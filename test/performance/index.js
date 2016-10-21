@@ -215,26 +215,26 @@ const s = struct.struct
 //   }
 // )
 
-// perf(
-//   function instanceStructResolveContextRemove () {
-//     const a = struct.create(s, {
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       let x = struct.create(a, { x: { y: { z: null } } })
-//     }
-//   },
-//   function instanceBaseResolveContextRemove () {
-//     const a = base({
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       new a.Constructor({ // eslint-disable-line
-//         x: { y: { a: null } }
-//       })
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStructResolveContextRemove () {
+    const a = struct.create(s, {
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(a, { x: { y: { z: null } } })
+    }
+  },
+  function instanceBaseResolveContextRemove () {
+    const a = base({
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      new a.Constructor({ // eslint-disable-line
+        x: { y: { a: null } }
+      })
+    }
+  }, 1, 1
+)
 
 perf(
   function instanceStructResolveContextFromEndPointRenive () {
