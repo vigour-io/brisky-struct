@@ -1,0 +1,52 @@
+{
+  "name": "brisky-struct",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "(ducktape; node test) | tap-difflet && standard",
+    "dev": "nodemon test | tap-difflet",
+    "cover": "istanbul cover --report none --print detail test/index.js",
+    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigour-io/brisky-struct.git"
+  },
+  "keywords": [
+    "data structur",
+    "vector",
+    "functional"
+  ],
+  "dependencies": {
+    "brisky-stamp": "^1.5.6",
+    "bubleify": "0.5.1",
+    "monotonic-timestamp": "0.0.9"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "bubleify"
+      ]
+    ]
+  },
+  "devDependencies": {
+    "brisky-performance": "^1.3.2",
+    "coveralls": "^2.11.9",
+    "ducktape": "^1.0.0",
+    "istanbul": "^0.4.3",
+    "nodemon": "^1.9.1",
+    "pre-commit": "^1.1.3",
+    "standard": "^8.1.0",
+    "tap-difflet": "0.6.0",
+    "tape": "4.6.0"
+  },
+  "author": "jim de beer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vigour-io/brisky-struct/issues"
+  },
+  "homepage": "https://github.com/vigour-io/brisky-struct#readme",
+  "contributors": [
+    "Jim de Beer <jim@vigour.io>"
+  ]
+}
