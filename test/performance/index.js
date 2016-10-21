@@ -31,7 +31,7 @@ const s = struct.struct
 //     }
 //   }
 // )
-
+//
 // perf(
 //   function instanceStruct () {
 //     const a = struct.create(s, { x: true })
@@ -190,30 +190,30 @@ perf(
   }
 )
 
-// perf(
-//   function computeStruct () {
-//     let x = struct.create(s, { x: 100 })
-//     let y = struct.create(s, {
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     let z = struct.create(s, { val: y, $transform: val => val * 2 })
-//     for (let i = 0; i < amount; i++) {
-//       struct.compute(z)
-//     }
-//   },
-//   function computeObservable () {
-//     const x = new Obs({ x: 100 })
-//     const y = new Obs({
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     const z = new Obs({ y })
-//     for (let i = 0; i < amount; i++) {
-//       z.compute()
-//     }
-//   }, 1, 1
-// )
+perf(
+  function computeStruct () {
+    let x = struct.create(s, { x: 100 })
+    let y = struct.create(s, {
+      val: x.x,
+      $transform: val => val * 3
+    })
+    let z = struct.create(s, { val: y, $transform: val => val * 2 })
+    for (let i = 0; i < amount; i++) {
+      struct.compute(z)
+    }
+  },
+  function computeObservable () {
+    const x = new Obs({ x: 100 })
+    const y = new Obs({
+      val: x.x,
+      $transform: val => val * 3
+    })
+    const z = new Obs({ y })
+    for (let i = 0; i < amount; i++) {
+      z.compute()
+    }
+  }, 1, 1
+)
 
 perf(
   function instanceStructResolveContextRemove () {
@@ -256,4 +256,3 @@ perf(
     }
   }, 1, 1
 )
-
