@@ -2,7 +2,7 @@ const perf = require('brisky-performance')
 const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
-const amount = 1
+const amount = 1e5
 
 const s = struct.struct
 
@@ -243,9 +243,7 @@ perf(
     })
     for (let i = 0; i < amount; i++) {
       const x = struct.create(a)
-      console.log(struct.get(x, [ 'x', 'y', 'keys' ]))
       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
-      console.log(x.x.y.keys)
     }
   },
   function instanceBaseResolveContextFromEndPoint () {
