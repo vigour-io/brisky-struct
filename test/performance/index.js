@@ -2,7 +2,7 @@ const perf = require('brisky-performance')
 const struct = require('../../')
 const base = require('brisky-base')
 // const Obs = require('vigour-observable')
-const amount = 1e5
+const amount = 1e4
 
 const s = struct.struct
 
@@ -158,4 +158,34 @@ perf(
       x.x.set('hello')
     }
   }, 1, 1
+)
+
+perf(
+  function simpleRemoveStruct () {
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(s, { x: i })
+      struct.remove(x.x)
+    }
+  },
+  function simpleRemoveBase () {
+    for (let i = 0; i < amount; i++) {
+      let x = base({ x: i })
+      x.x.remove()
+    }
+  }
+)
+
+perf(
+  function simpleRemoveStructSet () {
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(s, { x: i })
+      struct.set(x, null)
+    }
+  },
+  function simpleRemoveBaseSet () {
+    for (let i = 0; i < amount; i++) {
+      let x = base({ x: i })
+      x.set(null)
+    }
+  }
 )
