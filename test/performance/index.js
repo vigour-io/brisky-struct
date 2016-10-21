@@ -6,183 +6,204 @@ const amount = 1e4
 
 const s = struct.struct
 
-perf(
-  function structitFields () {
-    for (let i = 0; i < amount; i++) {
-      struct.create(s, { x: i })
-    }
-  },
-  function baseitFields () {
-    for (let i = 0; i < amount; i++) {
-      base({ x: i })
-    }
-  }
-)
+// perf(
+//   function structitFields () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, { x: i })
+//     }
+//   },
+//   function baseitFields () {
+//     for (let i = 0; i < amount; i++) {
+//       base({ x: i })
+//     }
+//   }
+// )
+
+// perf(
+//   function structitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, i)
+//     }
+//   },
+//   function baseitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       base(i)
+//     }
+//   }
+// )
+
+// perf(
+//   function instanceStruct () {
+//     const a = struct.create(s, { x: true })
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(a, { y: true })
+//     }
+//   },
+//   function instanceBase () {
+//     const a = base({ x: true })
+//     for (let i = 0; i < amount; i++) {
+//       new a.Constructor({ y: true }) // eslint-disable-line
+//     }
+//   }
+// )
+
+// perf(
+//   function instanceStructProperties () {
+//     const a = struct.create(s, {
+//       x: true,
+//       properties: {
+//         bla (target, key, val, stamp) {
+
+//         }
+//       }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(a, {
+//         y: true,
+//         bla: true
+//       })
+//     }
+//   },
+//   function instanceBaseProperties () {
+//     const a = base({
+//       x: true,
+//       properties: {
+//         bla (target, key, val, stamp) {
+
+//         }
+//       }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       new a.Constructor({ // eslint-disable-line
+//         y: true,
+//         bla: true
+//       })
+//     }
+//   }
+// )
+
+// perf(
+//   function makeClassStruct () {
+//     for (let i = 0; i < amount / 20; i++) {
+//       const a = struct.create(s, { x: true })
+//       struct.create(a, { y: true })
+//     }
+//   },
+//   function makeClassBase () {
+//     for (let i = 0; i < amount / 20; i++) {
+//       const a = base({ x: true })
+//       new a.Constructor({ y: true }) // eslint-disable-line
+//     }
+//   }
+// )
+
+// perf(
+//   function instanceStructResolveContext () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(a, { x: { y: { a: true } } })
+//     }
+//   },
+//   function instanceBaseResolveContext () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       new a.Constructor({ // eslint-disable-line
+//         x: { y: { a: true } }
+//       })
+//     }
+//   }, 1, 1
+// )
+
+// perf(
+//   function instanceStructResolveContextFromEndPoint () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = struct.create(a)
+//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
+//     }
+//   },
+//   function instanceBaseResolveContextFromEndPoint () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = new a.Constructor()
+//       x.x.y.z.set('hello')
+//     }
+//   }, 1, 1
+// )
+
+// perf(
+//   function instanceStructResolveContextSingle () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = struct.create(a)
+//       struct.set(struct.get(x, 'x'), 'hello')
+//     }
+//   },
+//   function instanceBaseResolveContextSingle () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = new a.Constructor()
+//       x.x.set('hello')
+//     }
+//   }, 1, 1
+// )
+
+// perf(
+//   function simpleRemoveStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       struct.set(x.x, null)
+//     }
+//   },
+//   function simpleRemoveBase () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.x.remove()
+//     }
+//   }
+// )
+
+// perf(
+//   function simpleRemoveStructSet () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       struct.set(x, null)
+//     }
+//   },
+//   function simpleRemoveBaseSet () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.set(null)
+//     }
+//   }
+// )
 
 perf(
-  function structitSingle () {
-    for (let i = 0; i < amount; i++) {
-      struct.create(s, i)
-    }
-  },
-  function baseitSingle () {
-    for (let i = 0; i < amount; i++) {
-      base(i)
-    }
-  }
-)
-
-perf(
-  function instanceStruct () {
-    const a = struct.create(s, { x: true })
-    for (let i = 0; i < amount; i++) {
-      struct.create(a, { y: true })
-    }
-  },
-  function instanceBase () {
-    const a = base({ x: true })
-    for (let i = 0; i < amount; i++) {
-      new a.Constructor({ y: true }) // eslint-disable-line
-    }
-  }
-)
-
-perf(
-  function instanceStructProperties () {
-    const a = struct.create(s, {
-      x: true,
-      properties: {
-        bla (target, key, val, stamp) {
-
-        }
-      }
+  function computeStruct () {
+    let x = struct.create(s, { x: 100 })
+    let y = struct.create(s, {
+      val: x.x,
+      $transform: val => val * 3
     })
+    let z = struct.create(s, { val: y, $transform: val => val * 2 })
     for (let i = 0; i < amount; i++) {
-      struct.create(a, {
-        y: true,
-        bla: true
-      })
+      struct.compute(z)
     }
+    console.log(struct.compute(z))
   },
-  function instanceBaseProperties () {
-    const a = base({
-      x: true,
-      properties: {
-        bla (target, key, val, stamp) {
-
-        }
-      }
-    })
-    for (let i = 0; i < amount; i++) {
-      new a.Constructor({ // eslint-disable-line
-        y: true,
-        bla: true
-      })
-    }
-  }
-)
-
-perf(
-  function makeClassStruct () {
-    for (let i = 0; i < amount / 20; i++) {
-      const a = struct.create(s, { x: true })
-      struct.create(a, { y: true })
-    }
-  },
-  function makeClassBase () {
-    for (let i = 0; i < amount / 20; i++) {
-      const a = base({ x: true })
-      new a.Constructor({ y: true }) // eslint-disable-line
-    }
-  }
-)
-
-perf(
-  function instanceStructResolveContext () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      struct.create(a, { x: { y: { a: true } } })
-    }
-  },
-  function instanceBaseResolveContext () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      new a.Constructor({ // eslint-disable-line
-        x: { y: { a: true } }
-      })
-    }
-  }, 1, 1
-)
-
-perf(
-  function instanceStructResolveContextFromEndPoint () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = struct.create(a)
-      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
-    }
-  },
-  function instanceBaseResolveContextFromEndPoint () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = new a.Constructor()
-      x.x.y.z.set('hello')
-    }
-  }, 1, 1
-)
-
-perf(
-  function instanceStructResolveContextSingle () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = struct.create(a)
-      struct.set(struct.get(x, 'x'), 'hello')
-    }
-  },
-  function instanceBaseResolveContextSingle () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = new a.Constructor()
-      x.x.set('hello')
-    }
-  }, 1, 1
-)
-
-perf(
-  function simpleRemoveStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      struct.remove(x.x)
-    }
-  },
-  function simpleRemoveBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.x.remove()
-    }
-  }
-)
-
-perf(
-  function simpleRemoveStructSet () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBaseSet () {
+  function computeBase () {
     for (let i = 0; i < amount; i++) {
       let x = base({ x: i })
       x.set(null)
