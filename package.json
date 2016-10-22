@@ -7,6 +7,7 @@
     "test": "(ducktape; node test) | tap-difflet && standard",
     "dev": "nodemon test | tap-difflet",
     "dev-perf": "nodemon test/performance/index.js | tap-difflet",
+    "dev-browser": "budo ./test/index.js -p 8080 --live",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
   },
@@ -32,6 +33,7 @@
     ]
   },
   "devDependencies": {
+    "budo": "^9.0.0",
     "brisky-performance": "^1.3.2",
     "coveralls": "^2.11.9",
     "ducktape": "^1.0.0",
