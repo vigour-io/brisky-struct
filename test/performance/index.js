@@ -8,12 +8,12 @@ const s = struct.struct
 
 perf(
   function structitSingle () {
-    for (let i = 0; i < amount * 10; i++) {
+    for (let i = 0; i < amount; i++) {
       struct.create(s, i)
     }
   },
   function baseitSingle () {
-    for (let i = 0; i < amount * 10; i++) {
+    for (let i = 0; i < amount; i++) {
       base(i)
     }
   }
@@ -29,7 +29,7 @@ perf(
     for (let i = 0; i < amount; i++) {
       base({ x: i })
     }
-  }, 1
+  }, 1, 100
 )
 
 // perf(
