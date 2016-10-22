@@ -216,7 +216,7 @@ perf(
       val: x.x,
       $transform: val => val * 3
     })
-    let z = struct.create(s, { val: y, $transform: val => val * 2 })
+    let z = struct.create(s, { val: y })
     for (let i = 0; i < amount; i++) {
       struct.compute(z)
     }
