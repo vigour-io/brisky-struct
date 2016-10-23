@@ -262,15 +262,6 @@ function emitObserv () {
   }
 }
 
-const EventEmitter = require('events')
-function emitEE () {
-  const emitter = new EventEmitter()
-  emitter.on('data', () => { ++eeCount })
-  for (var i = 0; i < amount; i++) {
-    emitter.emit('data')
-  }
-}
-
 perf(
   listenersStruct,
   function listenerObs () {
@@ -284,6 +275,15 @@ perf(
     }
   }
 )
+
+const EventEmitter = require('events')
+function emitEE () {
+  const emitter = new EventEmitter()
+  emitter.on('data', () => { ++eeCount })
+  for (var i = 0; i < amount; i++) {
+    emitter.emit('data')
+  }
+}
 
 perf(listenersStruct, emitObserv)
 perf(listenersStruct, emitEE)
@@ -299,7 +299,6 @@ perf(function structEmitter () {
     emit(x, 'data')
   }
 }, emitEE)
-
 
 perf(
   function listenersStructReference () {
