@@ -3336,6 +3336,10 @@ object.omit@^2.0.0:
     for-own "^0.1.3"
     is-extendable "^0.1.1"
 
+observ@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/observ/-/observ-0.2.0.tgz#0bc39b3e29faa5f9e6caa5906cb8392df400aa68"
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"

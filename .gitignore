@@ -25,3 +25,4 @@ resultlog.txt
 .npmrc
 README.html
 coverage
+yarn-error*

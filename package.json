@@ -43,7 +43,8 @@
     "tap-difflet": "0.6.0",
     "tape": "4.6.0",
     "brisky-base": "^4.0.0",
-    "vigour-observable": "^3.0.0"
+    "vigour-observable": "^3.0.0",
+    "observ": "0.2.0"
   },
   "author": "jim de beer",
   "license": "ISC",
