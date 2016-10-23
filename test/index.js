@@ -25,6 +25,12 @@ const b = create(struct, {
   }
 })
 
-const c = create(b, { hello: true })
+const c = create(b, {
+  hello: {
+    title: 'x'
+  },
+  yo: true
+})
 
 console.log(compute(get(c.hello, 'title')))
+console.log(compute(get(c.yo, 'title')))
