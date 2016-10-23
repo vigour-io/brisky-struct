@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 1
 
 const s = struct.struct
 
@@ -210,30 +210,30 @@ const s = struct.struct
 //   }
 // )
 
-// perf(
-//   function computeStruct () {
-//     let x = struct.create(s, { x: 100 })
-//     let y = struct.create(s, {
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     let z = struct.create(s, { val: y })
-//     for (let i = 0; i < amount; i++) {
-//       struct.compute(z)
-//     }
-//   },
-//   function computeObservable () {
-//     const x = new Obs({ x: 100 })
-//     const y = new Obs({
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     const z = new Obs({ y })
-//     for (let i = 0; i < amount; i++) {
-//       z.compute()
-//     }
-//   }, 1, 1
-// )
+perf(
+  function computeStruct () {
+    let x = struct.create(s, { x: 100 })
+    let y = struct.create(s, {
+      val: x.x,
+      $transform: val => val * 3
+    })
+    let z = struct.create(s, { val: y })
+    for (let i = 0; i < amount; i++) {
+      struct.compute(z)
+    }
+  },
+  function computeObservable () {
+    const x = new Obs({ x: 100 })
+    const y = new Obs({
+      val: x.x,
+      $transform: val => val * 3
+    })
+    const z = new Obs({ y })
+    for (let i = 0; i < amount; i++) {
+      z.compute()
+    }
+  }, 1, 1
+)
 
 var cnt = 0
 var obscnt = 0
