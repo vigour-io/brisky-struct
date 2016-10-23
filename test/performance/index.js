@@ -4,6 +4,7 @@ const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
 const amount = 1e6
+const observ = require('observ')
 
 const s = struct.struct
 
@@ -237,20 +238,41 @@ const s = struct.struct
 
 var cnt = 0
 var obscnt = 0
+var observrCallCount = 0
+var eeCount = 0
+
+function listenersStruct () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (let i = 0; i < amount; i++) {
+    let s = bstamp.create()
+    struct.set(x, i, s)
+    bstamp.close(s)
+  }
+}
+
+const observr = observ(0)
+function emitObserv () {
+  observr(() => ++observrCallCount)
+  for (var i = 0; i < amount; i++) {
+    observr.set(i)
+  }
+}
+
+const EventEmitter = require('events')
+function emitEE () {
+  const emitter = new EventEmitter()
+  emitter.on('data', () => { ++eeCount })
+  for (var i = 0; i < amount; i++) {
+    emitter.emit('data')
+  }
+}
 
 perf(
-  function listenersStruct () {
-    let x = struct.create(s, {
-      on: {
-        data: { a: t => { cnt++ } }
-      }
-    })
-    for (let i = 0; i < amount; i++) {
-      let s = bstamp.create()
-      struct.set(x, i, s)
-      bstamp.close(s)
-    }
-  },
+  listenersStruct,
   function listenerObs () {
     const x = new Obs({
       on: {
@@ -260,9 +282,24 @@ perf(
     for (let i = 0; i < amount; i++) {
       x.set(i)
     }
-    // console.log(cnt, obscnt)
-  }, 1
+  }
 )
+
+perf(listenersStruct, emitObserv)
+perf(listenersStruct, emitEE)
+
+const { emit } = require('../../')
+perf(function structEmitter () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (var i = 0; i < amount; i++) {
+    emit(x, 'data')
+  }
+}, emitEE)
+
 
 perf(
   function listenersStructReference () {
