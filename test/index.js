@@ -1,5 +1,5 @@
 'use strict'
-const { create, set, get, struct } = require('../')
+const { create, set, get, struct, compute } = require('../')
 const bstamp = require('brisky-stamp')
 
 const a = create(struct, {
@@ -16,6 +16,15 @@ const s = bstamp.create()
 set(a, 'bla', 'x', s)
 bstamp.close(s)
 
-// console.log(a.on.data.inherits.child)
+const b = create(struct, {
+  props: {
+    default: {
+      title: 'yo',
+      props: { default: 'self' }
+    }
+  }
+})
 
-// removing it
+const c = create(b, { hello: true })
+
+console.log(compute(get(c.hello, 'title')))
