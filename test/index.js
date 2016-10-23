@@ -7,14 +7,22 @@ const a = create(struct, {
     data: {
       a: () => console.log('yes fire')
     }
-  }
+  },
+  bla: true
 })
 
 // 1 mil sets 60ms
 console.log('go set!')
 const s = bstamp.create()
-set(a, 'bla', 'x', s)
+set(a, 'bla', s)
 bstamp.close(s)
+
+// so only when new - need to handle change better
+console.log(' \ndont fire parent')
+const x = bstamp.create()
+// maybe this is even nice behaveiour? -- meh no
+set(a, { bla: 'bla' }, x)
+bstamp.close(x)
 
 const b = create(struct, {
   props: {
