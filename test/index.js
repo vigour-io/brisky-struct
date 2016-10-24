@@ -27,24 +27,50 @@ bstamp.close(x)
 set(a, { on: { data: { a: null, b: (b) => {} } } })
 console.log('remove a', a.on.data.fn.map(val => val.toString()), a.on.data.a)
 
-set(a, { on: { data: { b: (haha) => {} } } })
+set(a, { on: { data: { b: (haha) => { console.log(' haha') } } } })
 console.log('replace b', a.on.data.fn.map(val => val.toString()), a.on.data.a)
 
-const b = create(struct, {
-  props: {
-    default: {
-      title: 'yo',
-      props: { default: 'self' }
+const aa = create(a, {
+  on: {
+    data: {
+      c: () => console.log(' yes fire') // copy works!
     }
   }
 })
 
-const c = create(b, {
-  hello: {
-    title: 'x'
-  },
-  yo: true
+console.log('GO GO GO')
+set(aa, {
+  hello: 'x'
+}, 'x')
+
+const aaa = create(aa, {
+  on: {
+    data: {
+      // c: () => console.log(' yo fire') // copy works!
+    }
+  }
 })
 
-console.log(compute(get(c.hello, 'title')))
-console.log(compute(get(c.yo, 'title')))
+console.log('GO GO GO 2')
+set(aaa, {
+  xxx: 'z'
+}, 'x')
+
+// const b = create(struct, {
+//   props: {
+//     default: {
+//       title: 'yo',
+//       props: { default: 'self' }
+//     }
+//   }
+// })
+
+// const c = create(b, {
+//   hello: {
+//     title: 'x'
+//   },
+//   yo: true
+// })
+
+// console.log(compute(get(c.hello, 'title')))
+// console.log(compute(get(c.yo, 'title')))
