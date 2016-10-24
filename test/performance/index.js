@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e5
+const amount = 1e4
 const observ = require('observ')
 
 console.log('PERF' , amount/1000, 'k')
@@ -341,20 +341,55 @@ const s = struct.struct
 //   }
 // )
 
+// perf(
+//   function createListenerRefStruct () {
+//     const x = struct.create(s)
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, x)
+//     }
+//   },
+//   function createRefObs () {
+//     var x = new Obs()
+//     for (let i = 0; i < amount; i++) {
+//       new Obs(x, false)
+//     }
+//   }
+// )
+
+// perf(
+//   function createListenerRefStructNew () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s)
+//       // O
+//       struct.create(s, x)
+//     }
+//   },
+//   function createRefObsNew () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = new Obs()
+//       // O^2
+//       new Obs(x, false)
+//     }
+//   }
+// )
+
 perf(
-  function createListenerStruct () {
-    const x = struct.create(s)
+  function createListenerRefStructNewRemove () {
+    let x = struct.create(s)
     for (let i = 0; i < amount; i++) {
-      struct.create(s, x)
+      let y = struct.create(s, x)
+      struct.set(y, null)
     }
   },
-  function createRefObs () {
-    var x = new Obs()
+  function createRefObsNewRemove () {
+    let x = new Obs()
     for (let i = 0; i < amount; i++) {
-      new Obs(x, false)
+      let y = new Obs(x, false)
+      y.remove()
     }
   }
 )
+
 // const EventEmitter = require('events')
 // function emitEE () {
 //   const emitter = new EventEmitter()
