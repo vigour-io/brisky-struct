@@ -6,6 +6,8 @@ const bstamp = require('brisky-stamp')
 const amount = 1e5
 const observ = require('observ')
 
+console.log('PERF' , amount/1000, 'k')
+
 const s = struct.struct
 
 // perf(
@@ -318,44 +320,38 @@ const s = struct.struct
 //   }
 // )
 
-perf(
-  function createListenerStruct () {
-    for (let i = 0; i < amount; i++) {
-      struct.create(s, {
-        on: {
-          data: { a: t => {} }
-        }
-      })
-    }
-  },
-  function createListenerObs () {
-    for (let i = 0; i < amount; i++) {
-      new Obs({
-        on: {
-          data: { a: t => {} }
-        }
-      }, false)
-    }
-  }
-)
+// perf(
+//   function createListenerStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, {
+//         on: {
+//           data: { a: t => {} }
+//         }
+//       })
+//     }
+//   },
+//   function createListenerObs () {
+//     for (let i = 0; i < amount; i++) {
+//       new Obs({
+//         on: {
+//           data: { a: t => {} }
+//         }
+//       }, false)
+//     }
+//   }
+// )
 
 perf(
   function createListenerStruct () {
+    const x = struct.create(s)
     for (let i = 0; i < amount; i++) {
-      struct.create(s, {
-        on: {
-          data: { a: t => {} }
-        }
-      })
+      struct.create(s, x)
     }
   },
-  function createListenerObs () {
+  function createRefObs () {
+    var x = new Obs()
     for (let i = 0; i < amount; i++) {
-      new Obs({
-        on: {
-          data: { a: t => {} }
-        }
-      }, false)
+      new Obs(x, false)
     }
   }
 )
