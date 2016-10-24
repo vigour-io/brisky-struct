@@ -46,7 +46,7 @@ set(aa, {
 const aaa = create(aa, {
   on: {
     data: {
-      // c: () => console.log(' yo fire') // copy works!
+      c: () => console.log(' yo fire!!! NEW') // copy works!
     }
   }
 })
