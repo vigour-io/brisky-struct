@@ -56,6 +56,19 @@ set(aaa, {
   xxx: 'z'
 }, 'x')
 
+console.log(' \nreplace MORE')
+set(aaa, {
+  on: {
+    data: {
+      b: () => console.log(' yo fire!!! B!') // copy works!
+    }
+  }
+}, 'x')
+
+console.log('GO GO GO 3')
+set(aaa, {
+  y: 'zxxxx'
+}, 'x')
 // const b = create(struct, {
 //   props: {
 //     default: {
