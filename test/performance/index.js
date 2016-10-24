@@ -406,6 +406,26 @@ perf(
   }
 )
 
+perf(
+  function createListenerRemoveDeep () {
+    for (let i = 0; i < amount; i++) {
+      var x = struct.create(s)
+      var y = struct.create(s, { x: x })
+      struct.set(x, null)
+    }
+    // prob need to clear the reference
+    // console.log(y.x.val) // maybe a good idea for extra speed
+  },
+  function createRefObsRemoveDeep () {
+    for (let i = 0; i < amount; i++) {
+      var x = new Obs()
+      var y = new Obs({ x: x }, false)
+      x.remove(false)
+    }
+    // console.log('obs:', y.x.val) // this a huge mem leak on removal of origina
+  }
+)
+
 // const EventEmitter = require('events')
 // function emitEE () {
 //   const emitter = new EventEmitter()
