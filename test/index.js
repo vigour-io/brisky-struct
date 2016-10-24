@@ -5,7 +5,7 @@ const bstamp = require('brisky-stamp')
 const a = create(struct, {
   on: {
     data: {
-      a: () => console.log('yes fire')
+      a: () => console.log(' yes fire')
     }
   },
   bla: true
@@ -23,6 +23,12 @@ const x = bstamp.create()
 // maybe this is even nice behaveiour? -- meh no
 set(a, { bla: 'bla' }, x)
 bstamp.close(x)
+
+set(a, { on: { data: { a: null, b: (b) => {} } } })
+console.log('remove a', a.on.data.fn.map(val => val.toString()), a.on.data.a)
+
+set(a, { on: { data: { b: (haha) => {} } } })
+console.log('replace b', a.on.data.fn.map(val => val.toString()), a.on.data.a)
 
 const b = create(struct, {
   props: {
