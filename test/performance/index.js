@@ -339,6 +339,26 @@ perf(
   }
 )
 
+perf(
+  function createListenerStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, {
+        on: {
+          data: { a: t => {} }
+        }
+      })
+    }
+  },
+  function createListenerObs () {
+    for (let i = 0; i < amount; i++) {
+      new Obs({
+        on: {
+          data: { a: t => {} }
+        }
+      }, false)
+    }
+  }
+)
 // const EventEmitter = require('events')
 // function emitEE () {
 //   const emitter = new EventEmitter()
