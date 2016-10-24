@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e4
+const amount = 1e6
 const observ = require('observ')
 console.log('PERF' , amount/1000, 'k')
 
@@ -165,159 +165,159 @@ const s = struct.struct
 //   }, 1, 1
 // )
 
-perf(
-  function simpleRemoveStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, i)
-      // struct.set(x.x, null)
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base(i)
-      x.remove()
-    }
-  }
-)
-
-perf(
-  function simpleRemoveFieldsStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      // struct.set(x.x, null)
-      struct.set(x.x, null)
-    }
-  },
-  function simpleRemoveFieldsBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.x.remove()
-    }
-  }, 1, 1
-)
-
-perf(
-  function simpleRemoveStructSet () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBaseSet () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.set(null)
-    }
-  }
-)
-
-perf(
-  function instanceStructResolveContextRemove () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(a, { x: { y: { z: null } } })
-    }
-  },
-  function instanceBaseResolveContextRemove () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      new a.Constructor({ // eslint-disable-line
-        x: { y: { a: null } }
-      })
-    }
-  }, 1, 1
-)
-
-perf(
-  function instanceStructResolveContextFromEndPointRenove () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = struct.create(a)
-      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
-    }
-  },
-  function instanceBaseResolveContextFromEndPoint () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = new a.Constructor()
-      x.x.y.z.set(null)
-    }
-  }, 1, 1
-)
-
 // perf(
-//   function computeStruct () {
-//     let x = struct.create(s, { x: 100 })
-//     let y = struct.create(s, {
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     let z = struct.create(s, { val: y })
+//   function simpleRemoveStruct () {
 //     for (let i = 0; i < amount; i++) {
-//       struct.compute(z)
+//       let x = struct.create(s, i)
+//       // struct.set(x.x, null)
+//       struct.set(x, null)
 //     }
 //   },
-//   function computeObservable () {
-//     const x = new Obs({ x: 100 })
-//     const y = new Obs({
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     const z = new Obs({ y })
+//   function simpleRemoveBase () {
 //     for (let i = 0; i < amount; i++) {
-//       z.compute()
+//       let x = base(i)
+//       x.remove()
+//     }
+//   }
+// )
+
+// perf(
+//   function simpleRemoveFieldsStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       // struct.set(x.x, null)
+//       struct.set(x.x, null)
+//     }
+//   },
+//   function simpleRemoveFieldsBase () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.x.remove()
 //     }
 //   }, 1, 1
 // )
 
-// var cnt = 0
-// var obscnt = 0
-// var observrCallCount = 0
-// var eeCount = 0
-
-// function listenersStruct () {
-//   let x = struct.create(s, {
-//     on: {
-//       data: { a: t => { cnt++ } }
-//     }
-//   })
-//   for (let i = 0; i < amount; i++) {
-//     let s = bstamp.create()
-//     struct.set(x, i, s)
-//     bstamp.close(s)
-//   }
-// }
-
-// const observr = observ(0)
-// function emitObserv () {
-//   observr(() => ++observrCallCount)
-//   for (var i = 0; i < amount; i++) {
-//     observr.set(i)
-//   }
-// }
-
 // perf(
-//   listenersStruct,
-//   function listenerObs () {
-//     const x = new Obs({
-//       on: {
-//         data: { a: t => { obscnt++ } }
-//       }
-//     })
+//   function simpleRemoveStructSet () {
 //     for (let i = 0; i < amount; i++) {
-//       x.set(i)
+//       let x = struct.create(s, { x: i })
+//       struct.set(x, null)
+//     }
+//   },
+//   function simpleRemoveBaseSet () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.set(null)
 //     }
 //   }
 // )
+
+// perf(
+//   function instanceStructResolveContextRemove () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(a, { x: { y: { z: null } } })
+//     }
+//   },
+//   function instanceBaseResolveContextRemove () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       new a.Constructor({ // eslint-disable-line
+//         x: { y: { a: null } }
+//       })
+//     }
+//   }, 1, 1
+// )
+
+// perf(
+//   function instanceStructResolveContextFromEndPointRenove () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = struct.create(a)
+//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
+//     }
+//   },
+//   function instanceBaseResolveContextFromEndPoint () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = new a.Constructor()
+//       x.x.y.z.set(null)
+//     }
+//   }, 1, 1
+// )
+
+perf(
+  function computeStruct () {
+    let x = struct.create(s, { x: 100 })
+    let y = struct.create(s, {
+      val: x.x,
+      $transform: val => val * 3
+    })
+    let z = struct.create(s, { val: y })
+    for (let i = 0; i < amount; i++) {
+      struct.compute(z)
+    }
+  },
+  function computeObservable () {
+    const x = new Obs({ x: 100 })
+    const y = new Obs({
+      val: x.x,
+      $transform: val => val * 3
+    })
+    const z = new Obs({ y })
+    for (let i = 0; i < amount; i++) {
+      z.compute()
+    }
+  }, 1, 1
+)
+
+var cnt = 0
+var obscnt = 0
+var observrCallCount = 0
+var eeCount = 0
+
+function listenersStruct () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (let i = 0; i < amount; i++) {
+    let s = bstamp.create()
+    struct.set(x, i, s)
+    bstamp.close(s)
+  }
+}
+
+const observr = observ(0)
+function emitObserv () {
+  observr(() => ++observrCallCount)
+  for (var i = 0; i < amount; i++) {
+    observr.set(i)
+  }
+}
+
+perf(
+  listenersStruct,
+  function listenerObs () {
+    const x = new Obs({
+      on: {
+        data: { a: t => { obscnt++ } }
+      }
+    })
+    for (let i = 0; i < amount; i++) {
+      x.set(i)
+    }
+  }
+)
 
 // perf(
 //   function createListenerStruct () {
@@ -372,116 +372,116 @@ perf(
 //   }
 // )
 
-perf(
-  function createListenerRefStructNewRemove () {
-    let x = struct.create(s)
-    for (let i = 0; i < amount; i++) {
-      let y = struct.create(s, x)
-      struct.set(y, null)
-    }
-  },
-  function createRefObsNewRemove () {
-    let x = new Obs()
-    for (let i = 0; i < amount; i++) {
-      let y = new Obs(x, false)
-      y.remove(false)
-    }
-  }
-)
-
-perf(
-  function createListenerRefStructNewRemoveDeep () {
-    let x = struct.create(s)
-    for (let i = 0; i < amount; i++) {
-      let y = struct.create(s, { x: x })
-      struct.set(y, null)
-    }
-  },
-  function createRefObsNewRemoveDeep () {
-    let x = new Obs()
-    for (let i = 0; i < amount; i++) {
-      let y = new Obs({ x: x }, false)
-      y.remove(false)
-    }
-  }
-)
-
-perf(
-  function createListenerRemoveDeep () {
-    for (let i = 0; i < amount; i++) {
-      var x = struct.create(s)
-      var y = struct.create(s, { x: x })
-      struct.set(x, null)
-    }
-    // prob need to clear the reference
-    // console.log(y.x.val) // maybe a good idea for extra speed
-  },
-  function createRefObsRemoveDeep () {
-    for (let i = 0; i < amount; i++) {
-      var x = new Obs()
-      var y = new Obs({ x: x }, false)
-      x.remove(false)
-    }
-    // console.log('obs:', y.x.val) // this a huge mem leak on removal of origina
-  }
-)
-
-// const EventEmitter = require('events')
-// function emitEE () {
-//   const emitter = new EventEmitter()
-//   emitter.on('data', () => { ++eeCount })
-//   for (var i = 0; i < amount; i++) {
-//     emitter.emit('data')
-//   }
-// }
-
-// perf(listenersStruct, emitObserv)
-// perf(listenersStruct, emitEE)
-
-// const { emit } = require('../../')
-// perf(function structEmitter () {
-//   let x = struct.create(s, {
-//     on: {
-//       data: { a: t => { cnt++ } }
-//     }
-//   })
-//   for (var i = 0; i < amount; i++) {
-//     emit(x, 'data')
-//   }
-// }, emitEE)
-
 // perf(
-//   function listenersStructReference () {
-//     let y = struct.create(s, {
-//       on: {
-//         data: { a: t => { cnt++ } }
-//       }
-//     })
-//     let x = struct.create(s, {
-//       on: {
-//         data: { y: y } // uids are nessecary for this
-//       }
-//     })
-
+//   function createListenerRefStructNewRemove () {
+//     let x = struct.create(s)
 //     for (let i = 0; i < amount; i++) {
-//       let s = bstamp.create()
-//       struct.set(x, i, s)
-//       bstamp.close(s)
+//       let y = struct.create(s, x)
+//       struct.set(y, null)
 //     }
 //   },
-//   function listenerObsReference () {
-//     const y = new Obs({
-//       on: {
-//         data: { a: t => { obscnt++ } }
-//       }
-//     })
-//     const x = new Obs({
-//       on: {
-//         data: { a: y }
-//       }
-//     })
+//   function createRefObsNewRemove () {
+//     let x = new Obs()
 //     for (let i = 0; i < amount; i++) {
-//       x.set(i)
+//       let y = new Obs(x, false)
+//       y.remove(false)
 //     }
-//   }, 1
+//   }
 // )
+
+// perf(
+//   function createListenerRefStructNewRemoveDeep () {
+//     let x = struct.create(s)
+//     for (let i = 0; i < amount; i++) {
+//       let y = struct.create(s, { x: x })
+//       struct.set(y, null)
+//     }
+//   },
+//   function createRefObsNewRemoveDeep () {
+//     let x = new Obs()
+//     for (let i = 0; i < amount; i++) {
+//       let y = new Obs({ x: x }, false)
+//       y.remove(false)
+//     }
+//   }
+// )
+
+// perf(
+//   function createListenerRemoveDeep () {
+//     for (let i = 0; i < amount; i++) {
+//       var x = struct.create(s)
+//       var y = struct.create(s, { x: x })
+//       struct.set(x, null)
+//     }
+//     // prob need to clear the reference
+//     // console.log(y.x.val) // maybe a good idea for extra speed
+//   },
+//   function createRefObsRemoveDeep () {
+//     for (let i = 0; i < amount; i++) {
+//       var x = new Obs()
+//       var y = new Obs({ x: x }, false)
+//       x.remove(false)
+//     }
+//     // console.log('obs:', y.x.val) // this a huge mem leak on removal of origina
+//   }
+// )
+
+const EventEmitter = require('events')
+function emitEE () {
+  const emitter = new EventEmitter()
+  emitter.on('data', () => { ++eeCount })
+  for (var i = 0; i < amount; i++) {
+    emitter.emit('data')
+  }
+}
+
+perf(listenersStruct, emitObserv)
+perf(listenersStruct, emitEE)
+
+const { emit } = require('../../')
+perf(function structEmitter () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (var i = 0; i < amount; i++) {
+    emit(x, 'data')
+  }
+}, emitEE)
+
+perf(
+  function listenersStructReference () {
+    let y = struct.create(s, {
+      on: {
+        data: { a: t => { cnt++ } }
+      }
+    })
+    let x = struct.create(s, {
+      on: {
+        data: { y: y } // uids are nessecary for this
+      }
+    })
+
+    for (let i = 0; i < amount; i++) {
+      let s = bstamp.create()
+      struct.set(x, i, s)
+      bstamp.close(s)
+    }
+  },
+  function listenerObsReference () {
+    const y = new Obs({
+      on: {
+        data: { a: t => { obscnt++ } }
+      }
+    })
+    const x = new Obs({
+      on: {
+        data: { a: y }
+      }
+    })
+    for (let i = 0; i < amount; i++) {
+      x.set(i)
+    }
+  }, 1
+)
