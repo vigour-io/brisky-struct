@@ -5,7 +5,8 @@ const bstamp = require('brisky-stamp')
 const a = create(struct, {
   on: {
     data: {
-      a: () => console.log(' yes fire')
+      a: () => console.log(' yes fire'),
+      x: (x) => console.log(' its x')
     }
   },
   bla: true
@@ -46,6 +47,7 @@ set(aa, {
 const aaa = create(aa, {
   on: {
     data: {
+      x: null,
       c: () => console.log(' yo fire!!! NEW') // copy works!
     }
   }
