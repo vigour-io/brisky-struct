@@ -294,11 +294,14 @@ const s = struct.struct
 //     }
 //   }
 // )
-const x = global.x = struct.create(s)
+// const x = struct.create(s)
 
 perf(
   function createListenerRefStruct () {
+    const x = struct.create(s)
+
     for (let i = 0; i < amount; i++) {
+      // struct.create(s, x)
       // struct.create(s, x)
       struct.set(struct.create(s, x), null)
     }
@@ -308,40 +311,40 @@ perf(
     // for (let i = 0; i < amount; i++) {
     //   new Obs(x, false)
     // }
-  }, 1
+  }, 1, 100
 )
 
-perf(
-  function simpleRemoveStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, i)
-      // struct.set(x.x, null)
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base(i)
-      x.remove()
-    }
-  }
-)
+// perf(
+//   function simpleRemoveStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, i)
+//       // struct.set(x.x, null)
+//       struct.set(x, null)
+//     }
+//   },
+//   function simpleRemoveBase () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base(i)
+//       x.remove()
+//     }
+//   }
+// )
 
-perf(
-  function simpleRemoveFieldsStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      // struct.set(x.x, null)
-      struct.set(x.x, null)
-    }
-  },
-  function simpleRemoveFieldsBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.x.remove()
-    }
-  }, 1, 1
-)
+// perf(
+//   function simpleRemoveFieldsStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       // struct.set(x.x, null)
+//       struct.set(x.x, null)
+//     }
+//   },
+//   function simpleRemoveFieldsBase () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.x.remove()
+//     }
+//   }, 1, 1
+// )
 
 // perf(
 //   function createListenerRefStructNew () {
