@@ -3,95 +3,44 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e5
+const amount = 1e6
 const observ = require('observ')
 console.log('PERF', amount / 1000, 'k')
+var cnt = 0
+var obscnt = 0
+var observrCallCount = 0
+var eeCount = 0
 
+const { create } = require('../../')
 const s = struct.struct
 
-// perf(
-//   function structitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, i)
-//     }
-//   },
-//   function baseitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       base(i)
-//     }
-//   }
-// )
-
-// perf(
-//   function splitup () {
-//     // for (let i = 0; i < 1e6; i++) {
-//     //   struct.create(s, { x: i })
-//     // }
-//   },
-//   function array () {
-//     var arr = []
-//     for (let i = 0; i < 1e6; i++) {
-//       var x = {}
-//       arr.push(x)
-//     }
-//   }, 1, 1
-// )
-
-// perf(
-//   function structitFields () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, { x: i })
-//     }
-//   },
-//   function baseitFields () {
-//     for (let i = 0; i < amount; i++) {
-//       base({ x: i })
-//     }
-//   }, 1, 1
-// )
-
-// function k (key) {
-//   const keys = [ 'key' ]
-//   const len = keys.length
-//   let i = len
-//   const b = []
-//   while (i--) { b[i] = keys[i] }
-//   b[len] = key
-//   return b
-// }
-
-// function y (key) {
-//   const keys = [ 'key' ]
-//   let i = keys.length
-//   const b = [ key ]
-//   while (i--) { b[i + 1] = keys[i] }
-//   return b
-// }
-
-// perf(function yy () {
-//   for (let i = 0; i < amount; i++) {
-//     k(i)
-//   }
-// }, function xx () {
-//   for (let i = 0; i < amount; i++) {
-//     y(i)
-//   }
-// }, 1, 100)
-
 perf(
-  function instanceStruct () {
-    const a = struct.create(s, { x: true })
+  function structitSingle () {
     for (let i = 0; i < amount; i++) {
-      struct.create(a, { y: true })
+      create(s, i)
     }
   },
-  function instanceBase () {
-    const a = base({ x: true })
+  function baseitSingle () {
     for (let i = 0; i < amount; i++) {
-      // new a.Constructor({ y: true }) // eslint-disable-line
+      base(i)
     }
-  }, 1, 100
+  }
 )
+
+// perf(
+//   function instanceStruct () {
+//     const a = struct.create(s, { x: true })
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(a, { y: true })
+//     }
+//   },
+//   function instanceBase () {
+//     const a = base({ x: true })
+//     for (let i = 0; i < amount; i++) {
+//       new a.Constructor({ y: true }) // eslint-disable-line
+//     }
+//   }, 1, 1
+// )
 
 // perf(
 //   function instanceStructProperties () {
@@ -322,11 +271,6 @@ perf(
 //   }, 1, 1
 // )
 
-// var cnt = 0
-// var obscnt = 0
-// var observrCallCount = 0
-// var eeCount = 0
-
 // function listenersStruct () {
 //   let x = struct.create(s, {
 //     on: {
@@ -469,29 +413,29 @@ perf(
 //   }
 // )
 
-// const EventEmitter = require('events')
-// function emitEE () {
-//   const emitter = new EventEmitter()
-//   emitter.on('data', () => { ++eeCount })
-//   for (var i = 0; i < amount; i++) {
-//     emitter.emit('data')
-//   }
-// }
+const EventEmitter = require('events')
+function emitEE () {
+  const emitter = new EventEmitter()
+  emitter.on('data', () => { ++eeCount })
+  for (var i = 0; i < amount; i++) {
+    emitter.emit('data')
+  }
+}
 
 // perf(listenersStruct, emitObserv)
 // perf(listenersStruct, emitEE)
 
-// const { emit } = require('../../')
-// perf(function structEmitter () {
-//   let x = struct.create(s, {
-//     on: {
-//       data: { a: t => { cnt++ } }
-//     }
-//   })
-//   for (var i = 0; i < amount; i++) {
-//     emit(x, 'data')
-//   }
-// }, emitEE)
+const { emit } = require('../../')
+perf(function structEmitter () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (var i = 0; i < amount; i++) {
+    emit(x, 'data')
+  }
+}, emitEE)
 
 // perf(
 //   function listenersStructReference () {
