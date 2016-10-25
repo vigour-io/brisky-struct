@@ -26,3 +26,4 @@ resultlog.txt
 README.html
 coverage
 yarn-error*
+isolate-*

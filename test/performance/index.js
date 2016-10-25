@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 1e5
 const observ = require('observ')
 console.log('PERF', amount / 1000, 'k')
 var cnt = 0
@@ -327,20 +327,20 @@ perf(
 //   }
 // )
 
-// perf(
-//   function createListenerRefStruct () {
-//     const x = struct.create(s)
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, x)
-//     }
-//   },
-//   function createRefObs () {
-//     var x = new Obs()
-//     for (let i = 0; i < amount; i++) {
-//       new Obs(x, false)
-//     }
-//   }
-// )
+perf(
+  function createListenerRefStruct () {
+    const x = struct.create(s)
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, x)
+    }
+  },
+  function createRefObs () {
+    // var x = new Obs()
+    // for (let i = 0; i < amount; i++) {
+    //   new Obs(x, false)
+    // }
+  }, 1, 25
+)
 
 // perf(
 //   function createListenerRefStructNew () {
@@ -413,62 +413,62 @@ perf(
 //   }
 // )
 
-const EventEmitter = require('events')
-function emitEE () {
-  const emitter = new EventEmitter()
-  emitter.on('data', () => { ++eeCount })
-  for (var i = 0; i < amount; i++) {
-    emitter.emit('data')
-  }
-}
+// const EventEmitter = require('events')
+// function emitEE () {
+//   const emitter = new EventEmitter()
+//   emitter.on('data', () => { ++eeCount })
+//   for (var i = 0; i < amount; i++) {
+//     emitter.emit('data')
+//   }
+// }
 
-// perf(listenersStruct, emitObserv)
-// perf(listenersStruct, emitEE)
+// // perf(listenersStruct, emitObserv)
+// // perf(listenersStruct, emitEE)
 
-const { emit } = require('../../')
-perf(function structEmitter () {
-  let x = struct.create(s, {
-    on: {
-      data: { a: t => { cnt++ } }
-    }
-  })
-  for (var i = 0; i < amount; i++) {
-    emit(x, 'data')
-  }
-}, emitEE)
+// const { emit } = require('../../')
+// perf(function structEmitter () {
+//   let x = struct.create(s, {
+//     on: {
+//       data: { a: t => { cnt++ } }
+//     }
+//   })
+//   for (var i = 0; i < amount; i++) {
+//     emit(x, 'data')
+//   }
+// }, emitEE)
 
-perf(
-  function listenersStructReference () {
-    let y = struct.create(s, {
-      on: {
-        data: { a: t => { cnt++ } }
-      }
-    })
-    let x = struct.create(s, {
-      on: {
-        data: { y: y } // uids are nessecary for this
-      }
-    })
+// perf(
+//   function listenersStructReference () {
+//     let y = struct.create(s, {
+//       on: {
+//         data: { a: t => { cnt++ } }
+//       }
+//     })
+//     let x = struct.create(s, {
+//       on: {
+//         data: { y: y } // uids are nessecary for this
+//       }
+//     })
 
-    for (let i = 0; i < amount; i++) {
-      let s = bstamp.create()
-      struct.set(x, i, s)
-      bstamp.close(s)
-    }
-  },
-  function listenerObsReference () {
-    const y = new Obs({
-      on: {
-        data: { a: t => { obscnt++ } }
-      }
-    })
-    const x = new Obs({
-      on: {
-        data: { a: y }
-      }
-    })
-    for (let i = 0; i < amount; i++) {
-      x.set(i)
-    }
-  }, 1
-)
+//     for (let i = 0; i < amount; i++) {
+//       let s = bstamp.create()
+//       struct.set(x, i, s)
+//       bstamp.close(s)
+//     }
+//   },
+//   function listenerObsReference () {
+//     const y = new Obs({
+//       on: {
+//         data: { a: t => { obscnt++ } }
+//       }
+//     })
+//     const x = new Obs({
+//       on: {
+//         data: { a: y }
+//       }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       x.set(i)
+//     }
+//   }, 1
+// )
