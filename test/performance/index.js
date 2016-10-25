@@ -14,18 +14,18 @@ var eeCount = 0
 const { create } = require('../../')
 const s = struct.struct
 
-perf(
-  function structitSingle () {
-    for (let i = 0; i < amount; i++) {
-      create(s, i)
-    }
-  },
-  function baseitSingle () {
-    for (let i = 0; i < amount; i++) {
-      base(i)
-    }
-  }
-)
+// perf(
+//   function structitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       create(s, i)
+//     }
+//   },
+//   function baseitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       base(i)
+//     }
+//   }
+// )
 
 // perf(
 //   function instanceStruct () {
