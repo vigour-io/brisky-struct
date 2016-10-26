@@ -27,18 +27,18 @@ const s = struct.struct
 //   }
 // )
 
-perf(
-  function fieldStruct () {
-    for (let i = 0; i < amount; i++) {
-      struct.create(s, { y: true })
-    }
-  },
-  function fieldBase () {
-    for (let i = 0; i < amount; i++) {
-      base({ y: true }) // eslint-disable-line
-    }
-  }, 1, 1
-)
+// perf(
+//   function fieldStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, { y: true })
+//     }
+//   },
+//   function fieldBase () {
+//     for (let i = 0; i < amount; i++) {
+//       base({ y: true }) // eslint-disable-line
+//     }
+//   }, 1, 1
+// )
 
 // perf(
 //   function instanceStruct () {
@@ -69,18 +69,18 @@ const yo = new Obs({
 })
 const zo = new Obs({ yo })
 
-// perf(
-//   function computeStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.compute(z)
-//     }
-//   },
-//   function computeObservable () {
-//     for (let i = 0; i < amount; i++) {
-//       zo.compute()
-//     }
-//   }, 1, 1
-// )
+perf(
+  function computeStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.compute(z)
+    }
+  },
+  function computeObservable () {
+    for (let i = 0; i < amount; i++) {
+      zo.compute()
+    }
+  }, 1, 100
+)
 
 // perf(
 //   function instanceStructProperties () {

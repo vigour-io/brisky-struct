@@ -76,51 +76,42 @@ console.log('lets go types')
 // reusing types
 // recursive types
 
+const x = create(struct, {
+  props: { type: null }
+  // type: 'xxxx'
+})
+
 const blurf = {
-  types: { blurf: { text: 'XXX' } }
+  types: {
+    blurf: { text: 'XXX' }
+  }
 }
 
 const instance = create(struct, {
-  inject: blurf,
-  types: {
-    hello: {
-      inject: () => {
-        console.log('!@#!@#!@#x')
-      },
-      text: 'yo',
-      gurk: {
-        type: 'blurf'
-      }
-    }
-  },
-  x: {
-    type: 'hello',
-    inject: [ 1, 2 ]
-  },
-  bla: {
-    bla: {
-      type: 'hello',
-      types: { x: 'X!' },
-      NOTYPE: {
-        props: { type: null },
-        type: 'x'
-      },
-      x: {
-        y: { type: 'x' }
-      }
-    }
-  }
+  inject: blurf
 })
 
-console.log(compute(get(instance, [ 'x' ])))
-console.log(instance.x.inherits)
-console.log(compute(get(instance, [ 'x', 'text' ])))
-console.log(compute(get(instance, [ 'bla', 'bla', 'text' ])))
-console.log('GURK', compute(get(instance, [ 'bla', 'bla', 'gurk', 'text' ])))
-console.log(compute(get(instance, [ 'bla', 'bla', 'x', 'y' ])))
-console.log(instance.bla.bla.x.y)
-const bla = create(struct)
-console.log('empty', compute(bla))
+console.log('------------------')
+console.log('its gone')
+const x2 = create(x, {
+  type: 'blurf'
+}, void 0, instance)
+console.log('------------------')
+
+// console.log(compute(get(instance, [ 'x' ])))
+// console.log(instance.x.inherits)
+// console.log(compute(get(instance, [ 'x', 'text' ])))
+// console.log(compute(get(instance, [ 'bla', 'bla', 'text' ])))
+// console.log('GURK', compute(get(instance, [ 'bla', 'bla', 'gurk', 'text' ])))
+// console.log(compute(get(instance, [ 'bla', 'bla', 'x', 'y' ])))
+// console.log(instance.bla.bla.x.y)
+// const bla = create(struct)
+// console.log('empty', compute(bla))
+
+// api get a gaurd ofc
+console.log(compute(get(x2, 'text')))
+
+// console.log('NOTYPE.TYPE', get(instance, [ 'bla', 'x', 'type' ]))
 
 // const b = create(struct, {
 //   props: {
