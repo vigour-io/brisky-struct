@@ -101,6 +101,9 @@ console.log(compute(get(instance, [ 'bla', 'bla', 'x', 'y' ])))
 
 console.log(instance.bla.bla.x.y)
 
+const bla = create(struct)
+console.log('empty', compute(bla))
+
 // const b = create(struct, {
 //   props: {
 //     default: {
