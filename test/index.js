@@ -84,6 +84,9 @@ const instance = create(struct, {
   inject: blurf,
   types: {
     hello: {
+      inject: () => {
+        console.log('!@#!@#!@#x')
+      },
       text: 'yo',
       gurk: {
         type: 'blurf'
@@ -91,12 +94,17 @@ const instance = create(struct, {
     }
   },
   x: {
-    type: 'hello'
+    type: 'hello',
+    inject: [ 1, 2 ]
   },
   bla: {
     bla: {
       type: 'hello',
       types: { x: 'X!' },
+      NOTYPE: {
+        props: { type: null },
+        type: 'x'
+      },
       x: {
         y: { type: 'x' }
       }
@@ -104,16 +112,13 @@ const instance = create(struct, {
   }
 })
 
+console.log(compute(get(instance, [ 'x' ])))
 console.log(instance.x.inherits)
 console.log(compute(get(instance, [ 'x', 'text' ])))
 console.log(compute(get(instance, [ 'bla', 'bla', 'text' ])))
-
 console.log('GURK', compute(get(instance, [ 'bla', 'bla', 'gurk', 'text' ])))
-
 console.log(compute(get(instance, [ 'bla', 'bla', 'x', 'y' ])))
-
 console.log(instance.bla.bla.x.y)
-
 const bla = create(struct)
 console.log('empty', compute(bla))
 
