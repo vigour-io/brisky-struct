@@ -78,7 +78,13 @@ console.log('lets go types')
 
 const instance = create(struct, {
   types: {
-    hello: { text: 'yo' }
+    blurf: { text: 'XXX' },
+    hello: {
+      text: 'yo',
+      gurk: {
+        type: 'blurf'
+      }
+    }
   },
   x: {
     type: 'hello'
@@ -97,6 +103,9 @@ const instance = create(struct, {
 console.log(instance.x.inherits)
 console.log(compute(get(instance, [ 'x', 'text' ])))
 console.log(compute(get(instance, [ 'bla', 'bla', 'text' ])))
+
+console.log('GURK', compute(get(instance, [ 'bla', 'bla', 'gurk', 'text' ])))
+
 console.log(compute(get(instance, [ 'bla', 'bla', 'x', 'y' ])))
 
 console.log(instance.bla.bla.x.y)
