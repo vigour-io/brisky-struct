@@ -93,9 +93,7 @@ const instance = create(struct, {
 
 console.log('------------------')
 console.log('its gone')
-const x2 = create(x, {
-  type: 'blurf'
-}, void 0, instance)
+const x2 = create(x, { type: 'blurf' }, void 0, instance)
 console.log('------------------')
 
 // console.log(compute(get(instance, [ 'x' ])))
@@ -109,7 +107,7 @@ console.log('------------------')
 // console.log('empty', compute(bla))
 
 // api get a gaurd ofc
-console.log(compute(get(x2, 'text')))
+console.log(get(x2, 'text'))
 
 // console.log('NOTYPE.TYPE', get(instance, [ 'bla', 'x', 'type' ]))
 
