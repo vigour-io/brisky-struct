@@ -76,9 +76,13 @@ console.log('lets go types')
 // reusing types
 // recursive types
 
+const blurf = {
+  types: { blurf: { text: 'XXX' } }
+}
+
 const instance = create(struct, {
+  inject: blurf,
   types: {
-    blurf: { text: 'XXX' },
     hello: {
       text: 'yo',
       gurk: {
