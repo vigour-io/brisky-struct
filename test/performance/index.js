@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e5
+const amount = 1e6
 const observ = require('observ')
 console.log('PERF', amount / 1000, 'k')
 var cnt = 0
@@ -28,6 +28,19 @@ const s = struct.struct
 // )
 
 // perf(
+//   function fieldStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, { y: true })
+//     }
+//   },
+//   function fieldBase () {
+//     for (let i = 0; i < amount; i++) {
+//       base({ y: true }) // eslint-disable-line
+//     }
+//   }, 1, 1
+// )
+
+// perf(
 //   function instanceStruct () {
 //     const a = struct.create(s, { x: true })
 //     for (let i = 0; i < amount; i++) {
@@ -41,6 +54,33 @@ const s = struct.struct
 //     }
 //   }, 1, 1
 // )
+
+let x = create(s, { x: 100 })
+let y = create(s, {
+  val: x.x,
+  $transform: val => val * 3
+})
+let z = create(s, { val: y })
+
+const xo = new Obs({ x: 100 })
+const yo = new Obs({
+  val: xo.x,
+  $transform: val => val * 3
+})
+const zo = new Obs({ yo })
+
+perf(
+  function computeStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.compute(z)
+    }
+  },
+  function computeObservable () {
+    for (let i = 0; i < amount; i++) {
+      zo.compute()
+    }
+  }, 1, 100
+)
 
 // perf(
 //   function instanceStructProperties () {
@@ -214,31 +254,6 @@ const s = struct.struct
 //   }, 1, 1
 // )
 
-// perf(
-//   function computeStruct () {
-//     let x = struct.create(s, { x: 100 })
-//     let y = struct.create(s, {
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     let z = struct.create(s, { val: y })
-//     for (let i = 0; i < amount; i++) {
-//       struct.compute(z)
-//     }
-//   },
-//   function computeObservable () {
-//     const x = new Obs({ x: 100 })
-//     const y = new Obs({
-//       val: x.x,
-//       $transform: val => val * 3
-//     })
-//     const z = new Obs({ y })
-//     for (let i = 0; i < amount; i++) {
-//       z.compute()
-//     }
-//   }, 1, 1
-// )
-
 // function listenersStruct () {
 //   let x = struct.create(s, {
 //     on: {
@@ -296,23 +311,23 @@ const s = struct.struct
 // )
 // const x = struct.create(s)
 
-perf(
-  function createListenerRefStruct () {
-    const x = struct.create(s)
+// perf(
+//   function createListenerRefStruct () {
+//     const x = struct.create(s)
 
-    for (let i = 0; i < amount; i++) {
-      // struct.create(s, x)
-      // struct.create(s, x)
-      struct.set(struct.create(s, x), null)
-    }
-  },
-  function createRefObs () {
-    // var x = new Obs()
-    // for (let i = 0; i < amount; i++) {
-    //   new Obs(x, false)
-    // }
-  }, 1, 100
-)
+//     for (let i = 0; i < amount; i++) {
+//       // struct.create(s, x)
+//       struct.create(s, x)
+//       // struct.set(struct.create(s, x), null)
+//     }
+//   },
+//   function createRefObs () {
+//     // var x = new Obs()
+//     // for (let i = 0; i < amount; i++) {
+//     //   new Obs(x, false)
+//     // }
+//   }, 1, 1
+// )
 
 // perf(
 //   function simpleRemoveStruct () {

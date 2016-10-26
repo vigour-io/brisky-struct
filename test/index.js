@@ -73,6 +73,9 @@ const bstamp = require('brisky-stamp')
 
 console.log('lets go types')
 
+// reusing types
+// recursive types
+
 const instance = create(struct, {
   types: {
     hello: { text: 'yo' }
