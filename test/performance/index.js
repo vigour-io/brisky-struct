@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 1e5
 const observ = require('observ')
 console.log('PERF', amount / 1000, 'k')
 var cnt = 0
@@ -233,26 +233,26 @@ const zo = new Obs({ yo })
 //   }, 1, 1
 // )
 
-// perf(
-//   function instanceStructResolveContextFromEndPointRenove () {
-//     const a = struct.create(s, {
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       const x = struct.create(a)
-//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
-//     }
-//   },
-//   function instanceBaseResolveContextFromEndPoint () {
-//     const a = base({
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       const x = new a.Constructor()
-//       x.x.y.z.set(null)
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStructResolveContextFromEndPointRenove () {
+    const a = struct.create(s, {
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      const x = struct.create(a)
+      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
+    }
+  },
+  function instanceBaseResolveContextFromEndPoint () {
+    const a = base({
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      const x = new a.Constructor()
+      x.x.y.z.set(null)
+    }
+  }, 1, 1
+)
 
 // function listenersStruct () {
 //   let x = struct.create(s, {
