@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 1e5
 const observ = require('observ')
 console.log('PERF', amount / 1000, 'k')
 var cnt = 0
@@ -55,22 +55,22 @@ const s = struct.struct
 //   }, 1, 1
 // )
 
-// perf(
-//   function instanceStructOriginalFields () {
-//     const a = create(s, { x: true })
-//     const b = create(a, { y: true })
-//     for (let i = 0; i < amount; i++) {
-//       set(a, { [i]: i })
-//     }
-//   },
-//   function instanceBaseOriginalFields () {
-//     const a = base({ x: true })
-//     const b = new a.Constructor({ y: true })
-//     for (let i = 0; i < amount; i++) {
-//       a.set({ [i]: i })
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStructOriginalFields () {
+    const a = create(s, { x: true })
+    const b = create(a, { y: true })
+    for (let i = 0; i < amount; i++) {
+      set(a, { [i]: i })
+    }
+  },
+  function instanceBaseOriginalFields () {
+    const a = base({ x: true })
+    const b = new a.Constructor({ y: true })
+    for (let i = 0; i < amount; i++) {
+      a.set({ [i]: i })
+    }
+  }, 1, 10
+)
 
 function instanceStructOriginal () {
   const a = create(s)
@@ -80,16 +80,16 @@ function instanceStructOriginal () {
   }
 }
 
-perf(
-  instanceStructOriginal,
-  function instanceObsOriginal () {
-    const a = new Obs()
-    const b = new a.Constructor()
-    for (let i = 0; i < amount; i++) {
-      a.set(i, false)
-    }
-  }, 1, 1
-)
+// perf(
+//   instanceStructOriginal,
+//   function instanceObsOriginal () {
+//     const a = new Obs()
+//     const b = new a.Constructor()
+//     for (let i = 0; i < amount; i++) {
+//       a.set(i, false)
+//     }
+//   }, 1, 1
+// )
 
 perf(
   function instanceStructOriginalListeners () {
@@ -107,7 +107,7 @@ perf(
     for (let i = 0; i < amount; i++) {
       a.set(i)
     }
-  }, 1, 1
+  }, 1, 10
 )
 
 let x = create(s, { x: 100 })
