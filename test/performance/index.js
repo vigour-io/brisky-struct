@@ -11,7 +11,7 @@ var obscnt = 0
 var observrCallCount = 0
 var eeCount = 0
 
-const { create } = require('../../')
+const { create, set } = require('../../')
 const s = struct.struct
 
 perf(
@@ -51,6 +51,61 @@ perf(
     const a = base({ x: true })
     for (let i = 0; i < amount; i++) {
       new a.Constructor({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
+
+perf(
+  function instanceStructOriginalFields () {
+    const a = create(s, { x: true })
+    const b = create(a, { y: true })
+    for (let i = 0; i < amount; i++) {
+      set(a, { [i]: i })
+    }
+  },
+  function instanceBaseOriginalFields () {
+    const a = base({ x: true })
+    const b = new a.Constructor({ y: true })
+    for (let i = 0; i < amount; i++) {
+      a.set({ [i]: i })
+    }
+  }, 1, 1
+)
+
+function instanceStructOriginal () {
+  const a = create(s)
+  const b = create(a)
+  for (let i = 0; i < amount; i++) {
+    set(a, i)
+  }
+}
+
+perf(
+  instanceStructOriginal,
+  function instanceBaseOriginal () {
+    const a = base()
+    const b = new a.Constructor()
+    for (let i = 0; i < amount; i++) {
+      a.set(i)
+    }
+  }, 1, 1
+)
+
+perf(
+  function instanceStructOriginalListeners () {
+    const a = create(s)
+    const b = create(a)
+    for (let i = 0; i < amount; i++) {
+      let s = bstamp.create()
+      set(a, i, s)
+      bstamp.close(s)
+    }
+  },
+  function instanceObsOriginalListeners () {
+    const a = new Obs()
+    const b = new a.Constructor()
+    for (let i = 0; i < amount; i++) {
+      a.set(i)
     }
   }, 1, 1
 )
@@ -155,26 +210,26 @@ const zo = new Obs({ yo })
 //   }, 1
 // )
 
-perf(
-  function instanceStructResolveContextFromEndPoint () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = struct.create(a)
-      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
-    }
-  },
-  function instanceBaseResolveContextFromEndPoint () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = new a.Constructor()
-      x.x.y.z.set('hello')
-    }
-  }, 1, 1
-)
+// perf(
+//   function instanceStructResolveContextFromEndPoint () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = struct.create(a)
+//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
+//     }
+//   },
+//   function instanceBaseResolveContextFromEndPoint () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = new a.Constructor()
+//       x.x.y.z.set('hello')
+//     }
+//   }, 1, 1
+// )
 
 // perf(
 //   function instanceStructResolveContextSingle () {
@@ -254,42 +309,42 @@ perf(
 //   }, 1, 1
 // )
 
-function listenersStruct () {
-  let x = struct.create(s, {
-    on: {
-      data: { a: t => { cnt++ } }
-    }
-  })
-  for (let i = 0; i < amount; i++) {
-    let s = bstamp.create()
-    struct.set(x, i, s)
-    bstamp.close(s)
-  }
-}
+// function listenersStruct () {
+//   let x = struct.create(s, {
+//     on: {
+//       data: { a: t => { cnt++ } }
+//     }
+//   })
+//   for (let i = 0; i < amount; i++) {
+//     let s = bstamp.create()
+//     struct.set(x, i, s)
+//     bstamp.close(s)
+//   }
+// }
 
-const observr = observ(0)
-function emitObserv () {
-  observr(() => ++observrCallCount)
-  for (var i = 0; i < amount; i++) {
-    observr.set(i)
-  }
-}
+// const observr = observ(0)
+// function emitObserv () {
+//   observr(() => ++observrCallCount)
+//   for (var i = 0; i < amount; i++) {
+//     observr.set(i)
+//   }
+// }
 
-perf(listenersStruct, emitObserv)
+// perf(listenersStruct, emitObserv)
 
-perf(
-  listenersStruct,
-  function listenerObs () {
-    const x = new Obs({
-      on: {
-        data: { a: t => { obscnt++ } }
-      }
-    })
-    for (let i = 0; i < amount; i++) {
-      x.set(i)
-    }
-  }
-)
+// perf(
+//   listenersStruct,
+//   function listenerObs () {
+//     const x = new Obs({
+//       on: {
+//         data: { a: t => { obscnt++ } }
+//       }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       x.set(i)
+//     }
+//   }
+// )
 
 // perf(
 //   function createListenerStruct () {
