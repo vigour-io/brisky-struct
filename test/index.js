@@ -61,3 +61,18 @@ console.log('\n update exsiting key (spesh)')
 s = bstamp.create()
 set(a, { spesh: true }, s)
 bstamp.close(s)
+
+console.log('-------------------------------------------')
+console.log('\n CONTEXT TIME')
+
+// const a = create(struct, {
+//   val: 1,
+//   on: {
+//     data: {
+//       1: (t, val) => {
+//         console.log('fire!', t.key, t.keys)
+//       }
+//     }
+//   }
+// })
+// a.key = 'a'
