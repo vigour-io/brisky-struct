@@ -254,40 +254,42 @@ perf(
 //   }, 1, 1
 // )
 
-// function listenersStruct () {
-//   let x = struct.create(s, {
-//     on: {
-//       data: { a: t => { cnt++ } }
-//     }
-//   })
-//   for (let i = 0; i < amount; i++) {
-//     let s = bstamp.create()
-//     struct.set(x, i, s)
-//     bstamp.close(s)
-//   }
-// }
+function listenersStruct () {
+  let x = struct.create(s, {
+    on: {
+      data: { a: t => { cnt++ } }
+    }
+  })
+  for (let i = 0; i < amount; i++) {
+    let s = bstamp.create()
+    struct.set(x, i, s)
+    bstamp.close(s)
+  }
+}
 
-// const observr = observ(0)
-// function emitObserv () {
-//   observr(() => ++observrCallCount)
-//   for (var i = 0; i < amount; i++) {
-//     observr.set(i)
-//   }
-// }
+const observr = observ(0)
+function emitObserv () {
+  observr(() => ++observrCallCount)
+  for (var i = 0; i < amount; i++) {
+    observr.set(i)
+  }
+}
 
-// perf(
-//   listenersStruct,
-//   function listenerObs () {
-//     const x = new Obs({
-//       on: {
-//         data: { a: t => { obscnt++ } }
-//       }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       x.set(i)
-//     }
-//   }
-// )
+perf(listenersStruct, emitObserv)
+
+perf(
+  listenersStruct,
+  function listenerObs () {
+    const x = new Obs({
+      on: {
+        data: { a: t => { obscnt++ } }
+      }
+    })
+    for (let i = 0; i < amount; i++) {
+      x.set(i)
+    }
+  }
+)
 
 // perf(
 //   function createListenerStruct () {
@@ -441,7 +443,6 @@ perf(
 //   }
 // }
 
-// // perf(listenersStruct, emitObserv)
 // // perf(listenersStruct, emitEE)
 
 // const { emit } = require('../../')
