@@ -14,46 +14,46 @@ var eeCount = 0
 const { create } = require('../../')
 const s = struct.struct
 
-// perf(
-//   function structitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       create(s, i)
-//     }
-//   },
-//   function baseitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       base(i)
-//     }
-//   }
-// )
+perf(
+  function structitSingle () {
+    for (let i = 0; i < amount; i++) {
+      create(s, i)
+    }
+  },
+  function baseitSingle () {
+    for (let i = 0; i < amount; i++) {
+      base(i)
+    }
+  }
+)
 
-// perf(
-//   function fieldStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, { y: true })
-//     }
-//   },
-//   function fieldBase () {
-//     for (let i = 0; i < amount; i++) {
-//       base({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 1
-// )
+perf(
+  function fieldStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, { y: true })
+    }
+  },
+  function fieldBase () {
+    for (let i = 0; i < amount; i++) {
+      base({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
-// perf(
-//   function instanceStruct () {
-//     const a = struct.create(s, { x: true })
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(a, { y: true })
-//     }
-//   },
-//   function instanceBase () {
-//     const a = base({ x: true })
-//     for (let i = 0; i < amount; i++) {
-//       new a.Constructor({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStruct () {
+    const a = struct.create(s, { x: true })
+    for (let i = 0; i < amount; i++) {
+      struct.create(a, { y: true })
+    }
+  },
+  function instanceBase () {
+    const a = base({ x: true })
+    for (let i = 0; i < amount; i++) {
+      new a.Constructor({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
 let x = create(s, { x: 100 })
 let y = create(s, {
@@ -155,26 +155,26 @@ const zo = new Obs({ yo })
 //   }, 1
 // )
 
-// perf(
-//   function instanceStructResolveContextFromEndPoint () {
-//     const a = struct.create(s, {
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       const x = struct.create(a)
-//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
-//     }
-//   },
-//   function instanceBaseResolveContextFromEndPoint () {
-//     const a = base({
-//       x: { y: { z: true } }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       const x = new a.Constructor()
-//       x.x.y.z.set('hello')
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStructResolveContextFromEndPoint () {
+    const a = struct.create(s, {
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      const x = struct.create(a)
+      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), 'hello')
+    }
+  },
+  function instanceBaseResolveContextFromEndPoint () {
+    const a = base({
+      x: { y: { z: true } }
+    })
+    for (let i = 0; i < amount; i++) {
+      const x = new a.Constructor()
+      x.x.y.z.set('hello')
+    }
+  }, 1, 1
+)
 
 // perf(
 //   function instanceStructResolveContextSingle () {
@@ -233,26 +233,26 @@ const zo = new Obs({ yo })
 //   }, 1, 1
 // )
 
-perf(
-  function instanceStructResolveContextFromEndPointRenove () {
-    const a = struct.create(s, {
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = struct.create(a)
-      struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
-    }
-  },
-  function instanceBaseResolveContextFromEndPoint () {
-    const a = base({
-      x: { y: { z: true } }
-    })
-    for (let i = 0; i < amount; i++) {
-      const x = new a.Constructor()
-      x.x.y.z.set(null)
-    }
-  }, 1, 1
-)
+// perf(
+//   function instanceStructResolveContextFromEndPointRenove () {
+//     const a = struct.create(s, {
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = struct.create(a)
+//       struct.set(struct.get(x, [ 'x', 'y', 'z' ]), null)
+//     }
+//   },
+//   function instanceBaseResolveContextFromEndPoint () {
+//     const a = base({
+//       x: { y: { z: true } }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       const x = new a.Constructor()
+//       x.x.y.z.set(null)
+//     }
+//   }, 1, 1
+// )
 
 // function listenersStruct () {
 //   let x = struct.create(s, {
