@@ -97,8 +97,6 @@ const x4 = create(x)
 const x5 = create(x)
 const x6 = create(x)
 
-console.log(b.instances.length)
-
 s = bstamp.create()
 set(b, { c: 'hello' }, s)
 bstamp.close(s)
