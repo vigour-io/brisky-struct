@@ -5,7 +5,7 @@ const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
 const amount = 1e6
 const observ = require('observ')
-console.log('PERF', amount / 1000, 'k')
+console.log('✨✨✨PERF', amount / 1000, 'k✨✨✨')
 var cnt = 0
 var obscnt = 0
 var observrCallCount = 0
@@ -155,7 +155,7 @@ perf(
     for (let i = 0; i < amount; i++) {
       x.set(i)
     }
-  }, 1
+  }, 1, 25
 )
 
 // const x = struct.create(s)

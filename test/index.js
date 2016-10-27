@@ -65,14 +65,40 @@ bstamp.close(s)
 console.log('-------------------------------------------')
 console.log('\n CONTEXT TIME')
 
-// const a = create(struct, {
-//   val: 1,
-//   on: {
-//     data: {
-//       1: (t, val) => {
-//         console.log('fire!', t.key, t.keys)
-//       }
-//     }
-//   }
-// })
-// a.key = 'a'
+const b = create(struct, {
+  val: 1,
+  c: {
+    on: {
+      data: {
+        1: (t, val) => {
+          console.log('fire!', t.key, t.keys)
+        }
+      }
+    }
+  }
+})
+b.key = 'b'
+
+// const b2 = create(b)
+// b2.key = 'b2'
+
+const x = create(struct, {
+  a: {
+    b: {
+      props: { default: b },
+      X: true
+    }
+  }
+})
+
+const x2 = create(x)
+const x3 = create(x)
+const x4 = create(x)
+const x5 = create(x)
+const x6 = create(x)
+
+console.log(b.instances.length)
+
+s = bstamp.create()
+set(b, { c: 'hello' }, s)
+bstamp.close(s)
