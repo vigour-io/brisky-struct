@@ -192,6 +192,23 @@ perf(
   }, 1, 1
 )
 
+
+perf(
+  function simpleRemoveFieldsStruct () {
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(s, { x: i })
+      // struct.set(x.x, null)
+      struct.set(x.x, null)
+    }
+  },
+  function simpleRemoveFieldsBase () {
+    for (let i = 0; i < amount; i++) {
+      let x = base({ x: i })
+      x.x.remove()
+    }
+  }, 1, 1
+)
+
 // const x = struct.create(s)
 let x = create(s, { x: 100 })
 let y = create(s, {
@@ -420,22 +437,6 @@ const zo = new Obs({ yo })
 //       x.remove()
 //     }
 //   }
-// )
-
-// perf(
-//   function simpleRemoveFieldsStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       let x = struct.create(s, { x: i })
-//       // struct.set(x.x, null)
-//       struct.set(x.x, null)
-//     }
-//   },
-//   function simpleRemoveFieldsBase () {
-//     for (let i = 0; i < amount; i++) {
-//       let x = base({ x: i })
-//       x.x.remove()
-//     }
-//   }, 1, 1
 // )
 
 // perf(
