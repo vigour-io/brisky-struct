@@ -52,6 +52,13 @@ console.log('-------------------------------------------')
 console.log('\n (wrong default -- revert to struct)')
 const v = create(struct, {
   props: {
-    default: () => {}
+    default: () => {},
+    x: create(struct)
+  },
+  types: {
+    blurf: { text: 'xxx' }
+  },
+  x: {
+    type: 'blurf'
   }
 })
