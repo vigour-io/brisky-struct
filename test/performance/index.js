@@ -91,24 +91,24 @@ function instanceStructOriginal () {
 //   }, 1, 1
 // )
 
-// perf(
-//   function instanceStructOriginalListeners () {
-//     const a = create(s, { on: { data: { 1: () => {} } } })
-//     const b = create(a)
-//     for (let i = 0; i < amount; i++) {
-//       let s = bstamp.create()
-//       set(a, i, s)
-//       bstamp.close(s)
-//     }
-//   },
-//   function instanceObsOriginalListeners () {
-//     const a = new Obs({ on: { data: { 1: () => {} } } })
-//     const b = new a.Constructor()
-//     for (let i = 0; i < amount; i++) {
-//       a.set(i)
-//     }
-//   }, 1, 10
-// )
+perf(
+  function instanceStructOriginalListeners () {
+    const a = create(s, { on: { data: { 1: () => {} } } })
+    const b = create(a)
+    for (let i = 0; i < amount; i++) {
+      let s = bstamp.create()
+      set(a, i, s)
+      bstamp.close(s)
+    }
+  },
+  function instanceObsOriginalListeners () {
+    const a = new Obs({ on: { data: { 1: () => {} } } })
+    const b = new a.Constructor()
+    for (let i = 0; i < amount; i++) {
+      a.set(i)
+    }
+  }, 1, 10
+)
 
 // perf(
 //   function createListenerStruct () {
@@ -164,7 +164,7 @@ perf(
     for (let i = 0; i < amount; i++) {
       x.set(i)
     }
-  }, 1, 25
+  }, 1, 10
 )
 
 // function listenersStruct () {
