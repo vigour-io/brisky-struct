@@ -32,10 +32,9 @@ const a3 = create(a, {
 })
 a3.key = 'a3'
 
-const xx = create(struct, 100)
 
 const bla = create(struct, {
-  val: xx,
+  val: a2,
   on: {
     data: {
       x: () => {
@@ -45,78 +44,73 @@ const bla = create(struct, {
   }
 })
 
+const xxx = create(bla, {})
+
 var s
 
 console.log('-------------------------------------------')
-console.log('\n\ngo set REF')
+console.log('\n\ngo set case')
 
 s = bstamp.create()
-set(xx, 3, s)
+set(a, 3, s)
 bstamp.close(s)
 
-// console.log('-------------------------------------------')
-// console.log('\n\ngo set case')
+// want to fire for a2
+console.log('a:', compute(a), 'a2:', compute(a2), 'a3:', compute(a3))
 
-// s = bstamp.create()
-// set(a, 3, s)
-// bstamp.close(s)
+console.log('-------------------------------------------')
+console.log('\n\ngo multi case')
+s = bstamp.create()
+set(a, { yuzi: true }, s)
+bstamp.close(s)
 
-// // want to fire for a2
-// console.log('a:', compute(a), 'a2:', compute(a2), 'a3:', compute(a3))
+console.log('-------------------------------------------')
+console.log('\n update exsiting key (remove)')
+s = bstamp.create()
+set(a, { c: null }, s)
+bstamp.close(s)
 
-// console.log('-------------------------------------------')
-// console.log('\n\ngo multi case')
-// s = bstamp.create()
-// set(a, { yuzi: true }, s)
-// bstamp.close(s)
+console.log('-------------------------------------------')
+console.log('\n update exsiting key (spesh)')
+s = bstamp.create()
+set(a, { spesh: true }, s)
+bstamp.close(s)
 
-// console.log('-------------------------------------------')
-// console.log('\n update exsiting key (remove)')
-// s = bstamp.create()
-// set(a, { c: null }, s)
-// bstamp.close(s)
+console.log('-------------------------------------------')
+console.log('\n CONTEXT TIME')
 
-// console.log('-------------------------------------------')
-// console.log('\n update exsiting key (spesh)')
-// s = bstamp.create()
-// set(a, { spesh: true }, s)
-// bstamp.close(s)
+const b = create(struct, {
+  val: 1,
+  c: {
+    on: {
+      data: {
+        1: (t, val) => {
+          console.log('fire!', t.key, t.keys)
+        }
+      }
+    }
+  }
+})
+b.key = 'b'
 
-// console.log('-------------------------------------------')
-// console.log('\n CONTEXT TIME')
+// const b2 = create(b)
+// b2.key = 'b2'
+const x = create(struct, {
+  a: {
+    b: {
+      props: { default: b },
+      X: true
+    }
+  }
+})
 
-// const b = create(struct, {
-//   val: 1,
-//   c: {
-//     on: {
-//       data: {
-//         1: (t, val) => {
-//           console.log('fire!', t.key, t.keys)
-//         }
-//       }
-//     }
-//   }
-// })
-// b.key = 'b'
+const x2 = create(x)
+const x3 = create(x)
+const x4 = create(x)
+const x5 = create(x)
+const x6 = create(x)
+s = bstamp.create()
+set(b, { c: 'hello' }, s)
+bstamp.close(s)
 
-// // const b2 = create(b)
-// // b2.key = 'b2'
-// const x = create(struct, {
-//   a: {
-//     b: {
-//       props: { default: b },
-//       X: true
-//     }
-//   }
-// })
-
-// const x2 = create(x)
-// const x3 = create(x)
-// const x4 = create(x)
-// const x5 = create(x)
-// const x6 = create(x)
-// s = bstamp.create()
-// set(b, { c: 'hello' }, s)
-// bstamp.close(s)
-
-// require('./prop')
+require('./prop')

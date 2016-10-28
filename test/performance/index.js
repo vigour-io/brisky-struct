@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e5
+const amount = 1e6
 const observ = require('observ')
 console.log('✨✨✨PERF', amount / 1000, 'k✨✨✨')
 var cnt = 0
@@ -14,18 +14,18 @@ var eeCount = 0
 const { create, set } = require('../../')
 const s = struct.struct
 
-perf(
-  function structitSingle () {
-    for (let i = 0; i < amount; i++) {
-      create(s, i)
-    }
-  },
-  function baseitSingle () {
-    for (let i = 0; i < amount; i++) {
-      base(i)
-    }
-  }
-)
+// perf(
+//   function structitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       create(s, i)
+//     }
+//   },
+//   function baseitSingle () {
+//     for (let i = 0; i < amount; i++) {
+//       base(i)
+//     }
+//   }
+// )
 
 // perf(
 //   function fieldStruct () {
@@ -110,46 +110,55 @@ function instanceStructOriginal () {
 //   }, 1, 10
 // )
 
+// perf(
+//   function createListenerStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       struct.create(s, {
+//         on: {
+//           data: { a: t => {} }
+//         }
+//       })
+//     }
+//   },
+//   function createListenerObs () {
+//     for (let i = 0; i < amount; i++) {
+//       new Obs({
+//         on: {
+//           data: { a: t => {} }
+//         }
+//       }, false)
+//     }
+//   }, 1, 1
+// )
+
 perf(
-  function createListenerStruct () {
+  function listenersStructReference () {
+    let y = struct.create(s, {
+      on: {
+        data: { a: t => { cnt++ } }
+      }
+    })
+    let x = struct.create(s, {
+      on: {
+        data: { y: y } // uids are nessecary for this
+      }
+    })
+
     for (let i = 0; i < amount; i++) {
-      struct.create(s, {
-        on: {
-          data: { a: t => {} }
-        }
-      })
+      let s = bstamp.create()
+      struct.set(x, i, s)
+      bstamp.close(s)
     }
   },
-  function createListenerObs () {
-    for (let i = 0; i < amount; i++) {
-      new Obs({
-        on: {
-          data: { a: t => {} }
-        }
-      }, false)
-    }
-  }, 1, 1
-)
-
-function listenersStruct () {
-  let x = struct.create(s, {
-    on: {
-      data: { a: t => { cnt++ } }
-    }
-  })
-  for (let i = 0; i < amount; i++) {
-    let s = bstamp.create()
-    struct.set(x, i, s)
-    bstamp.close(s)
-  }
-}
-
-perf(
-  listenersStruct,
-  function listenerObs () {
-    const x = new Obs({
+  function listenerObsReference () {
+    const y = new Obs({
       on: {
         data: { a: t => { obscnt++ } }
+      }
+    })
+    const x = new Obs({
+      on: {
+        data: { a: y }
       }
     })
     for (let i = 0; i < amount; i++) {
@@ -158,54 +167,81 @@ perf(
   }, 1, 25
 )
 
-perf(
-  function simpleRemoveStructSet () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBaseSet () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.set(null)
-    }
-  }
-)
+// function listenersStruct () {
+//   let x = struct.create(s, {
+//     on: {
+//       data: { a: t => { cnt++ } }
+//     }
+//   })
+//   for (let i = 0; i < amount; i++) {
+//     let s = bstamp.create()
+//     struct.set(x, i, s)
+//     bstamp.close(s)
+//   }
+// }
 
-perf(
-  function simpleRemoveStructSetInstance () {
-    let y = create(s)
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(y, { x: i })
-      struct.set(x, null)
-    }
-  },
-  function simpleRemoveBaseSetInstance () {
-    const Hello = (base()).Constructor
-    for (let i = 0; i < amount; i++) {
-      let x = new Hello({ x: i })
-      x.set(null)
-    }
-  }, 1, 1
-)
+// perf(
+//   listenersStruct,
+//   function listenerObs () {
+//     const x = new Obs({
+//       on: {
+//         data: { a: t => { obscnt++ } }
+//       }
+//     })
+//     for (let i = 0; i < amount; i++) {
+//       x.set(i)
+//     }
+//   }, 1, 25
+// )
+
+// perf(
+//   function simpleRemoveStructSet () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       struct.set(x, null)
+//     }
+//   },
+//   function simpleRemoveBaseSet () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.set(null)
+//     }
+//   }
+// )
+
+// perf(
+//   function simpleRemoveStructSetInstance () {
+//     let y = create(s)
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(y, { x: i })
+//       struct.set(x, null)
+//     }
+//   },
+//   function simpleRemoveBaseSetInstance () {
+//     const Hello = (base()).Constructor
+//     for (let i = 0; i < amount; i++) {
+//       let x = new Hello({ x: i })
+//       x.set(null)
+//     }
+//   }, 1, 1
+// )
 
 
-perf(
-  function simpleRemoveFieldsStruct () {
-    for (let i = 0; i < amount; i++) {
-      let x = struct.create(s, { x: i })
-      // struct.set(x.x, null)
-      struct.set(x.x, null)
-    }
-  },
-  function simpleRemoveFieldsBase () {
-    for (let i = 0; i < amount; i++) {
-      let x = base({ x: i })
-      x.x.remove()
-    }
-  }, 1, 1
-)
+// perf(
+//   function simpleRemoveFieldsStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = struct.create(s, { x: i })
+//       // struct.set(x.x, null)
+//       struct.set(x.x, null)
+//     }
+//   },
+//   function simpleRemoveFieldsBase () {
+//     for (let i = 0; i < amount; i++) {
+//       let x = base({ x: i })
+//       x.x.remove()
+//     }
+//   }, 1, 1
+// )
 
 // const x = struct.create(s)
 let x = create(s, { x: 100 })
@@ -531,38 +567,3 @@ const zo = new Obs({ yo })
 //   }
 // }, emitEE)
 
-// perf(
-//   function listenersStructReference () {
-//     let y = struct.create(s, {
-//       on: {
-//         data: { a: t => { cnt++ } }
-//       }
-//     })
-//     let x = struct.create(s, {
-//       on: {
-//         data: { y: y } // uids are nessecary for this
-//       }
-//     })
-
-//     for (let i = 0; i < amount; i++) {
-//       let s = bstamp.create()
-//       struct.set(x, i, s)
-//       bstamp.close(s)
-//     }
-//   },
-//   function listenerObsReference () {
-//     const y = new Obs({
-//       on: {
-//         data: { a: t => { obscnt++ } }
-//       }
-//     })
-//     const x = new Obs({
-//       on: {
-//         data: { a: y }
-//       }
-//     })
-//     for (let i = 0; i < amount; i++) {
-//       x.set(i)
-//     }
-//   }, 1
-// )
