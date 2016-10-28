@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 1e5
 const observ = require('observ')
 console.log('✨✨✨PERF', amount / 1000, 'k✨✨✨')
 var cnt = 0
@@ -158,6 +158,40 @@ perf(
   }, 1, 25
 )
 
+perf(
+  function simpleRemoveStructSet () {
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(s, { x: i })
+      struct.set(x, null)
+    }
+  },
+  function simpleRemoveBaseSet () {
+    for (let i = 0; i < amount; i++) {
+      let x = base({ x: i })
+      x.set(null)
+    }
+  }
+)
+
+perf(
+  function simpleRemoveStructSetInstance () {
+    let y = create(s)
+    for (let i = 0; i < amount; i++) {
+      let x = struct.create(y, { x: i })
+      struct.set(x, null)
+    }
+    console.log(y.instances)
+  },
+  function simpleRemoveBaseSetInstance () {
+    const Hello = (base()).Constructor
+    for (let i = 0; i < amount; i++) {
+      let x = new Hello({ x: i })
+      x.set(null)
+    }
+    console.log(Hello.prototype.instances)
+  }, 1, 1
+)
+
 // const x = struct.create(s)
 let x = create(s, { x: 100 })
 let y = create(s, {
@@ -301,20 +335,6 @@ const zo = new Obs({ yo })
 //   }, 1, 1
 // )
 
-// perf(
-//   function simpleRemoveStructSet () {
-//     for (let i = 0; i < amount; i++) {
-//       let x = struct.create(s, { x: i })
-//       struct.set(x, null)
-//     }
-//   },
-//   function simpleRemoveBaseSet () {
-//     for (let i = 0; i < amount; i++) {
-//       let x = base({ x: i })
-//       x.set(null)
-//     }
-//   }
-// )
 
 // perf(
 //   function instanceStructResolveContextRemove () {
