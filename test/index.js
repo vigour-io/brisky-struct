@@ -81,7 +81,6 @@ b.key = 'b'
 
 // const b2 = create(b)
 // b2.key = 'b2'
-
 const x = create(struct, {
   a: {
     b: {
@@ -96,7 +95,8 @@ const x3 = create(x)
 const x4 = create(x)
 const x5 = create(x)
 const x6 = create(x)
-
 s = bstamp.create()
 set(b, { c: 'hello' }, s)
 bstamp.close(s)
+
+require('./prop')

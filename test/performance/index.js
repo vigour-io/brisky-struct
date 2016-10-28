@@ -110,26 +110,26 @@ function instanceStructOriginal () {
 //   }, 1, 10
 // )
 
-// perf(
-//   function createListenerStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, {
-//         on: {
-//           data: { a: t => {} }
-//         }
-//       })
-//     }
-//   },
-//   function createListenerObs () {
-//     for (let i = 0; i < amount; i++) {
-//       new Obs({
-//         on: {
-//           data: { a: t => {} }
-//         }
-//       }, false)
-//     }
-//   }
-// )
+perf(
+  function createListenerStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, {
+        on: {
+          data: { a: t => {} }
+        }
+      })
+    }
+  },
+  function createListenerObs () {
+    for (let i = 0; i < amount; i++) {
+      new Obs({
+        on: {
+          data: { a: t => {} }
+        }
+      }, false)
+    }
+  }, 1, 1
+)
 
 function listenersStruct () {
   let x = struct.create(s, {
@@ -180,7 +180,6 @@ perf(
       let x = struct.create(y, { x: i })
       struct.set(x, null)
     }
-    console.log(y.instances)
   },
   function simpleRemoveBaseSetInstance () {
     const Hello = (base()).Constructor
@@ -188,7 +187,6 @@ perf(
       let x = new Hello({ x: i })
       x.set(null)
     }
-    console.log(Hello.prototype.instances)
   }, 1, 1
 )
 
