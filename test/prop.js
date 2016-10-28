@@ -44,9 +44,14 @@ console.log('-------------------------------------------')
 console.log('\n TYPES')
 const b = create(struct, {
   props: {
-    default: { hello: true }
-  }
+    default: { hello: 'HELLO' }
+  },
+  types: {
+    x: { bye: true }
+  },
+  xx: { type: 'x' }
 })
+console.log(compute(get(b, [ 'xx', 'hello' ])))
 
 console.log('-------------------------------------------')
 console.log('\n (wrong default -- revert to struct)')
