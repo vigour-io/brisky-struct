@@ -104,6 +104,10 @@ const x = create(struct, {
   }
 })
 
+const path = require('../lib/traversal').path
+console.log('hello', path(x.a.b))
+console.log(path(get(x, ['a', 'b', 'X', 'c'])))
+
 const x2 = create(x)
 const x3 = create(x)
 const x4 = create(x)
@@ -113,6 +117,6 @@ s = bstamp.create()
 set(b, { c: 'hello' }, s)
 bstamp.close(s)
 
-require('./prop')
-require('./listeners')
-require('./instances')
+// require('./prop')
+// require('./listeners')
+// require('./instances')
