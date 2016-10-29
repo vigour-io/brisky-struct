@@ -86,6 +86,12 @@ const b = create(struct, {
       data: {
         1: (t, val) => {
           console.log('fire!', path(t))
+          if (path(t)[0] === 'xx') {
+            console.log('GO')
+            const x = set(t, 'XXXXXXXXXX')
+            console.log(x.parent.parent.parent.parent.parent.parent.key)
+            console.log(t === x, b.C.val, x.val)
+          }
         }
       }
     }
