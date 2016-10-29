@@ -40,20 +40,20 @@ const s = struct.struct
 //   }, 1, 1
 // )
 
-// perf(
-//   function instanceStruct () {
-//     const a = struct.create(s, { x: true })
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(a, { y: true })
-//     }
-//   },
-//   function instanceBase () {
-//     const a = base({ x: true })
-//     for (let i = 0; i < amount; i++) {
-//       new a.Constructor({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 1
-// )
+perf(
+  function instanceStruct () {
+    const a = struct.create(s, { x: true })
+    for (let i = 0; i < amount; i++) {
+      struct.create(a, { y: true })
+    }
+  },
+  function instanceBase () {
+    const a = base({ x: true })
+    for (let i = 0; i < amount; i++) {
+      new a.Constructor({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
 // perf(
 //   function instanceStructOriginalFields () {
