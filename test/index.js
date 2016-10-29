@@ -137,10 +137,11 @@ const x4 = create(struct, {
 
 // console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
 
-console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ].contextLevel))
+console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]).contextLevel)
+console.log(path(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ])))
 
-// set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO')
-
+set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO')
+console.log('LOLLL', x4.A.B.C.xx.xxx.XXXX.a.b.X.C.val)
 // console.log(x3.xx.xxx.XXXX)
 // console.log(b.c.val)
 // console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
