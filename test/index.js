@@ -113,5 +113,6 @@ s = bstamp.create()
 set(b, { c: 'hello' }, s)
 bstamp.close(s)
 
-// require('./prop')
+require('./prop')
 require('./listeners')
+require('./instances')
