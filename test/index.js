@@ -81,7 +81,7 @@ console.log('\n CONTEXT TIME')
 
 const b = create(struct, {
   val: 1,
-  c: { // right here
+  C: { // right here
     on: {
       data: {
         1: (t, val) => {
@@ -106,10 +106,10 @@ const x = create(struct, {
 })
 
 const path = require('../lib/traversal').path
-console.log('hello', path(x.a.b))
-console.log(path(get(x, ['a', 'b', 'X', 'c'])))
+// console.log('hello', path(x.a.b))
+// console.log(path(get(x, ['a', 'b', 'X', 'c'])))
 
-const x2 = create(x)
+// const x2 = create(x)
 
 const x3 = create(struct, {
   xx: {
@@ -121,25 +121,35 @@ const x3 = create(struct, {
   }
 })
 
-console.log('!!!!!!!', path(get(x3, [ 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'c' ])))
-console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
+// const x4 = create(struct, {
+//   A: {
+//     B: {
+//       props: { default: x3 },
+//       C: true
+//     }
+//   }
+// })
 
-set(get(x3, [ 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'c' ]), '!!!!!!')
+// console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
+
+// set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'c' ]), 'TRIPPLE MOFO')
 
 // console.log(x3.xx.xxx.XXXX)
-console.log(b.c.val)
-console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
+// console.log(b.c.val)
+// console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
 
-console.log(x.a.b.X.c.val) // super wrong
+// console.log(x4.A.B.C.xx.xxx.XXXX.a.b.X.c.val) // super wrong
 
 // const x3 = create(x)
 // const x4 = create(x)
 // const x5 = create(x)
 // const x6 = create(x)
-// s = bstamp.create()
-// set(b, { c: 'hello' }, s)
-// bstamp.close(s)
+console.log(' \n\n')
+s = bstamp.create()
+set(b, { C: 'hello' }, s)
+bstamp.close(s)
 
 // require('./prop')
 // require('./listeners')
 // require('./instances')
+console.log('!!!!!!!', path(get(x3, [ 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ])))
