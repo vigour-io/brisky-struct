@@ -78,19 +78,15 @@ const bstamp = require('brisky-stamp')
 console.log('-------------------------------------------')
 console.log('\n CONTEXT TIME')
 
+var cnt = 0
+
 const b = create(struct, {
-  val: 1,
-  C: { // right here
+  C: {
     on: {
       data: {
         1: (t, val) => {
+          cnt++
           console.log('fire!', path(t))
-          // if (path(t)[0] === 'xx') {
-          //   console.log('GO')
-          //   const x = set(t, 'XXXXXXXXXX')
-          //   console.log(x.parent.parent.parent.parent.parent.parent.key)
-          //   console.log(t === x, b.C.val, x.val)
-          // }
         }
       }
     }
@@ -108,6 +104,23 @@ const x = create(struct, {
     }
   }
 })
+
+const yuzi = create(x, {
+  a: {
+    b: {
+      X: {
+        C: {
+          on: {
+            data: {
+              1: () => {}
+            }
+          }
+        }
+      }
+    }
+  }
+})
+yuzi.key = 'yuzi'
 
 const path = require('../lib/traversal').path
 // console.log('hello', path(x.a.b))
@@ -137,7 +150,7 @@ const x4 = create(struct, {
 // console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
 // console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]).contextLevel)
 // console.log(path(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ])))
-// set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO')
+console.log(set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO').val)
 // console.log('LOLLL', x4.A.B.C.xx.xxx.XXXX.a.b.X.C.val)
 // console.log(x3.xx.xxx.XXXX)
 // console.log(b.c.val)
@@ -176,11 +189,20 @@ const yo = create(struct, {
   }
 })
 
+
+// for (var i = 0; i < 1e6; i++) {
+//   create(yo)
+// }
+
 // console.log(' \n\n')
+var d = Date.now()
+
 s = bstamp.create()
-set(b.C, 'hello', s)
+// console.log(b.C.contextLevel, b.C.context.key)
+set(get(b, 'C'), 'hello', s)
 // set(b, { C: 'hello' }, s)
 bstamp.close(s)
+console.log(Date.now() - d, 'fired:', cnt, 'k')
 
 // require('./prop')
 // require('./listeners')
