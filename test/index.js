@@ -85,18 +85,17 @@ const b = create(struct, {
       data: {
         1: (t, val) => {
           console.log('fire!', path(t))
-          if (path(t)[0] === 'xx') {
-            console.log('GO')
-            const x = set(t, 'XXXXXXXXXX')
-            console.log(x.parent.parent.parent.parent.parent.parent.key)
-            console.log(t === x, b.C.val, x.val)
-          }
+          // if (path(t)[0] === 'xx') {
+          //   console.log('GO')
+          //   const x = set(t, 'XXXXXXXXXX')
+          //   console.log(x.parent.parent.parent.parent.parent.parent.key)
+          //   console.log(t === x, b.C.val, x.val)
+          // }
         }
       }
     }
   }
 })
-b.key = 'b'
 
 // const b2 = create(b)
 // b2.key = 'b2'
@@ -137,11 +136,11 @@ const x4 = create(struct, {
 
 // console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
 
-console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]).contextLevel)
-console.log(path(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ])))
+// console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]).contextLevel)
+// console.log(path(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ])))
 
-set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO')
-console.log('LOLLL', x4.A.B.C.xx.xxx.XXXX.a.b.X.C.val)
+// set(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]), 'TRIPPLE MOFO')
+// console.log('LOLLL', x4.A.B.C.xx.xxx.XXXX.a.b.X.C.val)
 // console.log(x3.xx.xxx.XXXX)
 // console.log(b.c.val)
 // console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
@@ -153,9 +152,9 @@ console.log('LOLLL', x4.A.B.C.xx.xxx.XXXX.a.b.X.C.val)
 // const x5 = create(x)
 // const x6 = create(x)
 // console.log(' \n\n')
-// s = bstamp.create()
-// set(b, { C: 'hello' }, s)
-// bstamp.close(s)
+s = bstamp.create()
+set(b, { C: 'hello' }, s)
+bstamp.close(s)
 
 // require('./prop')
 // require('./listeners')
