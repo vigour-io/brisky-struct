@@ -167,6 +167,15 @@ const bla = create(struct, {
   }
 })
 
+const yo = create(struct, {
+  yo: {
+    yoyo: {
+      props: { default: bla },
+      YO: true
+    }
+  }
+})
+
 // console.log(' \n\n')
 s = bstamp.create()
 set(b.C, 'hello', s)
