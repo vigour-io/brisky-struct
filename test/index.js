@@ -109,13 +109,13 @@ const yuzi = create(x, {
   a: {
     b: {
       X: {
-        C: {
-          on: {
-            data: {
-              1: () => {}
-            }
-          }
-        }
+        // C: {
+          // on: {
+          //   data: {
+          //     // 1: () => {}
+          //   }
+          // }
+        // }
       }
     }
   }
@@ -202,7 +202,7 @@ s = bstamp.create()
 set(get(b, 'C'), 'hello', s)
 // set(b, { C: 'hello' }, s)
 bstamp.close(s)
-console.log(Date.now() - d, 'fired:', cnt, 'k')
+console.log(Date.now() - d, 'fired:', cnt)
 
 // require('./prop')
 // require('./listeners')
