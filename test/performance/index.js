@@ -14,31 +14,31 @@ var eeCount = 0
 const { create, set } = require('../../')
 const s = struct.struct
 
-// perf(
-//   function structitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       create(s, i)
-//     }
-//   },
-//   function baseitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       base(i)
-//     }
-//   }
-// )
+perf(
+  function structitSingle () {
+    for (let i = 0; i < amount; i++) {
+      create(s, i)
+    }
+  },
+  function baseitSingle () {
+    for (let i = 0; i < amount; i++) {
+      base(i)
+    }
+  }
+)
 
-// perf(
-//   function fieldStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, { y: true })
-//     }
-//   },
-//   function fieldBase () {
-//     for (let i = 0; i < amount; i++) {
-//       base({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 1
-// )
+perf(
+  function fieldStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, { y: true })
+    }
+  },
+  function fieldBase () {
+    for (let i = 0; i < amount; i++) {
+      base({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
 perf(
   function instanceStruct () {
