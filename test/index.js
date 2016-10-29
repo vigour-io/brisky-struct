@@ -81,11 +81,11 @@ console.log('\n CONTEXT TIME')
 
 const b = create(struct, {
   val: 1,
-  c: {
+  c: { // right here
     on: {
       data: {
         1: (t, val) => {
-          console.log('fire!', t.key, t.keys)
+          console.log('fire!', path(t))
         }
       }
     }
@@ -99,6 +99,7 @@ const x = create(struct, {
   a: {
     b: {
       props: { default: b },
+      // so here is one
       X: true
     }
   }
@@ -109,13 +110,35 @@ console.log('hello', path(x.a.b))
 console.log(path(get(x, ['a', 'b', 'X', 'c'])))
 
 const x2 = create(x)
-const x3 = create(x)
-const x4 = create(x)
-const x5 = create(x)
-const x6 = create(x)
-s = bstamp.create()
-set(b, { c: 'hello' }, s)
-bstamp.close(s)
+
+const x3 = create(struct, {
+  xx: {
+    xxx: {
+      props: { default: x },
+      // so here is one
+      XXXX: true
+    }
+  }
+})
+
+console.log('!!!!!!!', path(get(x3, [ 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'c' ])))
+console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
+
+set(get(x3, [ 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'c' ]), '!!!!!!')
+
+// console.log(x3.xx.xxx.XXXX)
+console.log(b.c.val)
+console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
+
+console.log(x.a.b.X.c.val) // super wrong
+
+// const x3 = create(x)
+// const x4 = create(x)
+// const x5 = create(x)
+// const x6 = create(x)
+// s = bstamp.create()
+// set(b, { c: 'hello' }, s)
+// bstamp.close(s)
 
 // require('./prop')
 // require('./listeners')
