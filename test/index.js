@@ -113,26 +113,26 @@ const path = require('../lib/traversal').path
 // console.log('hello', path(x.a.b))
 // console.log(path(get(x, ['a', 'b', 'X', 'c'])))
 
-// const x2 = create(x)
+const x2 = create(x)
 
-// const x3 = create(struct, {
-//   xx: {
-//     xxx: {
-//       props: { default: x },
-//       // so here is one
-//       XXXX: true
-//     }
-//   }
-// })
+const x3 = create(struct, {
+  xx: {
+    xxx: {
+      props: { default: x },
+      // so here is one
+      XXXX: true
+    }
+  }
+})
 
-// const x4 = create(struct, {
-//   A: {
-//     B: {
-//       props: { default: x3 },
-//       C: true
-//     }
-//   }
-// })
+const x4 = create(struct, {
+  A: {
+    B: {
+      props: { default: x3 },
+      C: true
+    }
+  }
+})
 
 // console.log(b.c.contextPath, x.a.contextPath, x.a.b.X.contextPath, b.c.context.key, x.a.b.X.context.key)
 // console.log(get(x4, [ 'A', 'B', 'C', 'xx', 'xxx', 'XXXX', 'a', 'b', 'X', 'C' ]).contextLevel)
@@ -143,10 +143,10 @@ const path = require('../lib/traversal').path
 // console.log(b.c.val)
 // console.log(x3.xx.xxx.XXXX.a.b.X.c.val) // super wrong
 // console.log(x4.A.B.C.xx.xxx.XXXX.a.b.X.c.val) // super wrong
-// const xx2 = create(x)
-// const xx3 = create(x)
-// const xx4 = create(x)
-// const xx5 = create(x3)
+const xx2 = create(x)
+const xx3 = create(x)
+const xx4 = create(x)
+const xx5 = create(x3)
 
 
 const y = create(struct, {
