@@ -190,7 +190,6 @@ const yo = create(struct, {
   }
 })
 
-
 // for (var i = 0; i < 1e6; i++) {
 //   create(yo)
 // }

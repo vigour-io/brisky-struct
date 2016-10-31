@@ -18,8 +18,7 @@ const a = create(struct, {
 console.log('go go go go')
 var s = stamp.create('click')
 console.log(s)
-set(a, defer(1), s)
-stamp.close(s)
+// set(a, defer(1), s)
 
 // a.set(new Promise((resolve, reject) => setTimeout(() => resolve('blurrrrf'))))
 function* logGenerator () {
@@ -33,17 +32,22 @@ function* logGenerator () {
 // console.log(logGenerator)
 // f instanceof GeneratorFunction
 
-const gen = logGenerator()
+// const gen = logGenerator()
+// _async // and remove it
 
-var cnt = 0
-var bla = { next: function () {
-  cnt++
-  bla.value = cnt
-  bla.done = cnt > 10
-  return bla
-  // await new Promise(resolve => setTimeout(resolve(cnt), 100))
-}}
-bla[Symbol.iterator] = bla.next
+// cancel promise -- blurx
+set(a, logGenerator, s)
+stamp.close(s)
+
+// var cnt = 0
+// var bla = { next: function () {
+//   cnt++
+//   bla.value = cnt
+//   bla.done = cnt > 10
+//   return bla
+//   // await new Promise(resolve => setTimeout(resolve(cnt), 100))
+// }}
+// bla[Symbol.iterator] = bla.next
 
 // support if [symbol.itertator]
 
@@ -51,50 +55,51 @@ bla[Symbol.iterator] = bla.next
 //   console.log(i)
 // }
 
-const x = val => {
-  console.log('?', val)
-  if (val.value) {
-    console.log(val)
-    val.value.then(y => x(gen.next()))
-  } else {
-    if (val.next) { x(val.next()) }
-  }
-}
+// const x = val => {
+//   console.log('?', val)
+//   if (val.value) {
+//     console.log(val)
+//     val.value.then(y => x(gen.next()))
+//   } else {
+//     if (val.next) { x(val.next()) }
+//   }
+// }
 
 
 
-const fn = (val) => {
-  if (val[Symbol.iterator]) {
-    // console.log(val[Symbol.iterator]().next())
-    genNext(val[Symbol.iterator]())
-  }
-}
+// const fn = (val) => {
+//   if (val[Symbol.iterator]) {
+//     // console.log(val[Symbol.iterator]().next())
+//     genNext(val[Symbol.iterator]())
+//   }
+// }
 
-const genNext = (iterator, val) => {
-  if (!val || !val.done) {
-    if (val !== void 0) {
-      if (val.value && typeof val === 'object' && typeof val.value.then === 'function') {
-        val.value.then((resolved) => {
-          console.log('haha', resolved)
-          genNext(iterator, iterator.next())
-        })
-      } else {
-        console.log('haha normal')
-        genNext(iterator, iterator.next())
-      }
-    } else {
-      genNext(iterator, iterator.next())
-    }
-  }
-}
+// const genNext = (iterator, val) => {
+//   if (!val || !val.done) {
+//     if (val !== void 0) {
+//       if (val.value && typeof val === 'object' && typeof val.value.then === 'function') {
+//         val.value.then((resolved) => {
+//           console.log('haha', resolved)
+//           genNext(iterator, iterator.next())
+//         })
+//       } else {
+//         console.log('haha normal')
+//         genNext(iterator, iterator.next())
+//       }
+//     } else {
+//       genNext(iterator, iterator.next())
+//     }
+//   }
+// }
 
-genNext(gen, void 0)
+// const gen = ()
+// genNext(gen, void 0)
 
-var xxx = [ 1, 2, 3, 4]
-// add symbol .iterator
-console.log('???', [...xxx])
+// var xxx = [ 1, 2, 3, 4]
+// // add symbol .iterator
+// console.log('???', [...xxx])
 
-fn([1, 2, 3, 4])
+// fn([1, 2, 3, 4])
 
 // x(logGenerator())
 
