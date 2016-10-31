@@ -14,18 +14,18 @@ var eeCount = 0
 const { create, set } = require('../../')
 const s = struct.struct
 
-// perf(
-//   function structitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       create(s, i)
-//     }
-//   },
-//   function baseitSingle () {
-//     for (let i = 0; i < amount; i++) {
-//       base(i)
-//     }
-//   }
-// )
+perf(
+  function structitSingle () {
+    for (let i = 0; i < amount; i++) {
+      create(s, i)
+    }
+  },
+  function baseitSingle () {
+    for (let i = 0; i < amount; i++) {
+      base(i)
+    }
+  }
+)
 
 // perf(
 //   function fieldStruct () {
@@ -308,6 +308,7 @@ const zo = new Obs({ yo })
 //       })
 //     }
 //   },
+
 //   function instanceBaseProperties () {
 //     const a = base({
 //       x: true,

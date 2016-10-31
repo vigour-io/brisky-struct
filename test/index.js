@@ -132,6 +132,7 @@ const x3 = create(struct, {
   xx: {
     xxx: {
       props: { default: x },
+      // child --> props --> default
       // so here is one
       XXXX: true
     }
@@ -208,3 +209,5 @@ console.log(Date.now() - d, 'fired:', cnt)
 // require('./listeners')
 // require('./instances')
 console.log('!!!!!!!', path(get(bla, [ 'bla', 'x', 'Z', 'yy', 'Y', 'a', 'b', 'X', 'C' ])))
+
+require('./promise')
