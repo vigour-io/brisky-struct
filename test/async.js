@@ -2,13 +2,13 @@
 const { create, set, get, struct, compute } = require('../')
 const stamp = require('brisky-stamp')
 
-const defer = (val) => new Promise(resolve => setTimeout(() => resolve(val + 1), 1000))
+const defer = (val) => new Promise(resolve => setTimeout(() => resolve(val + 1), 100))
 
 const a = create(struct, {
   on: {
     data: {
       // a: (t, val, stamp) => set(t, defer(compute(t)), stamp),
-      log: (t, val, stamp) => console.log('defer', stamp, compute(t))
+      log: (t, val, stamp) => console.log('yo!', stamp, compute(t))
     }
   }
 })
@@ -18,25 +18,18 @@ const a = create(struct, {
 console.log('go go go go')
 var s = stamp.create('click')
 console.log(s)
-// set(a, defer(1), s)
+set(a, defer(1), s)
 
-// a.set(new Promise((resolve, reject) => setTimeout(() => resolve('blurrrrf'))))
-function* logGenerator () {
+set(a, function* logGenerator () {
   for (var i = 0; i < 100; i++) {
     yield defer(i)
   }
-}
+}, s)
 
-// once (allways a promise ofcourse)
+setTimeout(() => {
+  set(a, 1000, 'bla')
+}, 500)
 
-// console.log(logGenerator)
-// f instanceof GeneratorFunction
-
-// const gen = logGenerator()
-// _async // and remove it
-
-// cancel promise -- blurx
-set(a, logGenerator, s)
 stamp.close(s)
 
 // var cnt = 0

@@ -209,4 +209,4 @@ console.log(Date.now() - d, 'fired:', cnt)
 // require('./instances')
 console.log('!!!!!!!', path(get(bla, [ 'bla', 'x', 'Z', 'yy', 'Y', 'a', 'b', 'X', 'C' ])))
 
-require('./promise')
+require('./async')
