@@ -2,7 +2,7 @@
 const { create, set, get, struct, compute } = require('../')
 const stamp = require('brisky-stamp')
 
-const defer = (val) => new Promise(resolve => setTimeout(() => resolve(val + 1), 100))
+const defer = (val, time = 100) => new Promise(resolve => setTimeout(() => resolve(val + 1), time))
 
 const a = create(struct, {
   on: {
@@ -15,20 +15,50 @@ const a = create(struct, {
 
 // set(a, null, 'x')
 
-console.log('go go go go')
+// console.log('go go go go')
 var s = stamp.create('click')
-console.log(s)
-set(a, defer(1), s)
-
+// console.log(s)
+set(a, defer(100), s)
+set(a, defer(200), s)
+set(a, defer(300, 1e3), s)
+set(a, defer(500), s)
+set(a, defer(600), s)
 set(a, function* logGenerator () {
-  for (var i = 0; i < 100; i++) {
-    yield defer(i)
+  for (var i = 0; i < 3; i++) {
+    yield defer(i, 1e3)
   }
 }, s)
+set(a, defer(100), s)
 
-setTimeout(() => {
-  set(a, 1000, 'bla')
-}, 500)
+// var bla = [
+//   1,
+//   2,
+//   3
+// ]
+
+// for(var x of bla) {
+//   console.log(x)
+// }
+
+// console.log(bla[Symbol.iterator]())
+// set(a, bla[Symbol.iterator](), s)
+
+
+// setTimeout(() => {
+//   set(a, 1000, 'bla')
+// }, 500)
+
+set({
+  xxx: true,
+  y: true,
+  x: true
+})
+
+set({
+  blabla: true
+})
+
+// arr.forEach(() => set(a, new Promise()))
 
 stamp.close(s)
 

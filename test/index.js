@@ -80,6 +80,29 @@ console.log('\n CONTEXT TIME')
 
 var cnt = 0
 
+const hub = create(struct, {
+  a: {
+    b: {
+      c: 'hello',
+      bla: true
+    }
+  }
+})
+
+const hubForAUser = create(hub)
+
+console.log(compute(get(hub, ['a', 'b', 'c'])))
+
+var cInContext = get(hubForAUser, ['a', 'b', 'c'])
+
+
+console.log(compute(cInContext))
+console.log(cInContext === hub.a.b.c)
+console.log(cInContext.contextLevel, cInContext.context === hubForAUser)
+cInContext = set(cInContext, 'YO YO YO')
+
+console.log(hubForAUser.a.b.c.val)
+
 const b = create(struct, {
   C: {
     on: {
@@ -100,7 +123,8 @@ const x = create(struct, {
     b: {
       props: { default: b },
       // so here is one
-      X: true
+      X: true,
+      mustafa: true
     }
   }
 })

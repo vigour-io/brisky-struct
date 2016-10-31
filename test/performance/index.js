@@ -14,6 +14,21 @@ var eeCount = 0
 const { create, set } = require('../../')
 const s = struct.struct
 
+// perf(
+//   function makeClassStruct () {
+//     for (let i = 0; i < amount; i++) {
+//       const a = struct.create(s, { x: true })
+//       struct.create(a, { y: true })
+//     }
+//   },
+//   function makeClassBase () {
+//     for (let i = 0; i < amount; i++) {
+//       const a = base({ x: true })
+//       new a.Constructor({ y: true }) // eslint-disable-line
+//     }
+//   }
+// )
+
 perf(
   function structitSingle () {
     for (let i = 0; i < amount; i++) {
@@ -324,21 +339,6 @@ const zo = new Obs({ yo })
 //         y: true,
 //         bla: true
 //       })
-//     }
-//   }
-// )
-
-// perf(
-//   function makeClassStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       const a = struct.create(s, { x: true })
-//       struct.create(a, { y: true })
-//     }
-//   },
-//   function makeClassBase () {
-//     for (let i = 0; i < amount; i++) {
-//       const a = base({ x: true })
-//       new a.Constructor({ y: true }) // eslint-disable-line
 //     }
 //   }
 // )
