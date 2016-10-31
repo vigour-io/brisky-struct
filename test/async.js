@@ -18,10 +18,15 @@ const a = create(struct, {
 // console.log('go go go go')
 var s = stamp.create('click')
 // console.log(s)
+
+// when things are done at the same time add them to one stamp one set much better
+// so just check in the queue for all that are done make one set obj for them
+// need to support async inputs in .val as well!
+
 set(a, defer(100), s)
 set(a, defer(200), s)
 set(a, defer(300, 1e3), s)
-set(a, defer(500), s)
+set(a, defer({ val: 500, haha: true }), s)
 set(a, defer(600), s)
 set(a, function* logGenerator () {
   for (var i = 0; i < 3; i++) {
