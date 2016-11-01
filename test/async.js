@@ -57,13 +57,17 @@ test('async', t => {
 
   set(a, defer('defer-5'), s)
 
+  set(a, once(a, 'defer-4').then(() => 'defer-6'), s)
+
   set({
     xxx: true,
     y: true,
     x: true
   })
 
-  once(a, 'defer-5').then(() => t.end())
+  once(a, 'defer-5', () => { console.log('callback') })
+
+  once(a, 'defer-6').then(() => t.end())
 
   stamp.close(s)
 })
