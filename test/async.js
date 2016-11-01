@@ -119,8 +119,6 @@ stamp.close(s)
 //   }
 // }
 
-
-
 // const fn = (val) => {
 //   if (val[Symbol.iterator]) {
 //     // console.log(val[Symbol.iterator]().next())
@@ -186,7 +184,6 @@ function notAGenerator() {
     }
   }
 }
-
 
 if (err) {
       g.throw(err); return;
