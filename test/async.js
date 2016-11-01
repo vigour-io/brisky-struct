@@ -26,9 +26,9 @@ test('async', t => {
 
   const s = stamp.create('click')
 
-  const later = async sayWhat => {
+  const later = async val => {
     await defer(1, 100)
-    return sayWhat
+    return val
   }
 
   set(a, later('later-1'), s)
@@ -57,7 +57,7 @@ test('async', t => {
 
   set(a, defer('defer-5'), s)
 
-  set(a, once(a, 'defer-4').then(() => 'defer-6'), s)
+  set(a, once(a, 'gen-1').then(() => defer('defer-6', 5e2)), s)
 
   set({
     xxx: true,
