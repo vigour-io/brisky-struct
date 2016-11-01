@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "(ducktape; node test) | tap-difflet && standard",
-    "dev": "nodemon test | tap-difflet",
+    "dev": "nodemon --harmony-async-await test | tap-difflet",
     "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-difflet",
     "dev-perf": "nodemon test/performance/index.js --expose-gc | tap-difflet",
     "dev-perf-browser": "budo ./test/performance/index.js -p 8080 --live",
@@ -17,9 +17,10 @@
     "url": "git+https://github.com/vigour-io/brisky-struct.git"
   },
   "keywords": [
-    "data structur",
+    "data structure",
     "vector",
-    "functional"
+    "functional",
+    "memory optmization"
   ],
   "dependencies": {
     "brisky-stamp": "^1.5.6",
@@ -27,9 +28,7 @@
     "monotonic-timestamp": "0.0.9"
   },
   "browserify": {
-    "transform": [
-      "bubleify"
-    ]
+    "transform": [ "bubleify" ]
   },
   "devDependencies": {
     "brisky-base": "^4.0.0",
