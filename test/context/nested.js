@@ -99,7 +99,7 @@ test('context - nested', t => {
   }, 'first slow event fired as expected')
 
   slow = {}
-  set(animals, {mySeagull: { likes: { woundedPigeon: { runs: { slow: false } } } } }, 'stamp2')
+  set(animals, { mySeagull: { likes: { woundedPigeon: { runs: { slow: false } } } } }, 'stamp2')
   t.deepEqual(slow, {
     'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
   }, 'second slow event fired as expected')
