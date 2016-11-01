@@ -88,15 +88,21 @@ test('context - nested', t => {
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.context, get(animals, ['mySeagull']), 'wounded pigeon can not swim in context of context')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.contextLevel, 2, 'contextLevel of context is 2')
 
-  set(bird, {runs: { slow: true}}, 'a')
-
+  slow = {}
+  set(bird, { runs: { slow: true } }, 'stamp1')
   t.deepEqual(slow, {
     'seagull.runs': { val: false, count: 1 },
     'pigeon.runs': { val: false, count: 1 },
     'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
     'bird.runs': { val: false, count: 1 },
     'animals.mySeagull.runs': { val: true, count: 1 }
-  }, 'slow event fired as expected')
+  }, 'first slow event fired as expected')
+
+  slow = {}
+  set(animals, {mySeagull: { likes: { woundedPigeon: { runs: { slow: false } } } } }, 'stamp2')
+  t.deepEqual(slow, {
+    'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
+  }, 'second slow event fired as expected')
 
   t.end()
 })
