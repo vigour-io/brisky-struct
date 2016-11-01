@@ -26,43 +26,44 @@ test('async', t => {
 
   const s = stamp.create('click')
 
-  // const later = async sayWhat => {
-  //   await defer(1, 100)
-  //   return sayWhat
-  // }
+  const later = async sayWhat => {
+    await defer(1, 100)
+    return sayWhat
+  }
 
-  // set(a, later('later-1'), s)
-  // set(a, defer('defer-1'), s)
-  // set(a, defer('defer-2'), s)
+  set(a, later('later-1'), s)
 
-  // set(a, function* (t, stamp) {
-  //   for (var i = 0; i < 3; i++) {
-  //     yield later('await-gen-' + i)
-  //   }
-  // }, s)
+  set(a, defer('defer-1'), s)
 
-  // set(a, defer('defer-error', 0, new Error('haha')), s)
+  set(a, defer('defer-2'), s)
 
-  // set(a, function* logGenerator () {
-  //   for (var i = 0; i < 3; i++) {
-  //     yield defer('gen-' + i, 100)
-  //   }
-  // }, s)
+  set(a, function* (t, stamp) {
+    for (var i = 0; i < 3; i++) {
+      yield later('await-gen-' + i)
+    }
+  }, s)
 
-  // set(a, defer('defer-3', 500), s)
-  // set(a, defer('defer-4'), s)
+  set(a, defer('defer-error', 0, new Error('haha')), s)
+
+  set(a, function* logGenerator () {
+    for (var i = 0; i < 3; i++) {
+      yield defer('gen-' + i, 100)
+    }
+  }, s)
+
+  set(a, defer('defer-3', 500), s)
+
+  set(a, defer('defer-4'), s)
 
   set(a, defer('defer-5'), s)
 
-  // set({
-  //   xxx: true,
-  //   y: true,
-  //   x: true
-  // })
-
-  once(a, 'defer-5').then(() => {
-    console.log('hello', a.on.data.fn.length)
+  set({
+    xxx: true,
+    y: true,
+    x: true
   })
+
+  once(a, 'defer-5').then(() => t.end())
 
   stamp.close(s)
 })
