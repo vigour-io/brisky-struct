@@ -21,17 +21,17 @@ test('context - basic', t => {
     }
   })
 
-  t.equals(compute(instance.parent.child.grandChild), 'rebel', 'instance has primitive')
-  t.equals(compute(instance.parent.child.grandChild), 'rebel', 'extended has primitive')
-  t.notOk(instance.parent.child.grandChild.age, 'instance does not have age')
-  t.equals(compute(extended.parent.child.grandChild.age), 17, 'extended has age')
+  t.equals(compute(get(instance, ['parent', 'child', 'grandChild'])), 'rebel', 'instance has primitive')
+  t.equals(compute(get(instance, ['parent', 'child', 'grandChild'])), 'rebel', 'extended has primitive')
+  t.notOk(get(instance, ['parent', 'child', 'grandChild', 'age']), 'instance does not have age')
+  t.equals(compute(get(extended, ['parent', 'child', 'grandChild', 'age'])), 17, 'extended has age')
 
   const grandChild = get(instance, ['parent', 'child', 'grandChild'])
   set(grandChild, { name: 'Berk' })
 
-  t.equals(compute(instance.parent.child.grandChild.name), 'Berk', 'instance has name')
-  t.equals(compute(grandChild.name), 'Berk', 'assigned sub-struct has name')
-  t.notOk(extended.parent.child.grandChild.name, 'extended does not have name')
+  t.equals(compute(get(instance, ['parent', 'child', 'grandChild', 'name'])), 'Berk', 'instance has name')
+  t.equals(compute(get(grandChild, 'name')), 'Berk', 'assigned sub-struct has name')
+  t.equals(compute(get(extended, ['parent', 'child', 'grandChild', 'name'])), 'Berk', 'extended has name')
 
   t.end()
 })
@@ -52,6 +52,8 @@ test('context - props', t => {
     }
   })
 
+  t.equals(compute(get(students, ['first', 'gender'])), 'female', 'Burcu is a female')
+  t.equals(compute(get(students, ['second', 'gender'])), 'male', 'Mert is a male')
   t.end()
 })
 
