@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('tape')
-const { create, set, get, struct, compute, path } = require('../../')
+const { create, set, get, struct, compute, path, parent } = require('../../')
 
 test('context - nested', t => {
   const feline = create(struct, {
@@ -87,6 +87,9 @@ test('context - nested', t => {
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).contextLevel, 1, 'contextLevel is 1')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.context, get(animals, ['mySeagull']), 'wounded pigeon can not swim in context of context')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.contextLevel, 2, 'contextLevel of context is 2')
+
+  t.equals(parent(get(animals, ['mySeagull', 'hunts', 'kitten', 'swims'])), get(animals, ['mySeagull', 'hunts', 'kitten']), 'parent of swims is kitten')
+  t.equals(parent(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'runs'])), get(animals, ['mySeagull', 'likes', 'woundedPigeon']), 'parent of runs is woundedPigeon')
 
   slow = {}
   set(bird, { runs: { slow: true } }, 'stamp1')
