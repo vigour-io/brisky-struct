@@ -27,7 +27,7 @@ test('async', t => {
   const s = stamp.create('click')
 
   const later = async val => {
-    val = val + await defer(val, 100)
+    val = await defer(val, 100) + '!'
     return val
   }
 
@@ -67,9 +67,21 @@ test('async', t => {
     x: true
   })
 
-  once(a, 'defer-5', () => { console.log('callback') })
-
-  once(a, 'defer-7').then(() => t.end())
+  once(a, 'defer-7').then(() => {
+    const s = stamp.create('move')
+    set(a, function* logGenerator () {
+      for (var i = 0; i < 3; i++) {
+        yield defer('gen-2-' + i, 100)
+      }
+    }, s)
+    set(a, defer('defer-8', 1e3), s)
+    set(a, defer('defer-9', 1e3), s)
+    set(a, defer('defer-10', 1e3), s)
+    set(a, defer('defer-11', 1e3), s)
+    set(a, { async: null, val: defer('defer-12') }, s)
+    once(a, 'defer-12', () => t.end())
+    stamp.close(s)
+  })
 
   // context tests
 
