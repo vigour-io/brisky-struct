@@ -9,17 +9,15 @@ test('async', t => {
     )
 
   const results = []
+  const errors = []
 
   const a = create(struct, {
     on: {
       data: {
-        log: (t, val, stamp) => {
-          results.push(stamp)
-          console.log(stamp, val)
-        }
+        log: (t, val, stamp) => results.push(stamp)
       },
       error: {
-        log: (t, err, stamp) => console.log('ERROR', err.message, stamp)
+        log: (t, err, stamp) => errors.push(err.message)
       }
     }
   })
@@ -27,7 +25,7 @@ test('async', t => {
   const s = stamp.create('click')
 
   const later = async val => {
-    val = await defer(val, 100) + '!'
+    val = await defer(val, 10) + '!'
     return val
   }
 
@@ -47,17 +45,17 @@ test('async', t => {
 
   set(a, function* logGenerator () {
     for (var i = 0; i < 3; i++) {
-      yield defer('gen-' + i, 100)
+      yield defer('gen-' + i, 10)
     }
   }, s)
 
-  set(a, defer('defer-3', 500), s)
+  set(a, defer('defer-3', 25), s)
 
   set(a, defer('defer-4'), s)
 
   set(a, defer('defer-5'), s)
 
-  set(a, once(a, 'gen-1').then(() => defer('defer-6', 5e2)), s)
+  set(a, once(a, 'gen-1').then(() => defer('defer-6', 25)), s)
 
   set(a, { val: defer('defer-7'), hello: true }, s)
 
@@ -68,6 +66,7 @@ test('async', t => {
   })
 
   once(a, 'defer-7').then(() => {
+    t.pass('defer-7 is set')
     const s = stamp.create('move')
     set(a, function* logGenerator () {
       for (var i = 0; i < 3; i++) {
@@ -80,6 +79,7 @@ test('async', t => {
     set(a, defer('defer-11', 1e3), s)
     set(a, { async: null, val: defer('defer-12') }, s)
     once(a, 'defer-12', () => {
+      t.same(errors, [ 'haha' ], 'fired correct errors')
       t.same(results, [
         'click-1',
         'click-2',
