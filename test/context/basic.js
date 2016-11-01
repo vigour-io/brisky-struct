@@ -66,15 +66,18 @@ test('context - props', t => {
   t.equals(compute(get(students, ['first', 'gender'])), 'female', 'gender of Burcu is female')
   t.equals(get(students, ['first', 'gender']).context, get(students, 'first'), 'gender is in context')
   t.equals(get(students, ['first', 'gender']).contextLevel, 1, 'contextLevel is 1')
+  t.equals(parent(get(students, ['first', 'gender'])), get(students, 'first'), 'parent of gender for Burcu is first')
 
   t.equals(compute(get(students, ['second', 'gender'])), 'male', 'gender of Mert is male')
   t.equals(get(students, ['second', 'gender']).context, get(students, 'second'), 'gender is in context')
   t.equals(get(students, ['second', 'gender']).contextLevel, 1, 'contextLevel is 1')
+  t.equals(parent(get(students, ['second', 'gender'])), get(students, 'second'), 'parent of gender for Mert is second')
 
   set(students, { third: { name: 'Lale', type: 'female' } })
   t.equals(compute(get(students, ['third', 'gender'])), 'female', 'gender of Lale is female')
   t.equals(get(students, ['third', 'gender']).context, get(students, 'third'), 'gender is in context')
   t.equals(get(students, ['third', 'gender']).contextLevel, 1, 'contextLevel is 1')
+  t.equals(parent(get(students, ['third', 'gender'])), get(students, 'third'), 'parent of gender for Lale is third')
 
   t.end()
 })
