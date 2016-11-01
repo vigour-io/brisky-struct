@@ -19,7 +19,7 @@ test('async', t => {
         }
       },
       error: {
-        log: (t, val, stamp) => console.log('ERROR', val, stamp)
+        log: (t, err, stamp) => console.log('ERROR', err.message, stamp)
       }
     }
   })
