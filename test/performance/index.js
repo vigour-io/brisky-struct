@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 1e6
+const amount = 5e5
 const observ = require('observ')
 console.log('✨✨✨PERF', amount / 1000, 'k✨✨✨')
 var cnt = 0
@@ -42,33 +42,33 @@ perf(
   }
 )
 
-// perf(
-//   function fieldStruct () {
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(s, { y: true })
-//     }
-//   },
-//   function fieldBase () {
-//     for (let i = 0; i < amount; i++) {
-//       base({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 1
-// )
+perf(
+  function fieldStruct () {
+    for (let i = 0; i < amount; i++) {
+      struct.create(s, { y: true })
+    }
+  },
+  function fieldBase () {
+    for (let i = 0; i < amount; i++) {
+      base({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
-// perf(
-//   function instanceStruct () {
-//     const a = struct.create(s, { x: true })
-//     for (let i = 0; i < amount; i++) {
-//       struct.create(a, { y: true })
-//     }
-//   },
-//   function instanceBase () {
-//     const a = base({ x: true })
-//     for (let i = 0; i < amount; i++) {
-//       new a.Constructor({ y: true }) // eslint-disable-line
-//     }
-//   }, 1, 10
-// )
+perf(
+  function instanceStruct () {
+    const a = struct.create(s, { x: true })
+    for (let i = 0; i < amount; i++) {
+      struct.create(a, { y: true })
+    }
+  },
+  function instanceBase () {
+    const a = base({ x: true })
+    for (let i = 0; i < amount; i++) {
+      new a.Constructor({ y: true }) // eslint-disable-line
+    }
+  }, 1, 1
+)
 
 // perf(
 //   function instanceStructOriginalFields () {

@@ -59,6 +59,8 @@ test('async', t => {
 
   set(a, once(a, 'gen-1').then(() => defer('defer-6', 5e2)), s)
 
+  set(a, { val: defer('defer-7'), hello: true }, s)
+
   set({
     xxx: true,
     y: true,
@@ -67,7 +69,7 @@ test('async', t => {
 
   once(a, 'defer-5', () => { console.log('callback') })
 
-  once(a, 'defer-6').then(() => t.end())
+  once(a, 'defer-7').then(() => t.end())
 
   // context tests
 
