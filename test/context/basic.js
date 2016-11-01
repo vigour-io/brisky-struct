@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('tape')
-const { create, set, get, struct, compute } = require('../../')
+const { create, set, get, struct, compute, parent } = require('../../')
 
 test('context - extend', t => {
   const instance = create(struct, {
@@ -22,6 +22,8 @@ test('context - extend', t => {
     }
   })
 
+  console.log()
+
   t.equals(compute(get(instance, ['parent', 'child', 'grandChild'])), 'rebel', 'instance has primitive')
   t.equals(compute(get(instance, ['parent', 'child', 'grandChild'])), 'rebel', 'extended has primitive')
   t.notOk(get(instance, ['parent', 'child', 'grandChild', 'age']), 'instance does not have age')
@@ -32,6 +34,8 @@ test('context - extend', t => {
   t.equals(compute(get(instance, ['parent', 'child', 'grandChild', 'name'])), 'Berk', 'instance has name')
   t.equals(compute(get(grandChild, 'name')), 'Berk', 'assigned sub-struct has name')
   t.equals(compute(get(extended, ['parent', 'child', 'grandChild', 'name'])), 'Berk', 'extended has name')
+
+  t.equals(parent(get(extended, ['parent', 'child', 'grandChild'])), get(extended, ['parent', 'child']), 'extended child is parent of extended grandChild')
 
   t.end()
 })
