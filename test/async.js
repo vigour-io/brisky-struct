@@ -27,7 +27,7 @@ test('async', t => {
   const s = stamp.create('click')
 
   const later = async val => {
-    await defer(1, 100)
+    val = val + await defer(val, 100)
     return val
   }
 
@@ -68,6 +68,8 @@ test('async', t => {
   once(a, 'defer-5', () => { console.log('callback') })
 
   once(a, 'defer-6').then(() => t.end())
+
+  // context tests
 
   stamp.close(s)
 })
