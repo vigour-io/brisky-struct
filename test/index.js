@@ -1,3 +1,7 @@
+'use strict'
+require('./context')
+
+/*
 const { create, set, get, struct, compute } = require('../')
 const bstamp = require('brisky-stamp')
 
@@ -234,3 +238,4 @@ console.log(Date.now() - d, 'fired:', cnt)
 console.log('!!!!!!!', path(get(bla, [ 'bla', 'x', 'Z', 'yy', 'Y', 'a', 'b', 'X', 'C' ])))
 
 require('./async')
+*/
