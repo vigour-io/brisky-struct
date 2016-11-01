@@ -1,14 +1,25 @@
 const test = require('tape')
-const { create, set, struct, compute } = require('../')
+const { create, set, struct } = require('../')
 const stamp = require('brisky-stamp')
 
 test('async', t => {
-  const defer = (val, time = 100) => new Promise(resolve => setTimeout(() => resolve(val), time))
+  const defer = (val, time = 5, err) =>
+    new Promise((resolve, reject) =>
+      setTimeout(() => err ? reject(err) : resolve(val), time)
+    )
+
+  const results = []
 
   const a = create(struct, {
     on: {
       data: {
-        log: (t, val, stamp) => console.log('yo!', stamp, compute(t))
+        log: (t, val, stamp) => {
+          results.push(val)
+          console.log(stamp, val)
+        }
+      },
+      error: {
+        log: (t, val, stamp) => console.log('ERROR', val, stamp)
       }
     }
   })
@@ -16,7 +27,7 @@ test('async', t => {
   const s = stamp.create('click')
 
   const later = async sayWhat => {
-    await defer(1, 500)
+    await defer(1, 100)
     return sayWhat
   }
 
@@ -26,13 +37,15 @@ test('async', t => {
 
   set(a, function* (t, stamp) {
     for (var i = 0; i < 3; i++) {
-      yield later('await-gen-' + i, 1e3)
+      yield later('await-gen-' + i)
     }
   }, s)
 
+  set(a, defer('defer-error', 0, new Error('haha')), s)
+
   set(a, function* logGenerator () {
     for (var i = 0; i < 3; i++) {
-      yield defer('gen-' + i, 1e3)
+      yield defer('gen-' + i, 100)
     }
   }, s)
 
