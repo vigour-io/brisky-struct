@@ -54,6 +54,9 @@ test('context - props', t => {
 
   t.equals(compute(get(students, ['first', 'gender'])), 'female', 'Burcu is a female')
   t.equals(compute(get(students, ['second', 'gender'])), 'male', 'Mert is a male')
+
+  set(students, { third: { name: 'Lale' } })
+  t.equals(compute(get(students, ['third', 'gender'])), 'female', 'Lale is a female')
+
   t.end()
 })
-
