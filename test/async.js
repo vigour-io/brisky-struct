@@ -14,7 +14,7 @@ test('async', t => {
     on: {
       data: {
         log: (t, val, stamp) => {
-          results.push(val)
+          results.push(stamp)
           console.log(stamp, val)
         }
       },
@@ -79,7 +79,27 @@ test('async', t => {
     set(a, defer('defer-10', 1e3), s)
     set(a, defer('defer-11', 1e3), s)
     set(a, { async: null, val: defer('defer-12') }, s)
-    once(a, 'defer-12', () => t.end())
+    once(a, 'defer-12', () => {
+      t.same(results, [
+        'click-1',
+        'click-2',
+        'click-3',
+        'click-4',
+        'click-5',
+        'click-6',
+        'click-7',
+        'click-8',
+        'click-9',
+        'click-10',
+        'click-11',
+        'click-12',
+        'click-13',
+        'click-14',
+        'click-15',
+        'move-17'
+      ], 'fired correct results')
+      t.end()
+    })
     stamp.close(s)
   })
 
