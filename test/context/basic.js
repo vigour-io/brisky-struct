@@ -1,8 +1,9 @@
 'use strict'
+
 const test = require('tape')
 const { create, set, get, struct, compute } = require('../../')
 
-test('context - basic', t => {
+test('context - extend', t => {
   const instance = create(struct, {
     parent: {
       child: {
@@ -48,10 +49,7 @@ test('context - props', t => {
     props: {
       default: female
     },
-    types: {
-      female: female,
-      male: male
-    },
+    types: { female, male },
     first: {
       name: 'Burcu'
     },
@@ -62,17 +60,17 @@ test('context - props', t => {
   })
 
   t.equals(compute(get(students, ['first', 'gender'])), 'female', 'gender of Burcu is female')
-  t.equals(get(students, ['first', 'gender']).context, get(students, 'first'), 'gender should be in context')
-  t.equals(get(students, ['first', 'gender']).contextLevel, 1, 'contextLevel should be 1')
+  t.equals(get(students, ['first', 'gender']).context, get(students, 'first'), 'gender is in context')
+  t.equals(get(students, ['first', 'gender']).contextLevel, 1, 'contextLevel is 1')
 
   t.equals(compute(get(students, ['second', 'gender'])), 'male', 'gender of Mert is male')
-  t.equals(get(students, ['second', 'gender']).context, get(students, 'second'), 'gender should be in context')
-  t.equals(get(students, ['second', 'gender']).contextLevel, 1, 'contextLevel should be 1')
+  t.equals(get(students, ['second', 'gender']).context, get(students, 'second'), 'gender is in context')
+  t.equals(get(students, ['second', 'gender']).contextLevel, 1, 'contextLevel is 1')
 
   set(students, { third: { name: 'Lale', type: 'female' } })
   t.equals(compute(get(students, ['third', 'gender'])), 'female', 'gender of Lale is female')
-  t.equals(get(students, ['third', 'gender']).context, get(students, 'third'), 'gender should be in context')
-  t.equals(get(students, ['third', 'gender']).contextLevel, 1, 'contextLevel should be 1')
+  t.equals(get(students, ['third', 'gender']).context, get(students, 'third'), 'gender is in context')
+  t.equals(get(students, ['third', 'gender']).contextLevel, 1, 'contextLevel is 1')
 
   t.end()
 })
