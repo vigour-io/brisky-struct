@@ -37,25 +37,35 @@ test('context - basic', t => {
 })
 
 test('context - props', t => {
+  const female = create(struct, {
+    gender: 'female'
+  })
+
+  const male = create(struct, {
+    gender: 'male'
+  })
+
   const students = create(struct, {
     props: {
-      default: {
-        gender: 'female'
-      }
+      default: female
+    },
+    types: {
+      female: female,
+      male: male
     },
     first: {
       name: 'Burcu'
     },
     second: {
       name: 'Mert',
-      gender: 'male'
+      type: 'male'
     }
   })
 
   t.equals(compute(get(students, ['first', 'gender'])), 'female', 'Burcu is a female')
   t.equals(compute(get(students, ['second', 'gender'])), 'male', 'Mert is a male')
 
-  set(students, { third: { name: 'Lale' } })
+  set(students, { third: { name: 'Lale', type: 'female' } })
   t.equals(compute(get(students, ['third', 'gender'])), 'female', 'Lale is a female')
 
   t.end()
