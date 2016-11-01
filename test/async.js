@@ -24,7 +24,7 @@ test('async', t => {
     }
   })
 
-  // const s = stamp.create('click')
+  const s = stamp.create('click')
 
   // const later = async sayWhat => {
   //   await defer(1, 100)
@@ -52,7 +52,7 @@ test('async', t => {
   // set(a, defer('defer-3', 500), s)
   // set(a, defer('defer-4'), s)
 
-  // set(a, defer('defer-5'), s)
+  set(a, defer('defer-5'), s)
 
   // set({
   //   xxx: true,
@@ -61,8 +61,8 @@ test('async', t => {
   // })
 
   once(a, 'defer-5').then(() => {
-    console.log('hello')
+    console.log('hello', a.on.data.fn.length)
   })
 
-  // stamp.close(s)
+  stamp.close(s)
 })
