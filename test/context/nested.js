@@ -21,11 +21,9 @@ test('context - nested', t => {
       on: {
         data: {
           slow (t) {
-            if (slow[path(t).join('.')]) {
-              slow[path(t).join('.')].count++
-            } else {
-              slow[path(t).join('.')] = { val: compute(t), count: 1 }
-            }
+            const p = path(t).join('.')
+            slow[p] = slow[p] || { val: compute(t), count: 0 }
+            slow[p].count++
           }
         }
       }
