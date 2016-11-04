@@ -30,6 +30,21 @@ test('props - function', t => {
   set(s, { speed: 60 })
 
   t.equal(compute(get(s, 'fast')), true, 'now fast')
+  t.end()
+})
 
+test('props - nested', t => {
+  const s = create(struct, {
+    props: {
+      parent: {
+        child: 'rebel'
+      }
+    }
+  })
+
+  set(s, { parent: 'conservative' })
+
+  t.equal(compute(get(s, 'parent')), 'conservative', 'parent is conservative')
+  t.equal(compute(get(s, ['parent', 'child'])), 'rebel', 'child is rebel')
   t.end()
 })
