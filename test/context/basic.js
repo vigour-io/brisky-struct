@@ -1,5 +1,3 @@
-'use strict'
-
 const test = require('tape')
 const { create, set, get, struct, compute, parent } = require('../../')
 

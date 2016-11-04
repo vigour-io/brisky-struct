@@ -47,10 +47,8 @@ test('context - nested', t => {
   })
   seagull.key = 'seagull'
 
-  const animals = create(struct, {
-    types: {pigeon, seagull, cat}
-  })
-  animals.key = 'animals'
+  const animals = create(struct, { types: { pigeon, seagull, cat } })
+  animals.key = 'animals' // add key as property?
 
   set(animals, {
     mySeagull: {
@@ -74,28 +72,28 @@ test('context - nested', t => {
   t.equals(get(animals, ['mySeagull', 'swims']).contextLevel, 1, 'contextLevel is 1')
   t.ok(compute(get(animals, ['mySeagull', 'runs'])), 'my seagull runs')
   t.notOk(get(animals, ['mySeagull', 'runs']).context, 'my seagull runs out of context')
-
   t.equals(compute(get(animals, ['mySeagull', 'hunts', 'kitten', 'runs'])), false, 'my seagull hunts kitten which can not run')
   t.notOk(get(animals, ['mySeagull', 'hunts', 'kitten', 'runs']).context, 'hunted kitten can not run out of context')
   t.equals(get(animals, ['mySeagull', 'hunts', 'kitten', 'swims']).context, get(animals, ['mySeagull', 'hunts', 'kitten']), 'hunted kitten can not swim in context')
   t.equals(get(animals, ['mySeagull', 'hunts', 'kitten', 'swims']).contextLevel, 1, 'contextLevel is 1')
-
   t.equals(compute(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'flies'])), false, 'my seagull likes wounded pigeon which can not fly')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context, get(animals, ['mySeagull', 'likes', 'woundedPigeon']), 'wounded pigeon can not swim in context')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).contextLevel, 1, 'contextLevel is 1')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.context, get(animals, ['mySeagull']), 'wounded pigeon can not swim in context of context')
   t.equals(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.contextLevel, 2, 'contextLevel of context is 2')
-
   t.equals(parent(get(animals, ['mySeagull', 'hunts', 'kitten', 'swims'])), get(animals, ['mySeagull', 'hunts', 'kitten']), 'parent of swims is kitten')
   t.equals(parent(get(animals, ['mySeagull', 'likes', 'woundedPigeon', 'runs'])), get(animals, ['mySeagull', 'likes', 'woundedPigeon']), 'parent of runs is woundedPigeon')
 
   slow = {}
+
+  console.log(' \n OK HERE--------------------')
   set(bird, { runs: { slow: true } }, 'stamp1')
   t.deepEqual(slow, {
+    'bird.runs': { val: false, count: 1 },
     'seagull.runs': { val: false, count: 1 },
     'pigeon.runs': { val: false, count: 1 },
+    // why does this fire twice? -- once for pigeon and once for bird
     'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
-    'bird.runs': { val: false, count: 1 },
     'animals.mySeagull.runs': { val: true, count: 1 }
   }, 'first slow event fired as expected')
 
