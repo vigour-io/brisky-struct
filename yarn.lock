@@ -4,10 +4,6 @@ abbrev@1, abbrev@1.0.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.0.9.tgz#91b4792588a7738c25f35dd6f63752a2f8776135"
 
-acorn-es7-plugin@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/acorn-es7-plugin/-/acorn-es7-plugin-1.1.3.tgz#6a032a71f1faf396a1a29729c7b150fe480cc17a"
-
 acorn-jsx@^3.0.0, acorn-jsx@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-3.0.1.tgz#afdf9488fb1ecefc8348f6fb22f464e32a58b36b"
@@ -28,11 +24,11 @@ acorn@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-2.7.0.tgz#ab6e7d9d886aaca8b085bc3312b79a198433f0e7"
 
-acorn@^3.0.4, acorn@^3.1.0, acorn@^3.3.0, acorn@3.3.0:
+acorn@^3.0.4, acorn@^3.1.0, acorn@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
-acorn@^4.0.1, acorn@>=2.5.2, acorn@4.X:
+acorn@^4.0.1, acorn@4.X:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.3.tgz#1a3e850b428e73ba6b09d1cc527f5aaad4d03ef1"
 
@@ -842,13 +838,6 @@ browserify-des@^1.0.0:
     cipher-base "^1.0.1"
     des.js "^1.0.0"
     inherits "^2.0.1"
-
-browserify-nodent@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/browserify-nodent/-/browserify-nodent-1.0.22.tgz#20aa6ea9f4f24caf59493b47ac529ec6518e43fb"
-  dependencies:
-    nodent "^2.6.3"
-    through "2.3.8"
 
 browserify-rsa@^4.0.0:
   version "4.0.1"
@@ -3277,29 +3266,6 @@ nodemon@^1.9.1:
     undefsafe "0.0.3"
     update-notifier "0.5.0"
 
-nodent-runtime@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/nodent-runtime/-/nodent-runtime-3.0.3.tgz#49a25f4f4efb092c40d97be9e73de7e53a5f8361"
-
-nodent@^2.6.3:
-  version "2.6.14"
-  resolved "https://registry.yarnpkg.com/nodent/-/nodent-2.6.14.tgz#57e95b4394ac15bf71013356576bbb9900b117a0"
-  dependencies:
-    acorn "3.3.0"
-    acorn-es7-plugin "^1.1.3"
-    resolve "1.1.7"
-    source-map "0.5.3"
-
-nodent@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/nodent/-/nodent-3.0.7.tgz#08dd540baf834c136648aeaa9ae8ecd4bf92aa52"
-  dependencies:
-    acorn ">=2.5.2"
-    acorn-es7-plugin "^1.1.3"
-    nodent-runtime "^3.0.3"
-    resolve "^1.1.7"
-    source-map "0.5.6"
-
 noop6@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/noop6/-/noop6-1.0.4.tgz#af3b5678a5f0939b5a1e44880cbc2c237a0ec46d"
@@ -4037,7 +4003,7 @@ resolve-url@~0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
 
-resolve@^1.1.3, resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@~1.1.7, resolve@1.1.7, resolve@1.1.x:
+resolve@^1.1.3, resolve@^1.1.4, resolve@^1.1.6, resolve@~1.1.7, resolve@1.1.7, resolve@1.1.x:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
@@ -4237,7 +4203,7 @@ source-map@^0.4.2, source-map@^0.4.4:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.5.0, source-map@^0.5.3, source-map@~0.5.0, source-map@~0.5.1, source-map@~0.5.3, source-map@0.5.6, source-map@0.X:
+source-map@^0.5.0, source-map@^0.5.3, source-map@~0.5.0, source-map@~0.5.1, source-map@~0.5.3, source-map@0.X:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
@@ -4246,10 +4212,6 @@ source-map@~0.2.0:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.2.0.tgz#dab73fbcfc2ba819b4de03bd6f6eaa48164b3f9d"
   dependencies:
     amdefine ">=0.0.4"
-
-source-map@0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.3.tgz#82674b85a71b0be76c3e7416d15e9f5252eb3be0"
 
 spawn-sync@1.0.13:
   version "1.0.13"
@@ -4609,7 +4571,7 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-through@^2.3.6, "through@>=2.2.7 <3", through@~2.3, through@~2.3.1, through@~2.3.4, through@~2.3.8, through@2, through@2.3.8:
+through@^2.3.6, "through@>=2.2.7 <3", through@~2.3, through@~2.3.1, through@~2.3.4, through@~2.3.8, through@2:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
