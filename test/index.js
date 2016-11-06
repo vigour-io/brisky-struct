@@ -1,5 +1,5 @@
 'use strict'
 
 require('./context')
-// require('./props')
+require('./props')
 // require('./async')
