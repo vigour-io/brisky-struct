@@ -14,7 +14,10 @@ test('async', t => {
   const a = create(struct, {
     on: {
       data: {
-        log: (t, val, stamp) => results.push(stamp)
+        log: (t, val, stamp) => {
+          console.log('set it', val, stamp)
+          results.push(stamp)
+        }
       },
       error: {
         log: (t, err, stamp) => errors.push(err.message)
@@ -49,7 +52,7 @@ test('async', t => {
     }
   }, s)
 
-  set(a, defer('defer-3', 25), s)
+  set(a, defer({ val: 'defer-3', bla: { bla: {} } }, 25), s)
 
   set(a, defer('defer-4'), s)
 
@@ -58,12 +61,6 @@ test('async', t => {
   set(a, once(a, 'gen-1').then(() => defer('defer-6', 25)), s)
 
   set(a, { val: defer('defer-7'), hello: true }, s)
-
-  set({
-    xxx: true,
-    y: true,
-    x: true
-  })
 
   once(a, 'defer-7').then(() => {
     t.pass('defer-7 is set')

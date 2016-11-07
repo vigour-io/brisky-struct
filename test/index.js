@@ -2,4 +2,4 @@
 
 require('./context')
 require('./props')
-// require('./async')
+require('./async')
