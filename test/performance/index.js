@@ -3,7 +3,7 @@ const struct = require('../../')
 const base = require('brisky-base')
 const Obs = require('vigour-observable')
 const bstamp = require('brisky-stamp')
-const amount = 5e5
+const amount = 1e5
 const observ = require('observ')
 console.log('✨✨✨PERF', amount / 1000, 'k✨✨✨')
 var cnt = 0
@@ -28,6 +28,25 @@ const s = struct.struct
 //     }
 //   }
 // )
+
+const bla = create(s, {
+  hello: 'xxxxx '
+})
+
+const xxxx = bla.create({
+  xxx: 'xxxxxxx',
+  on: {
+    data: {
+      log () {
+        console.log('!@#!@#!@#!@#!@#')
+      }
+    }
+  }
+})
+
+console.log('!!!', bla.get('hello').compute())
+console.log('xxxx', xxxx.get('xxx').compute())
+bla.set('!!!!!!!', 'x')
 
 perf(
   function structitSingle () {
