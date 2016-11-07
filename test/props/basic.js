@@ -53,6 +53,20 @@ test('props - default', t => {
   const s = create(struct, {
     props: {
       default: {
+        props: {
+          _volume (s, val) {
+            set(s, {
+              volume: val,
+              mass: compute(get(s, 'density')) * val
+            })
+          },
+          _mass (s, val) {
+            set(s, {
+              volume: val / compute(get(s, 'density')),
+              mass: val
+            })
+          }
+        },
         density: 1
       }
     },
@@ -66,9 +80,12 @@ test('props - default', t => {
   })
 
   t.equal(compute(get(s, ['water', 'density'])), 1, 'density of water is 1')
-
   set(s, { gold: { density: 19.3, melting: 1064.18 } })
-
   t.equal(compute(get(s, ['gold', 'density'])), 19.3, 'density of gold is 19.3')
+  set(s, { water: { _volume: 10 } })
+  set(s, { gold: { _mass: 193 } })
+  t.equal(compute(get(s, ['water', 'mass'])), 10, 'mass of water is 10')
+  t.equal(compute(get(s, ['gold', 'volume'])), 10, 'volume of gold is 10')
+
   t.end()
 })
