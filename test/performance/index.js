@@ -44,12 +44,13 @@ const xxxx = bla.create({
   }
 })
 
-console.log('!!!', bla.get('hello').compute())
-console.log('xxxx', xxxx.get('xxx').compute())
-bla.set('!!!!!!!', 'x')
+// console.log('!!!', bla.get('hello').compute(), s.Constructor.prototype)
+// console.log('xxxx', xxxx.get('xxx').compute())
+// bla.set('!!!!!!!', 'x')
 
 perf(
   function structitSingle () {
+    // console.log('????', s.Constructor)
     for (let i = 0; i < amount; i++) {
       create(s, i)
     }
