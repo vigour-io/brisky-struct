@@ -5,15 +5,16 @@ var bla = create(struct)
 
 // console.log(bla.Constructor)
 
-bla.Constructor = function () {}
+// bla.
 
-//
-bla.Constructor.prototype = new struct.Constructor()
-bla.Constructor.prototype.hello = function () {
-  console.log('hello!!!!!')
-}
+// bla.Constructor = function () {}
 
 bla.set({
+  define: {
+    hello () {
+      console.log('yo hello!')
+    }
+  },
   props: {
     default: 'self'
   }
