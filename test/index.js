@@ -6,6 +6,8 @@ var bla = create(struct)
 // console.log(bla.Constructor)
 
 bla.Constructor = function () {}
+
+//
 bla.Constructor.prototype = new struct.Constructor()
 bla.Constructor.prototype.hello = function () {
   console.log('hello!!!!!')
@@ -24,9 +26,7 @@ bla.set({
 const x = bla.create()
 
 console.log(bla.x.hello(), bla.x.compute())
-
 // console.log(bla)
-
-require('./context')
+// require('./context')
 // require('./props')
 // require('./async')
