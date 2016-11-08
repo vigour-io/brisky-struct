@@ -22,6 +22,10 @@ bla.set({
   x: 'XXX'
 })
 
+// parent is #1
+// maybe key as well (make it like _K and _P)
+// can add extend again -- not a biggy
+
 const x = bla.create()
 console.log(bla.x.hello(), bla.x.compute())
 console.log('??', x.compute())
