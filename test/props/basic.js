@@ -1,7 +1,6 @@
 'use strict'
-
 const test = require('tape')
-const { create, set, get, struct, compute, parent } = require('../../')
+const { create, set, get, struct, compute } = require('../../')
 
 test('props - default', t => {
   const s = create(struct, {
@@ -36,16 +35,14 @@ test('props - function', t => {
 test('props - nested', t => {
   const s = create(struct, {
     props: {
-      parent: {
+      _parent: {
         child: 'rebel'
       }
     }
   })
-
-  set(s, { parent: 'conservative' })
-
-  t.equal(compute(get(s, 'parent')), 'conservative', 'parent is conservative')
-  t.equal(compute(get(s, ['parent', 'child'])), 'rebel', 'child is rebel')
+  set(s, { _parent: 'conservative' })
+  t.equal(compute(get(s, '_parent')), 'conservative', '_parent is conservative')
+  t.equal(compute(get(s, ['_parent', 'child'])), 'rebel', 'child is rebel')
   t.end()
 })
 

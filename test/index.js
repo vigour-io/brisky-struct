@@ -3,21 +3,19 @@
 const { create, struct } = require('../')
 var bla = create(struct)
 
-// console.log(bla.Constructor)
-
-// bla.
-
-// bla.Constructor = function () {}
-
 bla.set({
   define: {
     hello () {
-      console.log('yo hello!')
+      console.log('yo hello!', this.compute(), this.blur())
+    },
+    blur () {
+      return 'x'
     }
   },
   props: {
     default: 'self'
-  }
+  },
+  val: 'xxxxx'
 })
 
 bla.set({
@@ -29,5 +27,5 @@ console.log(bla.x.hello(), bla.x.compute())
 console.log('??', x.compute())
 // console.log(bla)
 // require('./context')
-// require('./props')
+require('./props')
 // require('./async')
