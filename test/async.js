@@ -15,7 +15,6 @@ test('async', t => {
     on: {
       data: {
         log: (t, val, stamp) => {
-          console.log('set it', val, stamp)
           results.push(stamp)
         }
       },
@@ -52,7 +51,7 @@ test('async', t => {
     }
   }, s)
 
-  set(a, defer({ val: 'defer-3', bla: { bla: {} } }, 25), s)
+  set(a, defer({ val: 'defer-3', bla: { bla: defer() } }, 25), s)
 
   set(a, defer('defer-4'), s)
 
