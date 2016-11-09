@@ -30,10 +30,10 @@ test('context - nested', t => {
     },
     swims: false
   })
-  bird.key = 'bird'
+  bird._k = 'bird'
 
   const pigeon = create(bird)
-  pigeon.key = 'pigeon'
+  pigeon._k = 'pigeon'
 
   const seagull = create(bird, {
     speed: 11,
@@ -45,10 +45,10 @@ test('context - nested', t => {
       }
     }
   })
-  seagull.key = 'seagull'
+  seagull._k = 'seagull'
 
   const animals = create(struct, { types: { pigeon, seagull, cat } })
-  animals.key = 'animals' // add key as property?
+  animals._k = 'animals' // add key as property?
 
   set(animals, {
     mySeagull: {
