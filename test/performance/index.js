@@ -30,27 +30,29 @@ perf(() => {
 }, 'create references')
 
 perf(() => {
-  const orig = struct({
+  let a = struct()
+  struct({
+    val: a,
     on: {
       data: {
-        lol: () => {}
+        lol () {}
       }
     }
   })
-  for (let i = 0; i < amount; i++) {
-    let a = orig.create()
-    struct(a)
+  for (let i = 0; i < amount * 100; i++) {
+    a.set(i)
   }
 }, () => {
-  const orig = new Obs({
+  let a = new Obs()
+  new Obs({ // eslint-disable-line
+    val: a,
     on: {
       data: {
-        lol: () => {}
+        lol () {}
       }
     }
   })
-  for (let i = 0; i < amount; i++) {
-    let a = new orig.Constructor()
-    new Obs(a) // eslint-disable-line
+  for (let i = 0; i < amount * 100; i++) {
+    a.set(i)
   }
 }, 'fire listeners over references')
