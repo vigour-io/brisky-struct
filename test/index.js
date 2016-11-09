@@ -61,9 +61,9 @@ console.log(instance.f.g.h.x)
 
 aa.set('hello!', 'y')
 
-// console.log(instance.map((val, key, keys) => val.compute()))
+console.log(instance.map((val, key, keys) => val.compute()))
 
-// console.log(instance.filter(val => val.compute() === 'XXX'))
+console.log(instance.filter(val => val.compute() === 'XXX'))
 console.log(instance.x)
 
 console.log(instance)
