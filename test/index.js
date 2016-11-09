@@ -29,6 +29,14 @@ const instance = bla.create({
         x: true
       }
     }
+  },
+  on: {
+    data: {
+      x: t => {
+        // add uid and sid
+        console.log(' \nFIRE BOY', t.compute(), t.path(), ' \n ')
+      }
+    }
   }
 })
 
@@ -36,7 +44,22 @@ for (let i = 0; i < 10; i++) {
   instance.push(i)
 }
 
+const aa = struct('x')
+
+const xx = struct({
+  val: aa,
+  $transform: val => `-----${val}-----`
+})
+
+console.log(aa.keys())
+
+instance.set(xx)
+
+console.log(xx)
+
 console.log(instance.f.g.h.x)
+
+aa.set('hello!', 'y')
 
 // console.log(instance.map((val, key, keys) => val.compute()))
 
@@ -55,3 +78,4 @@ console.log('??', x.compute())
 // require('./context')
 // require('./props')
 // require('./async')
+aa.set('girs', 'y')
