@@ -1,7 +1,7 @@
 'use strict'
 
-const { create, struct } = require('../')
-var bla = create(struct)
+const struct = require('../')
+const bla = struct()
 
 bla.set({
   define: {
@@ -30,6 +30,6 @@ const x = bla.create()
 console.log(bla.x.hello(), bla.x.compute())
 console.log('??', x.compute())
 // console.log(bla)
-require('./context')
-require('./props')
-require('./async')
+// require('./context')
+// require('./props')
+// require('./async')
