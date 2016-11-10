@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create, set, struct, once } = require('../')
+const struct = require('../')
 const stamp = require('brisky-stamp')
 
 test('async', t => {
@@ -11,7 +11,7 @@ test('async', t => {
   const results = []
   const errors = []
 
-  const a = create(struct, {
+  const a = struct({
     on: {
       data: {
         log: (t, val, stamp) => {
@@ -26,55 +26,56 @@ test('async', t => {
 
   const s = stamp.create('click')
 
-  const later = async val => {
-    val = await defer(val, 10) + '!'
-    return val
-  }
+  // before coveralls support async/await need a solution for this
+  // const later = async val => {
+  //   val = await defer(val, 10) + '!'
+  //   return val
+  // }
 
-  set(a, later('later-1'), s)
+  a.set(defer('later-1'), s)
 
-  set(a, defer('defer-1'), s)
+  a.set(defer('defer-1'), s)
 
-  set(a, defer('defer-2'), s)
+  a.set(defer('defer-2'), s)
 
-  set(a, function* (t, stamp) {
+  a.set(function* (t, stamp) {
     for (var i = 0; i < 3; i++) {
-      yield later('await-gen-' + i)
+      yield defer('await-gen-' + i)
     }
   }, s)
 
-  set(a, defer('defer-error', 0, new Error('haha')), s)
+  a.set(defer('defer-error', 0, new Error('haha')), s)
 
-  set(a, function* logGenerator () {
+  a.set(function* logGenerator () {
     for (var i = 0; i < 3; i++) {
       yield defer('gen-' + i, 10)
     }
   }, s)
 
-  set(a, defer({ val: 'defer-3', bla: { bla: defer() } }, 25), s)
+  a.set(defer({ val: 'defer-3', bla: { bla: defer() } }, 25), s)
 
-  set(a, defer('defer-4'), s)
+  a.set(defer('defer-4'), s)
 
-  set(a, defer('defer-5'), s)
+  a.set(defer('defer-5'), s)
 
-  set(a, once(a, 'gen-1').then(() => defer('defer-6', 25)), s)
+  a.set(a.once('gen-1').then(() => defer('defer-6', 25)), s)
 
-  set(a, { val: defer('defer-7'), hello: true }, s)
+  a.set({ val: defer('defer-7'), hello: true }, s)
 
-  once(a, 'defer-7').then(() => {
+  a.once('defer-7').then(() => {
     t.pass('defer-7 is set')
     const s = stamp.create('move')
-    set(a, function* logGenerator () {
+    a.set(function* logGenerator () {
       for (var i = 0; i < 3; i++) {
         yield defer('gen-2-' + i, 100)
       }
     }, s)
-    set(a, defer('defer-8', 1e3), s)
-    set(a, defer('defer-9', 1e3), s)
-    set(a, defer('defer-10', 1e3), s)
-    set(a, defer('defer-11', 1e3), s)
-    set(a, { async: null, val: defer('defer-12') }, s)
-    once(a, 'defer-12', () => {
+    a.set(defer('defer-8', 1e3), s)
+    a.set(defer('defer-9', 1e3), s)
+    a.set(defer('defer-10', 1e3), s)
+    a.set(defer('defer-11', 1e3), s)
+    a.set({ async: null, val: defer('defer-12') }, s)
+    a.once('defer-12', () => {
       t.same(errors, [ 'haha' ], 'fired correct errors')
       t.same(results, [
         'click-1',
