@@ -1,5 +1,4 @@
 'use strict'
-
 const test = require('tape')
 const struct = require('../../')
 
@@ -55,8 +54,15 @@ test('context - basic', t => {
     'extended has name'
   )
 
-  // t.equals(parent(grandChild), get(instance, ['_parent', 'child']), '_parent of grandChild is child')
-  // t.equals(parent(get(extended, ['_parent', 'child', 'grandChild'])), get(extended, ['_parent', 'child']), 'extended child is _parent of extended grandChild')
+  t.equals(
+    grandChild.parent(), instance.get(['_parent', 'child']),
+    '_parent of grandChild is child'
+  )
+
+  t.equals(
+    extended.get(['_parent', 'child', 'grandChild']).parent(), extended.get(['_parent', 'child']),
+    'extended child is _parent of extended grandChild'
+  )
 
   t.end()
 })
