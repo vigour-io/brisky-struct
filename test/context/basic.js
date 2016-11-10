@@ -60,7 +60,7 @@ test('context - basic', t => {
   )
 
   t.equals(
-    extended.get(['_parent', 'child', 'grandChild']).parent(), extended.get(['_parent', 'child']),
+    extended.get(['_parent', 'child', 'grandChild', 'parent']), extended.get(['_parent', 'child']),
     'extended child is _parent of extended grandChild'
   )
 
