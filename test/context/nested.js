@@ -20,6 +20,7 @@ test('context - nested', t => {
       on: {
         data: {
           slow (t) {
+            console.log('  --> fire', t.path())
             const p = t.path().join('.')
             slow[p] = slow[p] || { val: t.compute(), count: 0 }
             slow[p].count++
@@ -155,21 +156,30 @@ test('context - nested', t => {
 
   slow = {}
 
-  // console.log(' \n OK HERE--------------------')
+  console.log(' \n OK HERE--------------------')
   bird.set({ runs: { slow: true } }, 'stamp1')
-  // t.deepEqual(slow, {
-  //   'bird.runs': { val: false, count: 1 },
-  //   'seagull.runs': { val: false, count: 1 },
-  //   'pigeon.runs': { val: false, count: 1 },
-  //   // why does this fire twice? -- once for pigeon and once for bird
-  //   'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
-  //   'animals.mySeagull.runs': { val: true, count: 1 }
-  // }, 'first slow event fired as expected')
+
+  // so we fire once for bird runs
+  // and once for pigeon runs (on wounded pigeon)
+
+  t.deepEqual(slow, {
+    'bird.runs': { val: false, count: 1 },
+    'seagull.runs': { val: false, count: 1 },
+    'pigeon.runs': { val: false, count: 1 },
+    // why does this fire twice? -- once for pigeon and once for bird
+    'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
+    // ----------
+
+    'animals.mySeagull.runs': { val: true, count: 1 }
+  }, 'first slow event fired as expected')
 
   // slow = {}
-  // set(animals, { mySeagull: { likes: { woundedPigeon: { runs: { slow: false } } } } }, 'stamp2')
+  // animals.set({
+  //   mySeagull: { likes: { woundedPigeon: { runs: { val: 'a bit' } } } }
+  // }, 'stamp2')
+
   // t.deepEqual(slow, {
-  //   'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
+  //   'animals.mySeagull.likes.woundedPigeon.runs': { val: 'a bit', count: 1 }
   // }, 'second slow event fired as expected')
 
   t.end()
