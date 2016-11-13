@@ -176,5 +176,12 @@ test('context - nested', t => {
     'animals.mySeagull.likes.woundedPigeon.runs': { val: 'a bit', count: 1 }
   }, 'second slow event fired as expected')
 
+  const a = struct({
+    a: { b: { c: { d: true } } }
+  })
+  const a2 = a.create()
+  const d = a2.get([ 'a', 'b', 'c', 'd' ])
+  a.a.b.c.context = null
+  t.equal(d.parent().context, a2, 'sets context on parent from child')
   t.end()
 })

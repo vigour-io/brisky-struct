@@ -13,9 +13,7 @@ test('context - basic', t => {
   const extended = instance.create({
     _parent: {
       child: {
-        grandChild: {
-          age: 17
-        }
+        grandChild: { age: 17 }
       }
     }
   })
