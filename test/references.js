@@ -15,8 +15,9 @@ test('references - listeners', t => {
       }
     }
   })
+  const a2 = a.create() //eslint-disable-line
   a.set(1, 'stamp')
-  t.same(results, [ 1 ])
-  t.equal(c.compute(), 25)
+  t.same(results, [ 1 ], 'fires only for c (does not fire for a instance)')
+  t.equal(c.compute(), 25, 'compute processes transforms in the reference chain')
   t.end()
 })
