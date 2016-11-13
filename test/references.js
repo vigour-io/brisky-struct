@@ -35,5 +35,17 @@ test('references - serialized', t => {
   t.equal(a.bye.val, a.hello, 'create reference to root')
   t.equal(a.greeting.val, a.greeting.dutch, 'create reference to self')
   t.equal(a.vocabulary.val, a.greeting, 'create reference to parent')
-  t.end()
+  const b = struct({
+    bla: {
+      on: {
+        data: {
+          x () {
+            t.pass('fires listener when making a new reference from the serialized notation')
+            t.end()
+          }
+        }
+      }
+    }
+  })
+  b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] }, 'stamp')
 })
