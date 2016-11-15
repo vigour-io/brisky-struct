@@ -4,21 +4,65 @@ const struct = require('../')
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
   const b = struct({ val: a, $transform: val => val * 5 })
-  const results = []
+  var results = []
   const c = struct({
+    key: 'c',
     val: b,
     on: {
       data: {
         result: (t, val) => {
-          results.push(val)
+          results.push(t.path())
         }
       }
     }
   })
   const a2 = a.create() //eslint-disable-line
+  const c2 = c.create({ key: 'c2' })
   a.set(1, 'stamp')
-  t.same(results, [ 1 ], 'fires only for c (does not fire for a instance)')
+  t.same(
+    results, [ [ 'c' ], [ 'c2' ] ],
+    'fires for "c" and "c2" (does not fire for "a" instance)'
+  )
   t.equal(c.compute(), 25, 'compute processes transforms in the reference chain')
+  const d = struct({
+    key: 'd',
+    val: c2,
+    on: {
+      data: {
+        result: (t, val) => {
+          results.push(t.path())
+        }
+      }
+    }
+  })
+
+  const d2 = d.create({ //eslint-disable-line
+    key: 'd2',
+    val: 'clear!'
+  })
+
+  const e = struct({
+    x: {
+      y: {
+        props: {
+          default: d
+        },
+        z: {}
+      }
+    }
+  })
+
+  const e2 = e.create({ key: 'e2' }) //eslint-disable-line
+
+  results = []
+  a.set(2, 'stamp')
+  t.same(results, [
+      [ 'c' ],
+      [ 'c2' ],
+      [ 'd' ],
+      [ 'e2', 'x', 'y', 'z' ],
+      [ 'x', 'y', 'z' ]
+  ], 'fires only for c (does not fire for a instance)')
   t.end()
 })
 
@@ -40,7 +84,7 @@ test('references - serialized', t => {
       on: {
         data: {
           x () {
-            t.pass('fires listener when making a new reference from the serialized notation')
+            t.pass('fires listener when making a new reference')
             t.end()
           }
         }
