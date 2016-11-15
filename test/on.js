@@ -56,11 +56,9 @@ test('on - instances ', t => {
       }
     }
   })
-
   a.set('hello!', 'stamp')
   t.same(results, [ 'a-a', 'b-a', 'c-a', 'a-b', 'c-b' ], 'excludes "b-b"')
   t.same(instanceResults, [ 'b-b' ], 'correct instance result')
-
   results = []
   instanceResults = []
   const c = b.create({ key: 'c' })
@@ -83,7 +81,6 @@ test('on - instances ', t => {
     'fires update for each instance on "val"'
   )
   t.same(instanceResults, [ 'b-b', 'b-c' ], 'correct instance result')
-
   results = []
   c.set({ on: t => instanceResults.push('VAL-C-' + t.key) })
   const a2 = a.create({ key: 'a2', on: { data: {} } })
@@ -122,5 +119,15 @@ test('on - instances ', t => {
     ],
     'fires updates for all instances'
   )
+
+  t.end()
+})
+
+test('on - struct ', t => {
+  const ref = struct()
+  const a = struct(ref)
+  t.same(ref.emitters.data.struct, [ a ], 'add reference')
+  const b = struct(ref)
+  t.same(ref.emitters.data.struct, [ b, a ], 'add additional reference')
   t.end()
 })
