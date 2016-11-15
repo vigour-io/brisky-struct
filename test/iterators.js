@@ -1,7 +1,7 @@
 const test = require('tape')
 const struct = require('../')
 
-test('iterators - keys', t => {
+test('iterators', t => {
   const a = struct({ a: 'a', b: 'b', c: 'c' })
   t.same(a.keys(), [ 'a', 'b', 'c' ], 'correct initial keys')
   const b = a.create({ d: true, a: true })
@@ -16,6 +16,10 @@ test('iterators - keys', t => {
   t.same(c.keys(), [ 'a' ], 'correct keys on "c" after context remove')
   c.push('hello')
   t.same(c.keys().length, 2, 'push extra key')
+  const d = struct({ a: 'a', b: 'b', c: 'c' })
+  t.same(d.map(val => val), [ d.a, d.b, d.c ], 'map')
+  t.same(d.filter(val => val.key === 'a'), [ d.a ], 'filter')
+  // t.same(d.map(val => val), [ d.a, d.b, d.c ], 'map')
   t.end()
 })
 
