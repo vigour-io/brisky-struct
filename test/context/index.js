@@ -1,2 +1,3 @@
-require('./basic')
+require('./get')
 require('./nested')
+require('./resolve')
