@@ -12,7 +12,6 @@ test('types ', t => {
     },
     field: { type: 'something' }
   })
-
   const b = a.create({
     types: {
       something: {
@@ -24,11 +23,8 @@ test('types ', t => {
     x: {
       type: 'something'
     },
-    y: {
-      type: 'bla'
-    }
+    y: { type: 'bla' }
   })
-
   t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged "something" type')
   t.equal(b.get('y').keys(), void 0, 'override "bla" type')
   t.equal(b.get('y').compute(), 'override!', 'type with string')

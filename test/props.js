@@ -66,3 +66,67 @@ test('props - function', t => {
   t.equal(s.get(['gold', 'volume']).compute(), 10, 'volume of gold is 10')
   t.end()
 })
+
+test('props - self', t => {
+  const s = struct({
+    props: {
+      special: { something: 'special' },
+      default: 'self'
+    },
+    hello: 'so nested',
+    normal: {
+      type: 'struct',
+      val: 'so normal',
+      props: { normal: 'self' },
+      normal: {},
+      somethingNormal: true
+    }
+  })
+
+  const instance = s.create({
+    bla: true,
+    normal: { normal: true }
+  })
+
+  t.equal(
+    instance.get('hello').get('hello').get('hello').compute(), 'so nested',
+    'recursion by using self on default'
+  )
+
+  t.equal(
+    instance.get('normal').get('normal').get('normal').compute(), 'so normal',
+    'recursion by using self on specific field'
+  )
+
+  instance.set({
+    props: {
+      special: { field: true }
+    },
+    special: 'whatever'
+  })
+
+  t.equal(
+    instance.get('special').get('field').compute(), true,
+    'set on existing struct properties'
+  )
+
+  instance.set({
+    props: {
+      special: { field: true, extra: true }
+    }
+  })
+
+  t.same(
+    instance.special.keys(), [ 'something', 'field', 'extra' ],
+    'setting a key on property updates instances'
+  )
+
+  const instance2 = s.create({ special: 'hello' })
+
+  t.same(
+    instance2.special.keys(), [ 'something' ],
+    'set on existing struct property did not influence original'
+  )
+
+  t.end()
+})
