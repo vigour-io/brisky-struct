@@ -9,3 +9,11 @@ test('on - method ', t => {
   t.same(results, [ 'hello' ], 'add listener using method')
   t.end()
 })
+
+test('on - defaults ', t => {
+  const results = []
+  const a = struct({ on: (t, val) => results.push(val) })
+  a.set('hello', 'stamp')
+  t.same(results, [ 'hello' ], 'add listener using method')
+  t.end()
+})

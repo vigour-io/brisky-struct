@@ -4,6 +4,16 @@ const Obs = require('vigour-observable')
 const amount = 1e4
 
 perf(() => {
+  for (let i = 0; i < amount * 5; i++) {
+    struct({ on: { data: { log: () => {} } } })
+  }
+}, () => {
+  for (let i = 0; i < amount * 5; i++) {
+    new Obs({ on: { data: { log: () => {} } } }) // eslint-disable-line
+  }
+}, 'create listeners')
+
+perf(() => {
   const orig = struct({
     on: {
       data: {
