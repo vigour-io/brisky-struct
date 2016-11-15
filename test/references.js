@@ -63,6 +63,17 @@ test('references - listeners', t => {
       [ 'e2', 'x', 'y', 'z' ],
       [ 'x', 'y', 'z' ]
   ], 'fires only for c (does not fire for a instance)')
+
+  results = []
+  a.emit('data', 10)
+
+  t.same(results, [
+      [ 'c' ],
+      [ 'c2' ],
+      [ 'd' ],
+      [ 'e2', 'x', 'y', 'z' ],
+      [ 'x', 'y', 'z' ]
+  ], 'fires from a data emit')
   t.end()
 })
 
