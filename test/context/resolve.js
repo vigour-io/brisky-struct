@@ -1,7 +1,7 @@
 const test = require('tape')
 const struct = require('../../')
 
-test('context - resolve', t => {
+test('context - resolve - simple', t => {
   var results = []
   const a = struct({
     key: 'a',
@@ -46,5 +46,82 @@ test('context - resolve', t => {
   t.not(resolved3, z3D, 'resolved context (level 3)')
   t.equal(x.get([ 'y', 'z3', 'b', 'c', 'd' ]), void 0, 'removed d')
 
+  t.end()
+})
+
+test('context - resolve - multiple', t => {
+  var results = []
+
+  const a = struct({
+    key: 'a',
+    b: {
+      on: {
+        data: {
+          results: t => results.push(t.path())
+        }
+      },
+      c: {
+        d: {
+          on: {
+            data: {
+              results: t => results.push(t.path())
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const x = struct({
+    key: 'x',
+    y: {
+      on: {
+        data: {
+          results: t => results.push(t.path())
+        }
+      },
+      props: {
+        default: a
+      },
+      z: {}
+    }
+  })
+
+  const x2 = struct({
+    key: 'x2',
+    y2: {
+      props: { default: x },
+      on: {
+        data: {
+          results: t => results.push(t.path())
+        }
+      },
+      z2: {}
+    }
+  })
+
+  const x3 = struct({
+    key: 'x3',
+    y3: {
+      props: { default: x2 },
+      z3: {}
+    }
+  })
+
+  a.b.c.d.set('haha', 'stamp')
+  t.same(results, [
+    [ 'x', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'a', 'b', 'c', 'd' ]
+  ], 'fires all contexts when original updates')
+
+  results = []
+  const z3D = x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ])
+  z3D.set('hello', 'stamp')
+  t.same(
+    results, [ [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ] ],
+    'fires for resolved context'
+  )
   t.end()
 })
