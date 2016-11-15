@@ -3,6 +3,7 @@ const struct = require('../../')
 
 test('context - resolve - simple', t => {
   var results = []
+
   const a = struct({
     key: 'a',
     b: {
@@ -18,6 +19,7 @@ test('context - resolve - simple', t => {
       }
     }
   })
+
   const x = struct({
     key: 'x',
     y: {
@@ -29,6 +31,7 @@ test('context - resolve - simple', t => {
       z3: {}
     }
   })
+
   const zC = x.get([ 'y', 'z', 'b', 'c' ])
   const resolved = zC.set('haha', 'stamp')
   t.not(resolved, zC, 'resolved context (level 2)')
