@@ -19,11 +19,14 @@ test('references - listeners', t => {
   const a2 = a.create() //eslint-disable-line
   const c2 = c.create({ key: 'c2' })
   a.set(1, 'stamp')
+
   t.same(
     results, [ [ 'c' ], [ 'c2' ] ],
     'fires for "c" and "c2" (does not fire for "a" instance)'
   )
+
   t.equal(c.compute(), 25, 'compute processes transforms in the reference chain')
+
   const d = struct({
     key: 'd',
     val: c2,
@@ -35,6 +38,8 @@ test('references - listeners', t => {
       }
     }
   })
+
+  t.equal(d.origin(), c2, 'correct origin for "d"')
 
   const d2 = d.create({ //eslint-disable-line
     key: 'd2',
