@@ -36,6 +36,7 @@ test('on - defaults ', t => {
 test('on - instances ', t => {
   var results = []
   var instanceResults = []
+
   const a = struct({
     key: 'a',
     on: {
@@ -46,7 +47,8 @@ test('on - instances ', t => {
       }
     }
   })
-  const b = a.create({ //eslint-disable-line
+
+  const b = a.create({
     key: 'b',
     on: {
       data: {
@@ -54,8 +56,71 @@ test('on - instances ', t => {
       }
     }
   })
+
   a.set('hello!', 'stamp')
   t.same(results, [ 'a-a', 'b-a', 'c-a', 'a-b', 'c-b' ], 'excludes "b-b"')
-  t.same(instanceResults, [ 'b-b' ], '"b-b" instance result')
+  t.same(instanceResults, [ 'b-b' ], 'correct instance result')
+
+  results = []
+  instanceResults = []
+  const c = b.create({ key: 'c' })
+  a.set({ on: t => results.push('VAL-' + t.key) })
+  a.set('bye!', 'stamp')
+  t.same(
+    results,
+    [
+      'a-a',
+      'b-a',
+      'c-a',
+      'VAL-a',
+      'a-b',
+      'c-b',
+      'VAL-b',
+      'a-c',
+      'c-c',
+      'VAL-c'
+    ],
+    'fires update for each instance on "val"'
+  )
+  t.same(instanceResults, [ 'b-b', 'b-c' ], 'correct instance result')
+
+  results = []
+  c.set({ on: t => instanceResults.push('VAL-C-' + t.key) })
+  const a2 = a.create({ key: 'a2', on: { data: {} } })
+  const a3 = a2.create({ key: 'a3', on: { data: {} } }) // eslint-disable-line
+  a.set({
+    on: {
+      data: {
+        val: t => results.push('NEW-VAL-' + t.key),
+        extra: t => results.push('extra-' + t.key),
+        a: null
+      }
+    }
+  })
+  a.set('no way!', 'stamp')
+  t.same(
+    results,
+    [
+      'b-a',
+      'c-a',
+      'NEW-VAL-a',
+      'extra-a',
+      'b-a2',
+      'c-a2',
+      'NEW-VAL-a2',
+      'extra-a2',
+      'b-a3',
+      'c-a3',
+      'NEW-VAL-a3',
+      'extra-a3',
+      'c-b',
+      'VAL-b',
+      'NEW-VAL-b',
+      'extra-b',
+      'c-c',
+      'extra-c'
+    ],
+    'fires updates for all instances'
+  )
   t.end()
 })
