@@ -118,10 +118,43 @@ test('context - resolve - multiple', t => {
 
   results = []
   const z3D = x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ])
-  z3D.set('hello', 'stamp')
+  z3D.set({ bla: true }, 'stamp')
   t.same(
     results, [ [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ] ],
     'fires for resolved context'
   )
+
+  t.same(a.b.c.context, null, 'cleared context on "a.b.c"')
+  t.same(x.y.context, null, 'cleared context on "x.y"')
+  t.same(x2.y2.context, null, 'cleared context on "x2.y2"')
+
+  results = []
+  a.get([ 'b', 'c', 'd' ]).set('ha!', 'stamp')
+
+  t.same(results, [
+    [ 'x', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'a', 'b', 'c', 'd' ],
+    [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ] // instance update
+  ], 'fires all contexts and instance when original updates')
+
+  results = []
+  a.get([ 'b', 'c', 'd' ]).set({ bla: 'nice' }, 'stamp')
+  t.same(results, [
+    [ 'x', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'a', 'b', 'c', 'd' ]
+  ], 'fires all contexts when original updates not for instance (same)')
+
+  results = []
+  x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ]).set('myself!')
+
+  a.get([ 'b', 'c', 'd' ]).set('yo yo yo', 'stamp')
+  t.same(results, [
+    [ 'x', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
+    [ 'a', 'b', 'c', 'd' ]
+  ], 'fires all contexts when original updates not for has its own')
+
   t.end()
 })
