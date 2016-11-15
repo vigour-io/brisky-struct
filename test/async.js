@@ -8,8 +8,8 @@ test('async', t => {
       setTimeout(() => err ? reject(err) : resolve(val), time)
     )
 
-  const results = []
-  const errors = []
+  var results = []
+  var errors = []
 
   const a = struct({
     on: {
@@ -95,7 +95,52 @@ test('async', t => {
         'click-15',
         'move-17'
       ], 'fired correct results')
-      t.end()
+
+      a.set(defer('no stamp!'))
+      setTimeout(() => {
+        t.equal(a.compute(), 'no stamp!', 'async input without stamp')
+
+        const s = stamp.create('special')
+        results = []
+        errors = []
+
+        a.set(function* () {
+          var i = 10
+          while (i--) {
+            if (i === 5) {
+              throw new Error('lullllz')
+            }
+            yield 'gen-' + i
+          }
+        }, s)
+
+        a.set(function* () {
+          var i = 3
+          while (i--) {
+            if (i === 2) {
+              yield defer('ha!')
+            }
+            yield 'gen-' + i
+          }
+        }, s)
+
+        a.once('ha!').then(() => {
+          t.same(errors, [ 'lullllz' ], 'catches iterator errors')
+          t.same(results, [
+            'special-19',
+            'special-20',
+            'special-21',
+            'special-22',
+            'special-23',
+            'special-24',
+            'special-25',
+            'special-26'
+          ], 'correct results')
+          t.equal(a.async, void 0, 'removed async queue')
+          t.end()
+        })
+        stamp.close(s)
+      }, 25)
     })
     stamp.close(s)
   })
