@@ -17,20 +17,24 @@ test('context - resolve', t => {
       }
     }
   })
-
   const x = struct({
     key: 'x',
     y: {
       props: {
         default: a
       },
-      z: {}
+      z: {},
+      z2: {}
     }
   })
-
-  const context = x.get([ 'y', 'z', 'b', 'c' ])
-  const resolved = context.set('haha', 'stamp')
-  t.not(resolved, context, 'resolved context')
+  const z = x.get([ 'y', 'z', 'b', 'c' ])
+  const resolved = z.set('haha', 'stamp')
+  t.not(resolved, z, 'resolved context')
   t.same(results, [ [ 'x', 'y', 'z', 'b', 'c' ] ], 'fired correct listeners')
+  t.equal(z.context, null, 'cleared context on resolve')
+  t.equal(z.contextLevel, null, 'cleared contextLevel on resolve')
+  const z2 = x.get([ 'y', 'z2', 'b' ])
+  const resolved2 = z2.set('haha', 'stamp')
+  t.not(resolved2, z2, 'resolved context - low level')
   t.end()
 })
