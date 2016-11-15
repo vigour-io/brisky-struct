@@ -1,7 +1,7 @@
 const test = require('tape')
 const struct = require('../')
 
-test('props - default', t => {
+test('props - normal field', t => {
   const s = struct({
     props: {
       something: true
@@ -12,36 +12,23 @@ test('props - default', t => {
   t.end()
 })
 
+test('props - remove', t => {
+  const s = struct({
+    props: { something: true },
+    something: 'wrong'
+  })
+  const instance = s.create({
+    props: { something: null },
+    something: true
+  })
+  t.equal(
+    instance.get('something').compute(), true,
+    'instance "something" is a struct (overrides prop definition)'
+  )
+  t.end()
+})
+
 test('props - function', t => {
-  const s = struct({
-    props: {
-      speed (s, val) {
-        s.set({ fast: val > 50 })
-      }
-    },
-    speed: 40
-  })
-  t.equal(s.get('fast').compute(), false, 'not fast yet')
-  s.set({ speed: 60 })
-  t.equal(s.get('fast').compute(), true, 'now fast')
-  t.end()
-})
-
-test('props - nested', t => {
-  const s = struct({
-    props: {
-      _parent: {
-        child: 'rebel'
-      }
-    }
-  })
-  s.set({ _parent: 'conservative' })
-  t.equal(s.get('_parent').compute(), 'conservative', '_parent is conservative')
-  t.equal(s.get(['_parent', 'child']).compute(), 'rebel', 'child is rebel')
-  t.end()
-})
-
-test('props - default', t => {
   const s = struct({
     props: {
       default: {
@@ -70,7 +57,6 @@ test('props - default', t => {
       melting: 1064.18
     }
   })
-
   t.equal(s.get(['water', 'density']).compute(), 1, 'density of water is 1')
   s.set({ gold: { density: 19.3, melting: 1064.18 } })
   t.equal(s.get(['gold', 'density']).compute(), 19.3, 'density of gold is 19.3')
@@ -78,6 +64,5 @@ test('props - default', t => {
   s.set({ gold: { _mass: 193 } })
   t.equal(s.get(['water', 'mass']).compute(), 10, 'mass of water is 10')
   t.equal(s.get(['gold', 'volume']).compute(), 10, 'volume of gold is 10')
-
   t.end()
 })
