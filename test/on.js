@@ -124,10 +124,11 @@ test('on - instances ', t => {
 })
 
 test('on - struct ', t => {
+  const results = []
   const ref = struct()
-  const a = struct(ref)
-  t.same(ref.emitters.data.struct, [ a ], 'add reference')
-  const b = struct(ref)
-  t.same(ref.emitters.data.struct, [ b, a ], 'add additional reference')
+  struct({ val: ref, on: () => results.push('a') })
+  struct({ val: ref, on: () => results.push('b') })
+  ref.set('hello', 'stamp')
+  t.same(results, [ 'a', 'b' ], 'fires for multiple references')
   t.end()
 })
