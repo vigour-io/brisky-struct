@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const struct = require('../')
 
 test('props - default', t => {
   const s = struct({
