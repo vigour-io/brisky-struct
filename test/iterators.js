@@ -20,6 +20,10 @@ test('iterators', t => {
   t.same(d.map(val => val), [ d.a, d.b, d.c ], 'map')
   t.same(d.filter(val => val.key === 'a'), [ d.a ], 'filter')
   t.equal(d.reduce((a, b) => a + b.compute(), ''), 'abc', 'reduce')
+  const result = []
+  d.forEach(val => {
+    result.push(val)
+  })
+  t.same(d.map(val => val), [ d.a, d.b, d.c ], 'forEach')
   t.end()
 })
-
