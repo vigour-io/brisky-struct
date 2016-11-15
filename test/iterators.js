@@ -19,7 +19,7 @@ test('iterators', t => {
   const d = struct({ a: 'a', b: 'b', c: 'c' })
   t.same(d.map(val => val), [ d.a, d.b, d.c ], 'map')
   t.same(d.filter(val => val.key === 'a'), [ d.a ], 'filter')
-  // t.same(d.map(val => val), [ d.a, d.b, d.c ], 'map')
+  t.equal(d.reduce((a, b) => a + b.compute(), ''), 'abc', 'reduce')
   t.end()
 })
 
