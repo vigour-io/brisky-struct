@@ -2,7 +2,7 @@ const test = require('tape')
 const struct = require('../')
 
 test('types ', t => {
-  const a = struct({ //eslint-disable-line
+  const a = struct({
     key: 'a',
     types: {
       something: {

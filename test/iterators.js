@@ -14,6 +14,8 @@ test('iterators - keys', t => {
   const c = b.create()
   c.get('d').set(null)
   t.same(c.keys(), [ 'a' ], 'correct keys on "c" after context remove')
+  c.push('hello')
+  t.same(c.keys().length, 2, 'push extra key')
   t.end()
 })
 
