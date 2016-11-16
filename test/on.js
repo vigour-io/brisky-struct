@@ -36,7 +36,6 @@ test('on - defaults ', t => {
 test('on - instances ', t => {
   var results = []
   var instanceResults = []
-
   const a = struct({
     key: 'a',
     on: {
@@ -47,7 +46,6 @@ test('on - instances ', t => {
       }
     }
   })
-
   const b = a.create({
     key: 'b',
     on: {
