@@ -1,6 +1,6 @@
 {
   "name": "brisky-struct",
-  "description": "Data structure build for performance and memory optmization",
+  "description": "An observable data structure",
   "version": "0.0.2",
   "main": "lib/index.js",
   "scripts": {
