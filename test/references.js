@@ -109,3 +109,15 @@ test('references - serialized', t => {
   })
   b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] }, 'stamp')
 })
+
+test('references - override & remove', t => {
+  const a = struct('a')
+  const b = struct('b')
+  const c = struct(a)
+  c.set(b)
+  t.same(a.emitters.data.struct, [], 'removed struct listener from "a"')
+  t.same(b.emitters.data.struct, [ c ], 'added struct listener on "b"')
+  c.set(null)
+  t.same(b.emitters.data.struct, [], 'removed struct listener from "b"')
+  t.end()
+})
