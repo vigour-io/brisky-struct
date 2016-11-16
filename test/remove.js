@@ -102,10 +102,21 @@ test('remove - mixed', t => {
     key: 's3',
     a: 'hello'
   })
-  s.set({ d: true, a: null }, 'stamp')
-  t.same(s.keys(), [ 'b', 'c', 'd' ], 'correct keys')
-  t.same(s3.keys(), [ 'b', 'c', 'd' ], 'correct keys on s3')
-  t.same(s2.keys(), [ 'b', 'c', 'd', 'a' ], 'correct keys on s2')
-  t.same(results, [ [ 's3' ], [ 's' ], [ 's2' ] ], 'fires once')
+  const s4 = s3.create({
+    key: 's4'
+  })
+  s.set({ d: true, a: null, haha: true }, 'stamp')
+  t.same(s.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys')
+  t.same(s2.keys(), [ 'b', 'c', 'd', 'haha', 'a' ], 'correct keys on "s2"')
+  t.same(s3.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s3"')
+  t.same(s4.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s4"')
+  t.same(
+    results, [ [ 's3' ], [ 's4' ], [ 's' ], [ 's2' ] ],
+    'fires correct listeners'
+  )
+  const a = struct({ a: true, b: true })
+  const b = a.create({ a: { type: 'struct' } })
+  a.set({ d: true, a: null })
+  t.same(b.keys(), [ 'b', 'd', 'a' ], 'correct keys on "a"')
   t.end()
 })
