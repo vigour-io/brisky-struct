@@ -1,7 +1,7 @@
 const perf = require('brisky-performance')
 const struct = require('../../')
 const Obs = require('vigour-observable')
-const amount = 1e4
+const n = 1e4
 const bs = require('brisky-stamp')
 
 // perf(() => {
@@ -88,15 +88,15 @@ const bs = require('brisky-stamp')
 
 perf(() => {
   const a = struct({ on: { data: { log: () => {} } } })
-  for (let i = 0; i < amount * 100; i++) {
+  for (let i = 0; i < n * 100; i++) {
     a.set(i, bs.create())
   }
 }, () => {
   const a = new Obs({ on: { data: { log: () => {} } } })
-  for (let i = 0; i < amount * 100; i++) {
+  for (let i = 0; i < n * 100; i++) {
     a.set(i)
   }
-}, 'fire listeners')
+}, `fire listeners n = ${(n * 100 / 1e3) | 0}k`)
 
 // perf(() => {
 //   const orig = struct({
@@ -132,7 +132,7 @@ perf(() => {
       data: { lol () {} }
     }
   })
-  for (let i = 0; i < amount * 100; i++) {
+  for (let i = 0; i < n * 100; i++) {
     a.set(i, bs.create())
   }
 }, () => {
@@ -145,7 +145,7 @@ perf(() => {
       }
     }
   })
-  for (let i = 0; i < amount * 100; i++) {
+  for (let i = 0; i < n * 100; i++) {
     a.set(i)
   }
-}, 'fire listeners over references')
+}, `fire listeners over references n = ${(n * 100 / 1e3) | 0}k`)
