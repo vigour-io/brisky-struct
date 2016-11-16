@@ -1,7 +1,19 @@
 const test = require('tape')
 const struct = require('../')
 
-test('remove - only remove', t => {
+test('remove - basic', t => {
+  const s = struct({
+    key: 's',
+    a: 'a',
+    b: 'b',
+    c: 'c'
+  })
+  s.set(null)
+  t.same(s.keys(), [], 'correct keys')
+  t.end()
+})
+
+test('remove - instances', t => {
   const results = []
   const s = struct({
     key: 's',
@@ -82,22 +94,18 @@ test('remove - mixed', t => {
     c: 'c',
     on: t => results.push(t.path())
   })
-
   const s2 = s.create({
     key: 's2',
     a: { type: 'struct' }
   })
-
   const s3 = s.create({
     key: 's3',
     a: 'hello'
   })
-
   s.set({ d: true, a: null }, 'stamp')
   t.same(s.keys(), [ 'b', 'c', 'd' ], 'correct keys')
   t.same(s3.keys(), [ 'b', 'c', 'd' ], 'correct keys on s3')
   t.same(s2.keys(), [ 'b', 'c', 'd', 'a' ], 'correct keys on s2')
-  // not logicall order
   t.same(results, [ [ 's3' ], [ 's' ], [ 's2' ] ], 'fires once')
   t.end()
 })
