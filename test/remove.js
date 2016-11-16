@@ -26,6 +26,16 @@ test('remove ', t => {
     on: t => results.push(t.path())
   })
 
+  const s2 = s.create({ key: 's2' }) //eslint-disable-line
+
+  const obj = { //eslint-disable-line
+    props: {
+      default: s
+    },
+    hello: {},
+    bla: true
+  }
+
   s.set(null, 'stamp')
 
   console.log(results)
