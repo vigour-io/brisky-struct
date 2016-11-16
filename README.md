@@ -1,12 +1,12 @@
 # brisky-struct
-A data structure build for reactive applications
+An observable data structure
 - Deep memmory efficient prototypes
 - Every value is observable
 - Serializable references
 - Fast reactive state management. Inspired by virtual-dom tree-diffing algorithms and merkle-trees
 - Powerfull query syntax
 - Fast emitters
-- Build-in generator, iterator and promise support
+- Async helpers, work with generators, promises and iterators
 - Low footprint (6kb gzipped)
 
 [![Build Status](https://travis-ci.org/vigour-io/brisky-struct.svg?branch=master)](https://travis-ci.org/vigour-io/brisky-struct)
