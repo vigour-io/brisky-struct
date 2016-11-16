@@ -18,7 +18,7 @@ test('references - listeners', t => {
   })
   const a2 = a.create() //eslint-disable-line
   const c2 = c.create({ key: 'c2' })
-  a.set(1, 'stamp')
+  a.set(1, 'stamp-1')
 
   t.same(
     results, [ [ 'c' ], [ 'c2' ] ],
@@ -60,7 +60,7 @@ test('references - listeners', t => {
   const e2 = e.create({ key: 'e2' }) //eslint-disable-line
 
   results = []
-  a.set(2, 'stamp')
+  a.set(2, 'stamp-2')
   t.same(results, [
       [ 'c' ],
       [ 'c2' ],

@@ -33,14 +33,14 @@ test('context - resolve - simple', t => {
   })
 
   const zC = x.get([ 'y', 'z', 'b', 'c' ])
-  const resolved = zC.set('haha', 'stamp')
+  const resolved = zC.set('haha', 'stamp-1')
   t.not(resolved, zC, 'resolved context (level 2)')
   t.same(results, [ [ 'x', 'y', 'z', 'b', 'c' ] ], 'fired correct listeners')
   t.equal(zC.context, null, 'cleared context on resolve')
   t.equal(zC.contextLevel, null, 'cleared contextLevel on resolve')
 
   const z2B = x.get([ 'y', 'z2', 'b' ])
-  const resolved2 = z2B.set('haha', 'stamp')
+  const resolved2 = z2B.set('haha', 'stamp-2')
   t.not(resolved2, z2B, 'resolved context (level 1)')
 
   const z3D = x.get([ 'y', 'z3', 'b', 'c', 'd' ])
@@ -111,7 +111,7 @@ test('context - resolve - multiple', t => {
     }
   })
 
-  a.b.c.d.set('haha', 'stamp')
+  a.b.c.d.set('haha', 'stamp-3')
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
@@ -121,7 +121,7 @@ test('context - resolve - multiple', t => {
 
   results = []
   const z3D = x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ])
-  z3D.set({ bla: true }, 'stamp')
+  z3D.set({ bla: true }, 'stamp-4')
   t.same(
     results, [ [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ] ],
     'fires for resolved context'
@@ -132,7 +132,7 @@ test('context - resolve - multiple', t => {
   t.same(x2.y2.context, null, 'cleared context on "x2.y2"')
 
   results = []
-  a.get([ 'b', 'c', 'd' ]).set('ha!', 'stamp')
+  a.get([ 'b', 'c', 'd' ]).set('ha!', 'stamp-5')
 
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
@@ -142,7 +142,7 @@ test('context - resolve - multiple', t => {
   ], 'fires all contexts and instance when original updates')
 
   results = []
-  a.get([ 'b', 'c', 'd' ]).set({ bla: 'nice' }, 'stamp')
+  a.get([ 'b', 'c', 'd' ]).set({ bla: 'nice' }, 'stamp-6')
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
@@ -152,7 +152,7 @@ test('context - resolve - multiple', t => {
   results = []
   x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ]).set('myself!')
 
-  a.get([ 'b', 'c', 'd' ]).set('yo yo yo', 'stamp')
+  a.get([ 'b', 'c', 'd' ]).set('yo yo yo', 'stamp-7')
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],

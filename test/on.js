@@ -14,21 +14,21 @@ test('on - defaults ', t => {
   var results = []
   const a = struct({ on: (t, val) => results.push(val) })
   a.set({ on: { data: (t, val) => results.push(val) } })
-  a.set('hello', 'stamp')
+  a.set('hello', 'stamp-1')
   t.same(
     results, [ 'hello' ],
     'add listener on data _val when set directly on on'
   )
   results = []
   a.set({ on: { data: (t, val) => results.push(val) } })
-  a.set('bye', 'stamp')
+  a.set('bye', 'stamp-2')
   t.same(
     results, [ 'bye' ],
     'add listener on data _val when set directly on emitter'
   )
   results = []
   a.set({ on: { data: { val: (t, val) => results.push(val) } } })
-  a.set('now', 'stamp')
+  a.set('now', 'stamp-3')
   t.same(results, [ 'now' ], 'rewrites val to _val internaly')
   t.end()
 })
@@ -61,7 +61,7 @@ test('on - instances ', t => {
   instanceResults = []
   const c = b.create({ key: 'c' })
   a.set({ on: t => results.push('VAL-' + t.key) })
-  a.set('bye!', 'stamp')
+  a.set('bye!', 'stamp-2')
   t.same(
     results,
     [
@@ -92,7 +92,7 @@ test('on - instances ', t => {
       }
     }
   })
-  a.set('no way!', 'stamp')
+  a.set('no way!', 'stamp-3')
   t.same(
     results,
     [
@@ -126,7 +126,7 @@ test('on - struct ', t => {
   const ref = struct()
   struct({ val: ref, on: () => results.push('a') })
   struct({ val: ref, on: () => results.push('b') })
-  ref.set('hello', 'stamp')
+  ref.set('hello', 'stamp-3')
   t.same(results, [ 'a', 'b' ], 'fires for multiple references')
   t.end()
 })

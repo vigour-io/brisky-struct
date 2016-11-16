@@ -1,7 +1,7 @@
 const test = require('tape')
 const struct = require('../')
 
-test('remove ', t => {
+test('remove - only remove', t => {
   const results = []
   const s = struct({
     key: 's',
@@ -19,6 +19,7 @@ test('remove ', t => {
       on: t => results.push(t.path()),
       a: { type: 'a' }
     },
+    nice: {},
     x: {
       type: 'x',
       field: true
@@ -29,16 +30,29 @@ test('remove ', t => {
   const obj = struct({ //eslint-disable-line
     key: 'obj',
     props: {
-      default: s
+      nested: { type: 'struct' },
+      default: s,
+      weird: s.x
     },
     hello: {},
+    weird: {},
     blurf: {
       x: {
         z: 'haha'
       }
+    },
+    nested: {
+      on: t => results.push(t.path()),
+      props: { default: s.nice },
+      haha: {}
     }
   })
   s.set(null, 'stamp')
+  t.same(obj.keys(), [ 'nested' ], 'cleared keys on Obj')
+
+  console.log(results)
+
+  // missing .nested
   t.same(results, [
     [ 'obj', 'blurf' ],
     [ 'obj', 'blurf', 'bla' ],
@@ -54,7 +68,75 @@ test('remove ', t => {
     [ 's2', 'x', 'z' ],
     [ 's' ],
     [ 's', 'bla' ],
-    [ 's', 'bla', 'a', 'b', 'c' ]
+    [ 's', 'bla', 'a', 'b', 'c' ],
+    [ 'obj', 'nested' ],
+    [ 'obj', 'blurf', 'x', 'z' ],
+    [ 'obj', 'weird', 'z' ],
+    [ 's', 'x', 'z' ]
   ], 'fires all listeners on remove')
   t.end()
 })
+
+// test('remove - mixed', t => {
+//   const results = []
+//   const s = struct({
+//     key: 's',
+//     types: {
+//       a: {
+//         b: {
+//           c: { on: t => results.push(t.path()) }
+//         }
+//       },
+//       x: {
+//         z: { on: t => results.push(t.path()) }
+//       }
+//     },
+//     bla: {
+//       on: t => results.push(t.path()),
+//       a: { type: 'a' }
+//     },
+//     x: {
+//       type: 'x',
+//       field: true
+//     },
+//     on: t => results.push(t.path())
+//   })
+//   const s2 = s.create({ key: 's2' }) //eslint-disable-line
+//   const obj = struct({ //eslint-disable-line
+//     key: 'obj',
+//     props: {
+//       default: s,
+//       weird: s.x
+//     },
+//     hello: {},
+//     weird: {},
+//     blurf: {
+//       x: {
+//         z: 'haha'
+//       }
+//     }
+//   })
+//   s.set(null, 'stamp')
+//   t.same(obj.keys(), [], 'cleared keys on Obj')
+//   t.same(results, [
+//     [ 'obj', 'blurf' ],
+//     [ 'obj', 'blurf', 'bla' ],
+//     [ 'obj', 'blurf', 'bla', 'a', 'b', 'c' ],
+//     [ 'obj', 'blurf', 'x', 'z' ],
+//     [ 'obj', 'hello' ],
+//     [ 'obj', 'hello', 'bla' ],
+//     [ 'obj', 'hello', 'bla', 'a', 'b', 'c' ],
+//     [ 'obj', 'hello', 'x', 'z' ],
+//     [ 's2' ],
+//     [ 's2', 'bla' ],
+//     [ 's2', 'bla', 'a', 'b', 'c' ],
+//     [ 's2', 'x', 'z' ],
+//     [ 's' ],
+//     [ 's', 'bla' ],
+//     [ 's', 'bla', 'a', 'b', 'c' ],
+//     [ 'obj', 'blurf', 'x', 'z' ],
+//     [ 'obj', 'weird', 'z' ],
+//     [ 's', 'x', 'z' ]
+//   ], 'fires all listeners on remove')
+//   t.end()
+// })
