@@ -82,10 +82,22 @@ test('remove - mixed', t => {
     c: 'c',
     on: t => results.push(t.path())
   })
-  s.set({
-    d: true,
-    a: null
-  }, 'stamp')
-  t.same(results, [ [ 's' ] ], 'fires once')
+
+  const s2 = s.create({
+    key: 's2',
+    a: { type: 'struct' }
+  })
+
+  const s3 = s.create({
+    key: 's3',
+    a: 'hello'
+  })
+
+  s.set({ d: true, a: null }, 'stamp')
+  t.same(s.keys(), [ 'b', 'c', 'd' ], 'correct keys')
+  t.same(s3.keys(), [ 'b', 'c', 'd' ], 'correct keys on s3')
+  t.same(s2.keys(), [ 'b', 'c', 'd', 'a' ], 'correct keys on s2')
+  // not logicall order
+  t.same(results, [ [ 's3' ], [ 's' ], [ 's2' ] ], 'fires once')
   t.end()
 })
