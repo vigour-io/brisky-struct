@@ -132,9 +132,9 @@ test('on - struct ', t => {
 })
 
 test('on - context ', t => {
-  const results = []
-  const log = []
-  const special = []
+  var results = []
+  var log = []
+  var special = []
   const a = struct({
     key: 'a',
     on: {
@@ -144,7 +144,7 @@ test('on - context ', t => {
       }
     }
   })
-  const b = a.create({ //eslint-disable-line
+  const b = a.create({
     key: 'b',
     on: {
       data: {
@@ -156,5 +156,29 @@ test('on - context ', t => {
   t.same(results, [ ['a'], ['b'] ], 'results')
   t.same(log, [ ['a'], ['b'] ], 'log')
   t.same(special, [ ['b'] ], 'special')
+
+  results = []
+  log = []
+  special = []
+  const c = b.create({
+    key: 'c',
+    on: {
+      data: {
+        log: null,
+        special: null,
+        hello: t => log.push(t.path())
+      }
+    }
+  })
+  c.set({ on: { data: { hello: t => special.push(t.path()) } } })
+  a.set('bye', 'stamp-1')
+  t.same(results, [ ['a'], ['b'], ['c'] ], 'results (including "c")')
+  t.same(log, [ ['a'], ['b'] ], 'log (including "c")')
+  t.same(special, [ ['b'], ['c'] ], 'special (including "c")')
+
+  special = []
+  c.set({ on: { data: { special: t => special.push(t.path()) } } })
+  c.set('wow', 'stamp-2')
+  t.same(special, [ ['c'], ['c'] ], 'special set on c')
   t.end()
 })
