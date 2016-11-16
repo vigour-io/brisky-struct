@@ -7,7 +7,7 @@ test('once ', t => {
   .then(() => a.once('hello'))
   .then(() => {
     a.once(void 0, () => {
-      t.pass('fires with callbacks, with checks and without')
+      t.pass('promise, callback')
       t.end()
     })
     a.set('ha!', 'stamp-2')

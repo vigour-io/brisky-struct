@@ -129,6 +129,6 @@ test('references - normal object for val', t => {
   const c = struct(() => 'lulz')
   t.equal(b.compute(), val, 'returns normal object')
   a.set(c)
-  t.equal(b.compute()(), 'lulz', 'function support')
+  t.equal(b.compute(), 'lulz', 'function support')
   t.end()
 })
