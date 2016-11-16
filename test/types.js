@@ -29,5 +29,17 @@ test('types ', t => {
   t.equal(b.get('y').keys(), void 0, 'override "bla" type')
   t.equal(b.get('y').compute(), 'override!', 'type with string')
   t.same(a.get('field').keys(), [ 'field' ], '"field" on a has "field"')
+  const c = struct({
+    types: {
+      a: true
+    },
+    a: {
+      b: {
+        c: true
+      }
+    }
+  })
+  const c2 = c.create({ a: { type: 'a' } })
+  t.same(c2.get('a').keys(), void 0, 'override inheritance')
   t.end()
 })

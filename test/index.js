@@ -1,5 +1,4 @@
 'use strict'
-require('./async')
 require('./get')
 require('./context')
 require('./types')
@@ -12,3 +11,4 @@ require('./on')
 require('./iterators')
 require('./remove')
 require('./references')
+require('./async')

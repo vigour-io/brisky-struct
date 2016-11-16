@@ -112,7 +112,7 @@ test('references - serialized', t => {
 
 test('references - override & remove', t => {
   const a = struct('a')
-  const b = struct('b')
+  const b = struct({ val: 'b', on: { error () {} } })
   const c = struct(a)
   c.set(b)
   t.same(a.emitters.data.struct, [], 'removed struct listener from "a"')

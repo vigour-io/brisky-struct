@@ -124,7 +124,15 @@ test('async', t => {
           }
         }, s)
 
-        a.once('ha!').then(() => {
+        const arr = [
+          defer('iterator-1'),
+          'iterator-2',
+          defer('iterator-3')
+        ]
+
+        a.set({ val: arr[Symbol.iterator]() }, s)
+
+        a.once('iterator-3').then(() => {
           t.same(errors, [ 'lullllz' ], 'catches iterator errors')
           t.same(results, [
             'special-19',
@@ -134,7 +142,10 @@ test('async', t => {
             'special-23',
             'special-24',
             'special-25',
-            'special-26'
+            'special-26',
+            'special-27',
+            'special-28',
+            'special-29'
           ], 'correct results')
           t.equal(a.async, void 0, 'removed async queue')
           t.end()
