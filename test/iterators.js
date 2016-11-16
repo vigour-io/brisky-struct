@@ -1,7 +1,7 @@
 const test = require('tape')
 const struct = require('../')
 
-test('iterators', t => {
+test('iterators - functional', t => {
   const a = struct({ key: 1, a: 'a', b: 'b', c: 'c' })
   t.same(a.keys(), [ 'a', 'b', 'c' ], 'correct initial keys')
   const b = a.create({ key: 2, d: true, a: true, e: true })
@@ -24,5 +24,15 @@ test('iterators', t => {
   const result = []
   d.forEach(val => result.push(val))
   t.same(d.map(val => val), [ d.a, d.b, d.c ], 'forEach')
+  t.end()
+})
+
+test('iterators - for of', t => {
+  const a = struct([ 1, 2, 3, 4, 5, 6, 7 ])
+  const results = []
+  for (let val of a) {
+    results.push(val.compute())
+  }
+  t.same(results, [ 1, 2, 3, 4, 5, 6, 7 ], 'expected iteration')
   t.end()
 })
