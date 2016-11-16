@@ -28,13 +28,24 @@ test('remove ', t => {
 
   const s2 = s.create({ key: 's2' }) //eslint-disable-line
 
-  const obj = { //eslint-disable-line
+  /*
+  [ [ 's2' ],
+  [ 's2', 'bla' ],
+  [ 's2', 'bla', 'a', 'b', 'c' ],
+  [ 's2', 'x', 'z' ],
+  [ 's' ],
+  [ 's', 'bla' ],
+  [ 's', 'bla', 'a', 'b', 'c' ],
+  [ 's', 'x', 'z' ] ]
+  */
+
+  const obj = struct({ //eslint-disable-line
+    key: 'obj',
     props: {
       default: s
     },
-    hello: {},
-    bla: true
-  }
+    hello: {}
+  })
 
   s.set(null, 'stamp')
 
