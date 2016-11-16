@@ -99,9 +99,7 @@ test('props - self', t => {
   )
 
   instance.set({
-    props: {
-      special: { field: true }
-    },
+    props: { special: { field: true } },
     special: 'whatever'
   })
 

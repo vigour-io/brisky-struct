@@ -121,3 +121,11 @@ test('references - override & remove', t => {
   t.same(b.emitters.data.struct, [], 'removed struct listener from "b"')
   t.end()
 })
+
+test('references - normal object for val', t => {
+  const val = { hello: true }
+  const a = struct({ val })
+  const b = struct(a)
+  t.equal(b.compute(), val, 'returns normal object')
+  t.end()
+})
