@@ -130,3 +130,31 @@ test('on - struct ', t => {
   t.same(results, [ 'a', 'b' ], 'fires for multiple references')
   t.end()
 })
+
+test('on - context ', t => {
+  const results = []
+  const log = []
+  const special = []
+  const a = struct({
+    key: 'a',
+    on: {
+      data: {
+        results: t => results.push(t.path()),
+        log: t => log.push(t.path())
+      }
+    }
+  })
+  const b = a.create({ //eslint-disable-line
+    key: 'b',
+    on: {
+      data: {
+        special: t => special.push(t.path())
+      }
+    }
+  })
+  a.set('hello', 'stamp')
+  t.same(results, [ ['a'], ['b'] ], 'results')
+  t.same(log, [ ['a'], ['b'] ], 'log')
+  t.same(special, [ ['b'] ], 'special')
+  t.end()
+})
