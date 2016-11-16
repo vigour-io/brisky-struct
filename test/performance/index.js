@@ -14,6 +14,18 @@ perf(() => {
 }, 'create listeners')
 
 perf(() => {
+  const a = struct({ on: { data: { log: () => {} } } })
+  for (let i = 0; i < amount * 5; i++) {
+    a.set(i, i)
+  }
+}, () => {
+  const a = new Obs({ on: { data: { log: () => {} } } })
+  for (let i = 0; i < amount * 5; i++) {
+    a.set(i)
+  }
+}, 'fire listeners')
+
+perf(() => {
   const orig = struct({
     on: {
       data: {
@@ -50,7 +62,7 @@ perf(() => {
     }
   })
   for (let i = 0; i < amount * 100; i++) {
-    a.set(i)
+    a.set(i, i)
   }
 }, () => {
   let a = new Obs()
