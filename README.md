@@ -5,7 +5,7 @@ An observable data structure
 [![npm version](https://badge.fury.io/js/brisky-struct.svg)](https://badge.fury.io/js/brisky-struct)
 [![Coverage Status](https://coveralls.io/repos/github/vigour-io/brisky-struct/badge.svg?branch=master)](https://coveralls.io/github/vigour-io/brisky-struct?branch=master)
 
-- Deep memmory efficient prototypes
+- Deep memory efficient prototypes
 - Every value is observable
 - Serializable references
 - Fast reactive state management. Inspired by virtual-dom tree-diffing algorithms and merkle-trees
