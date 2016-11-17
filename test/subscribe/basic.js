@@ -1,7 +1,7 @@
 const test = require('tape')
 const subsTest = require('./util')
 
-test('basic', t => {
+test('subscription - basic', t => {
   const s = subsTest(
     t,
     { field: true },
