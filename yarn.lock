@@ -797,9 +797,9 @@ brisky-stamp@^1.5.6:
   dependencies:
     bubleify "0.5.1"
 
-brisky-stamp@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/brisky-stamp/-/brisky-stamp-2.0.2.tgz#c0ad72ba2cb93d74fedc91c989c1e1f57edc05c5"
+brisky-stamp@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/brisky-stamp/-/brisky-stamp-2.0.3.tgz#f5b97d0d4c03f6130915c7f15a48415f6410f220"
   dependencies:
     bubleify "0.5.1"
 
