@@ -9,6 +9,7 @@
     "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-difflet",
     "dev-perf": "nodemon test/performance/index.js --expose-gc | tap-difflet",
     "dev-perf-browser": "budo ./test/performance/index.js -p 8080 --live",
+    "dev-perf-webgl": "budo ./test/performance/webgl.js -p 8080 --live",
     "dev-perf-canvas": "budo ./test/performance/webgl.js -p 8080 --live",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
@@ -24,7 +25,7 @@
     "memory optmization"
   ],
   "dependencies": {
-    "brisky-stamp": "^1.5.6",
+    "brisky-stamp": "^2.0.2",
     "bubleify": "0.5.1",
     "monotonic-timestamp": "0.0.9",
     "pixi.js": "^4.2.2",
