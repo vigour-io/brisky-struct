@@ -8,7 +8,7 @@ test('remove - basic', t => {
     b: 'b',
     c: 'c'
   })
-  s.set(null)
+  s.set(null, false)
   t.same(s.keys(), [], 'correct keys')
   t.end()
 })
@@ -116,7 +116,7 @@ test('remove - mixed', t => {
   )
   const a = struct({ a: true, b: true })
   const b = a.create({ a: { type: 'struct' } })
-  a.set({ d: true, a: null })
+  a.set({ d: true, a: null }, false)
   t.same(b.keys(), [ 'b', 'd', 'a' ], 'correct keys on "a"')
   t.end()
 })

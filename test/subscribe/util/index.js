@@ -1,4 +1,3 @@
-const subscribe = require('../../../lib/subscribe')
 const struct = require('../../../')
 const bs = require('brisky-stamp')
 const logger = require('./log')
@@ -6,8 +5,7 @@ const logger = require('./log')
 module.exports = function (t, state, subs, log) {
   state = state.type === 'state' ? state : struct(state)
   var updates = []
-  const tree = subscribe(
-    state,
+  const tree = state.subscribe(
     subs,
     function (state, type, stamp, subs, tree, sType) {
       let path = state && state.path().join('/')
@@ -25,7 +23,7 @@ module.exports = function (t, state, subs, log) {
       updates.push(obj)
     }
   )
-  var seed = !state._lstamp ? bs.cnt : state._lstamp - 1
+  var seed = !state.stamp ? bs.cnt : state.stamp - 1
   return function test (label, updated, val) {
     if (val) {
       updates = []
