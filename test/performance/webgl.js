@@ -17,7 +17,6 @@ var context = canvas.getContext('2d')
 context.fillStyle = 'rgb(128,263,192)'
 context.fillRect(0, 0, 1, 1)
 const texture = PIXI.Texture.fromCanvas(canvas)
-
 // const texture = PIXI.Texture.fromImage('test/performance/img.png')
 
 const struct = require('../../')
@@ -72,7 +71,6 @@ function listen (target, type) {
   if (type === 'remove') {
     // stage.removeChild(target.sprite)
   } else {
-    // console.log(target.parent().sprite)
     if (type === 'new') {
       target.sprite = new PIXI.Sprite(texture)
       stage.addChild(target.sprite)
@@ -83,31 +81,5 @@ function listen (target, type) {
   }
 }
 
-// function listen2 (target, type) {
-//   if (type === 'remove') {
-//     // stage.removeChild(target.sprite)
-//   } else {
-//     // console.log(target.parent().sprite)
-//     if (!target.parent().sprite) {
-//       target.parent().sprite = new PIXI.Sprite(texture)
-//       stage.addChild(target.parent().sprite)
-//     }
-//     target.parent().sprite[target.key] = target.compute()
-//   }
-// }
-// -------------------------
-// state.subscribe({
-//   something: {
-//     $any: {
-//       x: { val: true },
-//       y: { val: true }
-//     }
-//   }
-// }, listen2)
-
 state.subscribe({ something: { $any: { val: true } } }, listen)
-
 animate()
-
-// bunny.rotation += 0.1
-console.log(state.something[0].scale)
