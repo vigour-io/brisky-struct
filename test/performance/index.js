@@ -1,6 +1,6 @@
 const perf = require('brisky-performance')
 const struct = require('../../')
-// const Obs = require('vigour-observable')
+const Obs = require('vigour-observable')
 const State = require('vigour-state')
 const n = 1e4
 const bs = require('brisky-stamp')
@@ -176,6 +176,18 @@ const bs = require('brisky-stamp')
 //     a.set(i)
 //   }
 // }, `fire listeners vs vigour-state deep n = ${(n * 100 / 1e3) | 0}k`)
+
+perf(() => {
+  const s = struct({ val: 's', $transform: val => val + '!' })
+  for (let i = 0; i < n * 1000; i++) {
+    s.compute()
+  }
+}, () => {
+  const s = new Obs({ val: 's', $transform: val => val + '!' })
+  for (let i = 0; i < n * 1000; i++) {
+    s.compute()
+  }
+}, `$transform n = ${(n * 1000 / 1e3) | 0}k`)
 
 perf(() => {
   const s = struct({ a: { b: { c: {} } } })
