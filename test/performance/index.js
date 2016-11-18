@@ -240,20 +240,20 @@ perf(() => {
     { $any: { val: true } },
     () => {}
   )
-  for (let i = 0; i < n * 2; i++) {
+  for (let i = 0; i < n; i++) {
     // console.log(' \nset')
     s.set({ [i]: i })
   }
 }, () => {
-  // const s = new State({})
-  // s.subscribe(
-  //   { $any: { val: true } },
-  //   () => {}
-  // )
-  // for (let i = 0; i < n * 2; i++) {
-  //   s.set({ [i]: i })
-  // }
-}, `any subscription n = ${((n * 2 / 1e3) | 0)}k`)
+  const s = new State({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.set({ [i]: i })
+  }
+}, `any subscription n = ${((n / 1e3) | 0)}k`)
 
 perf(() => {
   for (let i = 0; i < n * 10; i++) {
