@@ -2,7 +2,7 @@ const perf = require('brisky-performance')
 const struct = require('../../')
 const Obs = require('vigour-observable')
 const State = require('vigour-state')
-const n = 1e4
+const n = 1e3
 const bs = require('brisky-stamp')
 
 // perf(() => {
@@ -179,15 +179,15 @@ const bs = require('brisky-stamp')
 
 perf(() => {
   const s = struct({ val: 's', $transform: val => val + '!' })
-  for (let i = 0; i < n * 1000; i++) {
+  for (let i = 0; i < n * 100; i++) {
     s.compute()
   }
 }, () => {
   const s = new Obs({ val: 's', $transform: val => val + '!' })
-  for (let i = 0; i < n * 1000; i++) {
+  for (let i = 0; i < n * 100; i++) {
     s.compute()
   }
-}, `$transform n = ${(n * 1000 / 1e3) | 0}k`)
+}, `$transform n = ${(n * 100 / 1e3) | 0}k`)
 
 perf(() => {
   const s = struct({ a: { b: { c: {} } } })
