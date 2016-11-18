@@ -20,20 +20,27 @@ test('subscription - references', t => {
     },
     {
       ref: {
-        a: { val: true }
-        // b: { val: true }
+        a: { val: true },
+        b: { val: true }
       }
-    }
+    },
+    true
   )
 
   s(
     'initial subscription',
-    [ { path: 'field/a', type: 'new' } ]
+    [
+      { path: 'ref/b', type: 'new' },
+      { path: 'field/a', type: 'new' }
+    ]
   )
 
+  // see how this is qualified in pervious -- must be update
   s(
     'switch reference',
-    [ { path: 'other/a', type: 'new' } ],
+    [
+      { path: 'other/a', type: 'update' }
+    ],
     { ref: [ '@', 'parent', 'other' ] }
   )
 
