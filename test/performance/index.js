@@ -234,43 +234,70 @@ perf(() => {
 
 // n = 1
 
-perf(() => {
-  const s = struct({})
-  s.subscribe(
-    { $any: { val: true } },
-    () => {}
-  )
-  for (let i = 0; i < n; i++) {
-    // console.log(' \nset')
-    s.set({ [i]: i })
-  }
-}, () => {
-  const s = new State({})
-  s.subscribe(
-    { $any: { val: true } },
-    () => {}
-  )
-  for (let i = 0; i < n; i++) {
-    s.set({ [i]: i })
-  }
-}, `any subscription n = ${((n / 1e3) | 0)}k`)
+const s = struct({})
+console.log('create')
+var arr = []
+for (let i = 0; i < 3e5; i++) {
+  arr.push(i)
+}
+s.subscribe(
+  { $any: { val: true } },
+  () => {}
+)
+
+// will also optmize creation!
+s.set(arr)
+// console.log('wtf')
 
 perf(() => {
-  for (let i = 0; i < n * 10; i++) {
-    let s = struct({})
-    s.subscribe(
-      { $any: { val: true } },
-      () => {}
-    )
-    s.set({ [i]: i })
-  }
+  s[(Math.random() * 3e5) | 0].set('face')
 }, () => {
-  for (let i = 0; i < n * 10; i++) {
-    let s = new State({})
-    s.subscribe(
-      { $any: { val: true } },
-      () => {}
-    )
-    s.set({ [i]: i })
-  }
-}, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
+  // const s = new State({})
+  // s.subscribe(
+  //   { $any: { val: true } },
+  //   () => {}
+  // )
+  // for (let i = 0; i < n; i++) {
+  //   s.set({ [i]: i })
+  // }
+}, `any subscription large set n = 300k, 100 iterations`)
+
+// perf(() => {
+//   for (let i = 0; i < n * 10; i++) {
+//     let s = struct({})
+//     s.subscribe(
+//       { $any: { val: true } },
+//       () => {}
+//     )
+//     s.set({ [i]: i })
+//   }
+// }, () => {
+//   for (let i = 0; i < n * 10; i++) {
+//     let s = new State({})
+//     s.subscribe(
+//       { $any: { val: true } },
+//       () => {}
+//     )
+//     s.set({ [i]: i })
+//   }
+// }, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
+
+// perf(() => {
+//   const s = struct({})
+//   s.subscribe(
+//     { $any: { val: true } },
+//     () => {}
+//   )
+//   for (let i = 0; i < n; i++) {
+//     s.set({ [i]: i })
+//   }
+// }, () => {
+//   const s = new State({})
+//   s.subscribe(
+//     { $any: { val: true } },
+//     () => {}
+//   )
+//   for (let i = 0; i < n; i++) {
+//     s.set({ [i]: i })
+//   }
+// }, `any subscription n = ${((n / 1e3) | 0)}k`)
