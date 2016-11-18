@@ -8,8 +8,7 @@ test('subscription - basic', t => {
     {
       field: { val: true },
       other: { yuzi: { val: true } }
-    },
-    true
+    }
   )
 
   s(
@@ -23,7 +22,6 @@ test('subscription - basic', t => {
     { other: { yuzi: true } }
   )
 
-  console.log('go remove')
   s(
     'remove field',
     [ { path: 'other/yuzi', type: 'remove' } ],
