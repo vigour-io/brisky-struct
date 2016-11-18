@@ -8,7 +8,8 @@ test('subscription - basic', t => {
     {
       field: { val: true },
       other: { yuzi: { val: true } }
-    }
+    },
+    true
   )
 
   s(
@@ -22,23 +23,24 @@ test('subscription - basic', t => {
     { other: { yuzi: true } }
   )
 
-  // s(
-  //   'remove field',
-  //   [ { path: 'other/yuzi', type: 'remove' } ],
-  //   { other: { yuzi: null } }
-  // )
+  console.log('go remove')
+  s(
+    'remove field',
+    [ { path: 'other/yuzi', type: 'remove' } ],
+    { other: { yuzi: null } }
+  )
 
-  // s(
-  //   'reset yuzi',
-  //   [ { path: 'other/yuzi', type: 'new' } ],
-  //   { other: { yuzi: true } }
-  // )
+  s(
+    'reset yuzi',
+    [ { path: 'other/yuzi', type: 'new' } ],
+    { other: { yuzi: true } }
+  )
 
-  // s(
-  //   'remove other, no nested removal',
-  //   [],
-  //   { other: null }
-  // )
+  s(
+    'remove other, no nested removal',
+    [],
+    { other: null }
+  )
 
   t.end()
 })

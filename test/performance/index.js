@@ -196,7 +196,7 @@ perf(() => {
     { a: { b: { c: { val: true } } } },
     () => {}
   )
-  for (let i = 0; i < n * 10; i++) {
+  for (let i = 0; i < n * 100; i++) {
     let stamp = bs.create()
     a.set(i, stamp)
     bs.close(stamp)
@@ -211,4 +211,5 @@ perf(() => {
   for (let i = 0; i < n * 10; i++) {
     a.set(i)
   }
-}, `simple subscription n = ${(n * 10 / 1e3) | 0}k`)
+}, 10, 10)
+//  `simple subscription n = ${(n * 100 / 1e3) | 0}k`
