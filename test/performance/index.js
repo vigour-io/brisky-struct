@@ -188,73 +188,86 @@ perf(() => {
 //   }
 // }, `$transform n = ${(n * 100 / 1e3) | 0}k`)
 
-// perf(() => {
-//   const s = struct({ a: { b: { c: {} } } })
-//   const a = s.a.b.c
-//   s.subscribe(
-//     { a: { b: { c: { val: true } } } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 100; i++) {
-//     a.set(i)
-//   }
-// }, () => {
-//   const s = new State({ a: { b: { c: {} } } })
-//   const a = s.a.b.c
-//   s.subscribe(
-//     { a: { b: { c: { val: true } } } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 10; i++) {
-//     a.set(i)
-//   }
-// }, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
-
-// perf(() => {
-//   for (let i = 0; i < n * 10; i++) {
-//     const s = struct({ a: { b: { c: {} } } })
-//     const a = s.a.b.c
-//     s.subscribe(
-//       { a: { b: { c: { val: true } } } },
-//       () => {}
-//     )
-//     a.set(i)
-//   }
-// }, () => {
-//   for (let i = 0; i < n * 1; i++) {
-//     const s = new State({ a: { b: { c: {} } } })
-//     const a = s.a.b.c
-//     s.subscribe(
-//       { a: { b: { c: { val: true } } } },
-//       () => {}
-//     )
-//     a.set(i)
-//   }
-// }, `creation n = ${(n * 10 / 1e3) | 0}k`, 10)
-
-n = 1
 perf(() => {
-  const s = struct({})
-  var cnt = 0
+  const s = struct({ a: { b: { c: {} } } })
+  const a = s.a.b.c
   s.subscribe(
-    { $any: { val: true } },
-    () => {
-      ++cnt
-      console.log('???')
-    }
+    { a: { b: { c: { val: true } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 100; i++) {
+    a.set(i)
+  }
+}, () => {
+  const s = new State({ a: { b: { c: {} } } })
+  const a = s.a.b.c
+  s.subscribe(
+    { a: { b: { c: { val: true } } } },
+    () => {}
   )
   for (let i = 0; i < n * 10; i++) {
-    console.log(' \n' + i)
+    a.set(i)
+  }
+}, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
+
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = struct({ a: { b: { c: {} } } })
+    let a = s.a.b.c
+    s.subscribe(
+      { a: { b: { c: { val: true } } } },
+      () => {}
+    )
+    a.set(i)
+  }
+}, () => {
+  for (let i = 0; i < n * 1; i++) {
+    let s = new State({ a: { b: { c: {} } } })
+    let a = s.a.b.c
+    s.subscribe(
+      { a: { b: { c: { val: true } } } },
+      () => {}
+    )
+    a.set(i)
+  }
+}, `creation n = ${(n * 10 / 1e3) | 0}k`, 10)
+
+perf(() => {
+  const s = struct({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n / 2; i++) {
     s.set({ [i]: i })
   }
-  console.log('total:', cnt)
 }, () => {
   const s = new State({})
   s.subscribe(
     { $any: { val: true } },
     () => {}
   )
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n / 2; i++) {
     s.set({ [i]: i })
   }
-}, `any subscription n = ${(n * 10 / 1e3) | 0}k`, 10, 1)
+}, `any subscription n = ${((n / 200) | 0) / 10}k`)
+
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = struct({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, () => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = new State({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
