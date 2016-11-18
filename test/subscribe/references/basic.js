@@ -163,11 +163,10 @@ test('subscription - reference - nested', t => {
     { ref: [ '@', 'parent', 'd' ] }
   )
 
-  console.log('REMOVE REF!')
   s(
     'remove reference',
     [
-      { path: 'd/b/x', type: 'remove' } // maybe a path ? :X
+      { path: 'd/b/x', type: 'remove' }
     ],
     { ref: false }
   )
