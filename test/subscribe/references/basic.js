@@ -6,11 +6,15 @@ test('subscription - references', t => {
     t,
     {
       field: {
-        a: true,
+        a: { val: true, nest: true },
         b: true
       },
       other: {
-        a: true,
+        a: {
+          val: true,
+          nest: true,
+          field: true
+        },
         b: true
       },
       ref: {
@@ -21,7 +25,11 @@ test('subscription - references', t => {
     {
       ref: {
         $remove: true,
-        a: { val: true },
+        a: {
+          $remove: true,
+          nest: { val: true },
+          field: { val: true } // deeper should not fire
+        },
         b: { val: true }
       }
     },
@@ -32,14 +40,15 @@ test('subscription - references', t => {
     'initial subscription',
     [
       { path: 'ref/b', type: 'new' },
-      { path: 'field/a', type: 'new' }
+      { path: 'field/a/nest', type: 'new' }
     ]
   )
 
   s(
     'switch reference',
     [
-      { path: 'other/a', type: 'update' }
+      { path: 'other/a/nest', type: 'update' },
+      { path: 'other/a/field', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'other' ] }
   )
@@ -48,7 +57,8 @@ test('subscription - references', t => {
   s(
     'remove reference',
     [
-      { path: 'other/a', type: 'remove' }
+      { path: 'other/a/nest', type: 'remove' },
+      { path: 'other/a/field', type: 'remove' }
     ],
     { other: null }
   )
