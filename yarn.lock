@@ -641,8 +641,8 @@ babelify@^7.3.0:
     object-assign "^4.0.0"
 
 babylon@^6.11.0:
-  version "6.14.0"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.14.0.tgz#c8ba4b69b544b2cd8f3fb96b06614660a49b7128"
+  version "6.14.1"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.14.1.tgz#956275fab72753ad9b3435d7afe58f8bf0a29815"
 
 balanced-match@^0.4.1:
   version "0.4.2"
@@ -777,9 +777,9 @@ brisky-is-removed@^1.0.0:
   dependencies:
     bubleify "0.5.1"
 
-brisky-performance@^1.4.0:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/brisky-performance/-/brisky-performance-1.4.1.tgz#8b78fcf9356d89aa135f149a0ccc0fac2fbe62bb"
+brisky-performance@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/brisky-performance/-/brisky-performance-1.4.2.tgz#5ee3560854799a3ef1ba57db8206546cc9c12a1f"
   dependencies:
     is-node "^1.0.2"
     quick-hash "^1.0.4"
@@ -4024,8 +4024,8 @@ replace-ext@0.0.1:
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
 
 request@^2.75.0:
-  version "2.78.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.78.0.tgz#e1c8dec346e1c81923b24acdb337f11decabe9cc"
+  version "2.79.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:
     aws-sign2 "~0.6.0"
     aws4 "^1.2.1"
@@ -4041,12 +4041,12 @@ request@^2.75.0:
     isstream "~0.1.2"
     json-stringify-safe "~5.0.1"
     mime-types "~2.1.7"
-    node-uuid "~1.4.7"
     oauth-sign "~0.8.1"
     qs "~6.3.0"
     stringstream "~0.0.4"
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
+    uuid "^3.0.0"
 
 request@2.75.0:
   version "2.75.0"
@@ -4907,6 +4907,10 @@ util@~0.10.1, util@0.10.3:
 uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
+
+uuid@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.0.tgz#6728fc0459c450d796a99c31837569bdf672d728"
 
 vali-date@^1.0.0:
   version "1.0.0"
