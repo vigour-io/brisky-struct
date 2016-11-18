@@ -32,8 +32,7 @@ test('subscription - references', t => {
         },
         b: { val: true }
       }
-    },
-    true
+    }
   )
 
   s(
@@ -145,7 +144,6 @@ test('subscription - reference - nested', t => {
     { ref: [ '@', 'parent', 'c' ] }
   )
 
-  console.log('go go go')
   s(
     'switch reference to excluding fields',
     [
