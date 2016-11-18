@@ -245,32 +245,32 @@ perf(() => {
     s.set({ [i]: i })
   }
 }, () => {
-  const s = new State({})
-  s.subscribe(
-    { $any: { val: true } },
-    () => {}
-  )
-  for (let i = 0; i < n * 2; i++) {
+  // const s = new State({})
+  // s.subscribe(
+  //   { $any: { val: true } },
+  //   () => {}
+  // )
+  // for (let i = 0; i < n * 2; i++) {
+  //   s.set({ [i]: i })
+  // }
+}, `any subscription n = ${((n * 2 / 1e3) | 0)}k`)
+
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = struct({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
     s.set({ [i]: i })
   }
-}, `any subscription n = ${((n * 2 / 1e3) | 0)}k`, 1, 1)
-
-// perf(() => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = struct({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {}
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, () => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = new State({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {}
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
+}, () => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = new State({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
