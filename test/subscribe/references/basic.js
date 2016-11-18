@@ -113,8 +113,9 @@ test('subscription - reference - nested', t => {
     t,
     {
       a: { b: { c: 'its a.b.c!' } },
-      b: { b: { x: 'its b.b.x!' } },
+      b: { b: { field: true, x: { val: 'its b.b.x!', bla: true } } },
       c: { b: { c: 'its c.b.c!' } },
+      d: { b: { x: 'hahaha' } },
       ref: [ '@', 'parent', 'a' ]
     },
     {
@@ -123,7 +124,7 @@ test('subscription - reference - nested', t => {
         b: {
           $remove: true,
           c: { val: true },
-          x: { val: true }
+          x: { val: true, bla: { val: true } }
         }
       }
     }
@@ -149,18 +150,28 @@ test('subscription - reference - nested', t => {
     'switch reference to excluding fields',
     [
       { path: 'c/b/c', type: 'remove' },
-      { path: 'b/b/x', type: 'new' }
+      { path: 'b/b/x', type: 'new' },
+      { path: 'b/b/x/bla', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'b' ] }
   )
 
-  // also i would expect this to fire for b and c: { val: true }
-  // s(
-  //   'remove reference',
-  //   [
-  //     { type: 'remove' } // maybe a path ? :X
-  //   ],
-  //   { ref: false }
-  // )
+  s(
+    'switch reference to excluding deep fields',
+    [
+      { path: 'b/b/x/bla', type: 'remove' },
+      { path: 'd/b/x', type: 'update' }
+    ],
+    { ref: [ '@', 'parent', 'd' ] }
+  )
+
+  console.log('REMOVE REF!')
+  s(
+    'remove reference',
+    [
+      { path: 'd/b/x', type: 'remove' } // maybe a path ? :X
+    ],
+    { ref: false }
+  )
   t.end()
 })
