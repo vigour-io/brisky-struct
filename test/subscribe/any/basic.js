@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test('any - basic', t => {
+test('subscription - any - basic', t => {
   const s = subsTest(
     t,
     {},
@@ -51,7 +51,7 @@ test('any - basic', t => {
   t.end()
 })
 
-test('any - basic - true', t => {
+test('subscription - any - basic - true', t => {
   var s = subsTest(
     t,
     {},
@@ -88,7 +88,7 @@ test('any - basic - true', t => {
   t.end()
 })
 
-// test('any - basic - val: "property"', t => {
+// test('subscription - any - basic - val: "property"', t => {
 //   var s = subsTest(
 //     t,
 //     {},
@@ -129,7 +129,7 @@ test('any - basic - true', t => {
 //   t.end()
 // })
 
-// test('any - basic - combined with a field with nested subs', t => {
+// test('subscription - any - basic - combined with a field with nested subs', t => {
 //   var s = subsTest(
 //     t,
 //     {},
@@ -159,7 +159,7 @@ test('any - basic - true', t => {
 //   t.end()
 // })
 
-// test('any - basic - empty fields', t => {
+// test('subscription - any - basic - empty fields', t => {
 //   var s = subsTest(
 //     t,
 //     {
@@ -189,7 +189,7 @@ test('any - basic - true', t => {
 //   t.end()
 // })
 
-// test('any - basic - remove nested fields using $remove listener', t => {
+// test('subscription - any - basic - remove nested fields using $remove listener', t => {
 //   var s = subsTest(
 //     t,
 //     {
