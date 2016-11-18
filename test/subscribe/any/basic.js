@@ -34,61 +34,59 @@ test('any - basic', t => {
     { fields: [ { title: 'smurts' } ] }
   )
 
-  console.log('go remove!')
-  const r = s(
+  s(
     'remove field in a collection',
     [
       { path: 'fields/0/title', type: 'remove' }
     ],
     { fields: [ null ] }
   )
-  console.log(r.state.fields)
 
-  // s(
-  //   'toplevel id collection subscription',
-  //   [ { path: 'a/id', type: 'new' } ],
-  //   { a: { id: true } }
-  // )
+  s(
+    'toplevel id collection subscription',
+    [ { path: 'a/id', type: 'new' } ],
+    { a: { id: true } }
+  )
 
   t.end()
 })
 
-// test('any - basic - true', t => {
-//   var s = subsTest(
-//     t,
-//     {},
-//     { $any: { val: true } }
-//   )
+test('any - basic - true', t => {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: true } }
+  )
 
-//   s('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-//   s(
-//     'create fields',
-//     [
-//       { path: 'a', type: 'new' },
-//       { path: 'b', type: 'new' }
-//     ],
-//     {
-//       a: {},
-//       b: {}
-//     }
-//   )
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    {
+      a: {},
+      b: {}
+    }
+  )
 
-//   s(
-//     'change field',
-//     [ { path: 'a', type: 'update' } ],
-//     { a: 'a' }
-//   )
+  s(
+    'change field',
+    [ { path: 'a', type: 'update' } ],
+    { a: 'a' }
+  )
 
-//   s(
-//     'remove field',
-//     [
-//       { path: 'a', type: 'remove' }
-//     ],
-//     { a: null }
-//   )
-//   t.end()
-// })
+  s(
+    'remove field',
+    [
+      { path: 'a', type: 'remove' }
+    ],
+    { a: null }
+  )
+  t.end()
+})
 
 // test('any - basic - val: "property"', t => {
 //   var s = subsTest(
