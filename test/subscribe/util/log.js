@@ -7,8 +7,8 @@ module.exports = function logTree (tree, level, key, str) {
     level = 0
   }
   for (let i in tree) {
-    if (i !== '_p' && i !== '_key') {
-      if (typeof tree[i] === 'object' && !tree[i].isBase) {
+    if (i !== '_p' && i !== '_key' && i !== '$t') {
+      if (typeof tree[i] === 'object') {
         str += logTree(tree[i], level + 1, i) + '\n'
       } else {
         str += (

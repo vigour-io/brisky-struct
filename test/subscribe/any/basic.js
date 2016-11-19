@@ -34,14 +34,18 @@ test('subscription - any - basic', t => {
     { fields: [ { title: 'smurts' } ] }
   )
 
-  s(
+  console.log('go')
+  const result = s(
     'remove field in a collection',
     [
       { path: 'fields/0/title', type: 'remove' }
     ],
     { fields: [ null ] }
   )
+  console.log('end')
+  console.log(result.tree)
 
+  console.log(' \nGO')
   s(
     'toplevel id collection subscription',
     [ { path: 'a/id', type: 'new' } ],
