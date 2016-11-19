@@ -108,7 +108,6 @@ test('subscription - any - basic - true', t => {
   const k1 = struct.keys()[1]
   struct.keys()[1] = struct.keys()[2]
   struct.keys()[2] = k1
-
   s(
     'add field and reorder keys',
     [
