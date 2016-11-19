@@ -85,9 +85,7 @@ test('subscription - any - basic - true', t => {
     { a: 'a' }
   )
 
-  console.log(' \nDANGER')
-
-  const result = s(
+  s(
     'remove field',
     [
       { path: 'a', type: 'remove' }
@@ -95,38 +93,31 @@ test('subscription - any - basic - true', t => {
     { a: null }
   )
 
-  console.log(result.tree)
-
-  console.log(' \nWRONG')
-  s(
+  const result = s(
     'remove fields',
     [
-      // { path: 'a', type: 'new' },
-      // { path: 'b', type: 'remove' },
-      // { path: 'c', type: 'remove' }
-      // { path: 'b', type: 'remove' },
-      // { path: 'c', type: 'remove' },
-      // { path: 'a', type: 'new' }
+      { path: 'b', type: 'remove' },
+      { path: 'c', type: 'remove' },
+      { path: 'a', type: 'new' }
     ],
     { a: 'hello', b: null, c: null }
   )
 
+  const struct = result.state
+  struct.set({ start: 'start' }, false)
+  const k1 = struct.keys()[1]
+  struct.keys()[1] = struct.keys()[2]
+  struct.keys()[2] = k1
+
+  s(
+    'add field and reorder keys',
+    [
+      { path: 'start', type: 'new' },
+      { path: 'hello', type: 'new' }
+    ],
+    { hello: true }
+  )
   console.log(result.tree)
-
-  // const struct = result.state
-  // struct.set({ start: 'start' }, false)
-  // const k1 = struct.keys()[1]
-  // struct.keys()[1] = struct.keys()[2]
-  // struct.keys()[2] = k1
-
-  // s(
-  //   'add field and insert field',
-  //   [
-  //     { path: 'start', type: 'new' },
-  //     { path: 'hello', type: 'new' }
-  //   ],
-  //   { hello: true }
-  // )
 
   // shuffle array (re-sort)
   t.end()
