@@ -116,8 +116,6 @@ test('subscription - any - basic - true', t => {
     ],
     { hello: true }
   )
-  console.log(result.tree)
-
   // shuffle array (re-sort)
   t.end()
 })
@@ -254,6 +252,5 @@ test('subscription - any - basic - remove nested fields using $remove listener',
       fields: null
     }
   )
-
   t.end()
 })
