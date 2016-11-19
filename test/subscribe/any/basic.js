@@ -17,30 +17,33 @@ test('subscription - any - basic', t => {
   s(
     'create a collection',
     [
-      { path: 'fields/0/title', type: 'new' },
-      { path: 'fields/1/title', type: 'new' }
+      { path: 'fields/a/title', type: 'new' },
+      { path: 'fields/b/title', type: 'new' },
+      { path: 'fields/c/title', type: 'new' }
     ],
     {
-      fields: [
-        { title: 'james' },
-        { title: 'yuz' }
-      ]
+      fields: {
+        a: { title: 'james' },
+        b: { title: 'yuz' },
+        c: { title: 'sjonnie' }
+      }
     }
   )
 
   s(
     'specific field in a collection',
-    [ { path: 'fields/0/title', type: 'update' } ],
-    { fields: [ { title: 'smurts' } ] }
+    [ { path: 'fields/a/title', type: 'update' } ],
+    { fields: { a: { title: 'smurts' } } }
   )
 
   console.log('go')
   const result = s(
     'remove field in a collection',
     [
-      { path: 'fields/0/title', type: 'remove' }
+      { path: 'fields/a/title', type: 'remove' },
+      { path: 'fields/c/title', type: 'remove' }
     ],
-    { fields: [ null ] }
+    { fields: { a: null, c: null } }
   )
   console.log('end')
   console.log(result.tree)
