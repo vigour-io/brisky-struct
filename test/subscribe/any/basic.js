@@ -51,74 +51,73 @@ test('subscription - any - basic', t => {
   t.end()
 })
 
-test('subscription - any - basic - true', t => {
-  var s = subsTest(
-    t,
-    {},
-    { $any: { val: true } }
-  )
+// test('subscription - any - basic - true', t => {
+//   var s = subsTest(
+//     t,
+//     {},
+//     { $any: { val: true } }
+//   )
 
-  s('initial subscription', [], {})
+//   s('initial subscription', [], {})
 
-  s(
-    'create fields',
-    [
-      { path: 'a', type: 'new' },
-      { path: 'b', type: 'new' },
-      { path: 'c', type: 'new' },
-      { path: 'd', type: 'new' }
-    ],
-    {
-      a: {},
-      b: {},
-      c: {},
-      d: {}
-    }
-  )
+//   s(
+//     'create fields',
+//     [
+//       { path: 'a', type: 'new' },
+//       { path: 'b', type: 'new' },
+//       { path: 'c', type: 'new' },
+//       { path: 'd', type: 'new' }
+//     ],
+//     {
+//       a: {},
+//       b: {},
+//       c: {},
+//       d: {}
+//     }
+//   )
 
-  s(
-    'change field',
-    [{ path: 'a', type: 'update' }],
-    { a: 'a' }
-  )
+//   s(
+//     'change field',
+//     [{ path: 'a', type: 'update' }],
+//     { a: 'a' }
+//   )
 
-  const result = s(
-    'remove field',
-    [
-      { path: 'a', type: 'remove' }
-    ],
-    { a: null }
-  )
+//   const result = s(
+//     'remove field',
+//     [
+//       { path: 'a', type: 'remove' }
+//     ],
+//     { a: null }
+//   )
 
-  s(
-    'remove fields',
-    [
-      { path: 'b', type: 'remove' },
-      { path: 'c', type: 'remove' },
-      { path: 'a', type: 'new' }
-    ],
-    { a: 'hello', b: null, c: null }
-  )
+//   s(
+//     'remove fields',
+//     [
+//       { path: 'b', type: 'remove' },
+//       { path: 'c', type: 'remove' },
+//       { path: 'a', type: 'new' }
+//     ],
+//     { a: 'hello', b: null, c: null }
+//   )
 
-  const struct = result.state
-  struct.set({ start: 'start' }, false)
-  const k1 = struct.keys()[1]
-  struct.keys()[1] = struct.keys()[2]
-  struct.keys()[2] = k1
+//   const struct = result.state
+//   struct.set({ start: 'start' }, false)
+//   const k1 = struct.keys()[1]
+//   struct.keys()[1] = struct.keys()[2]
+//   struct.keys()[2] = k1
 
-  s(
-    'add field and insert field',
-    [
-      { path: 'start', type: 'new' },
-      { path: 'hello', type: 'new' }
-    ],
-    { hello: true }
-  )
+//   s(
+//     'add field and insert field',
+//     [
+//       { path: 'start', type: 'new' },
+//       { path: 'hello', type: 'new' }
+//     ],
+//     { hello: true }
+//   )
 
-  // shuffle array
-
-  t.end()
-})
+//   // shuffle array (re-sort)
+//   t.end()
+// })
 
 // test('subscription - any - basic - val: "property"', t => {
 //   var s = subsTest(
