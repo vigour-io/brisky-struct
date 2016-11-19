@@ -97,18 +97,21 @@ test('subscription - any - basic - true', t => {
 
   console.log(result.tree)
 
-  // s(
-  //   'remove fields',
-  //   [
-  //     { path: 'a', type: 'new' },
-  //     { path: 'b', type: 'remove' },
-  //     { path: 'c', type: 'remove' }
-  //     // { path: 'b', type: 'remove' },
-  //     // { path: 'c', type: 'remove' },
-  //     // { path: 'a', type: 'new' }
-  //   ],
-  //   { a: 'hello', b: null, c: null }
-  // )
+  console.log(' \nWRONG')
+  s(
+    'remove fields',
+    [
+      // { path: 'a', type: 'new' },
+      // { path: 'b', type: 'remove' },
+      // { path: 'c', type: 'remove' }
+      // { path: 'b', type: 'remove' },
+      // { path: 'c', type: 'remove' },
+      // { path: 'a', type: 'new' }
+    ],
+    { a: 'hello', b: null, c: null }
+  )
+
+  console.log(result.tree)
 
   // const struct = result.state
   // struct.set({ start: 'start' }, false)
