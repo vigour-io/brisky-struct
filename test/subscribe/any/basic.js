@@ -85,7 +85,9 @@ test('subscription - any - basic - true', t => {
     { a: 'a' }
   )
 
-  s(
+  console.log(' \nDANGER')
+
+  const result = s(
     'remove field',
     [
       { path: 'a', type: 'remove' }
@@ -93,12 +95,17 @@ test('subscription - any - basic - true', t => {
     { a: null }
   )
 
+  console.log(result.tree)
+
   // s(
   //   'remove fields',
   //   [
+  //     { path: 'a', type: 'new' },
   //     { path: 'b', type: 'remove' },
-  //     { path: 'c', type: 'remove' },
-  //     { path: 'a', type: 'new' }
+  //     { path: 'c', type: 'remove' }
+  //     // { path: 'b', type: 'remove' },
+  //     // { path: 'c', type: 'remove' },
+  //     // { path: 'a', type: 'new' }
   //   ],
   //   { a: 'hello', b: null, c: null }
   // )
