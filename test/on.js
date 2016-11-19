@@ -5,8 +5,17 @@ test('on - method ', t => {
   const results = []
   const a = struct()
   t.equal(a.on((t, val) => { results.push(val) }), a, 'returns struct')
-  a.set('hello', 'stamp')
+  a.set('hello')
   t.same(results, [ 'hello' ], 'add listener using method')
+  t.end()
+})
+
+test('on - emit ', t => {
+  const results = []
+  const a = struct()
+  a.on((t, val, stamp) => { results.push(val, stamp) })
+  a.emit('data', 'hello', 'custom-stamp')
+  t.same(results, [ 'hello', 'custom-stamp' ], 'emit method')
   t.end()
 })
 
@@ -14,21 +23,21 @@ test('on - defaults ', t => {
   var results = []
   const a = struct({ on: (t, val) => results.push(val) })
   a.set({ on: { data: (t, val) => results.push(val) } })
-  a.set('hello', 'stamp-1')
+  a.set('hello')
   t.same(
     results, [ 'hello' ],
     'add listener on data _val when set directly on on'
   )
   results = []
   a.set({ on: { data: (t, val) => results.push(val) } })
-  a.set('bye', 'stamp-2')
+  a.set('bye')
   t.same(
     results, [ 'bye' ],
     'add listener on data _val when set directly on emitter'
   )
   results = []
   a.set({ on: { data: { val: (t, val) => results.push(val) } } })
-  a.set('now', 'stamp-3')
+  a.set('now')
   t.same(results, [ 'now' ], 'rewrites val to _val internaly')
   t.end()
 })
@@ -54,7 +63,7 @@ test('on - instances ', t => {
       }
     }
   })
-  a.set('hello!', 'stamp')
+  a.set('hello!')
   t.same(results, [ 'a-a', 'b-a', 'c-a', 'a-b', 'c-b' ], 'excludes "b-b"')
   t.same(instanceResults, [ 'b-b' ], 'correct instance result')
   results = []
@@ -92,7 +101,7 @@ test('on - instances ', t => {
       }
     }
   })
-  a.set('no way!', 'stamp-3')
+  a.set('no way!')
   t.same(
     results,
     [
@@ -126,7 +135,7 @@ test('on - struct ', t => {
   const ref = struct()
   struct({ val: ref, on: () => results.push('a') })
   struct({ val: ref, on: () => results.push('b') })
-  ref.set('hello', 'stamp-3')
+  ref.set('hello')
   t.same(results, [ 'a', 'b' ], 'fires for multiple references')
   t.end()
 })
@@ -152,7 +161,7 @@ test('on - context ', t => {
       }
     }
   })
-  a.set('hello', 'stamp')
+  a.set('hello')
   t.same(results, [ ['a'], ['b'] ], 'results')
   t.same(log, [ ['a'], ['b'] ], 'log')
   t.same(special, [ ['b'] ], 'special')
@@ -171,14 +180,14 @@ test('on - context ', t => {
     }
   })
   c.set({ on: { data: { hello: t => special.push(t.path()) } } })
-  a.set('bye', 'stamp-1')
+  a.set('bye')
   t.same(results, [ ['a'], ['b'], ['c'] ], 'results (including "c")')
   t.same(log, [ ['a'], ['b'] ], 'log (including "c")')
   t.same(special, [ ['b'], ['c'] ], 'special (including "c")')
 
   special = []
   c.set({ on: { data: { special: t => special.push(t.path()) } } })
-  c.set('wow', 'stamp-2')
+  c.set('wow')
   t.same(special, [ ['c'], ['c'] ], 'special set on c')
   t.end()
 })
