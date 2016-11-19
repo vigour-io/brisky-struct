@@ -237,6 +237,7 @@ ss.set(arrs)
 perf(() => {
   s[(Math.random() * 3e5) | 0].set('face')
 }, () => {
+  ss[(Math.random() * 3e5) | 0].set('face')
 }, `any subscription large set n = 300k`)
 
 perf(() => {
