@@ -3,15 +3,15 @@ const test = require('tape')
 const subsTest = require('../util')
 // const struct = require('../../../')
 
-test('reference - any - fields', t => {
+test('subscription - any - reference - fields', t => {
   const s = subsTest(
     t,
     {
       0: 'its zero',
       1: 'its 1',
       collection: {
-        0: '$root.0',
-        1: '$root.1'
+        0: [ '@', 'root', 0 ],
+        1: [ '@', 'root', 1 ]
       }
     },
     {
