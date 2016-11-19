@@ -3,7 +3,7 @@ const bs = require('brisky-stamp')
 const logger = require('./log')
 
 module.exports = function (t, state, subs, log) {
-  state = state.type === 'state' ? state : struct(state)
+  state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
     subs,

@@ -1,7 +1,7 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('../util')
-// const struct = require('../../../')
+const struct = require('../../../')
 
 test('subscription - any - reference - fields', t => {
   const s = subsTest(
@@ -72,98 +72,99 @@ test('subscription - any - reference - target - struct', function (t) {
   t.end()
 })
 
-// test('subscription - any - reference - over reference', function (t) {
-//   const state = new State({
-//     a: {
-//       a1: true,
-//       a2: true
-//     },
-//     b: {
-//       b1: true
-//     },
-//     collection: '$root.a'
-//   })
+test('subscription - any - reference - over reference', t => {
+  const state = struct({
+    a: {
+      a1: true,
+      a2: true
+    },
+    b: {
+      b1: true
+    },
+    collection: [ '@', 'root', 'a' ]
+  })
 
-//   const s = subsTest(
-//     t,
-//     state,
-//     {
-//       collection: {
-//         $any: { val: true }
-//       }
-//     }
-//   )
-//   s(
-//     'initial subscription',
-//     [
-//       { path: 'a/a1', type: 'new' },
-//       { path: 'a/a2', type: 'new' }
-//     ]
-//   )
-//   s(
-//     'update 0',
-//     [
-//       { type: 'remove' },
-//       { type: 'remove' },
-//       { path: 'b/b1', type: 'new' }
-//     ],
-//     {
-//       collection: '$root.b'
-//     }
-//   )
-//   t.end()
-// })
+  const s = subsTest(
+    t,
+    state,
+    {
+      collection: {
+        $any: { val: true }
+      }
+    }
+  )
 
-// test('subscription - any - reference - over reference on field', function (t) {
-//   const state = new State({
-//     holder: {
-//       a: {
-//         a1: true,
-//         a2: true
-//       },
-//       b: {
-//         a1: true
-//       },
-//       collection: '$root.holder.a'
-//     }
-//   })
+  s(
+    'initial subscription',
+    [
+      { path: 'a/a1', type: 'new' },
+      { path: 'a/a2', type: 'new' }
+    ]
+  )
 
-//   const s = subsTest(
-//     t,
-//     state,
-//     {
-//       holder: {
-//         $remove: true,
-//         collection: {
-//           val: 1,
-//           $any: { val: true }
-//         }
-//       }
-//     }
-//   )
-//   s(
-//     'initial subscription',
-//     [
-//       { path: 'holder/collection', type: 'new' },
-//       { path: 'holder/a/a1', type: 'new' },
-//       { path: 'holder/a/a2', type: 'new' }
-//     ]
-//   )
-//   s(
-//     'update 0',
-//     [
-//       // { path: 'holder/b/a1', type: 'update' }, // need to make this a remove
-//       { path: 'holder/collection', type: 'update' },
-//       { type: 'remove' },
-//       { type: 'remove' },
-//       { path: 'holder/b/a1', type: 'new' }
-//     ],
-//     {
-//       holder: { collection: '$root.holder.b' }
-//     }
-//   )
-//   t.end()
-// })
+  s(
+    'update 0',
+    [
+      { path: 'a/a1', type: 'remove' },
+      { path: 'a/a2', type: 'remove' },
+      { path: 'b/b1', type: 'new' }
+    ],
+    {
+      collection: [ '@', 'root', 'b' ]
+    }
+  )
+  t.end()
+})
+
+test('subscription - any - reference - over reference on field', t => {
+  const state = struct({
+    holder: {
+      a: {
+        a1: true,
+        a2: true
+      },
+      b: {
+        a1: true
+      },
+      collection: [ '@', 'parent', 'a' ]
+    }
+  })
+
+  const s = subsTest(
+    t,
+    state,
+    {
+      holder: {
+        $remove: true,
+        collection: {
+          val: 1,
+          $any: { val: true }
+        }
+      }
+    }
+  )
+  s(
+    'initial subscription',
+    [
+      { path: 'holder/collection', type: 'new' },
+      { path: 'holder/a/a1', type: 'new' },
+      { path: 'holder/a/a2', type: 'new' }
+    ]
+  )
+
+  s(
+    'update 0',
+    [
+     { path: 'holder/a/a1', type: 'remove' },
+     { path: 'holder/a/a2', type: 'remove' },
+     { path: 'holder/b/a1', type: 'new' }
+    ],
+    {
+      holder: { collection: [ '@', 'root', 'holder', 'b' ] }
+    }
+  )
+  t.end()
+})
 
 // test('subscription - any - reference - target - struct', function (t) {
 //   const subscription = {
