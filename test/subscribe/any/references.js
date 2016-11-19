@@ -166,40 +166,37 @@ test('subscription - any - reference - over reference on field', t => {
   t.end()
 })
 
-// test('subscription - any - reference - target - struct', function (t) {
-//   const subscription = {
-//     a: {
-//       $remove: true,
-//       $any: {
-//         $remove: true,
-//         title: { val: true }
-//       }
-//     }
-//   }
-//   const b = [ { title: 1 }, { title: 2 }, { title: 3 }, { title: 4 } ]
-//   const s = subsTest(t, { b: b, a: '$root.b' }, subscription)
-//   s('initial subscription', multiple('new'))
-//   function multiple (type, nopath) {
-//     const val = []
-//     for (let i = 0, len = b.length; i < len; i++) {
-//       if (nopath) {
-//         val.push({ type: type })
-//       } else {
-//         val.push({ type: type, path: 'b/' + i + '/title' })
-//       }
-//     }
-//     return val
-//   }
-//   s(
-//     'remove reference',
-//      multiple('remove', true),
-//      { a: false }
-//    )
-//   t.end()
-// })
+test('subscription - any - reference - target - struct', t => {
+  const subscription = {
+    a: {
+      $remove: true,
+      $any: {
+        $remove: true,
+        title: { val: true }
+      }
+    }
+  }
+  const b = [ { title: 1 }, { title: 2 }, { title: 3 }, { title: 4 } ]
+  const s = subsTest(t, { b: b, a: [ '@', 'root', 'b' ] }, subscription)
+  s('initial subscription', multiple('new'))
+  function multiple (type, nopath) {
+    const val = []
+    for (let i = 0, len = b.length; i < len; i++) {
+      val.push({ type: type, path: 'b/' + i + '/title' })
+    }
+    return val
+  }
+  s(
+    'remove reference',
+     multiple('remove', true),
+     { a: false }
+   )
+  t.end()
+})
 
-// test('subscription - any - reference - over reference on field using $test', function (t) {
-//   const state = new State({
+// move to test
+// test('subscription - any - reference - over reference on field using $test', t => {
+//   const state = struct({
 //     holder: {
 //       a: {
 //         a1: true,
