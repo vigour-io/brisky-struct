@@ -36,7 +36,6 @@ test('subscription - any - basic', t => {
     { fields: { a: { title: 'smurts' } } }
   )
 
-  console.log('go')
   const result = s(
     'remove field in a collection',
     [
@@ -45,15 +44,14 @@ test('subscription - any - basic', t => {
     ],
     { fields: { a: null, c: null } }
   )
-  console.log('end')
-  console.log(result.tree)
 
-  console.log(' \nGO')
   s(
     'toplevel id collection subscription',
     [ { path: 'a/id', type: 'new' } ],
     { a: { id: true } }
   )
+
+  console.log(result.tree)
 
   t.end()
 })
