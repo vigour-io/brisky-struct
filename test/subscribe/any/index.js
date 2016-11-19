@@ -1,2 +1,2 @@
-require('./basic')
 require('./references')
+require('./basic')
