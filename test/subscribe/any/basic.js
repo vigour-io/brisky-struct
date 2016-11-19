@@ -65,12 +65,14 @@ test('subscription - any - basic - true', t => {
     [
       { path: 'a', type: 'new' },
       { path: 'b', type: 'new' },
-      { path: 'c', type: 'new' }
+      { path: 'c', type: 'new' },
+      { path: 'd', type: 'new' }
     ],
     {
       a: {},
       b: {},
-      c: {}
+      c: {},
+      d: {}
     }
   )
 
@@ -88,10 +90,21 @@ test('subscription - any - basic - true', t => {
     { a: null }
   )
 
+  s(
+    'remove fields',
+    [
+      { path: 'b', type: 'remove' },
+      { path: 'c', type: 'remove' },
+      { path: 'a', type: 'new' }
+    ],
+    { a: 'hello', b: null, c: null }
+  )
+
   const struct = result.state
   struct.set({ start: 'start' }, false)
+  const k1 = struct.keys()[1]
   struct.keys()[1] = struct.keys()[2]
-  struct.keys()[2] = 'c'
+  struct.keys()[2] = k1
 
   s(
     'add field and insert field',
@@ -101,6 +114,8 @@ test('subscription - any - basic - true', t => {
     ],
     { hello: true }
   )
+
+  // shuffle array
 
   t.end()
 })
