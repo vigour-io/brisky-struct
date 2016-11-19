@@ -64,27 +64,35 @@ test('subscription - any - basic - true', t => {
     'create fields',
     [
       { path: 'a', type: 'new' },
-      { path: 'b', type: 'new' }
+      { path: 'b', type: 'new' },
+      { path: 'c', type: 'new' }
     ],
     {
       a: {},
-      b: {}
+      b: {},
+      c: {}
     }
   )
 
   s(
     'change field',
-    [ { path: 'a', type: 'update' } ],
+    [{ path: 'a', type: 'update' }],
     { a: 'a' }
   )
 
-  s(
+  const result = s(
     'remove field',
     [
       { path: 'a', type: 'remove' }
     ],
     { a: null }
   )
+
+  const struct = result.state
+  struct.set({ start: 'start' }, false)
+  struct.keys()[1] = struct.keys()[2]
+  struct.keys()[2] = 'c'
+
   t.end()
 })
 

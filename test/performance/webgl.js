@@ -29,7 +29,7 @@ const state = struct({
     }
   }
 })
-var n = 0
+var n = 15e3
 var cnt = 0
 var dir = 2
 var growth = 1

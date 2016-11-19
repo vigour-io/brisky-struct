@@ -189,28 +189,6 @@ perf(() => {
 // }, `$transform n = ${(n * 100 / 1e3) | 0}k`)
 
 // perf(() => {
-//   const s = struct({ a: { b: { c: {} } } })
-//   const a = s.a.b.c
-//   s.subscribe(
-//     { a: { b: { c: { val: true } } } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 100; i++) {
-//     a.set(i)
-//   }
-// }, () => {
-//   const s = new State({ a: { b: { c: {} } } })
-//   const a = s.a.b.c
-//   s.subscribe(
-//     { a: { b: { c: { val: true } } } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 10; i++) {
-//     a.set(i)
-//   }
-// }, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
-
-// perf(() => {
 //   for (let i = 0; i < n * 10; i++) {
 //     let s = struct({ a: { b: { c: {} } } })
 //     let a = s.a.b.c
@@ -232,10 +210,7 @@ perf(() => {
 //   }
 // }, `creation n = ${(n * 10 / 1e3) | 0}k`, 10)
 
-// n = 1
-
 const s = struct({})
-console.log('create')
 var arr = []
 for (let i = 0; i < 3e5; i++) {
   arr.push(i)
@@ -260,44 +235,67 @@ perf(() => {
   // for (let i = 0; i < n; i++) {
   //   s.set({ [i]: i })
   // }
-}, `any subscription large set n = 300k, 100 iterations`)
+}, `any subscription large set n = 300k`)
 
-// perf(() => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = struct({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {}
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, () => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = new State({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {}
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = struct({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, () => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = new State({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
 
-// perf(() => {
-//   const s = struct({})
-//   s.subscribe(
-//     { $any: { val: true } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n; i++) {
-//     s.set({ [i]: i })
-//   }
-// }, () => {
-//   const s = new State({})
-//   s.subscribe(
-//     { $any: { val: true } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n; i++) {
-//     s.set({ [i]: i })
-//   }
-// }, `any subscription n = ${((n / 1e3) | 0)}k`)
+perf(() => {
+  const s = struct({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.set({ [i]: i })
+  }
+}, () => {
+  const s = new State({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.set({ [i]: i })
+  }
+}, `any subscription n = ${((n / 1e3) | 0)}k`)
+
+// test mem leaks
+perf(() => {
+  const s = struct({ a: { b: { c: {} } } })
+  const a = s.a.b.c
+  s.subscribe(
+    { a: { b: { c: { val: true } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 100; i++) {
+    a.set(i)
+  }
+}, () => {
+  const s = new State({ a: { b: { c: {} } } })
+  const a = s.a.b.c
+  s.subscribe(
+    { a: { b: { c: { val: true } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    a.set(i)
+  }
+}, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
