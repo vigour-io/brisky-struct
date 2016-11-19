@@ -93,6 +93,15 @@ test('subscription - any - basic - true', t => {
   struct.keys()[1] = struct.keys()[2]
   struct.keys()[2] = 'c'
 
+  s(
+    'add field and insert field',
+    [
+      { path: 'start', type: 'new' },
+      { path: 'hello', type: 'new' }
+    ],
+    { hello: true }
+  )
+
   t.end()
 })
 
