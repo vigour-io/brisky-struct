@@ -26,13 +26,12 @@ test('subscription - reference - multiple', t => {
     },
     {
       ref: {
-        $remove: true,
+        $remove: true, // bit fucked
         field1: { val: true },
         field2: { val: true },
         field3: { val: true }
       }
-    },
-    true
+    }
   )
 
   s(
@@ -43,13 +42,14 @@ test('subscription - reference - multiple', t => {
     ]
   )
 
+  console.log(' \nhello w00t?')
+
   // now i get the same shit thats happenig for the defualt much simnpler!
   s('switch to a', [
     // fuck needs to remove as well...
     // { path: 'c/field1', type: 'new' }
   ], { ref: [ '@', 'parent', 'b' ] })
 
-  console.log('\nhello w00t?')
   s(
     'switch ref',
     [
@@ -70,7 +70,6 @@ test('subscription - reference - multiple', t => {
 
   s('switch to a', [], { ref: [ '@', 'parent', 'a' ] })
 
-
   // { path: 'c/field1', type: 'remove' }, { path: 'e/field3', type: 'new' }, { path: 'c/field1', type: 'new' }
   s(
     'switch to e', // same issue
@@ -84,7 +83,6 @@ test('subscription - reference - multiple', t => {
     { ref: [ '@', 'parent', 'a' ] }
   )
 
-  // same here bitchez
   s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
 
   // s(
@@ -146,6 +144,47 @@ test('subscription - reference - multiple', t => {
   //   { path: 'd/field3', type: 'remove' },
   //   { path: 'f/field3', type: 'new' }
   // ], { f: { field3: true } })
+
+  t.end()
+})
+
+test('subscription - reference - multiple', t => {
+  const s = subsTest(
+    t,
+    {
+      a: [ '@', 'parent', 'b' ],
+      b: [ '@', 'parent', 'c' ],
+      c: {
+        val: [ '@', 'parent', 'd' ],
+        x: 'from c'
+      },
+      d: {
+        x: 'lullz'
+      },
+      x: [ '@', 'parent', 'a' ],
+      ref: {
+        val: [ '@', 'parent', 'a' ]
+      }
+    },
+    {
+      ref: {
+        $remove: true, // bit fucked
+        x: { val: true }
+      }
+    }
+  )
+
+  s(
+    'initial subscription',
+    [
+      { path: 'c/x', type: 'new' }
+    ]
+  )
+  s(
+    'switch ref',
+    [],
+    { ref: [ '@', 'parent', 'x' ] }
+  )
 
   t.end()
 })
