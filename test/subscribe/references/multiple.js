@@ -43,10 +43,11 @@ test('subscription - reference - multiple', t => {
     ]
   )
 
-  // s('switch to a', [
-  //   // fuck needs to remove as well...
-  //   // { path: 'c/field1', type: 'new' }
-  // ], { ref: [ '@', 'parent', 'b' ] })
+  // now i get the same shit thats happenig for the defualt much simnpler!
+  s('switch to a', [
+    // fuck needs to remove as well...
+    // { path: 'c/field1', type: 'new' }
+  ], { ref: [ '@', 'parent', 'b' ] })
 
   console.log('\nhello w00t?')
   s(
@@ -58,27 +59,33 @@ test('subscription - reference - multiple', t => {
     { ref: [ '@', 'parent', 'd' ] }
   )
 
-  // s(
-  //   'switch to c',
-  //   [ { path: 'c/field1', type: 'update' } ],
-  //   { ref: [ '@', 'parent', 'c' ] }
-  // )
+  s(
+    'switch to c',
+    [
+      { path: 'd/field1', type: 'remove' },
+      { path: 'c/field1', type: 'new' }
+    ],
+    { ref: [ '@', 'parent', 'c' ] }
+  )
 
-  // s('switch to a', [], { ref: [ '@', 'parent', 'a' ] })
+  s('switch to a', [], { ref: [ '@', 'parent', 'a' ] })
 
-  // s(
-  //   'switch to e',
-  //   [ { path: 'e/field3', type: 'new' } ],
-  //   { ref: [ '@', 'parent', 'e' ] }
-  // )
 
-  // s(
-  //   'switch to a',
-  //   [ { path: 'e/field3', type: 'remove' } ],
-  //   { ref: [ '@', 'parent', 'a' ] }
-  // )
+  // { path: 'c/field1', type: 'remove' }, { path: 'e/field3', type: 'new' }, { path: 'c/field1', type: 'new' }
+  s(
+    'switch to e', // same issue
+    [ { path: 'e/field3', type: 'new' } ],
+    { ref: [ '@', 'parent', 'e' ] }
+  )
 
-  // s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
+  s(
+    'switch to a',  // same issue
+    [ { path: 'e/field3', type: 'remove' } ],
+    { ref: [ '@', 'parent', 'a' ] }
+  )
+
+  // same here bitchez
+  s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
 
   // s(
   //   'switch nested refrence',
