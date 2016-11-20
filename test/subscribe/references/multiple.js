@@ -187,5 +187,23 @@ test('subscription - reference - multiple', t => {
     { ref: [ '@', 'parent', 'x' ] }
   )
 
+  s(
+    'add ref on a',
+    [
+      { path: 'c/x', type: 'remove' },
+      { path: 'a/x', type: 'new' }
+    ],
+    { a: { x: true } }
+  )
+
+  s(
+    'remove ref on a',
+    [
+      { path: 'a/x', type: 'remove' },
+      { path: 'c/x', type: 'new' }
+    ],
+    { a: { x: null } }
+  )
+
   t.end()
 })
