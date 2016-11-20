@@ -170,7 +170,6 @@ test('subscription - reference - multiple', t => {
     },
     {
       ref: {
-        $remove: true, // bit fucked
         x: { val: true }
       }
     }
