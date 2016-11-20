@@ -1,4 +1,3 @@
-'use strict'
 const test = require('tape')
 const subsTest = require('../util')
 const struct = require('../../../')
