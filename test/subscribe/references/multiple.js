@@ -107,9 +107,29 @@ test('subscription - reference - multiple', t => {
   ], { ref: { field2: null } })
 
   s('add field2 to ref', [
-    { path: 'ref/field2', type: 'new' },
-    { path: 'd/field2', type: 'remove' }
+    { path: 'd/field2', type: 'remove' },
+    { path: 'ref/field2', type: 'new' }
   ], { ref: { field2: true } })
+
+  s('add field3 to d', [
+    { path: 'd/field3', type: 'new' }
+  ], { d: { field3: true } })
+
+  s('switch to f', [
+    { path: 'f/field1', type: 'update' },
+    { path: 'f/field3', type: 'update' }
+  ], { ref: [ '@', 'parent', 'f' ] })
+
+  s('remove field3 from f', [
+    // has to become an update same eas everything else
+    { path: 'f/field3', type: 'remove' },
+    { path: 'd/field3', type: 'new' }
+  ], { f: { field3: null } })
+
+  s('add field3 to f', [
+    { path: 'd/field3', type: 'remove' },
+    { path: 'f/field3', type: 'new' }
+  ], { f: { field3: true } })
 
   t.end()
 })
