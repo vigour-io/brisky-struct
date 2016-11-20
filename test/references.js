@@ -122,7 +122,7 @@ test('references - override & remove', t => {
   const a2 = struct('a')
   const c2 = struct(a2)
   a2.set(null)
-  t.same(c2.val, void 0, 'removed .val from references')
+  t.same(c2.val, null, 'set .val on null references')
   t.end()
 })
 
