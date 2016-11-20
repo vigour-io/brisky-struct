@@ -26,7 +26,6 @@ test('subscription - reference - multiple', t => {
     },
     {
       ref: {
-        $remove: true, // bit fucked
         field1: { val: true },
         field2: { val: true },
         field3: { val: true }
