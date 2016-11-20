@@ -64,7 +64,7 @@ test('subscription - references', t => {
   t.end()
 })
 
-test('subscription - reference - double', t => {
+test('subscription - reference - switch', t => {
   const s = subsTest(
     t,
     {
@@ -170,5 +170,76 @@ test('subscription - reference - nested', t => {
     ],
     { ref: false }
   )
+  t.end()
+})
+
+test('subscription - reference - double', t => {
+  const s = subsTest(
+    t,
+    {
+      a: [ '@', 'parent', 'b' ],
+      b: [ '@', 'parent', 'c' ],
+      c: { field1: true },
+      d: { field1: true, field2: 'x' },
+      ref: {
+        val: [ '@', 'parent', 'a' ],
+        field2: true
+      }
+    },
+    {
+      ref: {
+        field1: { val: true },
+        field2: { val: true }
+      }
+    }
+  )
+
+  s(
+    'initial subscription',
+    [
+      { path: 'ref/field2', type: 'new' },
+      { path: 'c/field1', type: 'new' }
+    ]
+  )
+
+  // s(
+  //   'switch ref',
+  //   [ { path: 'd/field1', type: 'update' } ],
+  //   { ref: [ '@', 'parent', 'd' ] }
+  // )
+
+  // there is not update
+  console.log(' \nNO UPDATE')
+
+  s(
+    'switch to a',
+    [],
+    // [ { path: 'c/field1', type: 'update' } ],
+    { ref: [ '@', 'parent', 'b' ] }
+  )
+
+  // s(
+  //   'switch ref',
+  //   [ { path: 'd/field1', type: 'update' } ],
+  //   { ref: [ '@', 'parent', 'd' ] }
+  // )
+
+  // s(
+  //   'switch to c',
+  //   [ { path: 'c/field1', type: 'update' } ],
+  //   { ref: [ '@', 'parent', 'c' ] }
+  // )
+
+  // s(
+  //   'switch to a',
+  //   { ref: [ '@', 'parent', 'a' ] }
+  // )
+
+  // s(
+  //   'switch nested refrence',
+  //   [ { path: 'd/field1', type: 'update' } ],
+  //   { b: [ '@', 'parent', 'd' ] }
+  // )
+
   t.end()
 })

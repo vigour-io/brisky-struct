@@ -3,7 +3,7 @@ const test = require('tape')
 const subsTest = require('../util')
 const struct = require('../../../')
 
-test('subscription - any - reference - fields', t => {
+test('subscription - any - references - fields', t => {
   const s = subsTest(
     t,
     {
@@ -44,7 +44,7 @@ test('subscription - any - reference - fields', t => {
   t.end()
 })
 
-test('subscription - any - reference - target - struct', function (t) {
+test('subscription - any - references - target - struct', function (t) {
   const subscription = {
     a: {
       $remove: true,
@@ -72,7 +72,7 @@ test('subscription - any - reference - target - struct', function (t) {
   t.end()
 })
 
-test('subscription - any - reference - over reference', t => {
+test('subscription - any - references - over reference', t => {
   const state = struct({
     a: {
       a1: true,
@@ -116,7 +116,7 @@ test('subscription - any - reference - over reference', t => {
   t.end()
 })
 
-test('subscription - any - reference - over reference on field', t => {
+test('subscription - any - references - over reference on field', t => {
   const state = struct({
     holder: {
       a: {
@@ -166,7 +166,7 @@ test('subscription - any - reference - over reference on field', t => {
   t.end()
 })
 
-test('subscription - any - reference - target - struct', t => {
+test('subscription - any - references - target - struct', t => {
   const subscription = {
     a: {
       $remove: true,
@@ -195,7 +195,7 @@ test('subscription - any - reference - target - struct', t => {
 })
 
 // move to test
-// test('subscription - any - reference - over reference on field using $test', t => {
+// test('subscription - any - references - over reference on field using $test', t => {
 //   const state = struct({
 //     holder: {
 //       a: {
