@@ -15,8 +15,7 @@ test('subscription - any - merge', t => {
       collection: {
         $any: { val: true }
       }
-    },
-    true
+    }
   )
   s(
     'initial subscription',
@@ -26,15 +25,6 @@ test('subscription - any - merge', t => {
       { path: 'c/z', type: 'new' }
     ]
   )
-
-  /*
-    { path: 'a/x', type: 'remove' },
-    { path: 'b/y', type: 'remove' },
-    { path: 'c/z', type: 'remove' },
-    { path: 'b/y', type: 'new' },
-    { path: 'c/x', type: 'new' },
-    { path: 'c/z', type: 'new' }
-  */
 
   s(
     'change reference to b',
@@ -62,6 +52,16 @@ test('subscription - any - merge', t => {
      { path: 'b/y', type: 'new' }
     ],
     { collection: [ '@', 'parent', 'a' ] }
+  )
+
+  s(
+    'change reference to primitive',
+    [
+     { path: 'a/x', type: 'remove' },
+     { path: 'b/y', type: 'remove' },
+     { path: 'c/z', type: 'remove' }
+    ],
+    { collection: false }
   )
 
   t.end()
