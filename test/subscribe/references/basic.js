@@ -46,7 +46,8 @@ test('subscription - references', t => {
   s(
     'switch reference',
     [
-      { path: 'other/a/nest', type: 'update' },
+      { path: 'field/a/nest', type: 'remove' },
+      { path: 'other/a/nest', type: 'new' },
       { path: 'other/a/field', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'other' ] }
@@ -139,7 +140,8 @@ test('subscription - reference - nested', t => {
   s(
     'switch reference',
     [
-      { path: 'c/b/c', type: 'update' }
+      { path: 'a/b/c', type: 'remove' },
+      { path: 'c/b/c', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'c' ] }
   )
@@ -157,8 +159,9 @@ test('subscription - reference - nested', t => {
   s(
     'switch reference to excluding deep fields',
     [
+      { path: 'b/b/x', type: 'remove' },
       { path: 'b/b/x/bla', type: 'remove' },
-      { path: 'd/b/x', type: 'update' }
+      { path: 'd/b/x', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'd' ] }
   )
