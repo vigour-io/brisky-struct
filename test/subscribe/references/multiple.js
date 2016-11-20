@@ -153,14 +153,15 @@ test('subscription - reference - multiple - non origin', t => {
   const s = subsTest(
     t,
     {
-      a: [ '@', 'parent', 'b' ],
+      a: { val: [ '@', 'parent', 'b' ], y: true },
       b: [ '@', 'parent', 'c' ],
       c: {
         val: [ '@', 'parent', 'd' ],
         x: 'from c'
       },
       d: {
-        x: 'lullz'
+        x: 'lullz',
+        y: 'haha'
       },
       x: [ '@', 'parent', 'a' ],
       ref: {
@@ -169,7 +170,8 @@ test('subscription - reference - multiple - non origin', t => {
     },
     {
       ref: {
-        x: { val: true }
+        x: { val: true },
+        y: { val: true }
       }
     }
   )
@@ -177,6 +179,7 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'initial subscription',
     [
+      { path: 'a/y', type: 'new' },
       { path: 'c/x', type: 'new' }
     ]
   )
@@ -205,8 +208,20 @@ test('subscription - reference - multiple - non origin', t => {
   )
 
   s(
+    'switch ref to b',
+    [
+      { path: 'a/y', type: 'remove' },
+      { path: 'd/y', type: 'new' }
+    ],
+    { ref: [ '@', 'parent', 'b' ] }
+  )
+
+  s(
     'switch ref to primtive',
-    [ { path: 'c/x', type: 'remove' } ],
+    [
+      { path: 'a/y', type: 'remove' },
+      { path: 'c/x', type: 'remove' }
+    ],
     { ref: false }
   )
 

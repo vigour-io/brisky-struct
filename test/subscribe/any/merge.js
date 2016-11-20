@@ -6,39 +6,38 @@ test('subscription - any - merge', t => {
   const s = subsTest(
     t,
     {
-      0: 'its zero',
-      1: 'its 1',
-      collection: {
-        0: [ '@', 'root', 0 ],
-        1: [ '@', 'root', 1 ]
-      }
+      a: { x: true, val: [ '@', 'parent', 'b' ] },
+      b: { y: true, val: [ '@', 'parent', 'c' ] },
+      c: { x: true, y: true, z: true },
+      collection: [ '@', 'parent', 'a' ]
     },
     {
       collection: {
         $any: { val: true }
       }
-    }
+    },
+    true
   )
   s(
     'initial subscription',
     [
-      { path: 'collection/0', type: 'new' },
-      { path: 'collection/1', type: 'new' }
+      { path: 'a/x', type: 'new' },
+      { path: 'b/y', type: 'new' },
+      { path: 'c/z', type: 'new' }
     ]
   )
+
+// [ { path: 'a/x', type: 'remove' }, { path: 'b/y', type: 'remove' }, { path: 'c/z', type: 'remove' }
+
   s(
-    'update 0',
+    'change reference to b',
     [
-      { path: 'collection/0', type: 'update' }
+      // { path: 'a/x', type: 'remove' },
+      // { path: 'c/x', type: 'new' },
+      // { path: 'c/z', type: 'new' }
     ],
-    [ 'hello its an update in zero' ]
+    { collection: [ '@', 'parent', 'b' ] }
   )
-  s(
-    'remove 0',
-    [
-      { path: 'collection/0', type: 'update' }
-    ],
-    [ null ]
-  )
+
   t.end()
 })
