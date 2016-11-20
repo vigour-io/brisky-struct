@@ -149,7 +149,7 @@ test('subscription - reference - multiple', t => {
   t.end()
 })
 
-test('subscription - reference - multiple', t => {
+test('subscription - reference - multiple - non origin', t => {
   const s = subsTest(
     t,
     {
