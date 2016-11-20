@@ -109,7 +109,8 @@ test('subscription - reference - multiple', t => {
 
   s('switch to d', [
     { path: 'f/field1', type: 'remove' },
-    { path: 'f/field3', type: 'remove' }
+    { path: 'f/field3', type: 'remove' },
+    { path: 'd/field1', type: 'new' }
   ], { ref: [ '@', 'parent', 'd' ] })
 
   s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
@@ -219,8 +220,8 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'switch ref to primtive',
     [
-      { path: 'a/y', type: 'remove' },
-      { path: 'c/x', type: 'remove' }
+      { path: 'c/x', type: 'remove' },
+      { path: 'd/y', type: 'remove' }
     ],
     { ref: false }
   )
