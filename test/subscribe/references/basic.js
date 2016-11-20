@@ -218,11 +218,11 @@ test('subscription - reference - double', t => {
     { ref: [ '@', 'parent', 'b' ] }
   )
 
-  // s(
-  //   'switch ref',
-  //   [ { path: 'd/field1', type: 'update' } ],
-  //   { ref: [ '@', 'parent', 'd' ] }
-  // )
+  s(
+    'switch ref',
+    [ { path: 'd/field1', type: 'update' } ],
+    { ref: [ '@', 'parent', 'd' ] }
+  )
 
   // s(
   //   'switch to c',
