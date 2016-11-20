@@ -42,13 +42,8 @@ test('subscription - reference - multiple', t => {
     ]
   )
 
-  console.log(' \nhello w00t?')
-
   // now i get the same shit thats happenig for the defualt much simnpler!
-  s('switch to a', [
-    // fuck needs to remove as well...
-    // { path: 'c/field1', type: 'new' }
-  ], { ref: [ '@', 'parent', 'b' ] })
+  s('switch to a', [], { ref: [ '@', 'parent', 'b' ] })
 
   s(
     'switch ref',
@@ -70,42 +65,48 @@ test('subscription - reference - multiple', t => {
 
   s('switch to a', [], { ref: [ '@', 'parent', 'a' ] })
 
-  // { path: 'c/field1', type: 'remove' }, { path: 'e/field3', type: 'new' }, { path: 'c/field1', type: 'new' }
   s(
-    'switch to e', // same issue
+    'switch to e',
     [ { path: 'e/field3', type: 'new' } ],
     { ref: [ '@', 'parent', 'e' ] }
   )
 
   s(
-    'switch to a',  // same issue
+    'switch to a',
     [ { path: 'e/field3', type: 'remove' } ],
     { ref: [ '@', 'parent', 'a' ] }
   )
 
   s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
 
-  // s(
-  //   'switch nested refrence',
-  //   [ { path: 'd/field1', type: 'update' } ],
-  //   { b: [ '@', 'parent', 'd' ] }
-  // )
+  s(
+    'switch nested refrence',
+    [
+      { path: 'c/field1', type: 'remove' },
+      { path: 'd/field1', type: 'new' }
+    ],
+    { b: [ '@', 'parent', 'd' ] }
+  )
 
-  // console.log(' \nHERE')
-  // s(
-  //   'switch to c',
-  //   [ { path: 'c/field1', type: 'update' } ],
-  //   { ref: [ '@', 'parent', 'c' ] }
-  // )
+  s(
+    'switch to c',
+    [
+      { path: 'd/field1', type: 'remove' },
+      { path: 'c/field1', type: 'new' }
+    ],
+    { ref: [ '@', 'parent', 'c' ] }
+  )
 
-  // s('switch to a', [
-  //   { path: 'd/field1', type: 'update' }
-  // ], { ref: [ '@', 'parent', 'a' ] })
+  s('switch to a', [
+    { path: 'c/field1', type: 'remove' },
+    { path: 'd/field1', type: 'new' }
+  ], { ref: [ '@', 'parent', 'a' ] })
 
-  // s('switch to f', [
-  //    { path: 'f/field1', type: 'update' },
-  //    { path: 'f/field3', type: 'new' }
-  // ], { ref: [ '@', 'parent', 'f' ] })
+  s('switch to f', [
+    { path: 'd/field1', type: 'remove' },
+    { path: 'f/field1', type: 'new' },
+    { path: 'f/field3', type: 'new' }
+  ], { ref: [ '@', 'parent', 'f' ] })
 
   // s('switch to d', [
   //   { path: 'f/field3', type: 'remove' },
