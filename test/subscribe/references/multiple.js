@@ -206,5 +206,11 @@ test('subscription - reference - multiple', t => {
     { a: { x: null } }
   )
 
+  s(
+    'switch ref to primtive',
+    [ { path: 'c/x', type: 'remove' } ],
+    { ref: false }
+  )
+
   t.end()
 })
