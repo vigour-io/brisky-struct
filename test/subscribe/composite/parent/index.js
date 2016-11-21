@@ -1,5 +1,6 @@
 require('./basic')('$parent')
 require('./references')('$parent')
+require('./root')('$parent')
 
 // require('./basic')('parent')
 
@@ -10,6 +11,5 @@ require('./references')('$parent')
 // require('./references')('parent')
 
 // require('./root')('parent')
-// require('./root')('$parent')
 
 // require('./combined')
