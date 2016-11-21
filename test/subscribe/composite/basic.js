@@ -24,13 +24,13 @@ test('subscription - composite - root', function (t) {
 
   s('create b', [ { path: 'b', type: 'update' } ], { b: 'hello b!' })
 
-  // s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
+  s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
 
-  // s('remove b', [ { path: 'b', type: 'remove' } ], { b: null })
+  s('remove b', [ { path: 'b', type: 'remove' } ], { b: null })
 
-  // s('create b (again)', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
+  s('create b (again)', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
 
-  // s('remove a/b/c', [{ type: 'remove' }], { a: { b: { c: null } } })
+  s('remove a/b/c', [{ type: 'remove' }], { a: { b: { c: null } } })
 
   // t.equal(r.state.a.$c, void 0, 'removed a/$c')
 
