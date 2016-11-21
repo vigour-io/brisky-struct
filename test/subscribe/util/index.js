@@ -2,12 +2,12 @@ const struct = require('../../../')
 const bs = require('brisky-stamp')
 const logger = require('./log')
 
-module.exports = function (t, state, subs, log) {
+module.exports = (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
     subs,
-    function (state, type, stamp, subs, tree, sType) {
+    (state, type, stamp, subs, tree, sType) => {
       let path = state && state.path().join('/')
       let obj = {
         type: type,
