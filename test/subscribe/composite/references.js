@@ -51,18 +51,14 @@ test('root - references', function (t) {
     { b: [ '@', 'root', 'c' ] }
   )
 
-  console.log(' \n>>>>HERE<<<<')
-
   s(
     'switch a to f',
     [],
     { a: [ '@', 'root', 'f' ] }
   )
 
-  // at least the remove is better
   s(
     'switch a to dirt',
-    // need to see remove as well....
     [],
     { a: [ '@', 'root', 'dirt' ] }
   )
