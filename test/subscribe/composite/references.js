@@ -1,6 +1,6 @@
 const test = require('tape')
 const subsTest = require('../util')
-test('root - references', function (t) {
+test('subscription - composite - root - references', t => {
   const subscription = {
     a: {
       b: {
