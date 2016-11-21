@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test('root - basic', function (t) {
+test('subscription - composite - root', function (t) {
   const struct = require('../../../')
   const subs = {
     a: {
