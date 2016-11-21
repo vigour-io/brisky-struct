@@ -25,11 +25,8 @@ test('root - references', function (t) {
 
   const s = subsTest(t, state, subscription)
 
-  const r = s('initial subscription', [{ path: 'c/d', type: 'new' }])
+  s('initial subscription', [{ path: 'c/d', type: 'new' }])
 
-  console.log(r.tree)
-
-  console.log(' \n go go go')
   s(
     'switch reference on b',
     [

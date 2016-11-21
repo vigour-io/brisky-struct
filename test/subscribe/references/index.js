@@ -1,2 +1,2 @@
-// require('./basic')
-require('./multiple')
+require('./basic')
+// require('./multiple')
