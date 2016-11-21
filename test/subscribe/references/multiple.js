@@ -228,3 +228,51 @@ test('subscription - reference - multiple - non origin', t => {
 
   t.end()
 })
+
+test('subscription - reference - multiple - nested (dont fire)', t => {
+  const s = subsTest(
+    t,
+    {
+      end: { x: true },
+      allmost: [ '@', 'root', 'end' ],
+      a: [ '@', 'root', 'end' ],
+      c: 'c',
+      z: [ '@', 'root', 'a' ],
+      b: { ref: [ '@', 'root', 'a' ] },
+      y: { ref: [ '@', 'root', 'end' ] },
+      x: [ '@', 'root', 'b' ]
+    },
+    { x: { ref: { x: { val: true } } } } // this will not fire ofc
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'end/x', type: 'new' }]
+  )
+
+  s(
+    'switch ref b to z',
+    [],
+    { b: { ref: [ '@', 'root', 'z' ] } }
+  )
+
+  s(
+    'switch ref x to b',
+    [],
+    { x: [ '@', 'root', 'b' ] }
+  )
+
+  s(
+    'switch ref a to allmost',
+    [],
+    { a: [ '@', 'root', 'allmost' ] }
+  )
+
+  s(
+    'switch x a to y',
+    [],
+    { x: [ '@', 'root', 'y' ] }
+  )
+
+  t.end()
+})

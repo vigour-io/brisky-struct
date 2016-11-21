@@ -59,6 +59,7 @@ test('root - references', function (t) {
     { a: [ '@', 'root', 'f' ] }
   )
 
+  // at least the remove is better
   s(
     'switch a to dirt',
     // need to see remove as well....
