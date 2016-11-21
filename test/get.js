@@ -14,3 +14,11 @@ test('get - methods', t => {
   t.equal(a.a.b.c.get('parent'), a.a.b, 'parent')
   t.end()
 })
+
+test('get - origin', t => {
+  const a = struct({ c: true })
+  const b = struct({ a: { b: a } })
+  const c = struct(b)
+  t.equal(c.get(['a', 'b', 'c']), a.c, 'references')
+  t.end()
+})
