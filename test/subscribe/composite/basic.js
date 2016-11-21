@@ -20,8 +20,6 @@ test('subscription - composite - root', t => {
   const s = subsTest(t, struct({ a: { b: { c: {} } }, b: 'lullz' }, false), subs)
   const r = s('initial subscription', [ { path: 'b', type: 'new' } ])
 
-  console.log('hello', r.tree)
-
   s('create b', [ { path: 'b', type: 'update' } ], { b: 'hello b!' })
 
   s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
