@@ -30,8 +30,7 @@ test('root - references', function (t) {
   s(
     'switch reference on b',
     [
-      { path: 'c/d', type: 'remove' },
-      { path: 'd/d', type: 'new' }
+      { path: 'd/d', type: 'update' }
     ],
     { b: [ '@', 'root', 'd' ] }
   )
