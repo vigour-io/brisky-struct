@@ -36,7 +36,7 @@ test('subscription - basic', t => {
 
   s(
     'remove other, no nested removal',
-    [],
+    [ { path: 'other/yuzi', type: 'remove' } ],
     { other: null }
   )
 
@@ -49,7 +49,7 @@ test('subscription - basic - nested removal', t => {
     { field: true, other: { yuzi: true } },
     {
       field: { val: true },
-      other: { yuzi: { val: true }, $remove: true }
+      other: { yuzi: { val: true } }
     }
   )
   s(

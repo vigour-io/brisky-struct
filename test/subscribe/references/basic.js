@@ -176,3 +176,28 @@ test('subscription - reference - nested', t => {
 
   t.end()
 })
+
+test('subscription - reference - nested remove', t => {
+  const s = subsTest(
+    t,
+    {
+      a: { x: true },
+      c: 'c',
+      b: { ref: [ '@', 'root', 'a' ] }
+    },
+    { b: { ref: { x: { val: true } } } } // this will not fire ofc
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'a/x', type: 'new' }]
+  )
+
+  s(
+    'remove ref',
+    [{ path: 'a/x', type: 'remove' }],
+    { b: { ref: null } }
+  )
+
+  t.end()
+})

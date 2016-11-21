@@ -18,7 +18,9 @@ test('root - references', function (t) {
     b: [ '@', 'root', 'c' ],
     c: { d: 'c.d' },
     d: { d: 'd.d' },
-    e: { b: {} }
+    e: { b: {} },
+    dirt: { b: {} },
+    f: [ '@', 'root', 'e' ]
   }
 
   const s = subsTest(t, state, subscription)
@@ -37,10 +39,32 @@ test('root - references', function (t) {
     { b: [ '@', 'root', 'd' ] }
   )
 
-  // s(
-  //   'remove reference on b',
-  //   [{ type: 'remove' }],
-  //   { b: 'no more ref!' }
-  // )
+  s(
+    'remove reference on b',
+    [{ path: 'd/d', type: 'remove' }],
+    { b: 'no more ref!' }
+  )
+
+  s(
+    'switch b to c',
+    [{ path: 'c/d', type: 'new' }],
+    { b: [ '@', 'root', 'c' ] }
+  )
+
+  console.log(' \n>>>>HERE<<<<')
+
+  s(
+    'switch a to f',
+    [],
+    { a: [ '@', 'root', 'f' ] }
+  )
+
+  s(
+    'switch a to dirt',
+    // need to see remove as well....
+    [],
+    { a: [ '@', 'root', 'dirt' ] }
+  )
+
   t.end()
 })

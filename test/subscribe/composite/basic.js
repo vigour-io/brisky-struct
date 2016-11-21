@@ -8,9 +8,9 @@ test('subscription - composite - root', t => {
     a: {
       b: {
         c: {
-          $remove: true,
+
           root: {
-            $remove: true,
+
             b: { val: true, _: 'random information' }
           }
         }

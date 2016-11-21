@@ -7,7 +7,7 @@ test('subscription - any - basic', t => {
     t,
     {},
     {
-      fields: { $remove: true, $any: { title: { val: true }, $remove: true } },
+      fields: { $any: { title: { val: true } } },
       $any: { id: { val: true } }
     }
   )
@@ -199,8 +199,7 @@ test('subscription - any - basic - empty fields', t => {
     },
     {
       fields: {
-        $remove: true,
-        $any: { val: true, $remove: true }
+        $any: { val: true }
       }
     }
   )
@@ -232,8 +231,7 @@ test('subscription - any - basic - remove nested fields using $remove listener',
     },
     {
       fields: {
-        $remove: true,
-        $any: { val: true, $remove: true }
+        $any: { val: true }
       }
     }
   )
