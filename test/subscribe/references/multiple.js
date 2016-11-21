@@ -36,8 +36,8 @@ test('subscription - reference - multiple', t => {
   s(
     'initial subscription',
     [
-      { path: 'ref/field2', type: 'new' },
-      { path: 'c/field1', type: 'new' }
+      { path: 'c/field1', type: 'new' },
+      { path: 'ref/field2', type: 'new' }
     ]
   )
 
@@ -47,8 +47,7 @@ test('subscription - reference - multiple', t => {
   s(
     'switch ref',
     [
-      { path: 'c/field1', type: 'remove' },
-      { path: 'd/field1', type: 'new' }
+      { path: 'd/field1', type: 'update' }
     ],
     { ref: [ '@', 'parent', 'd' ] }
   )
@@ -56,8 +55,7 @@ test('subscription - reference - multiple', t => {
   s(
     'switch to c',
     [
-      { path: 'd/field1', type: 'remove' },
-      { path: 'c/field1', type: 'new' }
+      { path: 'c/field1', type: 'update' }
     ],
     { ref: [ '@', 'parent', 'c' ] }
   )
@@ -81,8 +79,7 @@ test('subscription - reference - multiple', t => {
   s(
     'switch nested refrence',
     [
-      { path: 'c/field1', type: 'remove' },
-      { path: 'd/field1', type: 'new' }
+      { path: 'd/field1', type: 'update' }
     ],
     { b: [ '@', 'parent', 'd' ] }
   )
@@ -90,40 +87,33 @@ test('subscription - reference - multiple', t => {
   s(
     'switch to c',
     [
-      { path: 'd/field1', type: 'remove' },
-      { path: 'c/field1', type: 'new' }
+      { path: 'c/field1', type: 'update' }
     ],
     { ref: [ '@', 'parent', 'c' ] }
   )
 
   s('switch to a', [
-    { path: 'c/field1', type: 'remove' },
-    { path: 'd/field1', type: 'new' }
+    { path: 'd/field1', type: 'update' }
   ], { ref: [ '@', 'parent', 'a' ] })
 
   s('switch to f', [
-    { path: 'd/field1', type: 'remove' },
-    { path: 'f/field1', type: 'new' },
+    { path: 'f/field1', type: 'update' },
     { path: 'f/field3', type: 'new' }
   ], { ref: [ '@', 'parent', 'f' ] })
 
   s('switch to d', [
-    { path: 'f/field1', type: 'remove' },
-    { path: 'f/field3', type: 'remove' },
-    { path: 'd/field1', type: 'new' }
+    { path: 'd/field1', type: 'update' },
+    { path: 'f/field3', type: 'remove' }
   ], { ref: [ '@', 'parent', 'd' ] })
 
   s('switch to b', [], { ref: [ '@', 'parent', 'b' ] })
 
   s('remove field2 from ref', [
-    // has to become an update same eas everything else
-    { path: 'ref/field2', type: 'remove' },
-    { path: 'd/field2', type: 'new' }
+    { path: 'd/field2', type: 'update' }
   ], { ref: { field2: null } })
 
   s('add field2 to ref', [
-    { path: 'd/field2', type: 'remove' },
-    { path: 'ref/field2', type: 'new' }
+    { path: 'ref/field2', type: 'update' }
   ], { ref: { field2: true } })
 
   s('add field3 to d', [
@@ -131,20 +121,16 @@ test('subscription - reference - multiple', t => {
   ], { d: { field3: true } })
 
   s('switch to f', [
-    { path: 'd/field1', type: 'remove' },
-    { path: 'd/field3', type: 'remove' },
-    { path: 'f/field1', type: 'new' },
-    { path: 'f/field3', type: 'new' }
+    { path: 'f/field1', type: 'update' },
+    { path: 'f/field3', type: 'update' }
   ], { ref: [ '@', 'parent', 'f' ] })
 
   s('remove field3 from f', [
-    { path: 'f/field3', type: 'remove' },
-    { path: 'd/field3', type: 'new' }
+    { path: 'd/field3', type: 'update' }
   ], { f: { field3: null } })
 
   s('add field3 to f', [
-    { path: 'd/field3', type: 'remove' },
-    { path: 'f/field3', type: 'new' }
+    { path: 'f/field3', type: 'update' }
   ], { f: { field3: true } })
 
   t.end()
@@ -180,8 +166,8 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'initial subscription',
     [
-      { path: 'a/y', type: 'new' },
-      { path: 'c/x', type: 'new' }
+      { path: 'c/x', type: 'new' },
+      { path: 'a/y', type: 'new' }
     ]
   )
   s(
@@ -193,8 +179,7 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'add ref on a',
     [
-      { path: 'c/x', type: 'remove' },
-      { path: 'a/x', type: 'new' }
+      { path: 'a/x', type: 'update' }
     ],
     { a: { x: true } }
   )
@@ -202,8 +187,7 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'remove ref on a',
     [
-      { path: 'a/x', type: 'remove' },
-      { path: 'c/x', type: 'new' }
+      { path: 'c/x', type: 'update' }
     ],
     { a: { x: null } }
   )
@@ -211,8 +195,7 @@ test('subscription - reference - multiple - non origin', t => {
   s(
     'switch ref to b',
     [
-      { path: 'a/y', type: 'remove' },
-      { path: 'd/y', type: 'new' }
+      { path: 'd/y', type: 'update' }
     ],
     { ref: [ '@', 'parent', 'b' ] }
   )

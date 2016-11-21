@@ -24,9 +24,7 @@ test('subscription - references', t => {
     },
     {
       ref: {
-        $remove: true,
         a: {
-          $remove: true,
           nest: { val: true },
           field: { val: true } // deeper should not fire
         },
@@ -38,17 +36,21 @@ test('subscription - references', t => {
   s(
     'initial subscription',
     [
-      { path: 'ref/b', type: 'new' },
-      { path: 'field/a/nest', type: 'new' }
+     { path: 'field/a/nest', type: 'new' }, { path: 'ref/b', type: 'new' }
+      // { path: 'ref/b', type: 'new' },
+      // { path: 'field/a/nest', type: 'new' }
     ]
   )
 
+  console.log('\nSTEP ONE')
   s(
     'switch reference',
     [
-      { path: 'field/a/nest', type: 'remove' },
-      { path: 'other/a/nest', type: 'new' },
+      { path: 'other/a/nest', type: 'update' },
       { path: 'other/a/field', type: 'new' }
+      // { path: 'field/a/nest', type: 'remove' },
+      // { path: 'other/a/nest', type: 'new' },
+      // { path: 'other/a/field', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'other' ] }
   )
@@ -120,9 +122,9 @@ test('subscription - reference - nested', t => {
     },
     {
       ref: {
-        $remove: true,
+
         b: {
-          $remove: true,
+
           c: { val: true },
           x: { val: true, bla: { val: true } }
         }
@@ -139,10 +141,7 @@ test('subscription - reference - nested', t => {
 
   s(
     'switch reference',
-    [
-      { path: 'a/b/c', type: 'remove' },
-      { path: 'c/b/c', type: 'new' }
-    ],
+    [ { path: 'c/b/c', type: 'update' } ],
     { ref: [ '@', 'parent', 'c' ] }
   )
 
@@ -159,9 +158,8 @@ test('subscription - reference - nested', t => {
   s(
     'switch reference to excluding deep fields',
     [
-      { path: 'b/b/x', type: 'remove' },
-      { path: 'b/b/x/bla', type: 'remove' },
-      { path: 'd/b/x', type: 'new' }
+      { path: 'd/b/x', type: 'update' },
+      { path: 'b/b/x/bla', type: 'remove' }
     ],
     { ref: [ '@', 'parent', 'd' ] }
   )
