@@ -11,7 +11,7 @@ module.exports = type => {
         bla: {},
         a: {
           b: {
-            c: '$root.bla',
+            c: [ '@', 'root', 'bla' ],
             d: 'yes!'
           }
         }
@@ -31,11 +31,11 @@ module.exports = type => {
 
     if (type === '$parent') {
       s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
-      s('set $root.d', [], { d: 'hello!' })
+      s('set root/d', [], { d: 'hello!' })
       s('fire for a/b/d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
     } else if (type === 'parent') {
-      s('initial subscription', [])
-      s('fire for $root.d', [ { path: 'd', type: 'new' } ], { d: 'hello!' })
+      s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
+      // s('fire for root/d', [ { path: 'd', type: 'new' } ], { d: 'hello!' })
       s('fire for removing c', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { c: false } } })
       s('fire for a/b/d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
     }

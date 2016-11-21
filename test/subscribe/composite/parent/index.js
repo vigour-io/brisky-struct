@@ -2,6 +2,10 @@ require('./basic')('$parent')
 require('./references')('$parent')
 require('./root')('$parent')
 
+require('./basic')('parent')
+require('./references')('parent')
+require('./root')('parent')
+
 // require('./basic')('parent')
 
 // require('./switch')('$parent')
