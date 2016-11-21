@@ -9,7 +9,7 @@ test('root - basic', function (t) {
       b: {
         c: {
           $remove: true,
-          $root: {
+          root: {
             $remove: true,
             b: { val: true, _: 'random information' }
           }
