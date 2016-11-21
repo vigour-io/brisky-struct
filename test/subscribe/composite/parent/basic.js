@@ -3,7 +3,7 @@ const subsTest = require('../../util')
 const field = require('../../util/field')
 
 module.exports = type => {
-  test(type, t => {
+  test(`subscription - composite - ${type}`, t => {
     const s = subsTest(
       t,
       {
@@ -60,8 +60,7 @@ module.exports = type => {
     t.end()
   })
 
-  test(type + ' - type', t => {
-    // prop somehting with sid
+  test(`subscription - composite - ${type} - type`, t => {
     const s = subsTest(
       t,
       {
@@ -95,7 +94,7 @@ module.exports = type => {
     t.end()
   })
 
-  test(type + ' - $any', t => {
+  test(`subscription - composite - ${type} - $any`, t => {
     const s = subsTest(
       t,
       {
