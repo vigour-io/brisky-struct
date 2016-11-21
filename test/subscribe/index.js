@@ -1,4 +1,4 @@
-// require('./basic')
+require('./basic')
 require('./references')
-// require('./any')
+require('./any')
 // require('./composite')

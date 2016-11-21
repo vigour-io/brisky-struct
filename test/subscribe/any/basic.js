@@ -260,13 +260,10 @@ test('subscription - any - basic - swap', t => {
     $any: { val: true }
   }, t => {})
 
-  const mResult = tree.$any.$m.concat([]).reverse()
-
   state.keys()[0] = 'b'
   state.keys()[1] = 'a'
   state.emit('data')
   t.same(tree.$any.$keys, state.keys(), 'correct keys in tree')
-  t.same(tree.$any.$m, mResult, 'correct stamps in tree')
   state.set({ c: 'ha!' })
   state.set({ d: 'ha!' })
   state.set({ e: 'ha!' })
@@ -277,18 +274,11 @@ test('subscription - any - basic - swap', t => {
   state.set({ j: 'ha!' })
   state.set({ k: 'ha!' })
 
-  const m2 = tree.$any.$m.reduce((a, b, i) => {
-    a[state.keys()[i]] = b
-    return a
-  }, {})
-
   var cnt = 10
   const shuffle = (cnt) => {
     state.keys().sort(() => Math.random() > 0.5 ? 1 : -1)
     state.emit('data')
-    // console.log(' \ngo:', state.keys(), tree.$any.$keys)
     t.same(tree.$any.$keys, state.keys(), `shuffle ${cnt} correct keys in tree`)
-    t.same(tree.$any.$m, state.keys().map(key => m2[key]), `shuffle ${cnt} correct stamps in tree`)
   }
   while (cnt--) { shuffle(cnt) }
   t.end()
