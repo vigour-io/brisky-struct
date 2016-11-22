@@ -20,15 +20,15 @@ test('remove - instances', t => {
     types: {
       a: {
         b: {
-          c: { on: t => results.push(t.path()) }
+          c: { on: (val, stamp, t) => results.push(t.path()) }
         }
       },
       x: {
-        z: { on: t => results.push(t.path()) }
+        z: { on: (val, stamp, t) => results.push(t.path()) }
       }
     },
     bla: {
-      on: t => results.push(t.path()),
+      on: (val, stamp, t) => results.push(t.path()),
       a: { type: 'a' }
     },
     nice: {},
@@ -36,7 +36,7 @@ test('remove - instances', t => {
       type: 'x',
       field: true
     },
-    on: t => results.push(t.path())
+    on: (val, stamp, t) => results.push(t.path())
   })
   const s2 = s.create({ key: 's2' }) //eslint-disable-line
   const obj = struct({ //eslint-disable-line
@@ -54,7 +54,7 @@ test('remove - instances', t => {
       }
     },
     nested: {
-      on: t => results.push(t.path()),
+      on: (val, stamp, t) => results.push(t.path()),
       props: { default: s.nice },
       haha: {}
     }
@@ -92,7 +92,7 @@ test('remove - mixed', t => {
     a: 'a',
     b: 'b',
     c: 'c',
-    on: t => results.push(t.path())
+    on: (val, stamp, t) => results.push(t.path())
   })
   const s2 = s.create({
     key: 's2',
@@ -127,7 +127,7 @@ test('remove - keys', t => {
     a: 'a',
     b: 'b',
     c: 'c',
-    on: t => results.push(t.keys().concat())
+    on: (val, stamp, t) => results.push(t.keys().concat())
   })
   s.set({ a: null })
   s.set({ b: null })

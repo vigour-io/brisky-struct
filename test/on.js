@@ -4,7 +4,7 @@ const struct = require('../')
 test('on - method ', t => {
   const results = []
   const a = struct()
-  t.equal(a.on((t, val) => { results.push(val) }), a, 'returns struct')
+  t.equal(a.on(val => { results.push(val) }), a, 'returns struct')
   a.set('hello')
   t.same(results, [ 'hello' ], 'add listener using method')
   t.end()
@@ -13,7 +13,7 @@ test('on - method ', t => {
 test('on - emit ', t => {
   const results = []
   const a = struct()
-  a.on((t, val, stamp) => { results.push(val, stamp) })
+  a.on((val, stamp) => { results.push(val, stamp) })
   a.emit('data', 'hello', 'custom-stamp')
   t.same(results, [ 'hello', 'custom-stamp' ], 'emit method')
   t.end()
@@ -21,22 +21,22 @@ test('on - emit ', t => {
 
 test('on - defaults ', t => {
   var results = []
-  const a = struct({ on: (t, val) => results.push(val) })
-  a.set({ on: { data: (t, val) => results.push(val) } })
+  const a = struct({ on: val => results.push(val) })
+  a.set({ on: { data: val => results.push(val) } })
   a.set('hello')
   t.same(
     results, [ 'hello' ],
     'add listener on data _val when set directly on on'
   )
   results = []
-  a.set({ on: { data: (t, val) => results.push(val) } })
+  a.set({ on: { data: val => results.push(val) } })
   a.set('bye')
   t.same(
     results, [ 'bye' ],
     'add listener on data _val when set directly on emitter'
   )
   results = []
-  a.set({ on: { data: { val: (t, val) => results.push(val) } } })
+  a.set({ on: { data: { val: val => results.push(val) } } })
   a.set('now')
   t.same(results, [ 'now' ], 'rewrites val to _val internaly')
   t.end()
@@ -49,9 +49,9 @@ test('on - instances ', t => {
     key: 'a',
     on: {
       data: {
-        a: (t) => results.push('a-' + t.key),
-        b: (t) => results.push('b-' + t.key),
-        c: (t) => results.push('c-' + t.key)
+        a: (val, stamp, t) => results.push('a-' + t.key),
+        b: (val, stamp, t) => results.push('b-' + t.key),
+        c: (val, stamp, t) => results.push('c-' + t.key)
       }
     }
   })
@@ -59,7 +59,7 @@ test('on - instances ', t => {
     key: 'b',
     on: {
       data: {
-        b: (t) => instanceResults.push('b-' + t.key)
+        b: (val, stamp, t) => instanceResults.push('b-' + t.key)
       }
     }
   })
@@ -69,7 +69,7 @@ test('on - instances ', t => {
   results = []
   instanceResults = []
   const c = b.create({ key: 'c' })
-  a.set({ on: t => results.push('VAL-' + t.key) })
+  a.set({ on: (val, stamp, t) => results.push('VAL-' + t.key) })
   a.set('bye!', 'stamp-2')
   t.same(
     results,
@@ -89,14 +89,14 @@ test('on - instances ', t => {
   )
   t.same(instanceResults, [ 'b-b', 'b-c' ], 'correct instance result')
   results = []
-  c.set({ on: t => instanceResults.push('VAL-C-' + t.key) })
+  c.set({ on: (val, stamp, t) => instanceResults.push('VAL-C-' + t.key) })
   const a2 = a.create({ key: 'a2', on: { data: {} } })
   const a3 = a2.create({ key: 'a3', on: { data: {} } }) // eslint-disable-line
   a.set({
     on: {
       data: {
-        val: t => results.push('NEW-VAL-' + t.key),
-        extra: t => results.push('extra-' + t.key),
+        val: (val, stamp, t) => results.push('NEW-VAL-' + t.key),
+        extra: (val, stamp, t) => results.push('extra-' + t.key),
         a: null
       }
     }
@@ -148,8 +148,8 @@ test('on - context ', t => {
     key: 'a',
     on: {
       data: {
-        results: t => results.push(t.path()),
-        log: t => log.push(t.path())
+        results: (val, stamp, t) => results.push(t.path()),
+        log: (val, stamp, t) => log.push(t.path())
       }
     }
   })
@@ -157,7 +157,7 @@ test('on - context ', t => {
     key: 'b',
     on: {
       data: {
-        special: t => special.push(t.path())
+        special: (val, stamp, t) => special.push(t.path())
       }
     }
   })
@@ -175,18 +175,18 @@ test('on - context ', t => {
       data: {
         log: null,
         special: null,
-        hello: t => log.push(t.path())
+        hello: (val, stamp, t) => log.push(t.path())
       }
     }
   })
-  c.set({ on: { data: { hello: t => special.push(t.path()) } } })
+  c.set({ on: { data: { hello: (val, stamp, t) => special.push(t.path()) } } })
   a.set('bye')
   t.same(results, [ ['a'], ['b'], ['c'] ], 'results (including "c")')
   t.same(log, [ ['a'], ['b'] ], 'log (including "c")')
   t.same(special, [ ['b'], ['c'] ], 'special (including "c")')
 
   special = []
-  c.set({ on: { data: { special: t => special.push(t.path()) } } })
+  c.set({ on: { data: { special: (val, stamp, t) => special.push(t.path()) } } })
   c.set('wow')
   t.same(special, [ ['c'], ['c'] ], 'special set on c')
   t.end()
