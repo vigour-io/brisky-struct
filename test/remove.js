@@ -120,3 +120,18 @@ test('remove - mixed', t => {
   t.same(b.keys(), [ 'b', 'd', 'a' ], 'correct keys on "a"')
   t.end()
 })
+
+test('remove - keys', t => {
+  const results = []
+  const s = struct({
+    a: 'a',
+    b: 'b',
+    c: 'c',
+    on: t => results.push(t.keys().concat())
+  })
+  s.set({ a: null })
+  s.set({ b: null })
+  s.set({ c: null })
+  t.same(results, [ [ 'b', 'c' ], [ 'c' ], [] ], 'correct keys results')
+  t.end()
+})
