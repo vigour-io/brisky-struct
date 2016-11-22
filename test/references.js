@@ -119,6 +119,10 @@ test('references - override & remove', t => {
   t.same(b.emitters.data.struct, [ c ], 'added struct listener on "b"')
   c.set(null)
   t.same(b.emitters.data.struct, [], 'removed struct listener from "b"')
+  const a2 = struct('a')
+  const c2 = struct(a2)
+  a2.set(null)
+  t.same(c2.val, null, 'set .val on null references')
   t.end()
 })
 

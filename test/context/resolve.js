@@ -150,7 +150,7 @@ test('context - resolve - multiple', t => {
   ], 'fires all contexts when original updates not for instance (same)')
 
   results = []
-  x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ]).set('myself!')
+  x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ]).set('myself!', false)
 
   a.get([ 'b', 'c', 'd' ]).set('yo yo yo', 'stamp-7')
   t.same(results, [
