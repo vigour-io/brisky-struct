@@ -1,6 +1,7 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('../util')
+const tree = require('../util/tree')
 
 test(`subscription - composite - mixed`, t => {
   const s = subsTest(
@@ -88,90 +89,107 @@ test('subscription - composite - mixed - references', t => {
             }
           }
         },
-        // a: {
-        //   root: {
-        //     b: {
-        //       c: {
-        //         deep: {
-        //           val: true,
-        //           parent: {
-        //             parent: {
-        //               d: { val: true }
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
+        a: {
+          root: {
+            b: {
+              c: {
+                deep: {
+                  val: true,
+                  parent: {
+                    parent: {
+                      d: { val: true }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   )
 
   const r = s('initial subscription', [
+    { path: 'z', type: 'new' },
     { path: 'y', type: 'new' },
     { path: 'b/c/deep', type: 'new' },
     { path: 'b/d', type: 'new' }
   ])
 
-  s('update b/d', [
-    { path: 'b/c/deep', type: 'update' }
-  ], { bla: { x: 'wow!' } })
+  const start = tree(r.tree)
 
-  s('update y', [
-    { path: 'y', type: 'update' }
-  ], { y: 'wow!' })
+  s('update b/d', [ { path: 'b/c/deep', type: 'update' } ], { bla: { x: 'wow!' } })
+  s('update y', [ { path: 'y', type: 'update' } ], { y: 'wow!' })
+  s('update z', [ { path: 'z', type: 'update' } ], { z: 'wow!' })
 
   t.same(r.tree.x.$c, { a: 'root', bla: 'root' }, 'correct $c')
 
-  console.log('1', r.tree)
+  s(
+    'remove x/c/d',
+    [ { path: 'y', type: 'remove' } ],
+    { x: { c: { d: null } } }
+  )
 
-  s('remove x/c/d', [
-    { path: 'y', type: 'remove' }
-  ], { x: { c: { d: null } } })
-  console.log('2', r.tree)
+  s(
+    'remove x/bla/gur/x',
+    [ { path: 'z', type: 'remove' } ],
+    { x: { bla: { gur: { x: null } } } }
+  )
 
-  // // t.same(r.tree.x.$c, { a: true }, 'remove b correct $c')
-  // // console.log('1', r.tree)
+  s('remove x/a', [
+    { path: 'b/c/deep', type: 'remove' },
+    { path: 'b/d', type: 'remove' }
+  ], { x: { a: null } })
 
+  const empty = {
+    x: {
+      bla: {
+        blurf: {
+          parent: {
+            gur: {
+              $c: {
+                b: 'parent'
+              },
+              b: {
+                parent: {
+                  parent: {
+                    parent: {
+                      c: {}
+                    }
+                  }
+                },
+                $c: {
+                  parent: 'parent'
+                }
+              }
+            }
+          },
+          $c: {
+            parent: 'parent'
+          }
+        },
+        $c: {
+          blurf: 'parent'
+        }
+      }
+    }
+  }
+  t.same(tree(r.tree), empty, 'removed root composites')
 
-  // // console.log( '\n go go go go')
+  s('add x/c/d', [
+    { path: 'y', type: 'new' }
+  ], { x: { c: { d: {} } } })
 
-  // s('remove x/bla/b', [
-  //   { path: 'y', type: 'remove' }
-  // ], { x: { bla: { b: null } } })
-  // console.log('3', r.tree)
+  s('add x/bla/gur/x', [
+    { path: 'z', type: 'new' }
+  ], { x: { bla: { gur: { x: true } } } })
 
-  // s('remove x/bla/b', [
-  //   { path: 'y', type: 'remove' }
-  // ], { x: { bla: { b: {} } } })
-  // console.log('2', r.tree)
+  s('add x/a', [
+    { path: 'b/c/deep', type: 'new' },
+    { path: 'b/d', type: 'new' }
+  ], { x: { a: {} } })
 
-  // s('remove x/b', [
-  //   { path: 'y', type: 'remove' }
-  // ], { x: { bla: null } })
-  // console.log('4', r.tree)
-
-  // console.log('remove dat', r.tree)
-
-  // s('add x/c/d', [
-  //   { path: 'y', type: 'new' }
-  // ], { x: { c: { d: {} } } })
-
-  // console.log(r.tree)
-
-  // s('remove x/c/d', [
-  //   { path: 'y', type: 'remove' }
-  // ], { x: { c: { d: null } } })
-
-  // s('remove b/c/deep', [
-  //   { path: 'b/c/deep', type: 'remove' },
-  //   { path: 'b/d', type: 'remove' }
-  // ], { b: { c: { deep: null } } })
-
-  // s('remove b/c/deep', [], { x: { a: null } })
-
-  // t.same(r.tree.x.$c, void 0, 'removed x $c')
+  t.same(tree(r.tree), start, 'same as start')
 
   t.end()
 })

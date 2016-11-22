@@ -2,7 +2,7 @@ const struct = require('../../../')
 const bs = require('brisky-stamp')
 const logger = require('./log')
 
-module.exports = (t, state, subs, log) => {
+module.exports = exports = (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
@@ -106,16 +106,20 @@ function resolveStamps (tree, seed) {
   }
 }
 
-function copy (tree) {
+exports.copy = copy
+
+function copy (tree, strip) {
   const result = {}
   if (tree instanceof Array) {
     return tree.concat()
   } else {
     for (let i in tree) {
-      if (tree[i] && typeof tree[i] === 'object' && !tree[i].isBase) {
-        result[i] = copy(tree[i])
-      } else {
-        result[i] = tree[i]
+      if ((i !== '$' && i !== '$t') || !strip) {
+        if (tree[i] && typeof tree[i] === 'object' && !tree[i].inherits) {
+          result[i] = copy(tree[i], strip)
+        } else {
+          result[i] = tree[i]
+        }
       }
     }
     return result
