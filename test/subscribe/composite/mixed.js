@@ -279,3 +279,36 @@ test(`subscription - composite - root with parent`, t => {
   })
   t.end()
 })
+
+test('subsciption - composite - mixed - any', function (t) {
+  const subscription = {
+    a: {
+      $any: {
+        parent: {
+          parent: {
+            b: {
+              c: {
+                root: {
+                  x: { val: true }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  const a = [ 1, 2, 3, 4 ]
+  const s = subsTest(t, { a: a, b: { c: true }, x: 'bla' }, subscription)
+  const r = s('initial subscription', multiple('new'))
+  s('set b', multiple('update'), { x: 'hello x2!' })
+  t.end()
+  function multiple (type) {
+    const val = []
+    for (let i = 0, len = a.length; i < len; i++) {
+      val.push({ type: type, path: 'x' })
+    }
+    return val
+  }
+  console.log(r.tree)
+})
