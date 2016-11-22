@@ -14,12 +14,12 @@ test('async', t => {
   const a = struct({
     on: {
       data: {
-        log: (t, val, stamp) => {
+        log: (val, stamp, t) => {
           results.push(stamp)
         }
       },
       error: {
-        log: (t, err, stamp) => errors.push(err.message)
+        log: (err) => errors.push(err.message)
       }
     }
   })

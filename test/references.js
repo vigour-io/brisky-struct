@@ -10,7 +10,7 @@ test('references - listeners', t => {
     val: b,
     on: {
       data: {
-        result: (t, val) => {
+        result: (val, stamp, t) => {
           results.push(t.path())
         }
       }
@@ -32,7 +32,7 @@ test('references - listeners', t => {
     val: c2,
     on: {
       data: {
-        result: (t, val) => {
+        result: (val, stamp, t) => {
           results.push(t.path())
         }
       }

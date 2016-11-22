@@ -11,7 +11,7 @@ test('context - resolve - simple', t => {
         d: {},
         on: {
           data: {
-            results: (t) => {
+            results: (val, stamp, t) => {
               results.push(t.path())
             }
           }
@@ -60,14 +60,14 @@ test('context - resolve - multiple', t => {
     b: {
       on: {
         data: {
-          results: t => results.push(t.path())
+          results: (val, stamp, t) => results.push(t.path())
         }
       },
       c: {
         d: {
           on: {
             data: {
-              results: t => results.push(t.path())
+              results: (val, stamp, t) => results.push(t.path())
             }
           }
         }
@@ -80,7 +80,7 @@ test('context - resolve - multiple', t => {
     y: {
       on: {
         data: {
-          results: t => results.push(t.path())
+          results: (val, stamp, t) => results.push(t.path())
         }
       },
       props: {
@@ -96,7 +96,7 @@ test('context - resolve - multiple', t => {
       props: { default: x },
       on: {
         data: {
-          results: t => results.push(t.path())
+          results: (val, stamp, t) => results.push(t.path())
         }
       },
       z2: {}

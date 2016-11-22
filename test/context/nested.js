@@ -18,7 +18,7 @@ test('context - nested', t => {
       val: false,
       on: {
         data: {
-          slow (t) {
+          slow (val, stamp, t) {
             const p = t.path().join('.')
             slow[p] = slow[p] || { val: t.compute(), count: 0 }
             slow[p].count++

@@ -10,7 +10,7 @@ test('context - remove', t => {
       c: {
         on: {
           data: {
-            results: (t) => {
+            results: (val, stamp, t) => {
               results.push(t.path())
             }
           }
