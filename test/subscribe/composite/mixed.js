@@ -46,7 +46,13 @@ test('subscription - composite - mixed - references', t => {
       z: {},
       x: {
         a: {},
-        bla: { blurf: {}, b: {} },
+        bla: {
+          blurf: {},
+          gur: {
+            b: {},
+            x: {}
+          }
+        },
         c: { d: {} }
       },
       b: {
@@ -61,14 +67,18 @@ test('subscription - composite - mixed - references', t => {
         bla: {
           blurf: {
             parent: {
-              b: {
-                parent: {
+              gur: {
+                x: { root: { z: { val: true } } },
+                b: {
                   parent: {
-                    c: {
-                      d: {
-                        root: {
-                          // y: { val: true },
-                          z: { parent: { y: { val: true } } }
+                    parent: {
+                      parent: {
+                        c: {
+                          d: {
+                            root: {
+                              z: { parent: { y: { val: true } } }
+                            }
+                          }
                         }
                       }
                     }
@@ -77,7 +87,7 @@ test('subscription - composite - mixed - references', t => {
               }
             }
           }
-        }
+        },
         // a: {
         //   root: {
         //     b: {
@@ -99,27 +109,27 @@ test('subscription - composite - mixed - references', t => {
   )
 
   const r = s('initial subscription', [
-    { path: 'y', type: 'new' }
-    // { path: 'b/c/deep', type: 'new' },
-    // { path: 'b/d', type: 'new' }
+    { path: 'y', type: 'new' },
+    { path: 'b/c/deep', type: 'new' },
+    { path: 'b/d', type: 'new' }
   ])
 
   s('update b/d', [
-    // { path: 'b/c/deep', type: 'update' }
+    { path: 'b/c/deep', type: 'update' }
   ], { bla: { x: 'wow!' } })
 
   s('update y', [
     { path: 'y', type: 'update' }
   ], { y: 'wow!' })
 
-  // t.same(r.tree.x.$c, { a: true, b: true }, 'correct $c')
+  t.same(r.tree.x.$c, { a: 'root', bla: 'root' }, 'correct $c')
 
   console.log('1', r.tree)
 
-  // s('remove x/c/d', [
-  //   { path: 'y', type: 'remove' }
-  // ], { x: { c: { d: null } } })
-  // console.log('2', r.tree)
+  s('remove x/c/d', [
+    { path: 'y', type: 'remove' }
+  ], { x: { c: { d: null } } })
+  console.log('2', r.tree)
 
   // // t.same(r.tree.x.$c, { a: true }, 'remove b correct $c')
   // // console.log('1', r.tree)
