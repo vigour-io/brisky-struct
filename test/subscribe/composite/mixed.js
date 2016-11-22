@@ -202,7 +202,8 @@ test(`subscription - composite - root with parent`, t => {
         c: { d: {} },
         y: {
           b: {},
-          z: {}
+          z: {},
+          hello: true
         }
       },
       y: 'bye',
@@ -214,6 +215,7 @@ test(`subscription - composite - root with parent`, t => {
           root: {
             x: {
               y: {
+                hello: { val: true },
                 z: {
                   parent: {
                     b: {
@@ -239,15 +241,26 @@ test(`subscription - composite - root with parent`, t => {
     }
   )
 
-  const r = s('initial subscription', [ { path: 'y', type: 'new' } ])
+  const r = s('initial subscription', [
+    { path: 'x/y/hello', type: 'new' },
+    { path: 'y', type: 'new' }
+  ])
   const start = tree(r.tree)
-  s('remove x/y', [ { path: 'y', type: 'remove' } ], {
+  s('remove x/y', [
+    { path: 'x/y/hello', type: 'remove' },
+    { path: 'y', type: 'remove' }
+  ], {
     x: { y: null }
   })
   t.same(tree(r.tree), { x: {} }, 'cleared tree')
-  s('add x/y', [ { path: 'y', type: 'new' } ], {
-    x: { y: { z: true, b: {} } }
+  s('add x/y', [ { path: 'x/y/hello', type: 'new' }, { path: 'y', type: 'new' } ], {
+    x: { y: { z: true, b: {}, hello: true } }
   })
   t.same(start, tree(r.tree))
+  s('remove x/y', [
+    { path: 'x/y/hello', type: 'remove' }
+  ], {
+    x: { y: { hello: null } }
+  })
   t.end()
 })
