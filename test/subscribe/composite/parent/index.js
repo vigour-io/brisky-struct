@@ -1,19 +1,3 @@
-require('./basic')('$parent')
-require('./references')('$parent')
-require('./root')('$parent')
-
-require('./basic')('parent')
-require('./references')('parent')
-require('./root')('parent')
-
-// require('./basic')('parent')
-
-// require('./switch')('$parent')
-// require('./references')('$parent')
-
-// require('./switch')('parent')
-// require('./references')('parent')
-
-// require('./root')('parent')
-
-// require('./combined')
+require('./basic')
+require('./references')
+require('./root')

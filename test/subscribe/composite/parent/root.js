@@ -1,37 +1,68 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('../../util')
-const field = require('../../util/field')
 
-module.exports = type => {
-  test(`subscription - composite - ${type} - root`, t => {
-    const s = subsTest(
-      t,
-      {
-        bla: {},
-        a: {},
-        b: {
-          d: 'yes',
-          c: {}
+test(`subscription - composite - parent - root`, t => {
+  const s = subsTest(
+    t,
+    {
+      bla: {},
+      a: {},
+      b: {
+        d: 'yes',
+        c: {}
+      }
+    },
+    {
+      a: {
+        root: {
+          b: {
+            c: {
+              parent: { d: { val: true } }
+            }
+          }
         }
+      }
+    }
+  )
+  s('initial subscription', [ { path: 'b/d', type: 'new' } ])
+  t.end()
+})
+
+test('parent - references - combined', function (t) {
+  const s = subsTest(
+    t,
+    {
+      bla: {
+        x: 'its x',
+        d: 'xxxx'
       },
-      field({
-        a: {
-          root: {
-            b: {
-              c: {
-                $parent: {
-                  d: { val: true }
+      a: {},
+      b: {
+        c: {
+          deep: [ '@', 'root', 'bla', 'x' ]
+        },
+        d: 'yes!'
+      }
+    },
+    {
+      a: {
+        root: {
+          b: {
+            c: {
+              deep: {
+                parent: {
+                  parent: {
+                    d: { val: true }
+                  }
                 }
               }
             }
           }
         }
-      }, type, '$parent')
-    )
-    const r = s('initial subscription', [ { path: 'b/d', type: 'new' } ])
-    console.log(r.tree)
-    // s('update b/d', [ { path: 'b/d', type: 'update' } ], { b: { d: 'x' } })
-    t.end()
-  })
-}
+      }
+    }
+  )
+  s('initial subscription', [ { path: 'b/d', type: 'new' } ])
+  t.end()
+})
