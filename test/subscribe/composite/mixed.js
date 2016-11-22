@@ -300,7 +300,7 @@ test('subsciption - composite - mixed - any', function (t) {
   }
   const a = [ 1, 2, 3, 4 ]
   const s = subsTest(t, { a: a, b: { c: true }, x: 'bla' }, subscription)
-  const r = s('initial subscription', multiple('new'))
+  s('initial subscription', multiple('new'))
   s('set b', multiple('update'), { x: 'hello x2!' })
   t.end()
   function multiple (type) {
@@ -310,5 +310,4 @@ test('subsciption - composite - mixed - any', function (t) {
     }
     return val
   }
-  console.log(r.tree)
 })
