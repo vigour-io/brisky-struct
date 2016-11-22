@@ -54,6 +54,9 @@ test(`subscription - composite - parent`, t => {
     [ { path: 'top/a', type: 'remove' } ],
     { top: { b: { c: { d: null } } }
   })
+
+  t.equal('$c' in r.tree.top.b, false, 'removed $c in top.b')
+
   t.end()
 })
 
