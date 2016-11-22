@@ -1,6 +1,42 @@
 const test = require('tape')
 const subsTest = require('./util')
 
+test('subscription - basic - root', t => {
+  const s = subsTest(
+    t,
+    { field: true },
+    { val: true }
+  )
+  s(
+    'initial subscription',
+    [{ type: 'new' }]
+  )
+  s(
+    'update root',
+    [ { type: 'update' } ],
+    'hello'
+  )
+  t.end()
+})
+
+test('subscription - basic - root - 1', t => {
+  const s = subsTest(
+    t,
+    { field: true },
+    { val: 'property' }
+  )
+  s(
+    'initial subscription',
+    [{ type: 'new' }]
+  )
+  s(
+    'update root',
+    [],
+    'hello'
+  )
+  t.end()
+})
+
 test('subscription - basic', t => {
   const s = subsTest(
     t,
