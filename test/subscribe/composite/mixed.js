@@ -193,3 +193,61 @@ test('subscription - composite - mixed - references', t => {
 
   t.end()
 })
+
+test(`subscription - composite - root with parent`, t => {
+  const s = subsTest(
+    t,
+    {
+      x: {
+        c: { d: {} },
+        y: {
+          b: {},
+          z: {}
+        }
+      },
+      y: 'bye',
+      z: 'hello'
+    },
+    {
+      x: {
+        y: {
+          root: {
+            x: {
+              y: {
+                z: {
+                  parent: {
+                    b: {
+                      parent: {
+                        parent: {
+                          c: {
+                            d: {
+                              root: {
+                                z: { parent: { y: { val: true } } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  )
+
+  const r = s('initial subscription', [ { path: 'y', type: 'new' } ])
+  const start = tree(r.tree)
+  s('remove x/y', [ { path: 'y', type: 'remove' } ], {
+    x: { y: null }
+  })
+  t.same(tree(r.tree), { x: {} }, 'cleared tree')
+  s('add x/y', [ { path: 'y', type: 'new' } ], {
+    x: { y: { z: true, b: {} } }
+  })
+  t.same(start, tree(r.tree))
+  t.end()
+})
