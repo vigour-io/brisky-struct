@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test(`subscription - composite - parent - root`, t => {
+test(`subscription - composite - mixed`, t => {
   const s = subsTest(
     t,
     {
@@ -34,7 +34,7 @@ test(`subscription - composite - parent - root`, t => {
   t.end()
 })
 
-test('subscription - composite - parent - root - references', t => {
+test('subscription - composite - mixed - references', t => {
   const s = subsTest(
     t,
     {
