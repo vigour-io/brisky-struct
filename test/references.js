@@ -20,6 +20,8 @@ test('references - listeners', t => {
   const c2 = c.create({ key: 'c2' })
   a.set(1, 'stamp-1')
 
+  t.same(b._uid, b.uid(), 'a has uid')
+
   t.same(
     results, [ [ 'c' ], [ 'c2' ] ],
     'fires for "c" and "c2" (does not fire for "a" instance)'
