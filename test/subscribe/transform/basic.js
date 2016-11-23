@@ -1,9 +1,9 @@
 const test = require('tape')
-// const subsTest = require('../util')
-const struct = require('../../../')
+const subsTest = require('../util')
+const tree = require('../util/tree')
 
 test('subscription - $transform - basic', t => {
-  const s = struct({
+  const s = subsTest(t, {
     collection: {
       a: {
         x: 'hello'
@@ -14,15 +14,11 @@ test('subscription - $transform - basic', t => {
       }
     },
     qeury: 'hello'
-  })
-
-  const tree = s.subscribe({
+  }, {
     collection: {
       $any: {
-        // this has to work differently in the transform unforutately
         $transform: (t, subs, tree) => {
-          // fucked that the qeury ends up in diffing this one...
-          return { x: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
+          return { x: { val: true } }
         },
         $transform2: {
           val: (t, subs, tree) => {
@@ -30,7 +26,7 @@ test('subscription - $transform - basic', t => {
             if (q === t.get([ 'c', 'compute' ])) {
               return { c: { val: true }, d: { val: true } }
             } else if (q === 'unicorn') {
-              return { unicorn: { val: true } }
+              return { root: { unicorn: { val: true } } }
             }
           },
           c: { val: true },
@@ -40,38 +36,97 @@ test('subscription - $transform - basic', t => {
         }
       }
     }
-  }, (t, type) => {
-    console.log('FIRE:', t.path(), type)
   })
 
-  console.log(tree.collection.$any.b.$c)
+  const result = s('initial subscription', [ { path: 'collection/a/x', type: 'new' } ])
+  const start = tree(result.tree)
 
-  console.log(' \nchange query (add)')
-  s.qeury.set('bye')
+  s('update query', [
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'collection/b/d', type: 'new' }
+  ], { qeury: 'bye' })
 
-  console.log(' \nchange query (remove)')
-  s.qeury.set('blax')
+  s('update query to unicorn', [
+    { path: 'collection/b/c', type: 'remove' },
+    { path: 'collection/b/d', type: 'remove' }
+  ], { qeury: 'unicorn' })
 
-  console.log(' \nchange driver from self -- collection.b.c')
-  s.collection.b.c.set('blax')
+  s('update unicorn', [
+    { path: 'unicorn', type: 'new' },
+    { path: 'unicorn', type: 'new' }
+  ], { unicorn: '🦄' })
 
-  console.log(' \nnon driver change -- collection.b.d')
-  s.collection.b.d.set('blax')
-  // console.log(' \nhaha broken!')
-  // s.collection.b.c.set('yo qeury')
+  // console.log(result.tree)
 
-  console.log(' \ndriver switch -- qeury === pony')
-  s.qeury.set('unicorn')
-  // console.log(' \nhaha broken!')
-  // s.collection.b.c.set('yo qeury')
+  s('update query', [
+    { path: 'unicorn', type: 'remove' },
+    { path: 'unicorn', type: 'remove' },
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'collection/b/d', type: 'new' }
+  ], { qeury: 'bye' })
 
-  console.log(' \nadd pony')
-  s.collection.b.set({
-    unicorn: '🦄'
-  })
+  s('update query', [
+    { path: 'collection/b/c', type: 'remove' },
+    { path: 'collection/b/d', type: 'remove' }
+  ], { qeury: 'blax' })
 
-  console.log(' \ndriver switch -- qeury === blurf')
-  s.qeury.set('blurf')
+  t.same(start, tree(result.tree), 'equal to start tree')
 
+  // console.log(result.tree)
+
+  // t.same(results, [ { path: [ 'collection', 'a', 'x' ], type: 'new' } ], 'initial')
+
+  // results = []
+  // s.qeury.set('bye')
+
+  // results = []
+  // s.qeury.set('unicorn')
+
+  // results = []
+  // s.set({ unicorn: '🦄' })
+
+  // results = []
+  // s.qeury.set('blax')
+
+  // results = []
+  // s.collection.b.c.set('blax')
+
+  // results = []
+  // s.collection.b.d.set('blax')
+  // // s.qeury.set('blurf')
+  // // s.collection.b.c.set('blurf')
+  // // s.collection.set(null)
+  // t.same([
+  //   // new
+  //   { path: [ 'collection', 'a', 'x' ], type: 'new' },
+
+  //   // query
+  //   { path: [ 'collection', 'b', 'c' ], type: 'new' },
+  //   { path: [ 'collection', 'b', 'd' ], type: 'new' },
+
+  //   // switch
+  //   { path: [ 'collection', 'b', 'c' ], type: 'remove' },
+  //   { path: [ 'collection', 'b', 'd' ], type: 'remove' },
+
+  //   // set unicorn
+  //   { path: [ 'unicorn' ], type: 'new' },
+  //   { path: [ 'unicorn' ], type: 'new' },
+
+  //   // switch
+  //   { path: [ 'unicorn' ], type: 'remove' },
+  //   { path: [ 'unicorn' ], type: 'remove' },
+
+  //   // change title
+  //   { path: [ 'collection', 'b', 'c' ], type: 'new' },
+  //   { path: [ 'collection', 'b', 'd' ], type: 'new' },
+
+  //   // update fields
+  //   { path: [ 'collection', 'b', 'd' ], type: 'update' },
+  //   { path: [ 'collection', 'b', 'c' ], type: 'update' },
+  //   { path: [ 'collection', 'a', 'x' ], type: 'remove' },
+  //   { path: [ 'collection', 'b', 'c' ], type: 'remove' },
+  //   { path: [ 'collection', 'b', 'd' ], type: 'remove' }
+  // ], results, 'correct results')
+  // t.same(tree(result), {}, 'empty tree after removal')
   t.end()
 })
