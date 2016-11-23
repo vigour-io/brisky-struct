@@ -25,8 +25,11 @@ test('subscription - $transform - basic', t => {
         // },
         $transform2: {
           val: (t, subs, tree) => {
-            if (t.get('root').qeury.compute() === t.get([ 'c', 'compute' ])) {
+            const q = t.get('root').qeury.compute()
+            if (q === t.get([ 'c', 'compute' ])) {
               return { c: { val: true }, d: { val: true } }
+            } else if (q === 'unicorn') {
+              return { unicorn: { val: true } }
             }
           },
           c: { val: true },
@@ -55,6 +58,19 @@ test('subscription - $transform - basic', t => {
   s.collection.b.d.set('blax')
   // console.log(' \nhaha broken!')
   // s.collection.b.c.set('yo qeury')
+
+  console.log(' \ndriver switch -- qeury === pony')
+  s.qeury.set('unicorn')
+  // console.log(' \nhaha broken!')
+  // s.collection.b.c.set('yo qeury')
+
+  console.log(' \nadd pony')
+  s.collection.b.set({
+    unicorn: '🦄'
+  })
+
+  console.log(' \ndriver switch -- qeury === blurf')
+  s.qeury.set('blurf')
 
   t.end()
 })
