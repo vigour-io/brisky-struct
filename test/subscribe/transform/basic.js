@@ -42,10 +42,10 @@ test('subscription - $transform - basic', t => {
 
   console.log(tree.collection.$any.b.$c)
 
-  console.log(' \nextra!')
+  console.log(' \nchange query (add)')
   s.qeury.set('bye')
 
-  console.log(' \nmore more!')
+  console.log(' \nchange query (remove)')
   s.qeury.set('blax')
 
   console.log(' \nchange driver from self -- collection.b.c')
