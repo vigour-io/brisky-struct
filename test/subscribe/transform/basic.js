@@ -13,7 +13,7 @@ test('subscription - $transform - basic', t => {
         d: 'HA!'
       }
     },
-    qeury: 'hello'
+    query: 'hello'
   }, {
     collection: {
       $any: {
@@ -22,7 +22,7 @@ test('subscription - $transform - basic', t => {
         },
         $transform2: {
           val: (t, subs, tree) => {
-            const q = t.get('root').qeury.compute()
+            const q = t.get('root').query.compute()
             if (q === t.get([ 'c', 'compute' ])) {
               return { c: { val: true }, d: { val: true } }
             } else if (q === 'unicorn') {
@@ -31,7 +31,7 @@ test('subscription - $transform - basic', t => {
           },
           c: { val: true },
           root: {
-            qeury: { val: true }
+            query: { val: true }
           }
         }
       }
@@ -44,31 +44,29 @@ test('subscription - $transform - basic', t => {
   s('update query', [
     { path: 'collection/b/c', type: 'new' },
     { path: 'collection/b/d', type: 'new' }
-  ], { qeury: 'bye' })
+  ], { query: 'bye' })
 
   s('update query to unicorn', [
     { path: 'collection/b/c', type: 'remove' },
     { path: 'collection/b/d', type: 'remove' }
-  ], { qeury: 'unicorn' })
+  ], { query: 'unicorn' })
 
   s('update unicorn', [
     { path: 'unicorn', type: 'new' },
     { path: 'unicorn', type: 'new' }
   ], { unicorn: '🦄' })
 
-  // console.log(result.tree)
-
   s('update query', [
     { path: 'unicorn', type: 'remove' },
     { path: 'unicorn', type: 'remove' },
     { path: 'collection/b/c', type: 'new' },
     { path: 'collection/b/d', type: 'new' }
-  ], { qeury: 'bye' })
+  ], { query: 'bye' })
 
   s('update query', [
     { path: 'collection/b/c', type: 'remove' },
     { path: 'collection/b/d', type: 'remove' }
-  ], { qeury: 'blax' })
+  ], { query: 'blax' })
 
   t.same(start, tree(result.tree), 'equal to start tree (cleared composites')
 
@@ -88,5 +86,56 @@ test('subscription - $transform - basic', t => {
   ], { collection: null })
 
   t.same(tree(result.tree), {}, 'empty tree after removal')
+  t.end()
+})
+
+test('subscription - $transform - nested', t => {
+  const s = subsTest(t, {
+    collection: {
+      a: {
+        val: 'hello',
+        hello: 'hello',
+        unicorn: 'not a unicorn'
+      },
+      b: {
+        val: 'hello',
+        hello: 'hello',
+        unicorn: '🦄'
+      }
+    },
+    query: 'hello'
+  }, {
+    collection: {
+      $any: {
+        $transform: (t, subs, tree) => {
+          console.log(t.val)
+          if (t.val === 'unicorn') {
+            return {
+              hello: {
+                parent: {
+                  unicorn: {
+                    $transform: t => {
+                      if (t.val === '🦄') {
+                        console.log('transform passes')
+                        return { val: true } // this is a bit shitty
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const result = s('initial subscription', [])
+  const start = tree(result.tree)
+
+  s('update query', [ ':/' ], {
+    collection: { b: 'unicorn' }
+  })
+
   t.end()
 })
