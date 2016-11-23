@@ -9,7 +9,8 @@ test('subscription - $transform - basic', t => {
         x: 'hello'
       },
       b: {
-        c: 'bye'
+        c: 'bye',
+        d: 'HA!'
       }
     },
     qeury: 'hello'
@@ -24,10 +25,8 @@ test('subscription - $transform - basic', t => {
         // },
         $transform2: {
           val: (t, subs, tree) => {
-            console.log('?', t.path())
             if (t.get('root').qeury.compute() === t.get([ 'c', 'compute' ])) {
-              console.log('pass')
-              return { c: { val: true } }
+              return { c: { val: true }, d: { val: true } }
             }
           },
           c: { val: true },
@@ -49,9 +48,11 @@ test('subscription - $transform - basic', t => {
   console.log(' \nmore more!')
   s.qeury.set('blax')
 
-  console.log(' \ncollection.b.c')
+  console.log(' \nchange driver from self -- collection.b.c')
   s.collection.b.c.set('blax')
 
+  console.log(' \nnon driver change -- collection.b.d')
+  s.collection.b.d.set('blax')
   // console.log(' \nhaha broken!')
   // s.collection.b.c.set('yo qeury')
 
