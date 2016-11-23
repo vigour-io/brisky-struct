@@ -70,63 +70,23 @@ test('subscription - $transform - basic', t => {
     { path: 'collection/b/d', type: 'remove' }
   ], { qeury: 'blax' })
 
-  t.same(start, tree(result.tree), 'equal to start tree')
+  t.same(start, tree(result.tree), 'equal to start tree (cleared composites')
 
-  // console.log(result.tree)
+  s('update collection/b/c', [
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'collection/b/d', type: 'new' }
+  ], { collection: { b: { c: 'blax' } } })
 
-  // t.same(results, [ { path: [ 'collection', 'a', 'x' ], type: 'new' } ], 'initial')
+  s('update collection/b/c', [
+    { path: 'collection/b/d', type: 'update' }
+  ], { collection: { b: { d: 'blurf' } } })
 
-  // results = []
-  // s.qeury.set('bye')
+  s('update collection/b/c', [
+   { path: 'collection/a/x', type: 'remove' },
+   { path: 'collection/b/c', type: 'remove' },
+   { path: 'collection/b/d', type: 'remove' }
+  ], { collection: null })
 
-  // results = []
-  // s.qeury.set('unicorn')
-
-  // results = []
-  // s.set({ unicorn: '🦄' })
-
-  // results = []
-  // s.qeury.set('blax')
-
-  // results = []
-  // s.collection.b.c.set('blax')
-
-  // results = []
-  // s.collection.b.d.set('blax')
-  // // s.qeury.set('blurf')
-  // // s.collection.b.c.set('blurf')
-  // // s.collection.set(null)
-  // t.same([
-  //   // new
-  //   { path: [ 'collection', 'a', 'x' ], type: 'new' },
-
-  //   // query
-  //   { path: [ 'collection', 'b', 'c' ], type: 'new' },
-  //   { path: [ 'collection', 'b', 'd' ], type: 'new' },
-
-  //   // switch
-  //   { path: [ 'collection', 'b', 'c' ], type: 'remove' },
-  //   { path: [ 'collection', 'b', 'd' ], type: 'remove' },
-
-  //   // set unicorn
-  //   { path: [ 'unicorn' ], type: 'new' },
-  //   { path: [ 'unicorn' ], type: 'new' },
-
-  //   // switch
-  //   { path: [ 'unicorn' ], type: 'remove' },
-  //   { path: [ 'unicorn' ], type: 'remove' },
-
-  //   // change title
-  //   { path: [ 'collection', 'b', 'c' ], type: 'new' },
-  //   { path: [ 'collection', 'b', 'd' ], type: 'new' },
-
-  //   // update fields
-  //   { path: [ 'collection', 'b', 'd' ], type: 'update' },
-  //   { path: [ 'collection', 'b', 'c' ], type: 'update' },
-  //   { path: [ 'collection', 'a', 'x' ], type: 'remove' },
-  //   { path: [ 'collection', 'b', 'c' ], type: 'remove' },
-  //   { path: [ 'collection', 'b', 'd' ], type: 'remove' }
-  // ], results, 'correct results')
-  // t.same(tree(result), {}, 'empty tree after removal')
+  t.same(tree(result.tree), {}, 'empty tree after removal')
   t.end()
 })
