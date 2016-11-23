@@ -80,9 +80,12 @@ test('subscription - $transform - basic', t => {
   ], { collection: { b: { d: 'blurf' } } })
 
   s('update collection/b/c', [
-   { path: 'collection/a/x', type: 'remove' },
    { path: 'collection/b/c', type: 'remove' },
    { path: 'collection/b/d', type: 'remove' }
+  ], { collection: { b: null } })
+
+  s('update collection/b/c', [
+   { path: 'collection/a/x', type: 'remove' }
   ], { collection: null })
 
   t.same(tree(result.tree), {}, 'empty tree after removal')
@@ -90,6 +93,7 @@ test('subscription - $transform - basic', t => {
 })
 
 test('subscription - $transform - nested', t => {
+  const unicornSubs = { val: true, poops: { val: true } }
   const s = subsTest(t, {
     collection: {
       a: {
@@ -120,7 +124,7 @@ test('subscription - $transform - nested', t => {
                   unicorn: {
                     $transform: t => {
                       if (t.val === '🦄') {
-                        return { val: true, poops: { val: true } } // this is a bit shitty
+                        return unicornSubs // this is a bit shitty
                       } else if (t.val === 'horse') {
                         return {
                           root: { unicorn: { val: true } }
