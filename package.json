@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/index.js",
   "scripts": {
     "test": "(ducktape; node test) | tap-difflet && standard",
@@ -32,7 +32,9 @@
     "pixi.js": "^4.2.2",
     "stats-js": "^1.0.0-alpha1"
   },
-  "browser": { "./test/index.js": "./test/browser.js" },
+  "browser": {
+    "./test/index.js": "./test/browser.js"
+  },
   "browserify": {
     "transform": [
       "bubleify"
