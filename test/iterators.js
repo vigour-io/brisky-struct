@@ -24,6 +24,9 @@ test('iterators - functional', t => {
   const result = []
   d.forEach(val => result.push(val))
   t.same(d.map(val => val), [ d.a, d.b, d.c ], 'forEach')
+
+  const empty = struct({})
+  t.same(empty.filter(val => true), [], 'filter returns empty array')
   t.end()
 })
 
