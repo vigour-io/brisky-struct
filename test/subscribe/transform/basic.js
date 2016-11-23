@@ -20,9 +20,10 @@ test('subscription - $transform - basic', t => {
     collection: {
       $any: {
         // this has to work differently in the transform unforutately
-        // $transform: (t, subs, tree) => {
-        //   return { x: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
-        // },
+        $transform: (t, subs, tree) => {
+          // fucked that the qeury ends up in diffing this one...
+          return { x: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
+        },
         $transform2: {
           val: (t, subs, tree) => {
             const q = t.get('root').qeury.compute()
