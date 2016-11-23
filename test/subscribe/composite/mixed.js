@@ -153,7 +153,6 @@ test('subsciption - composite - mixed - any', function (t) {
   }
 })
 
-
 test('subscription - composite - mixed - references', t => {
   const s = subsTest(
     t,
@@ -294,24 +293,22 @@ test('subscription - composite - mixed - references', t => {
     }
   }
 
-  console.log(r.tree)
-
   t.same(tree(r.tree), empty, 'removed root composites')
 
-  // s('add x/c/d', [
-  //   { path: 'y', type: 'new' }
-  // ], { x: { c: { d: {} } } })
+  s('add x/c/d', [
+    { path: 'y', type: 'new' }
+  ], { x: { c: { d: {} } } })
 
-  // s('add x/bla/gur/x', [
-  //   { path: 'z', type: 'new' }
-  // ], { x: { bla: { gur: { x: true } } } })
+  s('add x/bla/gur/x', [
+    { path: 'z', type: 'new' }
+  ], { x: { bla: { gur: { x: true } } } })
 
-  // s('add x/a', [
-  //   { path: 'b/c/deep', type: 'new' },
-  //   { path: 'b/d', type: 'new' }
-  // ], { x: { a: {} } })
+  s('add x/a', [
+    { path: 'b/c/deep', type: 'new' },
+    { path: 'b/d', type: 'new' }
+  ], { x: { a: {} } })
 
-  // t.same(tree(r.tree), start, 'same as start')
+  t.same(tree(r.tree), start, 'same as start')
 
   t.end()
 })
