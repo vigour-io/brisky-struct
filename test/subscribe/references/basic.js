@@ -36,9 +36,8 @@ test('subscription - references', t => {
   s(
     'initial subscription',
     [
-     { path: 'field/a/nest', type: 'new' }, { path: 'ref/b', type: 'new' }
-      // { path: 'ref/b', type: 'new' },
-      // { path: 'field/a/nest', type: 'new' }
+     { path: 'field/a/nest', type: 'new' },
+     { path: 'ref/b', type: 'new' }
     ]
   )
 
@@ -48,9 +47,6 @@ test('subscription - references', t => {
     [
       { path: 'other/a/nest', type: 'update' },
       { path: 'other/a/field', type: 'new' }
-      // { path: 'field/a/nest', type: 'remove' },
-      // { path: 'other/a/nest', type: 'new' },
-      // { path: 'other/a/field', type: 'new' }
     ],
     { ref: [ '@', 'parent', 'other' ] }
   )

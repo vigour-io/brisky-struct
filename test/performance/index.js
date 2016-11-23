@@ -3,7 +3,6 @@ const struct = require('../../')
 const Obs = require('vigour-observable') // eslint-disable-line
 const State = require('vigour-state') // eslint-disable-line
 var n = 1e3 // eslint-disable-line
-const bs = require('brisky-stamp')
 
 perf(() => {
   for (let i = 0; i < n; i++) {
@@ -30,6 +29,22 @@ perf(() => {
     a.remove(false)
   }
 }, 'remove')
+
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let a = struct({
+      a: i, b: i, c: i
+    })
+    let b = a.create() // eslint-disable-line
+  }
+}, () => {
+  for (let i = 0; i < n * 10; i++) {
+    let a = new Obs({
+      a: i, b: i, c: i
+    })
+    let b = new a.Constructor() // eslint-disable-line
+  }
+}, `create context n = ${(n * 10 / 1e3) | 0}k`)
 
 perf(() => {
   for (let i = 0; i < n; i++) {
@@ -154,7 +169,7 @@ perf(() => {
 perf(() => {
   const a = struct({})
   for (let i = 0; i < n * 100; i++) {
-    a.set(i, bs.create())
+    a.set(i)
   }
 }, () => {
   const a = new State({})
@@ -167,7 +182,7 @@ perf(() => {
   const s = struct({ a: { b: { c: {} } } })
   const a = s.a.b.c
   for (let i = 0; i < n * 100; i++) {
-    a.set(i, bs.create())
+    a.set(i)
   }
 }, () => {
   const s = new State({ a: { b: { c: {} } } })
@@ -246,7 +261,8 @@ perf(() => {
     let s = struct({})
     s.subscribe(
       { $any: { val: true } },
-      () => {}
+      () => {},
+      true
     )
     s.set({ [i]: i })
   }
@@ -302,3 +318,100 @@ perf(() => {
     a.set(i)
   }
 }, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
+
+perf(() => {
+  const arr = []
+  let i = 100
+  while (i--) {
+    arr.push({ x: true })
+  }
+  const s = struct({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    { $any: { x: { root: { query: true } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 100; i++) {
+    s.query.set(i)
+  }
+}, () => {
+  const arr = []
+  let i = 100
+  while (i--) {
+    arr.push({ x: true })
+  }
+  const s = new State({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    { $any: { x: { root: { query: true } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 100; i++) {
+    s.query.set(i)
+  }
+}, `root subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
+
+perf(() => {
+  const arr = []
+  let i = n * 10
+  while (i--) {
+    arr.push(i)
+  }
+  const s = struct({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    {
+      $any: {
+        $transform: {
+          val: (t) => {
+            if (t.val === t.root().query.compute()) {
+              return { val: true }
+            }
+          },
+          root: { query: true }
+        }
+      }
+    },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    s.query.set(i)
+  }
+}, () => {
+  const arr = []
+  let i = n * 10
+  while (i--) {
+    arr.push(i)
+  }
+  const s = new State({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    {
+      $any: {
+        $test: {
+          exec: (t) => {
+            if (t.val === t.root.query.compute()) {
+              return true
+            }
+          },
+          $: {
+            $root: { query: {} }
+          },
+          $pass: { val: true }
+        }
+      }
+    },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    s.query.set(i)
+  }
+}, `$transform vs $test subscription n = ${(n * 10 / 1e3) | 0}k`, 10)
