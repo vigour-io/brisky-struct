@@ -6,8 +6,9 @@
   "scripts": {
     "test": "(ducktape; node test) | tap-difflet && standard",
     "dev": "nodemon --harmony-async-await test | tap-difflet",
-    "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-difflet",
+    "dev-browser": "budo ./test/index.js -p 8080 --live",
     "dev-perf": "nodemon test/performance/index.js --expose-gc | tap-difflet",
+    "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-difflet",
     "dev-perf-browser": "budo ./test/performance/index.js -p 8080 --live",
     "dev-perf-webgl": "budo ./test/performance/webgl.js -p 8080 --live",
     "dev-perf-canvas": "budo ./test/performance/webgl.js -p 8080 --live",
@@ -31,6 +32,7 @@
     "pixi.js": "^4.2.2",
     "stats-js": "^1.0.0-alpha1"
   },
+  "browser": { "./test/index.js": "./test/browser.js" },
   "browserify": {
     "transform": [
       "bubleify"

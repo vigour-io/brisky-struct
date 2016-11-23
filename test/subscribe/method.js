@@ -9,8 +9,12 @@ test('subscription - parse', t => {
     c: true
   })
   s.subscribe({
-    $any: true,
-    hello: () => {},
+    props: {
+      any: { $any: true }
+    },
+    $transform: (t, subs) => {
+      return subs.props.any
+    },
     _: 'ha!'
   }, t => results.push(t.path()))
   t.same(results, [ [ 'a' ], [ 'b' ], [ 'c' ] ], 'parse')
