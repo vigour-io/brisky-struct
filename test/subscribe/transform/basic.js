@@ -101,6 +101,11 @@ test('subscription - $transform - nested', t => {
         val: 'hello',
         hello: 'hello',
         unicorn: '🦄'
+      },
+      c: {
+        val: 'hello',
+        hello: 'hello',
+        unicorn: 'horse'
       }
     },
     query: 'hello'
@@ -118,6 +123,11 @@ test('subscription - $transform - nested', t => {
                       if (t.val === '🦄') {
                         console.log('transform passes')
                         return { val: true } // this is a bit shitty
+                      } else if (t.val === 'horse') {
+                        console.log('transform passes')
+                        return {
+                          root: { unicorn: { val: true } }
+                        } // this is a bit shitty
                       }
                     }
                   }
@@ -133,9 +143,26 @@ test('subscription - $transform - nested', t => {
   const result = s('initial subscription', [])
   const start = tree(result.tree)
 
-  s('update query', [ ':/' ], {
+  s('update query', [ { path: 'collection/b/unicorn', type: 'new' } ], {
     collection: { b: 'unicorn' }
   })
+
+  const inBetween = tree(result.tree)
+
+  s('update query', [], {
+    collection: { c: 'unicorn' }
+  })
+
+  console.log(result.tree)
+
+  s('update query', [ { path: 'unicorn', type: 'new' } ], { unicorn: '🦄'  })
+
+  s('update query', [ { path: 'unicorn', type: 'remove' } ], {
+    collection: { c: 'no more unicorns' }
+  })
+
+  console.log(result.tree)
+  t.same(tree(result.tree), inBetween, 'removed root')
 
   t.end()
 })
