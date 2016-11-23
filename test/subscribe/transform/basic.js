@@ -19,28 +19,41 @@ test('subscription - $transform - basic', t => {
     collection: {
       $any: {
         // this has to work differently in the transform unforutately
-        $transform: (t, subs, tree) => {
-          return { x: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
-        },
+        // $transform: (t, subs, tree) => {
+        //   return { x: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
+        // },
         $transform2: {
           val: (t, subs, tree) => {
-            console.log('blurrrr')
-            return { c: { val: true } } // if parse parse results of functions // bit of a waste but fuck it -- make faster later
+            console.log('?', t.path())
+            if (t.get('root').qeury.compute() === t.get([ 'c', 'compute' ])) {
+              console.log('pass')
+              return { c: { val: true } }
+            }
           },
+          c: { val: true },
           root: {
             qeury: { val: true }
           }
         }
       }
     }
-  }, (t) => {
-    console.log('FIRE:', t.path())
+  }, (t, type) => {
+    console.log('FIRE:', t.path(), type)
   })
 
   console.log(tree.collection.$any.b.$c)
 
   console.log(' \nextra!')
-  s.qeury.set('yo qeury')
+  s.qeury.set('bye')
+
+  console.log(' \nmore more!')
+  s.qeury.set('blax')
+
+  console.log(' \ncollection.b.c')
+  s.collection.b.c.set('blax')
+
+  // console.log(' \nhaha broken!')
+  // s.collection.b.c.set('yo qeury')
 
   t.end()
 })
