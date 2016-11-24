@@ -191,3 +191,14 @@ test('on - context ', t => {
   t.same(special, [ ['c'], ['c'] ], 'special set on c')
   t.end()
 })
+
+test('on - create ', t => {
+  const a = struct({
+    on: (val, stamp, struct) => {
+      t.same(struct.key, 'b', 'pass instance')
+      t.same(stamp, 'lullz', 'gets correct stamp')
+      t.end()
+    }
+  })
+  a.create({ key: 'b', val: 'its b' }, 'lullz')
+})
