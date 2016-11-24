@@ -138,3 +138,27 @@ test('references - normal object for val', t => {
   t.equal(b.compute(), 'lulz', 'function support')
   t.end()
 })
+
+test('get - references', t => {
+  const state = struct({
+    holder: {
+      fields: {
+        thing: 1
+      },
+      fields2: {
+        thing: 2
+      },
+      current: [ '@', 'root', 'holder', 'fields' ]
+    }
+  })
+  t.ok(
+    state.holder.current.val === state.holder.fields,
+    'making a reference using root in a nested field'
+  )
+
+  t.ok(
+    state.holder.current.val._p === state.holder,
+    'ref holder is state.holder'
+  )
+  t.end()
+})
