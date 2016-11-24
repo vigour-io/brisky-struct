@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "lib/index.js",
   "scripts": {
     "test": "(ducktape; node test) | tap-difflet && standard",
