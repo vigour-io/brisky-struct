@@ -23,5 +23,7 @@ test('compute ', t => {
   t.equal(a.get('hello').compute(), 'hello', 'remove $transform')
   t.equal(a.get('bye').compute(), 'bye?', 'override $transform')
   t.equal(a.get('generate').compute(), '100!', 'execute function')
+  const x = struct(100)
+  t.equal(a.get('bye').compute(x), '100?', 'chain to compute')
   t.end()
 })
