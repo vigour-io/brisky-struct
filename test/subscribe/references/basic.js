@@ -41,7 +41,6 @@ test('subscription - references', t => {
     ]
   )
 
-  console.log('\nSTEP ONE')
   s(
     'switch reference',
     [
@@ -191,6 +190,34 @@ test('subscription - reference - nested remove', t => {
     'remove ref',
     [{ path: 'a/x', type: 'remove' }],
     { b: { ref: null } }
+  )
+
+  t.end()
+})
+
+test('subscription - reference - simple', t => {
+  const s = subsTest(
+    t,
+    {
+      clients: {
+        client: {
+          menu: true
+        }
+      },
+      client: [ '@', 'root', 'clients', 'client' ]
+    },
+    { client: { menu: { val: true } } } // this will not fire ofc
+  )
+
+  s(
+    'initial subscription',
+    [ { path: 'clients/client/menu', type: 'new' } ]
+  )
+
+  s(
+    'remove ref',
+    [ { path: 'clients/client/menu', type: 'update' } ],
+    { clients: { client: { menu: 'hello' } } }
   )
 
   t.end()
