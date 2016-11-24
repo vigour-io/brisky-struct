@@ -12,7 +12,7 @@ test('subscription - parse', t => {
     props: {
       any: { $any: true }
     },
-    $transform: (t, subs) => {
+    $switch: (t, subs) => {
       return subs.props.any
     },
     _: 'ha!'

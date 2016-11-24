@@ -2,7 +2,7 @@ const test = require('tape')
 const subsTest = require('../util')
 const tree = require('../util/tree')
 
-test('subscription - $transform - basic', t => {
+test('subscription - $switch - basic', t => {
   const s = subsTest(t, {
     collection: {
       a: {
@@ -17,10 +17,10 @@ test('subscription - $transform - basic', t => {
   }, {
     collection: {
       $any: {
-        $transform: (t, subs, tree) => {
+        $switch: (t, subs, tree) => {
           return { x: { val: true } }
         },
-        $transform2: {
+        $switch2: {
           val: (t, subs, tree) => {
             const q = t.get('root').query.compute()
             if (q === t.get([ 'c', 'compute' ])) {
@@ -92,7 +92,7 @@ test('subscription - $transform - basic', t => {
   t.end()
 })
 
-test('subscription - $transform - nested', t => {
+test('subscription - $switch - nested', t => {
   const unicornSubs = { val: true, poops: { val: true } }
   const s = subsTest(t, {
     collection: {
@@ -116,13 +116,13 @@ test('subscription - $transform - nested', t => {
   }, {
     collection: {
       $any: {
-        $transform: (t, subs, tree) => {
+        $switch: (t, subs, tree) => {
           if (t.val === 'unicorn') {
             return {
               hello: {
                 parent: {
                   unicorn: {
-                    $transform: t => {
+                    $switch: t => {
                       if (t.val === '🦄') {
                         return unicornSubs // this is a bit shitty
                       } else if (t.val === 'horse') {
@@ -140,7 +140,7 @@ test('subscription - $transform - nested', t => {
               hello: {
                 parent: {
                   unicorn: {
-                    $transform: t => {
+                    $switch: t => {
                       return {
                         parent: { val: true }
                       }
