@@ -25,5 +25,7 @@ test('compute ', t => {
   t.equal(a.get('generate').compute(), '100!', 'execute function')
   const x = struct(100)
   t.equal(a.get('bye').compute(x), '100?', 'chain to compute')
+  x.set(void 0)
+  t.equal(a.compute(x), x, 'undefined when passed a value will return the struct')
   t.end()
 })
