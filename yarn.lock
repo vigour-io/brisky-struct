@@ -4430,7 +4430,7 @@ standard@^8.1.0:
     eslint-plugin-standard "~2.0.1"
     standard-engine "~5.2.0"
 
-stats-js@^1.0.0-alpha1:
+stats-js@1.0.0-alpha1:
   version "1.0.0-alpha1"
   resolved "https://registry.yarnpkg.com/stats-js/-/stats-js-1.0.0-alpha1.tgz#44ae82e6421123bab99750d95c3f5526b8f257db"
 
