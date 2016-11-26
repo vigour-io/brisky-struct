@@ -2,6 +2,28 @@ const test = require('tape')
 const subsTest = require('../util')
 const tree = require('../util/tree')
 
+test('subscription - $switch - forceCompare', t => {
+  const s = subsTest(t, {
+    field: 'a',
+    x: 100
+  }, {
+    field: {
+      $switch: (t, subs, tree) => {
+        if (t.compute() === 'a') {
+          console.log('?????')
+          return { root: { x: { val: true } }, _: 'ha' }
+        } else {
+          return { root: { x: { val: true } }, _: 'bla' }
+        }
+      }
+    }
+  })
+
+  s('initial subscription', [ { path: 'x', type: 'new' } ])
+  s('initial subscription', [ { path: 'x', type: 'remove' }, { path: 'x', type: 'new' } ], { field: 'x' })
+  t.end()
+})
+
 test('subscription - $switch - basic', t => {
   const s = subsTest(t, {
     collection: {
