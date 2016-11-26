@@ -4,10 +4,11 @@ const struct = require('../../')
 test('context - props', t => {
   const app = struct({
     types: {
+      text: 'hello',
       hello: {
         props: {
           default: {
-            text: 'hello'
+            text: { type: 'text' }
           }
         }
       },
@@ -42,13 +43,11 @@ test('context - props', t => {
     // over types goes wrong as well the bye case
   })
 
-  // console.log(app.bla.get('props').default)
+  t.equal(app.get([ 'bla', 'field', 'text', 'compute' ]), 'hello')
+  t.equal(app.get([ 'bla', 'props' ]).default.struct.text.get('val'), 'hello')
+  t.equal(app.get([ 'bah', 'props' ]).default.struct.text.val, 'yo yo yo')
 
-  console.log(app.get([ 'bla', 'field', 'text', 'compute' ]))
-
-  console.log(app.get([ 'bla', 'props' ]).default.struct.text.val)
-
-  console.log(app.get([ 'bah', 'props' ]).default.struct.text.val)
+  console.log()
 
   t.end()
 })
