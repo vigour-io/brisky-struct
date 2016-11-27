@@ -10,7 +10,6 @@ test('subscription - $switch - forceCompare', t => {
     field: {
       $switch: (t, subs, tree) => {
         if (t.compute() === 'a') {
-          console.log('?????')
           return { root: { x: { val: true } }, _: 'ha' }
         } else {
           return { root: { x: { val: true } }, _: 'bla' }
