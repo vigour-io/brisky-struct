@@ -17,7 +17,6 @@ test('subscription - $switch - forceCompare', t => {
       }
     }
   })
-
   s('initial subscription', [ { path: 'x', type: 'new' } ])
   s('initial subscription', [ { path: 'x', type: 'remove' }, { path: 'x', type: 'new' } ], { field: 'x' })
   t.end()
