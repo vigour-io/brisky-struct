@@ -26,7 +26,7 @@
     "memory optmization"
   ],
   "dependencies": {
-    "brisky-stamp": "^2.0.4",
+    "brisky-stamp": "^2.1.0",
     "bubleify": "0.5.1",
     "monotonic-timestamp": "0.0.9"
   },
