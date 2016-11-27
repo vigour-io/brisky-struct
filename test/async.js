@@ -24,7 +24,7 @@ test('async', t => {
     }
   })
 
-  const scnt = global.briskystamp.cnt
+  const scnt = stamp.cnt
   const s = stamp.create('click')
 
   // before coveralls support async/await need a solution for this
