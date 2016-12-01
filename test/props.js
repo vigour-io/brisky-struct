@@ -44,7 +44,8 @@ test('props - function', t => {
               volume: val / s.get('density').compute(),
               mass: val
             })
-          }
+          },
+          density: true
         },
         density: 1
       }
