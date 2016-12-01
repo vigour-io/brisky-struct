@@ -51,10 +51,6 @@ test('props - function', t => {
     },
     water: {
       melting: 0
-    },
-    gold: {
-      density: 19.3,
-      melting: 1064.18
     }
   })
   t.equal(s.get(['water', 'density']).compute(), 1, 'density of water is 1')
