@@ -45,16 +45,17 @@ test('props - function', t => {
               mass: val
             })
           },
-          density: true
+          density: true,
+          melting: true
         },
-        density: 1
+        density: 1,
+        melting: 0
       }
     },
-    water: {
-      melting: 0
-    }
+    water: {}
   })
   t.equal(s.get(['water', 'density']), 1, 'density of water is 1')
+  t.equal(s.get(['water', 'melting']), 0, 'melting point of water is 0')
   s.set({ gold: { density: 19.3, melting: 1064.18 } })
   t.equal(s.get(['gold', 'density']), 19.3, 'density of gold is 19.3')
   s.set({ water: { _volume: 10 } })
