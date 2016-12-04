@@ -10,7 +10,7 @@ An observable data structure
 - Every value is observable
 - Serializable references
 - Fast reactive state management. Inspired by virtual-dom tree-diffing algorithms and merkle-trees
-- Powerfull query syntax
+- Powerful query syntax
 - Fast emitters
 - Async helpers, work with generators, promises and iterators
 - Low footprint (6kb gzipped)
