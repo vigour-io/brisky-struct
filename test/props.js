@@ -36,30 +36,29 @@ test('props - function', t => {
           _volume (s, val) {
             s.set({
               volume: val,
-              mass: s.get('density').compute() * val
+              mass: s.get('density') * val
             })
           },
           _mass (s, val) {
             s.set({
-              volume: val / s.get('density').compute(),
+              volume: val / s.get('density'),
               mass: val
             })
           },
-          density: true
+          density: true,
+          melting: true
         },
-        density: 1
+        density: 1,
+        melting: 0
       }
     },
-    water: {
-      melting: 0
-    }
+    water: {}
   })
 
-  console.log(s.water.inherits.density)
-
-  t.equal(s.get(['water', 'density']).compute(), 1, 'density of water is 1')
+  t.equal(s.get(['water', 'density']), 1, 'density of water is 1')
+  t.equal(s.get(['water', 'melting']), 0, 'melting point of water is 0')
   s.set({ gold: { density: 19.3, melting: 1064.18 } })
-  t.equal(s.get(['gold', 'density']).compute(), 19.3, 'density of gold is 19.3')
+  t.equal(s.get(['gold', 'density']), 19.3, 'density of gold is 19.3')
   s.set({ water: { _volume: 10 } })
   s.set({ gold: { _mass: 193 } })
   t.equal(s.get(['water', 'mass']).compute(), 10, 'mass of water is 10')
