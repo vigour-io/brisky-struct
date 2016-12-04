@@ -4,11 +4,11 @@
   "version": "0.0.18",
   "main": "lib/index.js",
   "scripts": {
-    "test": "(ducktape; node test) | tap-difflet && standard",
-    "dev": "nodemon --harmony-async-await test | tap-difflet",
+    "test": "(ducktape; node test) | tap-spec && standard",
+    "dev": "nodemon --harmony-async-await test | tap-spec",
     "dev-browser": "budo ./test/index.js -p 8080 --live",
-    "dev-perf": "nodemon test/performance/index.js --expose-gc | tap-difflet",
-    "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-difflet",
+    "dev-perf": "nodemon test/performance/index.js --expose-gc | tap-spec",
+    "dev-perf-transpile": "cd ./test/performance && buble ./index.js | node | tap-spec",
     "dev-perf-browser": "budo ./test/performance/index.js -p 8080 --live",
     "dev-perf-webgl": "budo ./test/performance/webgl.js -p 8080 --live",
     "dev-perf-canvas": "budo ./test/performance/webgl.js -p 8080 --live",
@@ -23,7 +23,10 @@
     "data structure",
     "vector",
     "functional",
-    "memory optmization"
+    "memory efficient",
+    "subscriptions",
+    "realtime",
+    "observable"
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
@@ -54,7 +57,7 @@
     "redux": "^3.6.0",
     "standard": "^8.1.0",
     "stats-js": "1.0.0-alpha1",
-    "tap-difflet": "0.6.0",
+    "tap-spec": "4.1.1",
     "tape": "4.6.0",
     "vigour-observable": "^3.0.0",
     "vigour-state": "^4.8.2"
