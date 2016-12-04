@@ -54,6 +54,9 @@ test('props - function', t => {
       melting: 0
     }
   })
+
+  console.log(s.water.inherits.density)
+
   t.equal(s.get(['water', 'density']).compute(), 1, 'density of water is 1')
   s.set({ gold: { density: 19.3, melting: 1064.18 } })
   t.equal(s.get(['gold', 'density']).compute(), 19.3, 'density of gold is 19.3')
