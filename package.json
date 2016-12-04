@@ -23,7 +23,10 @@
     "data structure",
     "vector",
     "functional",
-    "memory optmization"
+    "memory efficient",
+    "subscriptions",
+    "realtime",
+    "observable"
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
