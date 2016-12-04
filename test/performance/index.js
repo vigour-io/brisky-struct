@@ -365,12 +365,16 @@ perf(() => {
     collection: arr,
     query: 'hello'
   })
+  var cnt = 0
   s.subscribe(
     {
       collection: {
         $any: {
-          $switch: state => state.key === '10' &&
+          $switch: state => {
+            cnt++
+            return state.key === '10' &&
             { x: { root: { query: { val: true } } } }
+          }
         }
       }
     },
@@ -379,6 +383,7 @@ perf(() => {
   for (let i = 0; i < n * 100; i++) {
     s.query.set(i)
   }
+  console.log(cnt) // has to be 100
 }, () => {
   const arr = []
   let i = 100
