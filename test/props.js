@@ -56,6 +56,9 @@ test('props - function', t => {
   })
 
   t.equal(s.get(['water', 'density']), 1, 'density of water is 1')
+
+  console.log(s.get(['water', 'melting']))
+
   t.equal(s.get(['water', 'melting']), 0, 'melting point of water is 0')
   s.set({ gold: { density: 19.3, melting: 1064.18 } })
   t.equal(s.get(['gold', 'density']), 19.3, 'density of gold is 19.3')
