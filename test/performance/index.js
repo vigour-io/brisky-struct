@@ -319,9 +319,11 @@ var n = 1e2 // eslint-disable-line
 //   }
 // }, `simple subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
 
+
+// n = 1
 perf(() => {
   const arr = []
-  let i = 100
+  let i = 2
   while (i--) {
     arr.push({ x: true })
   }
@@ -330,7 +332,7 @@ perf(() => {
     query: 'hello'
   })
   s.subscribe(
-    { $any: { x: { root: { query: true } } } },
+    { collection: { $any: { x: { root: { query: true } } } } },
     () => {}
   )
   for (let i = 0; i < n * 100; i++) {
@@ -338,7 +340,7 @@ perf(() => {
   }
 }, () => {
   const arr = []
-  let i = 100
+  let i = 2
   while (i--) {
     arr.push({ x: true })
   }
@@ -347,7 +349,7 @@ perf(() => {
     query: 'hello'
   })
   s.subscribe(
-    { $any: { x: { root: { query: true } } } },
+    { collection: { $any: { x: { $root: { query: { val: true } } } } } },
     () => {}
   )
   for (let i = 0; i < n * 10; i++) {
@@ -372,7 +374,7 @@ perf(() => {
         $any: {
           $switch: state => {
             cnt++
-            return state.key === '10' &&
+            return state.key === '1' &&
             { x: { root: { query: { val: true } } } }
           }
         }
@@ -383,7 +385,7 @@ perf(() => {
   for (let i = 0; i < n * 100; i++) {
     s.query.set(i)
   }
-  console.log(cnt) // has to be 100
+  console.log(cnt)
 }, () => {
   const arr = []
   let i = 100
