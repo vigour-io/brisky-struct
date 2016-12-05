@@ -330,7 +330,52 @@ perf(() => {
     query: 'hello'
   })
   s.subscribe(
-    { $any: { x: { root: { query: true } } } },
+    { collection: { $any: { x: { root: { query: true } } } } },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    s.query.set(i)
+  }
+}, () => {
+  const arr = []
+  let i = 100
+  while (i--) {
+    arr.push({ x: true })
+  }
+  const s = new State({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    { collection: { $any: { x: { $root: { query: { val: true } } } } } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.query.set(i)
+  }
+}, `root subscription n = ${(n * 10 * 100 / 1e3) | 0}k`, 10)
+
+perf(() => {
+  const arr = []
+  let i = 100
+  while (i--) {
+    arr.push({ x: true })
+  }
+  const s = struct({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    {
+      collection: {
+        $any: {
+          $switch: state => {
+            return state.key === '1' &&
+            { x: { root: { query: { val: true } } } }
+          }
+        }
+      }
+    },
     () => {}
   )
   for (let i = 0; i < n * 100; i++) {
@@ -347,13 +392,22 @@ perf(() => {
     query: 'hello'
   })
   s.subscribe(
-    { $any: { x: { root: { query: true } } } },
+    { collection: {
+      $any: {
+        $test: {
+          exec: state => state.key === '10',
+          $pass: {
+            x: { $root: { query: { val: true } } }
+          }
+        }
+      }
+    } },
     () => {}
   )
-  for (let i = 0; i < n * 100; i++) {
+  for (let i = 0; i < n * 10; i++) {
     s.query.set(i)
   }
-}, `root subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
+}, `root + test subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
 
 perf(() => {
   const arr = []
