@@ -2,7 +2,7 @@ const perf = require('brisky-performance')
 const struct = require('../../')
 const Obs = require('vigour-observable') // eslint-disable-line
 const State = require('vigour-state') // eslint-disable-line
-var n = 1e2 // eslint-disable-line
+var n = 1e3 // eslint-disable-line
 
 // perf(() => {
 //   for (let i = 0; i < n; i++) {
@@ -323,7 +323,7 @@ var n = 1e2 // eslint-disable-line
 // n = 1
 perf(() => {
   const arr = []
-  let i = 2
+  let i = 100
   while (i--) {
     arr.push({ x: true })
   }
@@ -335,12 +335,12 @@ perf(() => {
     { collection: { $any: { x: { root: { query: true } } } } },
     () => {}
   )
-  for (let i = 0; i < n * 100; i++) {
+  for (let i = 0; i < n * 10; i++) {
     s.query.set(i)
   }
 }, () => {
   const arr = []
-  let i = 2
+  let i = 100
   while (i--) {
     arr.push({ x: true })
   }
@@ -352,10 +352,10 @@ perf(() => {
     { collection: { $any: { x: { $root: { query: { val: true } } } } } },
     () => {}
   )
-  for (let i = 0; i < n * 10; i++) {
+  for (let i = 0; i < n; i++) {
     s.query.set(i)
   }
-}, `root subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
+}, `root subscription n = ${(n * 10 * 100 / 1e3) | 0}k`, 10)
 
 perf(() => {
   const arr = []
@@ -367,13 +367,11 @@ perf(() => {
     collection: arr,
     query: 'hello'
   })
-  var cnt = 0
   s.subscribe(
     {
       collection: {
         $any: {
           $switch: state => {
-            cnt++
             return state.key === '1' &&
             { x: { root: { query: { val: true } } } }
           }
@@ -385,7 +383,6 @@ perf(() => {
   for (let i = 0; i < n * 100; i++) {
     s.query.set(i)
   }
-  console.log(cnt)
 }, () => {
   const arr = []
   let i = 100
@@ -414,63 +411,63 @@ perf(() => {
   }
 }, `root + test subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
 
-// perf(() => {
-//   const arr = []
-//   let i = n * 10
-//   while (i--) {
-//     arr.push(i)
-//   }
-//   const s = struct({
-//     collection: arr,
-//     query: 'hello'
-//   })
-//   s.subscribe(
-//     {
-//       $any: {
-//         $transform: {
-//           val: (t) => {
-//             if (t.val === t.root().query.compute()) {
-//               return { val: true }
-//             }
-//           },
-//           root: { query: true }
-//         }
-//       }
-//     },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 10; i++) {
-//     s.query.set(i)
-//   }
-// }, () => {
-//   const arr = []
-//   let i = n * 10
-//   while (i--) {
-//     arr.push(i)
-//   }
-//   const s = new State({
-//     collection: arr,
-//     query: 'hello'
-//   })
-//   s.subscribe(
-//     {
-//       $any: {
-//         $test: {
-//           exec: (t) => {
-//             if (t.val === t.root.query.compute()) {
-//               return true
-//             }
-//           },
-//           $: {
-//             $root: { query: {} }
-//           },
-//           $pass: { val: true }
-//         }
-//       }
-//     },
-//     () => {}
-//   )
-//   for (let i = 0; i < n * 10; i++) {
-//     s.query.set(i)
-//   }
-// }, `$transform vs $test subscription n = ${(n * 10 / 1e3) | 0}k`, 10)
+perf(() => {
+  const arr = []
+  let i = n * 10
+  while (i--) {
+    arr.push(i)
+  }
+  const s = struct({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    {
+      $any: {
+        $transform: {
+          val: (t) => {
+            if (t.val === t.root().query.compute()) {
+              return { val: true }
+            }
+          },
+          root: { query: true }
+        }
+      }
+    },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    s.query.set(i)
+  }
+}, () => {
+  const arr = []
+  let i = n * 10
+  while (i--) {
+    arr.push(i)
+  }
+  const s = new State({
+    collection: arr,
+    query: 'hello'
+  })
+  s.subscribe(
+    {
+      $any: {
+        $test: {
+          exec: (t) => {
+            if (t.val === t.root.query.compute()) {
+              return true
+            }
+          },
+          $: {
+            $root: { query: {} }
+          },
+          $pass: { val: true }
+        }
+      }
+    },
+    () => {}
+  )
+  for (let i = 0; i < n * 10; i++) {
+    s.query.set(i)
+  }
+}, `$transform vs $test subscription n = ${(n * 10 / 1e3) | 0}k`, 10)
