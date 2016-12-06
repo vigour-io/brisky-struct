@@ -127,3 +127,28 @@ test('props - self', t => {
 
   t.end()
 })
+
+test('props - reset', t => {
+  const s = struct({
+    a: 'a',
+    b: 'b',
+    c: 'c'
+  })
+
+  s.set({ reset: true })
+
+  t.same(s.keys(), [], 'removed keys')
+
+  s.set({
+    a: 'a',
+    b: 'b',
+    c: 'c',
+    d: 'd'
+  })
+
+  s.set({ reset: [ 'c', 'a' ] })
+
+  t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
+
+  t.end()
+})
