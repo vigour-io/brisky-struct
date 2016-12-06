@@ -171,7 +171,7 @@ test('async', t => {
 })
 
 test('async - promise all', t => {
-  const a = struct({ inject: require('../lib/debug') }).create()
+  const a = struct()
 
   a.set(Promise.all([
     timeout({ val: 'later-1', 1: true }, 0),
