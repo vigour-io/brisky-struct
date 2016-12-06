@@ -2,12 +2,12 @@ const test = require('tape')
 const struct = require('../')
 const stamp = require('brisky-stamp')
 
-test('async', t => {
-  const timeout = (val, time = 5, err) =>
-    new Promise((resolve, reject) =>
-      setTimeout(() => err ? reject(err) : resolve(val), time)
-    )
+const timeout = (val, time = 5, err) =>
+  new Promise((resolve, reject) =>
+    setTimeout(() => err ? reject(err) : resolve(val), time)
+  )
 
+test('async', t => {
   var results = []
   var errors = []
 
@@ -168,4 +168,74 @@ test('async', t => {
   })
 
   stamp.close(s)
+})
+
+test('async - promise all', t => {
+  const a = struct({ inject: require('../lib/debug') }).create()
+
+  a.set(Promise.all([
+    timeout({ val: 'later-1', 1: true }, 0),
+    timeout({ val: 'later-2', 2: true }, 10),
+    timeout({ val: 'later-3', 3: true }, 5)
+  ]))
+
+  a.set(a.once('later-3').then(() => {
+    t.same(a.keys(), [ '1', '2', '3' ], 'correct keys')
+    t.same(a.val, 'later-3', 'correct val')
+    return 'lulllz'
+  }))
+
+  a.once('lulllz', () => { t.end() })
+})
+
+test('async - advanced', t => {
+  var cnt = 0
+  const a = struct()
+
+  const done = () => {
+    var total = 0
+    const walk = (p) => {
+      p.forEach(p => {
+        total++
+        walk(p)
+      })
+    }
+    walk(a)
+    t.equal(total, 436, 'added all episodes and comments')
+    t.end()
+  }
+
+  const episodes = function * () {
+    cnt++
+    var episode = 5
+    while (episode--) {
+      yield new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            episodes: {
+              [episode]: {
+                title: 'ha!' + episode,
+                comments: Promise.resolve(resolve => {
+                  setTimeout(() => resolve([ 1, 2, 3 ]), 1)
+                })
+              }
+            }
+          })
+        }, 10)
+      })
+    }
+    if (--cnt === 0) { done() }
+  }
+
+  const seasons = function * () {
+    var season = 5
+    while (season--) { yield { seasons: { [season]: episodes } } }
+  }
+
+  const scrape = function * () {
+    var page = 5
+    while (page--) { yield { shows: { [page]: seasons } } }
+  }
+
+  a.set(scrape)
 })
