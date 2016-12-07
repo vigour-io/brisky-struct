@@ -5,6 +5,32 @@ const State = require('vigour-state') // eslint-disable-line
 var n = 1e3 // eslint-disable-line
 
 perf(() => {
+  const orig = struct({
+    on: {
+      data: {
+        lol: () => {}
+      }
+    }
+  })
+  for (let i = 0; i < n; i++) {
+    let a = orig.create()
+    struct(a)
+  }
+}, () => {
+  const orig = new Obs({
+    on: {
+      data: {
+        lol: () => {}
+      }
+    }
+  })
+  for (let i = 0; i < n; i++) {
+    let a = new orig.Constructor()
+    new Obs(a) // eslint-disable-line
+  }
+}, 'create references')
+
+perf(() => {
   for (let i = 0; i < n; i++) {
     let a = struct({
       b: { c: { d: true } },
@@ -113,32 +139,6 @@ perf(() => {
     a.set(i)
   }
 }, `fire listeners n = ${(n * 100 / 1e3) | 0}k`)
-
-perf(() => {
-  const orig = struct({
-    on: {
-      data: {
-        lol: () => {}
-      }
-    }
-  })
-  for (let i = 0; i < n; i++) {
-    let a = orig.create()
-    struct(a)
-  }
-}, () => {
-  const orig = new Obs({
-    on: {
-      data: {
-        lol: () => {}
-      }
-    }
-  })
-  for (let i = 0; i < n; i++) {
-    let a = new orig.Constructor()
-    new Obs(a) // eslint-disable-line
-  }
-}, 'create references')
 
 perf(() => {
   const a = struct()
