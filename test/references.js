@@ -140,6 +140,7 @@ test('references - normal object for val', t => {
 })
 
 test('get - references', t => {
+  var cnt = 0
   const state = struct({
     holder: {
       fields: {
@@ -148,7 +149,12 @@ test('get - references', t => {
       fields2: {
         thing: 2
       },
-      current: [ '@', 'root', 'holder', 'fields' ]
+      current: {
+        val: [ '@', 'root', 'holder', 'fields' ],
+        on: () => {
+          cnt++
+        }
+      }
     }
   })
   t.ok(
@@ -160,5 +166,10 @@ test('get - references', t => {
     state.holder.current.val._p === state.holder,
     'ref holder is state.holder'
   )
+
+  state.holder.current.set([ '@', 'root', 'holder', 'fields' ])
+
+  t.equal(cnt, 0, 'did not fire')
+
   t.end()
 })
