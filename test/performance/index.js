@@ -484,7 +484,7 @@ s.subscribe(
       $anynice: {
         $keys: (keys, state) => {
           return keys.filter(key => {
-            return state[key].rating.compute() > 15
+            return state[key].rating.compute() > 10
           }).sort((a, b) => {
             return state[a].rating.compute() > state[b].rating.compute() ? 1 : -1
           })
