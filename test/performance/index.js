@@ -336,7 +336,7 @@ perf(() => {
       cnt++
     }
   )
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n * 10; i++) {
     s.query.set(i)
   }
 }, () => {
@@ -356,7 +356,7 @@ perf(() => {
   for (let i = 0; i < n; i++) {
     s.query.set(i)
   }
-}, `root subscription n = ${(n * 100 / 1e3) | 0}k`)
+}, `root subscription n = ${(n * 100 / 1e3) | 0}k`, 10)
 
 // perf(() => {
 //   const arr = []
