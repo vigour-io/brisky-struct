@@ -38,11 +38,14 @@ test('subscription - any - basic', t => {
 
   // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' } ]
 
+  // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' }
+
   const r = s(
     'remove field in a collection',
     [
       { path: 'fields/b/title', type: 'update' }, // this is new ofc
-      { path: 'fields/b/title', type: 'remove' } // seems weird that you dont get a but it makes all the sense
+      { path: 'fields/b/title', type: 'remove' }, // seems weird that you dont get a but it makes all the sense
+      { path: 'fields/c/title', type: 'remove' }
     ],
     { fields: { a: null, c: null } }
   )
@@ -183,67 +186,68 @@ test('subscription - any - basic - val: "property"', t => {
   t.end()
 })
 
-// test('subscription - any - basic - combined with a field with nested subs', t => {
-//   var s = subsTest(
-//     t,
-//     {},
-//     {
-//       field: { nested: { val: true } },
-//       $any: { val: true }
-//     }
-//   )
+test('subscription - any - basic - combined with a field with nested subs', t => {
+  var s = subsTest(
+    t,
+    {},
+    {
+      field: { nested: { val: true } },
+      $any: { val: true }
+    }
+  )
 
-//   s('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-//   s(
-//     'create fields',
-//     [
-//       { path: 'field/nested', type: 'new' },
-//       { path: 'a', type: 'new' },
-//       { path: 'field', type: 'new' }
-//     ],
-//     {
-//       a: {},
-//       field: {
-//         nested: 'hello'
-//       }
-//     }
-//   )
+  s(
+    'create fields',
+    [
+      { path: 'field/nested', type: 'new' },
+      { path: 'a', type: 'new' },
+      { path: 'field', type: 'new' }
+    ],
+    {
+      a: {},
+      field: {
+        nested: 'hello'
+      }
+    }
+  )
 
-//   t.end()
-// })
+  t.end()
+})
 
-// test('subscription - any - basic - empty fields', t => {
-//   var s = subsTest(
-//     t,
-//     {
-//       fields: [ true, true ]
-//     },
-//     {
-//       fields: {
-//         $any: { val: true }
-//       }
-//     }
-//   )
+test('subscription - any - basic - empty fields', t => {
+  var s = subsTest(
+    t,
+    {
+      fields: [ true, true ]
+    },
+    {
+      fields: {
+        $any: { val: true }
+      }
+    }
+  )
 
-//   s('initial subscription', [
-//     { path: 'fields/0', type: 'new' },
-//     { path: 'fields/1', type: 'new' }
-//   ])
+  const r = s('initial subscription', [
+    { path: 'fields/0', type: 'new' },
+    { path: 'fields/1', type: 'new' }
+  ])
 
-//   s(
-//     'remove fields',
-//     [
-//       { path: 'fields/0', type: 'remove' },
-//       { path: 'fields/1', type: 'remove' }
-//     ],
-//     {
-//       fields: { 0: null, 1: null }
-//     }
-//   )
+  s(
+    'remove fields',
+    [
+      { path: 'fields/0', type: 'remove' },
+      { path: 'fields/1', type: 'remove' }
+    ],
+    {
+      fields: { 0: null, 1: null }
+    }
+  )
+  console.log(r.state.fields.keys())
 
-//   t.end()
-// })
+  t.end()
+})
 
 // test('subscription - any - basic - remove nested fields', t => {
 //   var s = subsTest(
