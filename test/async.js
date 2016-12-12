@@ -185,7 +185,19 @@ test('async - promise all', t => {
     return 'lulllz'
   }))
 
-  a.once('lulllz', () => { t.end() })
+  a.once('lulllz', () => {
+    var cnt = 0
+    a.on('error', () => ++cnt)
+
+    a.set(new Promise((resolve, reject) => {
+      reject()
+    }))
+
+    process.nextTick(() => {
+      t.equal(cnt, 0, 'does not fire error event')
+      t.end()
+    })
+  })
 })
 
 test('async - advanced', t => {
