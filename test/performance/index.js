@@ -481,7 +481,7 @@ const s = struct({
 s.subscribe(
   {
     collection: {
-      $any: {
+      $anynice: {
         $keys: (keys, state) => {
           return keys.filter(key => {
             return state[key].rating.compute() > 15
