@@ -226,56 +226,56 @@ var n = 1e3 // eslint-disable-line
 //   }
 // }, `creation n = ${(n * 10 / 1e3) | 0}k`, 10)
 
-// const s = struct({})
-// var arr = []
-// for (let i = 0; i < 3e5; i++) {
-//   arr.push(i)
-// }
-// s.subscribe(
-//   { $any: { val: true } },
-//   () => {}
-// )
-// // will also optmize creation!
-// s.set(arr)
+var s = struct({})
+var arr = []
+for (let i = 0; i < 3e5; i++) {
+  arr.push(i)
+}
+s.subscribe(
+  { $any: { val: true } },
+  () => {}
+)
+// will also optmize creation!
+s.set(arr)
 
-// const ss = new State({})
-// var arrs = []
-// for (let i = 0; i < 3e5; i++) {
-//   arrs.push(i)
-// }
-// ss.subscribe(
-//   { $any: { val: true } },
-//   () => {}
-// )
-// // will also optmize creation!
-// ss.set(arrs)
+var ss = new State({})
+var arrs = []
+for (let i = 0; i < 3e5; i++) {
+  arrs.push(i)
+}
+ss.subscribe(
+  { $any: { val: true } },
+  () => {}
+)
+// will also optmize creation!
+ss.set(arrs)
 
-// perf(() => {
-//   s[(Math.random() * 3e5) | 0].set('face')
-// }, () => {
-//   ss[(Math.random() * 3e5) | 0].set('face')
-// }, `any subscription large set n = 300k`)
+perf(() => {
+  s[(Math.random() * 3e5) | 0].set('face')
+}, () => {
+  ss[(Math.random() * 3e5) | 0].set('face')
+}, `any subscription large set n = 300k`)
 
-// perf(() => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = struct({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {},
-//       true
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, () => {
-//   for (let i = 0; i < n * 10; i++) {
-//     let s = new State({})
-//     s.subscribe(
-//       { $any: { val: true } },
-//       () => {}
-//     )
-//     s.set({ [i]: i })
-//   }
-// }, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
+perf(() => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = struct({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {},
+      true
+    )
+    s.set({ [i]: i })
+  }
+}, () => {
+  for (let i = 0; i < n * 10; i++) {
+    let s = new State({})
+    s.subscribe(
+      { $any: { val: true } },
+      () => {}
+    )
+    s.set({ [i]: i })
+  }
+}, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
 
 perf(() => {
   const s = struct({})
@@ -481,37 +481,37 @@ perf(() => {
 
 // do ignoring better
 
-const arr = []
-let i = 5
-while (i--) {
-  arr.push({ rating: Math.random() * 20 })
-}
-const s = struct({
-  collection: arr
-})
-s.subscribe(
-  {
-    collection: {
-      $anynice: {
-        $keys: (keys, state) => {
-          return keys.filter(key => {
-            return true // state[key].rating.compute() > 10
-          }).sort((a, b) => {
-            return state[a].rating.compute() > state[b].rating.compute() ? 1 : -1
-          })
-        },
-        rating: true
-      }
-    }
-  },
-  t => {
-    console.log('update:', t.path())
-  }
-)
-console.log(' \ngo go go')
-console.log(s.collection[2].rating.compute())
+// var arr = []
+// var i = 5
+// while (i--) {
+//   arr.push({ rating: Math.random() * 20 })
+// }
+// var s = struct({
+//   collection: arr
+// })
+// s.subscribe(
+//   {
+//     collection: {
+//       $anynice: {
+//         $keys: (keys, state) => {
+//           return keys.filter(key => {
+//             return true // state[key].rating.compute() > 10
+//           }).sort((a, b) => {
+//             return state[a].rating.compute() > state[b].rating.compute() ? 1 : -1
+//           })
+//         },
+//         rating: true
+//       }
+//     }
+//   },
+//   t => {
+//     console.log('update:', t.path())
+//   }
+// )
+// console.log(' \ngo go go')
+// console.log(s.collection[2].rating.compute())
 
-// ok this is resort! now more
-s.collection[2].set({ rating: 5 })
+// // ok this is resort! now more
+// s.collection[2].set({ rating: 5 })
 
 // add filter syntax
