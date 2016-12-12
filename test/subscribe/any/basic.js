@@ -249,35 +249,35 @@ test('subscription - any - basic - empty fields', t => {
   t.end()
 })
 
-// test('subscription - any - basic - remove nested fields', t => {
-//   var s = subsTest(
-//     t,
-//     {
-//       fields: [ true, true ]
-//     },
-//     {
-//       fields: {
-//         $any: { val: true }
-//       }
-//     }
-//   )
+test('subscription - any - basic - remove nested fields', t => {
+  var s = subsTest(
+    t,
+    {
+      fields: [ true, true ]
+    },
+    {
+      fields: {
+        $any: { val: true }
+      }
+    }
+  )
 
-//   s('initial subscription', [
-//     { path: 'fields/0', type: 'new' },
-//     { path: 'fields/1', type: 'new' }
-//   ])
+  s('initial subscription', [
+    { path: 'fields/0', type: 'new' },
+    { path: 'fields/1', type: 'new' }
+  ])
 
-//   s(
-//     'remove fields',
-//     [
-//       { path: 'fields/0', type: 'remove' }, { path: 'fields/1', type: 'remove' }
-//     ],
-//     {
-//       fields: null
-//     }
-//   )
-//   t.end()
-// })
+  s(
+    'remove fields',
+    [
+      { path: 'fields/0', type: 'remove' }, { path: 'fields/1', type: 'remove' }
+    ],
+    {
+      fields: null
+    }
+  )
+  t.end()
+})
 
 // test('subscription - any - basic - swap', t => {
 //   const state = struct({ a: true })
