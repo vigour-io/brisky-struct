@@ -277,25 +277,25 @@ var n = 1e3 // eslint-disable-line
 //   }
 // }, `any subscription creation n = ${(n * 10 / 1e3) | 0}k`)
 
-// perf(() => {
-//   const s = struct({})
-//   s.subscribe(
-//     { $any: { val: true } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n; i++) {
-//     s.set({ [i]: i })
-//   }
-// }, () => {
-//   const s = new State({})
-//   s.subscribe(
-//     { $any: { val: true } },
-//     () => {}
-//   )
-//   for (let i = 0; i < n; i++) {
-//     s.set({ [i]: i })
-//   }
-// }, `any subscription n = ${((n / 1e3) | 0)}k`)
+perf(() => {
+  const s = struct({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.set({ [i]: i })
+  }
+}, () => {
+  const s = new State({})
+  s.subscribe(
+    { $any: { val: true } },
+    () => {}
+  )
+  for (let i = 0; i < n; i++) {
+    s.set({ [i]: i })
+  }
+}, `any subscription n = ${((n / 1e3) | 0)}k`)
 
 // perf(() => {
 //   const s = struct({ a: { b: { c: {} } } })
@@ -470,8 +470,19 @@ var n = 1e3 // eslint-disable-line
 //   }
 // }, `$transform vs $test subscription n = ${(n * 10 / 1e3) | 0}k`, 10)
 
+// now think how to make it fast e.g. one extra gets added -- check in the branch to start
+// do the remove
+
+// fast check -- also check if keys change that is allready a lot better
+
+// keys !== key || $t !== || $ !==
+// length !== length
+// make it into an array? using _p tree -- thats totally possible
+
+// do ignoring better
+
 const arr = []
-let i = 10
+let i = 5
 while (i--) {
   arr.push({ rating: Math.random() * 20 })
 }
@@ -484,7 +495,7 @@ s.subscribe(
       $anynice: {
         $keys: (keys, state) => {
           return keys.filter(key => {
-            return state[key].rating.compute() > 10
+            return true // state[key].rating.compute() > 10
           }).sort((a, b) => {
             return state[a].rating.compute() > state[b].rating.compute() ? 1 : -1
           })
@@ -498,6 +509,9 @@ s.subscribe(
   }
 )
 console.log(' \ngo go go')
-s.collection[2].set({ rating: 1e3 })
+console.log(s.collection[2].rating.compute())
+
+// ok this is resort! now more
+s.collection[2].set({ rating: 5 })
 
 // add filter syntax
