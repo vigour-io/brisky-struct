@@ -38,15 +38,15 @@ test('subscription - any - basic', t => {
 
   // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' } ]
 
-  s(
+  const r = s(
     'remove field in a collection',
     [
       { path: 'fields/b/title', type: 'update' }, // this is new ofc
-      { path: 'fields/b/title', type: 'remove' }, // seems weird that you dont get a but it makes all the sense
-      { path: 'fields/c/title', type: 'remove' }
+      { path: 'fields/b/title', type: 'remove' } // seems weird that you dont get a but it makes all the sense
     ],
     { fields: { a: null, c: null } }
   )
+  console.log(r.state.fields.keys())
 
   s(
     'toplevel id collection subscription',
@@ -88,7 +88,7 @@ test('subscription - any - basic - true', t => {
     { a: 'a' }
   )
 
-  console.log(result.state.keys())
+  // console.log(result.state.keys())
 
   s(
     'remove field',
@@ -140,46 +140,48 @@ test('subscription - any - basic - true', t => {
   t.end()
 })
 
-// test('subscription - any - basic - val: "property"', t => {
-//   var s = subsTest(
-//     t,
-//     {},
-//     { $any: { val: 'property' } }
-//   )
+test('subscription - any - basic - val: "property"', t => {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: 'property' } }
+    // hmm this is not so nice need to fire for switch as well...
+    // when switch in any its becomes to weird
+  )
 
-//   s('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-//   s(
-//     'create fields',
-//     [
-//       { path: 'a', type: 'new' },
-//       { path: 'b', type: 'new' }
-//     ],
-//     {
-//       a: {},
-//       b: {}
-//     }
-//   )
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    {
+      a: {},
+      b: {}
+    }
+  )
 
-//   s(
-//     'set fields',
-//     [],
-//     {
-//       a: 'a',
-//       b: 'b'
-//     }
-//   )
+  s(
+    'set fields',
+    [],
+    {
+      a: 'a',
+      b: 'b'
+    }
+  )
 
-//   s(
-//     'remove field',
-//     [
-//       { path: 'a', type: 'remove' }
-//     ],
-//     { a: null }
-//   )
+  s(
+    'remove field',
+    [
+      { path: 'b', type: 'remove' } // ok so this seems strange but it aint
+    ],
+    { a: null }
+  )
 
-//   t.end()
-// })
+  t.end()
+})
 
 // test('subscription - any - basic - combined with a field with nested subs', t => {
 //   var s = subsTest(
