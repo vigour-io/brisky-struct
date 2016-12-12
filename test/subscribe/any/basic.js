@@ -253,33 +253,33 @@ test('subscription - any - basic - remove nested fields using $remove listener',
   t.end()
 })
 
-test('subscription - any - basic - swap', t => {
-  const state = struct({ a: true })
-  state.set({ b: 'ha!' })
-  const tree = state.subscribe({
-    $any: { val: true }
-  }, t => {})
+// test('subscription - any - basic - swap', t => {
+//   const state = struct({ a: true })
+//   state.set({ b: 'ha!' })
+//   const tree = state.subscribe({
+//     $any: { val: true }
+//   }, t => {})
 
-  state.keys()[0] = 'b'
-  state.keys()[1] = 'a'
-  state.emit('data')
-  t.same(tree.$any.$keys, state.keys(), 'correct keys in tree')
-  state.set({ c: 'ha!' })
-  state.set({ d: 'ha!' })
-  state.set({ e: 'ha!' })
-  state.set({ f: 'ha!' })
-  state.set({ g: 'ha!' })
-  state.set({ h: 'ha!' })
-  state.set({ i: 'ha!' })
-  state.set({ j: 'ha!' })
-  state.set({ k: 'ha!' })
+//   state.keys()[0] = 'b'
+//   state.keys()[1] = 'a'
+//   state.emit('data')
+//   t.same(tree.$any.$keys, state.keys(), 'correct keys in tree')
+//   state.set({ c: 'ha!' })
+//   state.set({ d: 'ha!' })
+//   state.set({ e: 'ha!' })
+//   state.set({ f: 'ha!' })
+//   state.set({ g: 'ha!' })
+//   state.set({ h: 'ha!' })
+//   state.set({ i: 'ha!' })
+//   state.set({ j: 'ha!' })
+//   state.set({ k: 'ha!' })
 
-  var cnt = 10
-  const shuffle = (cnt) => {
-    state.keys().sort(() => Math.random() > 0.5 ? 1 : -1)
-    state.emit('data')
-    t.same(tree.$any.$keys, state.keys(), `shuffle ${cnt} correct keys in tree`)
-  }
-  while (cnt--) { shuffle(cnt) }
-  t.end()
-})
+//   var cnt = 10
+//   const shuffle = (cnt) => {
+//     state.keys().sort(() => Math.random() > 0.5 ? 1 : -1)
+//     state.emit('data')
+//     t.same(tree.$any.$keys, state.keys(), `shuffle ${cnt} correct keys in tree`)
+//   }
+//   while (cnt--) { shuffle(cnt) }
+//   t.end()
+// })
