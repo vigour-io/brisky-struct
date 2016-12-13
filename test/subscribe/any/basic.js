@@ -289,7 +289,7 @@ test('subscription - any - basic - swap', t => {
   state.keys()[0] = 'b'
   state.keys()[1] = 'a'
   state.emit('data')
-  t.same(tree.$any.$keys, state.keys(), 'correct keys in tree')
+  t.same(tree.$any.$keys.map(s => s.$t.key), state.keys(), 'correct keys in tree')
   state.set({ c: 'ha!' })
   state.set({ d: 'ha!' })
   state.set({ e: 'ha!' })
@@ -304,7 +304,7 @@ test('subscription - any - basic - swap', t => {
   const shuffle = (cnt) => {
     state.keys().sort(() => Math.random() > 0.5 ? 1 : -1)
     state.emit('data')
-    t.same(tree.$any.$keys, state.keys(), `shuffle ${cnt} correct keys in tree`)
+    t.same(tree.$any.$keys.map(s => s.$t.key), state.keys(), `shuffle ${cnt} correct keys in tree`)
   }
   while (cnt--) { shuffle(cnt) }
   t.end()
