@@ -31,7 +31,7 @@ test('subscription - any - merge', t => {
 
   // [ { path: 'b/y', type: 'update' }, { path: 'c/x', type: 'update' } ]
 
-  // order very importan
+  // order very important -- maybe want to correct for order?
   s(
     'change reference to b',
     [
