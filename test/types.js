@@ -12,6 +12,7 @@ test('types ', t => {
     },
     field: { type: 'something' }
   })
+
   const b = a.create({
     types: {
       something: {

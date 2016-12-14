@@ -62,7 +62,6 @@ test('async', t => {
   a.set(a.once('gen-1').then(() => timeout('timeout-6', 25)), s)
 
   a.set({ val: timeout('timeout-7'), hello: true }, s)
-
   a.once('timeout-7').then(() => {
     t.pass('timeout-7 is set')
     const s = stamp.create('move')
@@ -193,10 +192,10 @@ test('async - promise all', t => {
       reject()
     }))
 
-    process.nextTick(() => {
+    setTimeout(() => {
       t.equal(cnt, 0, 'does not fire error event')
       t.end()
-    })
+    }, 25)
   })
 })
 
