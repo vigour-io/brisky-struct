@@ -95,16 +95,16 @@ test('subscription - $switch - basic', t => {
     { path: 'collection/b/d', type: 'new' }
   ], { collection: { b: { c: 'blax' } } })
 
-  s('update collection/b/c', [
+  s('update collection/b/d', [
     { path: 'collection/b/d', type: 'update' }
   ], { collection: { b: { d: 'blurf' } } })
 
-  s('update collection/b/c', [
+  s('remove collection/b', [
    { path: 'collection/b/c', type: 'remove' },
    { path: 'collection/b/d', type: 'remove' }
   ], { collection: { b: null } })
 
-  s('update collection/b/c', [
+  s('remove collection', [
    { path: 'collection/a/x', type: 'remove' }
   ], { collection: null })
 

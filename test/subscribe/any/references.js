@@ -1,4 +1,3 @@
-'use strict'
 const test = require('tape')
 const subsTest = require('../util')
 const struct = require('../../../')
@@ -54,7 +53,9 @@ test('subscription - any - references - target - struct', function (t) {
   }
   const b = [ { title: 1 }, { title: 2 }, { title: 3 }, { title: 4 } ]
   const s = subsTest(t, { b: b, a: [ '@', 'root', 'b' ] }, subscription)
+
   s('initial subscription', multiple('new'))
+
   function multiple (type, nopath) {
     const val = []
     for (let i = 0, len = b.length; i < len; i++) {
@@ -62,11 +63,13 @@ test('subscription - any - references - target - struct', function (t) {
     }
     return val
   }
+
   s(
     'remove reference',
     multiple('remove', true),
     { a: false }
   )
+
   t.end()
 })
 
@@ -103,8 +106,7 @@ test('subscription - any - references - over reference', t => {
   s(
     'update 0',
     [
-      { path: 'a/a1', type: 'remove' },
-      { path: 'b/b1', type: 'new' },
+      { path: 'b/b1', type: 'update' },
       { path: 'a/a2', type: 'remove' }
     ],
     {
@@ -187,62 +189,3 @@ test('subscription - any - references - target - struct', t => {
    )
   t.end()
 })
-
-// move to test
-// test('subscription - any - references - over reference on field using $test', t => {
-//   const state = struct({
-//     holder: {
-//       a: {
-//         a1: true,
-//         a2: true
-//       },
-//       b: {
-//         a1: true
-//       },
-//       collection: '$root.holder.a'
-//     }
-//   })
-
-//   const s = subsTest(
-//     t,
-//     state,
-//     {
-//       holder: {
-//
-//         collection: {
-//           val: 1,
-//           $any: {
-//             // val: 1,
-//             $test: {
-//               exec: () => true,
-//               $pass: {
-//                 val: true
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   )
-//   s(
-//     'initial subscription',
-//     [
-//       { path: 'holder/collection', type: 'new' },
-//       { path: 'holder/a/a1', type: 'new' },
-//       { path: 'holder/a/a2', type: 'new' }
-//     ]
-//   )
-//   s(
-//     'update 0',
-//     [
-//       { path: 'holder/collection', type: 'update' },
-//       { type: 'remove' },
-//       { type: 'remove' },
-//       { path: 'holder/b/a1', type: 'new' }
-//     ],
-//     {
-//       holder: { collection: '$root.holder.b' }
-//     }
-//   )
-//   t.end()
-// })

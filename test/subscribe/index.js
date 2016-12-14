@@ -1,6 +1,6 @@
 require('./basic')
-require('./any')
 require('./method')
 require('./references')
 require('./composite')
+require('./any')
 require('./switch')

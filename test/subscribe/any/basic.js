@@ -36,14 +36,20 @@ test('subscription - any - basic', t => {
     { fields: { a: { title: 'smurts' } } }
   )
 
-  s(
+  // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' } ]
+
+  // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' }
+
+  const r = s(
     'remove field in a collection',
     [
-      { path: 'fields/a/title', type: 'remove' },
+      { path: 'fields/b/title', type: 'update' }, // this is new ofc
+      { path: 'fields/b/title', type: 'remove' }, // seems weird that you dont get a but it makes all the sense
       { path: 'fields/c/title', type: 'remove' }
     ],
     { fields: { a: null, c: null } }
   )
+  console.log(r.state.fields.keys())
 
   s(
     'toplevel id collection subscription',
@@ -61,7 +67,7 @@ test('subscription - any - basic - true', t => {
     { $any: { val: true } }
   )
 
-  s('initial subscription', [], {})
+  const result = s('initial subscription', [], {})
 
   s(
     'create fields',
@@ -85,33 +91,50 @@ test('subscription - any - basic - true', t => {
     { a: 'a' }
   )
 
+  // console.log(result.state.keys())
+
   s(
     'remove field',
     [
-      { path: 'a', type: 'remove' }
+       { path: 'b', type: 'update' },
+       { path: 'c', type: 'update' },
+       { path: 'd', type: 'update' },
+       { path: 'd', type: 'remove' }
     ],
     { a: null }
   )
 
-  const result = s(
+  console.log(result.state.keys())
+
+  s(
     'remove fields',
     [
-      { path: 'b', type: 'remove' },
-      { path: 'c', type: 'remove' },
-      { path: 'a', type: 'new' }
+      { path: 'd', type: 'update' },
+      { path: 'a', type: 'update' },
+      { path: 'd', type: 'remove' }
+      // if you want to get info about the previous one need to cache do may be nice to do.... this is jsut weird
+      // were removing b and c
     ],
     { a: 'hello', b: null, c: null }
   )
+
+  // this one is wrong... needs to clean up better
+  console.log(result.tree.$any.$keys.length, result.tree.$any.$keys.map(val => val.$t.path()))
+  console.log(result.state.keys())
 
   const struct = result.state
   struct.set({ start: 'start' }, false)
   const k1 = struct.keys()[1]
   struct.keys()[1] = struct.keys()[2]
   struct.keys()[2] = k1
+
+  // reshuffle needs to fire updates!
+  // need to see 2 new but new for things that are allrdy rendered thats re-order
   s(
     'add field and reorder keys',
     [
-      { path: 'start', type: 'new' },
+      { path: 'start', type: 'update' },
+      { path: 'a', type: 'new' },
       { path: 'hello', type: 'new' }
     ],
     { hello: true }
@@ -125,6 +148,8 @@ test('subscription - any - basic - val: "property"', t => {
     t,
     {},
     { $any: { val: 'property' } }
+    // hmm this is not so nice need to fire for switch as well...
+    // when switch in any its becomes to weird
   )
 
   s('initial subscription', [], {})
@@ -153,7 +178,7 @@ test('subscription - any - basic - val: "property"', t => {
   s(
     'remove field',
     [
-      { path: 'a', type: 'remove' }
+      { path: 'b', type: 'remove' } // ok so this seems strange but it aint
     ],
     { a: null }
   )
@@ -204,7 +229,7 @@ test('subscription - any - basic - empty fields', t => {
     }
   )
 
-  s('initial subscription', [
+  const r = s('initial subscription', [
     { path: 'fields/0', type: 'new' },
     { path: 'fields/1', type: 'new' }
   ])
@@ -219,11 +244,12 @@ test('subscription - any - basic - empty fields', t => {
       fields: { 0: null, 1: null }
     }
   )
+  console.log(r.state.fields.keys())
 
   t.end()
 })
 
-test('subscription - any - basic - remove nested fields using $remove listener', t => {
+test('subscription - any - basic - remove nested fields', t => {
   var s = subsTest(
     t,
     {
@@ -263,7 +289,7 @@ test('subscription - any - basic - swap', t => {
   state.keys()[0] = 'b'
   state.keys()[1] = 'a'
   state.emit('data')
-  t.same(tree.$any.$keys, state.keys(), 'correct keys in tree')
+  t.same(tree.$any.$keys.map(s => s.$t.key), state.keys(), 'correct keys in tree')
   state.set({ c: 'ha!' })
   state.set({ d: 'ha!' })
   state.set({ e: 'ha!' })
@@ -278,7 +304,7 @@ test('subscription - any - basic - swap', t => {
   const shuffle = (cnt) => {
     state.keys().sort(() => Math.random() > 0.5 ? 1 : -1)
     state.emit('data')
-    t.same(tree.$any.$keys, state.keys(), `shuffle ${cnt} correct keys in tree`)
+    t.same(tree.$any.$keys.map(s => s.$t.key), state.keys(), `shuffle ${cnt} correct keys in tree`)
   }
   while (cnt--) { shuffle(cnt) }
   t.end()

@@ -30,6 +30,7 @@ test('subscription - any - merge', t => {
   s(
     'change reference to b',
     [
+      { path: 'b/y', type: 'update' },
       { path: 'c/x', type: 'update' }
     ],
     { collection: [ '@', 'parent', 'b' ] }
@@ -38,6 +39,7 @@ test('subscription - any - merge', t => {
   s(
     'change reference to c',
     [
+     { path: 'c/x', type: 'update' },
      { path: 'c/y', type: 'update' }
     ],
     { collection: [ '@', 'parent', 'c' ] }
