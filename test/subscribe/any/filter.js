@@ -69,7 +69,8 @@ test('subscription - any - filter - root', t => {
   s.subscribe({
     collection: {
       $any: {
-        $keys: (keys, s) => keys.filter(val => s.root().get([ 'target', 'compute' ]) === val),
+        $keys: (keys, s) => keys.filter(val => s.root().get([ 'target', 'compute' ]) === val ||
+          s.root().get([ 'target', 'compute' ]) === '*'),
         val: true,
         root: { target: true }
       }
@@ -81,5 +82,18 @@ test('subscription - any - filter - root', t => {
   results = []
   s.target.set('b')
   t.same(results, [ 'b', 'target' ], 'remove a, shift c')
+
+  results = []
+  s.target.set('*')
+  t.same(results, [ 'a', 'target', 'b', 'target', 'c', 'target' ], 'add all')
+
+  results = []
+  s.target.set('b')
+  t.same(results, [ 'b', 'target', '-b', '-target', '-c', '-target' ], 'use b') // this breaks everything now
+
+  // results = []
+  // s.target.set('nothing') // this crashes...
+  // t.same(results, [ 'b', 'target', '-b', '-target', '-c', '-target' ], 'use b') // this breaks everything now
+
   t.end()
 })
