@@ -67,17 +67,23 @@ test('subscription - $switch - basic', t => {
     { path: 'collection/b/d', type: 'new' }
   ], { query: 'bye' })
 
+  console.log(' \n-----------')
+
   s('update query to unicorn', [
     { path: 'collection/b/c', type: 'remove' },
     { path: 'collection/b/d', type: 'remove' }
   ], { query: 'unicorn' })
 
-  console.log('\nlets go', result.tree.collection.$any.$keys.map(val => val.$t.key))
+  // console.log('\nlets go', result.tree.collection.$any.$keys.map(val => val.$t.key))
 
-  s('update unicorn', [
-    { path: 'unicorn', type: 'new' },
-    { path: 'unicorn', type: 'new' }
-  ], { unicorn: '🦄' })
+  // console.log(JSON.stringify(tree(result.tree.collection.$any.$keys), false, 2))
+
+  // console.log(' \n-----------')
+
+  // s('update unicorn', [
+  //   { path: 'unicorn', type: 'new' },
+  //   { path: 'unicorn', type: 'new' }
+  // ], { unicorn: '🦄' })
 
   // s('update query', [
   //   { path: 'unicorn', type: 'remove' },
