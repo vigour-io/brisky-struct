@@ -29,9 +29,6 @@ test('subscription - any - merge', t => {
 
   console.log(r.tree.collection.$any.$keys.map(val => val.$t.key))
 
-  // [ { path: 'b/y', type: 'update' }, { path: 'c/x', type: 'update' } ]
-
-  // order very important -- maybe want to correct for order?
   s(
     'change reference to b',
     [
