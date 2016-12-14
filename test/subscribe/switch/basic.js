@@ -80,42 +80,46 @@ test('subscription - $switch - basic', t => {
 
   // console.log(' \n-----------')
 
-  // s('update unicorn', [
-  //   { path: 'unicorn', type: 'new' },
-  //   { path: 'unicorn', type: 'new' }
-  // ], { unicorn: '🦄' })
+  s('update unicorn', [
+    { path: 'unicorn', type: 'new' },
+    { path: 'unicorn', type: 'new' }
+  ], { unicorn: '🦄' })
 
-  // s('update query', [
-  //   { path: 'unicorn', type: 'remove' },
-  //   { path: 'unicorn', type: 'remove' },
-  //   { path: 'collection/b/c', type: 'new' },
-  //   { path: 'collection/b/d', type: 'new' }
-  // ], { query: 'bye' })
+  s('update query', [
+    { path: 'unicorn', type: 'remove' },
+    { path: 'unicorn', type: 'remove' },
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'collection/b/d', type: 'new' }
+  ], { query: 'bye' })
 
-  // s('update query', [
-  //   { path: 'collection/b/c', type: 'remove' },
-  //   { path: 'collection/b/d', type: 'remove' }
-  // ], { query: 'blax' })
+  s('update query', [
+    { path: 'collection/b/c', type: 'remove' },
+    { path: 'collection/b/d', type: 'remove' }
+  ], { query: 'blax' })
 
-  // t.same(start, tree(result.tree), 'equal to start tree (cleared composites')
+  t.same(start, tree(result.tree), 'equal to start tree (cleared composites')
 
-  // s('update collection/b/c', [
-  //   { path: 'collection/b/c', type: 'new' },
-  //   { path: 'collection/b/d', type: 'new' }
-  // ], { collection: { b: { c: 'blax' } } })
+  s('update collection/b/c', [
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'collection/b/d', type: 'new' }
+  ], { collection: { b: { c: 'blax' } } })
 
-  // s('update collection/b/c', [
-  //   { path: 'collection/b/d', type: 'update' }
-  // ], { collection: { b: { d: 'blurf' } } })
+  s('update collection/b/d', [
+    { path: 'collection/b/d', type: 'update' }
+  ], { collection: { b: { d: 'blurf' } } })
 
-  // s('update collection/b/c', [
-  //  { path: 'collection/b/c', type: 'remove' },
-  //  { path: 'collection/b/d', type: 'remove' }
-  // ], { collection: { b: null } })
+  s('remove collection/b', [
+   { path: 'collection/b/c', type: 'remove' },
+   { path: 'collection/b/d', type: 'remove' }
+  ], { collection: { b: null } })
 
-  // s('update collection/b/c', [
-  //  { path: 'collection/a/x', type: 'remove' }
-  // ], { collection: null })
+  console.log(result.tree.collection.$any.$keys.map(val => val.$t.key))
+
+  s('remove collection', [
+   { path: 'collection/a/x', type: 'remove' }
+  ], { collection: null })
+
+  // console.log(result.tree.collection.$any.$keys.map(val => val.$t.key))
 
   // t.same(tree(result.tree), {}, 'empty tree after removal')
   t.end()
