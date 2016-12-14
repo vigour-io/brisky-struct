@@ -18,7 +18,7 @@ test('subscription - any - merge', t => {
     }
   )
 
-  const r = s(
+  s(
     'initial subscription',
     [
       { path: 'a/x', type: 'new' },
@@ -26,8 +26,6 @@ test('subscription - any - merge', t => {
       { path: 'c/z', type: 'new' }
     ]
   )
-
-  console.log(r.tree.collection.$any.$keys.map(val => val.$t.key))
 
   s(
     'change reference to b',
@@ -37,8 +35,6 @@ test('subscription - any - merge', t => {
     ],
     { collection: [ '@', 'parent', 'b' ] }
   )
-
-  console.log(r.tree.collection.$any.$keys.map(val => val.$t.key))
 
   s(
     'change reference to c',
