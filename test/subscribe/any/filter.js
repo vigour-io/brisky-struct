@@ -14,7 +14,7 @@ test('subscription - any - filter', t => {
   s.subscribe({
     collection: {
       $any: {
-        $keys: keys => keys.concat().reverse(), // needs to be immtuable else issues
+        $keys: (keys, s) => keys.concat().sort((a, b) => a.key < b.key ? -1 : 1), // needs to be immtuable else issues
         val: true
       }
     }
@@ -26,8 +26,7 @@ test('subscription - any - filter', t => {
 
   results = []
   s.set({ collection: { x: true } })
-  t.same(results, [ 'x', 'c', 'b', 'a' ], 'initial subscription')
-
+  t.same(results, [ 'x', 'c', 'b', 'a' ], 'add to end update all')
   // console.log(results)
   t.end()
 })
