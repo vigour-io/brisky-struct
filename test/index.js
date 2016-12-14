@@ -12,5 +12,6 @@
 // require('./references')
 // require('./context')
 // require('./async')
-// require('./subscribe')
 require('./compute')
+require('./subscribe')
+

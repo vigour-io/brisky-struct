@@ -32,8 +32,6 @@ test('compute ', t => {
   t.equal(a.get('bye').compute(x), '100?', 'chain to compute')
   x.set(void 0)
   t.equal(a.compute(x), x, 'undefined when passed a value will return the struct')
-
   t.equal(a.yes.compute(100, a.hello), 'hello', 'passon as second argument')
-
   t.end()
 })

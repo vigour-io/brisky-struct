@@ -20,10 +20,10 @@ test('subscription - $switch - any', t => {
     }
   })
   const r = s('initial subscription', [ { path: 'x', type: 'new' } ])
-  t.same(tree(r.tree).$any.$c, { a: 'root' }, 'correct composite')
+  t.same(tree(r.tree).$any.$c, { 0: 'root' }, 'correct composite')
   s('rename', [ { path: 'x', type: 'remove' } ], { a: 'c' })
   t.same(tree(r.tree).$any.$c, void 0, 'removed composite')
   s('rename', [ { path: 'x', type: 'new' } ], { b: 'a' })
-  t.same(tree(r.tree).$any.$c, { b: 'root' }, 'correct composite')
+  t.same(tree(r.tree).$any.$c, { 1: 'root' }, 'correct composite')
   t.end()
 })

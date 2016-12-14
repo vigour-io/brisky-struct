@@ -138,15 +138,12 @@ test('subscription - $switch - nested', t => {
       $any: {
         $switch: (t, subs, tree) => {
           if (t.val === 'unicorn') {
-            console.log('here you go')
             return {
               hello: {
                 parent: {
                   unicorn: {
                     $switch: t => {
-                      console.log('????')
                       if (t.val === '🦄') {
-                        console.log('unicorn!')
                         return unicornSubs // this is a bit shitty
                       } else if (t.val === 'horse') {
                         return {
