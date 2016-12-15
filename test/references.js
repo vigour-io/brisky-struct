@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const struct = require('../').create
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })

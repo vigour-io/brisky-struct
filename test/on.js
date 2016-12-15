@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const struct = require('../').create
 
 test('on - method ', t => {
   const results = []
