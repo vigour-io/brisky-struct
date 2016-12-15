@@ -34,16 +34,11 @@
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
-    "bubleify": "0.5.1",
+    "buble": "0.15.1",
     "monotonic-timestamp": "0.0.9"
   },
   "browser": {
     "./test/index.js": "./test/browser.js"
-  },
-  "browserify": {
-    "transform": [
-      "bubleify"
-    ]
   },
   "devDependencies": {
     "brisky-base": "^4.0.0",
