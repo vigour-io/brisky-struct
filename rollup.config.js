@@ -9,7 +9,7 @@ export default {
     }),
     commonjs()
   ],
-  // sourceMap: true,
+  sourceMap: true,
   targets: [
     { dest: 'dist/index.js', format: 'cjs' },
     { dest: 'dist/index.es.js', format: 'es' }

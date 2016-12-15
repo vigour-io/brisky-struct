@@ -8,10 +8,10 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c rollup.config.test.js -w",
-    "pretest": "rollup -c rollup.config.test.js",
+    "pretest": "rollup -c && rollup -c rollup.config.test.js",
     "test": "node dist/test/index.js | tap-spec && standard",
     "dev": "npm run watch & nodemon --harmony-async-await dist/test/index.js | tap-spec",
-    "cover": "istanbul cover --report none --print detail test/index.js",
+    "cover": "npm run pretest && istanbul cover --report none --print detail dist/test/index.js",
     "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
   },
   "repository": {
