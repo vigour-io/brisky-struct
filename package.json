@@ -5,6 +5,7 @@
   "main": "dist/brisky-struct.js",
   "module": "dist/brisky-struct.es.js",
   "jsnext:main": "dist/brisky-struct.es.js",
+  "version": "0.0.33",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
