@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
-    "monotonic-timestamp": "0.0.9",
+    "monotonic-timestamp": "0.0.9"
   },
   "nyc": {
     "include": [
