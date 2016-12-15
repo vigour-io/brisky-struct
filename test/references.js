@@ -1,5 +1,5 @@
-const test = require('tape')
-const struct = require('../').create
+import test from 'tape'
+import { create as struct } from '../'
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })

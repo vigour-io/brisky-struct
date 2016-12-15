@@ -1,6 +1,6 @@
-const test = require('tape')
-const subsTest = require('../util')
-const struct = require('../../../').create
+import test from 'tape'
+import subsTest from '../util'
+import { create as struct } from '../../../'
 
 test('subscription - any - basic', t => {
   const s = subsTest(

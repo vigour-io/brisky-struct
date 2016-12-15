@@ -1,8 +1,8 @@
-const struct = require('../../../').create
-const bs = require('brisky-stamp')
-const logger = require('./log')
+import { create as struct } from '../../../'
+import bs from 'brisky-stamp'
+import logger from './log'
 
-module.exports = exports = (t, state, subs, log) => {
+export default (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
@@ -105,8 +105,6 @@ function resolveStamps (tree, seed) {
     }
   }
 }
-
-exports.copy = copy
 
 function copy (tree, strip) {
   const result = {}

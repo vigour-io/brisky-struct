@@ -1,5 +1,5 @@
-const test = require('tape')
-const struct = require('../').create
+import test from 'tape'
+import { create as struct } from '../'
 
 test('iterators - functional', t => {
   const a = struct({ key: 1, a: 'a', b: 'b', c: 'c' })

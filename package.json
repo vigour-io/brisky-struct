@@ -7,9 +7,10 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "test": "(ducktape; node test) | tap-spec && standard",
-    "dev": "npm run watch & nodemon --harmony-async-await test | tap-spec",
+    "watch": "rollup -c rollup.config.test.js -w",
+    "pretest": "rollup -c rollup.config.test.js",
+    "test": "node dist/test/index.js | tap-spec && standard",
+    "dev": "npm run watch & nodemon --harmony-async-await dist/test/index.js | tap-spec",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
   },
@@ -36,7 +37,6 @@
   "devDependencies": {
     "buble": "0.15.1",
     "coveralls": "^2.11.9",
-    "ducktape": "^1.0.0",
     "istanbul": "^0.4.3",
     "nodemon": "^1.11.0",
     "pre-commit": "^1.1.3",
