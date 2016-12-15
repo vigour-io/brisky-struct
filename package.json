@@ -6,9 +6,10 @@
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "scripts": {
-    "build": "rollup -c",
-    "pretest": "rollup -c rollup.config.test.js",
-    "test": "node dist/test/index.js",
+    "build": "rollup -c rollup/dist.js",
+    "pretest": "rollup -c rollup/test.js",
+    "prepublish": "npm run build",
+    "test": "standard && (node dist/test/index.js | tap-spec)",
     "dev": "rollup -c rollup.config.test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js | tap-spec",
     "cover": "nyc npm test"
   },
@@ -27,6 +28,7 @@
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
+    "istanbul": "^0.4.5",
     "monotonic-timestamp": "0.0.9",
     "rollup-plugin-istanbul": "^1.1.0"
   },
