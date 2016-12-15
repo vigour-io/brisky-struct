@@ -1,11 +1,10 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "0.0.29",
+  "version": "0.0.33",
   "main": "dist/brisky-struct.js",
   "module": "dist/brisky-struct.es.js",
   "jsnext:main": "dist/brisky-struct.es.js",
-  "version": "0.0.33",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
