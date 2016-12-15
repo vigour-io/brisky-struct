@@ -5,12 +5,7 @@ export default {
   plugins: [
     nodeResolve({
       jsnext: true
-    }),
-    {
-      ongenerate: (options, rendered) => {
-        console.log('yo', rendered.code)
-      }
-    }
+    })
   ],
   external: [
     'brisky-stamp',
@@ -18,7 +13,7 @@ export default {
   ],
   // sourceMap: true,
   targets: [
-    { dest: 'dist/brisky-struct.js', format: 'cjs' },
-    { dest: 'dist/brisky-struct.es.js', format: 'es' }
+    { dest: 'dist/index.js', format: 'cjs' },
+    { dest: 'dist/index.es.js', format: 'es' }
   ]
 }
