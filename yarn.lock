@@ -939,9 +939,9 @@ buble@^0.12.0:
     minimist "^1.2.0"
     os-homedir "^1.0.1"
 
-buble@0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/buble/-/buble-0.14.0.tgz#f9b8005b92a5151d9eb972e3bd461ab84a6b59b9"
+buble@0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/buble/-/buble-0.15.1.tgz#89fa32b8956d772c3cce2a27684245e64d8e930d"
   dependencies:
     acorn "^3.3.0"
     acorn-jsx "^3.0.1"
