@@ -1,4 +1,4 @@
-const struct = require('../../../')
+const struct = require('../../../').create
 const bs = require('brisky-stamp')
 const logger = require('./log')
 

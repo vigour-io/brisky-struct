@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../../')
+const struct = require('../../../').create
 
 test('subscription - any - sort', t => {
   var results = []

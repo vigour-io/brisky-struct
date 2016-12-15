@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const struct = require('../../').create
 
 test('context - props', t => {
   const app = struct({
