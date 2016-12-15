@@ -36,20 +36,15 @@ test('subscription - any - basic', t => {
     { fields: { a: { title: 'smurts' } } }
   )
 
-  // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' } ]
-
-  // [ { path: 'fields/b/title', type: 'update' }, { path: 'fields/b/title', type: 'remove' }, { path: 'fields/c/title', type: 'remove' }
-
-  const r = s(
+  s(
     'remove field in a collection',
     [
-      { path: 'fields/b/title', type: 'update' }, // this is new ofc
-      { path: 'fields/b/title', type: 'remove' }, // seems weird that you dont get a but it makes all the sense
+      { path: 'fields/b/title', type: 'update' },
+      { path: 'fields/b/title', type: 'remove' },
       { path: 'fields/c/title', type: 'remove' }
     ],
     { fields: { a: null, c: null } }
   )
-  console.log(r.state.fields.keys())
 
   s(
     'toplevel id collection subscription',
@@ -91,8 +86,6 @@ test('subscription - any - basic - true', t => {
     { a: 'a' }
   )
 
-  // console.log(result.state.keys())
-
   s(
     'remove field',
     [
@@ -104,23 +97,15 @@ test('subscription - any - basic - true', t => {
     { a: null }
   )
 
-  console.log(result.state.keys())
-
   s(
     'remove fields',
     [
       { path: 'd', type: 'update' },
       { path: 'a', type: 'update' },
       { path: 'd', type: 'remove' }
-      // if you want to get info about the previous one need to cache do may be nice to do.... this is jsut weird
-      // were removing b and c
     ],
     { a: 'hello', b: null, c: null }
   )
-
-  // this one is wrong... needs to clean up better
-  console.log(result.tree.$any.$keys.length, result.tree.$any.$keys.map(val => val.$t.path()))
-  console.log(result.state.keys())
 
   const struct = result.state
   struct.set({ start: 'start' }, false)
@@ -128,8 +113,6 @@ test('subscription - any - basic - true', t => {
   struct.keys()[1] = struct.keys()[2]
   struct.keys()[2] = k1
 
-  // reshuffle needs to fire updates!
-  // need to see 2 new but new for things that are allrdy rendered thats re-order
   s(
     'add field and reorder keys',
     [
@@ -139,7 +122,7 @@ test('subscription - any - basic - true', t => {
     ],
     { hello: true }
   )
-  // shuffle array (re-sort)
+
   t.end()
 })
 
@@ -148,8 +131,6 @@ test('subscription - any - basic - val: "property"', t => {
     t,
     {},
     { $any: { val: 'property' } }
-    // hmm this is not so nice need to fire for switch as well...
-    // when switch in any its becomes to weird
   )
 
   s('initial subscription', [], {})
@@ -178,7 +159,7 @@ test('subscription - any - basic - val: "property"', t => {
   s(
     'remove field',
     [
-      { path: 'b', type: 'remove' } // ok so this seems strange but it aint
+      { path: 'b', type: 'remove' }
     ],
     { a: null }
   )
@@ -229,7 +210,7 @@ test('subscription - any - basic - empty fields', t => {
     }
   )
 
-  const r = s('initial subscription', [
+  s('initial subscription', [
     { path: 'fields/0', type: 'new' },
     { path: 'fields/1', type: 'new' }
   ])
@@ -244,8 +225,6 @@ test('subscription - any - basic - empty fields', t => {
       fields: { 0: null, 1: null }
     }
   )
-  console.log(r.state.fields.keys())
-
   t.end()
 })
 

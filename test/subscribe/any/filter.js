@@ -60,40 +60,44 @@ test('subscription - any - filter - root', t => {
   const s = struct({
     target: 'a',
     collection: {
-      a: { rating: 6 },
-      b: { rating: 4 },
-      c: { rating: 10 }
+      a: true,
+      b: true,
+      c: true
     }
   })
 
   s.subscribe({
     collection: {
       $any: {
-        $keys: (keys, s) => keys.filter(val => s.root().get([ 'target', 'compute' ]) === val ||
-          s.root().get([ 'target', 'compute' ]) === '*'),
-        val: true,
-        root: { target: true }
+        $keys: {
+          val: (keys, s) =>
+            keys.filter(val => s.root().get([ 'target', 'compute' ]) === val ||
+            s.root().get([ 'target', 'compute' ]) === '*'),
+          root: { target: true }
+        },
+        val: true
       }
     }
-  }, (val, type) => {
-    results.push(type === 'remove' ? '-' + val.key : val.key)
-  })
-  t.same(results, [ 'a', 'target' ], 'initial subscription')
+  }, (v, t) => results
+    .push(t === 'remove' ? '-' + v.key : t === 'new' ? '+' + v.key : v.key)
+  )
+
+  t.same(results, [ '+a' ], 'initial subscription')
   results = []
   s.target.set('b')
-  t.same(results, [ 'b', 'target' ], 'remove a, shift c')
+  t.same(results, [ 'b' ], 'replace a')
 
   results = []
   s.target.set('*')
-  t.same(results, [ 'a', 'target', 'b', 'target', 'c', 'target' ], 'add all')
+  t.same(results, [ 'a', '+b', '+c' ], 'add all')
 
   results = []
   s.target.set('b')
-  t.same(results, [ 'b', 'target', '-b', '-target', '-c', '-target' ], 'use b') // this breaks everything now
+  t.same(results, [ 'b', '-b', '-c' ], 'use b') // this breaks everything now
 
-  // results = []
-  // s.target.set('nothing') // this crashes...
-  // t.same(results, [ 'b', 'target', '-b', '-target', '-c', '-target' ], 'use b') // this breaks everything now
+  results = []
+  s.target.set('nothing') // this crashes...
+  t.same(results, [ '-b' ], 'use nothing') // this breaks everything now
 
   t.end()
 })
