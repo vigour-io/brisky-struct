@@ -28,9 +28,7 @@
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
-    "istanbul": "^0.4.5",
     "monotonic-timestamp": "0.0.9",
-    "rollup-plugin-istanbul": "^1.1.0"
   },
   "nyc": {
     "include": [
@@ -52,6 +50,7 @@
     "rollup-plugin-commonjs": "^6.0.0",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-watch": "^2.5.0",
+    "rollup-plugin-istanbul": "^1.1.0",
     "standard": "^8.1.0",
     "tap-spec": "4.1.1",
     "tape": "4.6.0"
