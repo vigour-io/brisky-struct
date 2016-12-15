@@ -9,7 +9,7 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "test": "(ducktape; node test) | tap-spec && standard",
-    "dev": "nodemon --harmony-async-await test | tap-spec",
+    "dev": "npm run watch & nodemon --harmony-async-await test | tap-spec",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
   },
