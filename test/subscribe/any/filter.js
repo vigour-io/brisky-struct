@@ -75,7 +75,10 @@ test('subscription - any - filter - root', t => {
             s.root().get([ 'target', 'compute' ]) === '*'),
           root: { target: true }
         },
-        val: true
+        val: true,
+        root: {
+          hello: true
+        }
       }
     }
   }, (v, t) => results
@@ -98,6 +101,14 @@ test('subscription - any - filter - root', t => {
   results = []
   s.target.set('nothing') // this crashes...
   t.same(results, [ '-b' ], 'use nothing') // this breaks everything now
+
+  results = []
+  s.target.set('*')
+  t.same(results, [ '+a', '+b', '+c' ], 'add all')
+
+  results = []
+  s.set({ hello: 'yes' })
+  t.same(results, [ '+hello', 'a', '+hello', 'b', '+hello', 'c' ], 'update hello')
 
   t.end()
 })
