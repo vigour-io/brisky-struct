@@ -1,5 +1,5 @@
 import test from 'tape'
-import { create as struct } from '../../'
+import { create as struct } from '../../lib'
 
 test('context - basic', t => {
   const instance = struct({

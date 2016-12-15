@@ -1,5 +1,5 @@
 import test from 'tape'
-import { create as struct } from '../'
+import { create as struct } from '../lib/'
 
 test('compute ', t => {
   const a = struct({

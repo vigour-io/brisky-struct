@@ -7,12 +7,10 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c rollup.config.test.js -w",
-    "pretest": "rollup -c && rollup -c rollup.config.test.js",
-    "test": "node dist/test/index.js | tap-spec && standard",
-    "dev": "npm run watch & nodemon --harmony-async-await dist/test/index.js | tap-spec",
-    "cover": "npm run pretest && istanbul cover --report none --print detail dist/test/index.js",
-    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
+    "pretest": "rollup -c rollup.config.test.js",
+    "test": "node dist/test/index.js",
+    "dev": "rollup -c rollup.config.test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js | tap-spec",
+    "cover": "nyc npm test"
   },
   "repository": {
     "type": "git",
@@ -29,7 +27,15 @@
   ],
   "dependencies": {
     "brisky-stamp": "^2.1.1",
-    "monotonic-timestamp": "0.0.9"
+    "monotonic-timestamp": "0.0.9",
+    "rollup-plugin-istanbul": "^1.1.0"
+  },
+  "nyc": {
+    "include": [
+      "dist/index.js"
+    ],
+    "sourceMap": true,
+    "instrument": true
   },
   "browser": {
     "./test/index.js": "./test/browser.js"
@@ -37,8 +43,8 @@
   "devDependencies": {
     "buble": "0.15.1",
     "coveralls": "^2.11.9",
-    "istanbul": "^0.4.3",
     "nodemon": "^1.11.0",
+    "nyc": "^10.0.0",
     "pre-commit": "^1.1.3",
     "rollup": "^0.37.0",
     "rollup-plugin-commonjs": "^6.0.0",

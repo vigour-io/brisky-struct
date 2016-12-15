@@ -1,6 +1,6 @@
 import test from 'tape'
 import subsTest from '../util'
-import { create as struct } from '../../../'
+import { create as struct } from '../../../lib/'
 
 test('subscription - $switch - references', t => {
   const s = subsTest(t, {

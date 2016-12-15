@@ -1,5 +1,5 @@
 import test from 'tape'
-import { create as struct } from '../../'
+import { create as struct } from '../../lib/'
 test('context - apply and resolve', t => {
   const obj = struct({ a: { b: { c: true } } })
   const base2 = obj.create({ key: 'base2' })

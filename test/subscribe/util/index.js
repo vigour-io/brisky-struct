@@ -1,4 +1,4 @@
-import { create as struct } from '../../../'
+import { create as struct } from '../../../lib/'
 import bs from 'brisky-stamp'
 import logger from './log'
 

@@ -1,5 +1,5 @@
 import test from 'tape'
-import { create as struct } from '../'
+import { create as struct } from '../lib/'
 import stamp from 'brisky-stamp'
 
 const timeout = (val, time = 5, err) =>

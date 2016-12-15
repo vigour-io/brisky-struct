@@ -1,7 +1,6 @@
-'use strict'
 import test from 'tape'
 import subsTest from '../util'
-import { create as struct } from '../../../'
+import { create as struct } from '../../../lib/'
 
 test('subscription - composite - root', t => {
   const subs = {
