@@ -1,6 +1,7 @@
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
-import istanbul from 'rollup-plugin-istanbul'
+// import istanbul from 'rollup-plugin-istanbul'
+// special for cover
 
 export default {
   entry: 'test/index.js',
@@ -8,9 +9,9 @@ export default {
     nodeResolve({
       jsnext: true
     }),
-    istanbul({
-      exclude: ['test/**/*.js']
-    }),
+    // istanbul({
+    //   exclude: ['test/**/*.js']
+    // }),
     commonjs()
   ],
   external: [

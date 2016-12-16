@@ -152,3 +152,8 @@ test('props - reset', t => {
 
   t.end()
 })
+
+test('props - context', t => {
+  const s = struct({})
+  t.end()
+})
