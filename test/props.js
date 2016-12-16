@@ -159,7 +159,7 @@ test('props - context', t => {
       lurf: {
         // on: (val, stamp, t) => console.log(t.path()),
         field: {
-          val: 'hello',
+          val: 'hello'
           // on: (val, stamp, t) => {
           //   // console.log('fire flame', t.path())
           // }
