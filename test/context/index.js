@@ -1,6 +1,6 @@
 require('./get')
 require('./resolve')
-require('./remove')
 require('./props')
 require('./store')
 require('./nested')
+require('./remove')
