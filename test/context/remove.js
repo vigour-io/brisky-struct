@@ -48,6 +48,14 @@ test('context - remove', t => {
     b: {}
   })
 
+  const xInstance = x.create({ // eslint-disable-line
+    key: 'xInstance'
+  })
+
+  const aInstance = a.create({ // eslint-disable-line
+    key: 'aInstance'
+  })
+
   const z = struct({
     key: 'z',
     props: { x2: x },
@@ -73,6 +81,16 @@ test('context - remove', t => {
   })
 
   console.log('results', results)
+
+  t.same(
+    results,
+    [
+      [ 'z', 'x2', 'b' ],
+      [ 'c', 'x', 'z2', 'x2', 'b' ],
+      [ 'zInstance', 'x2', 'b' ]
+    ], // this is shit //  [ 'xInstance', 'b' ]
+    'fires for all instances'
+  )
 
   t.end()
 })
