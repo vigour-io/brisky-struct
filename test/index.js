@@ -12,5 +12,5 @@
 // require('./context')
 // require('./async')
 // require('./compute')
-// require('./subscribe')
-require('./props')
+// require('./props')
+require('./subscribe')
