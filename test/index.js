@@ -9,7 +9,7 @@
 // require('./on')
 // require('./remove')
 // require('./references')
-// require('./context')
+require('./context')
 // require('./async')
 // require('./compute')
 // require('./props')

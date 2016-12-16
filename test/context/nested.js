@@ -154,16 +154,20 @@ test('context - nested', t => {
 
   slow = {}
 
+  console.log(' \nHERE WE GO')
+
+  // console.log(seagull.likes.context)
+  // delete bird.runs.context
+  // delete seagull.likes.context
+  // delete seagull.likes.woundedPigeon.context
   bird.set({ runs: { slow: true } }, 'stamp1')
 
   t.deepEqual(slow, {
     'bird.runs': { val: false, count: 1 },
     'seagull.runs': { val: false, count: 1 },
     'pigeon.runs': { val: false, count: 1 },
-    // why does this fire twice? -- once for pigeon and once for bird
     'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
-    // ----------
-
+    'seagull.likes.woundedPigeon.runs': { val: false, count: 1 },
     'animals.mySeagull.runs': { val: true, count: 1 }
   }, 'first slow event fired as expected')
 
