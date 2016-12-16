@@ -154,6 +154,35 @@ test('props - reset', t => {
 })
 
 test('props - context', t => {
-  const s = struct({})
+  const s = struct({
+    types: {
+      lurf: {
+        // on: (val, stamp, t) => console.log(t.path()),
+        field: {
+          val: 'hello',
+          // on: (val, stamp, t) => {
+          //   // console.log('fire flame', t.path())
+          // }
+        }
+      }
+    },
+    hello: {
+      props: {
+        lurf: { type: 'lurf' }
+      },
+      lurf: {}
+    }
+  })
+
+  s.set({
+    types: {
+      lurf: {
+        field: 'blue'
+      }
+    }
+  })
+
+  t.equal(s.get([ 'hello', 'lurf', 'field' ]).compute(), 'blue', 'correct inhertiance')
+
   t.end()
 })
