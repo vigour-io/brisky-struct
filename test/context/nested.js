@@ -154,12 +154,6 @@ test('context - nested', t => {
 
   slow = {}
 
-  console.log(' \nHERE WE GO')
-
-  // console.log(seagull.likes.context)
-  // delete bird.runs.context
-  // delete seagull.likes.context
-  // delete seagull.likes.woundedPigeon.context
   bird.set({ runs: { slow: true } }, 'stamp1')
 
   t.deepEqual(slow, {
