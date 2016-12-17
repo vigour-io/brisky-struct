@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "rollup -c rollup/dist.js",
+    "watch": "rollup -c rollup/dist.js -w",
     "pretest": "rollup -c rollup/test.js",
     "prepublish": "npm run build",
     "test": "standard && (node dist/test/index.js | tap-spec)",
