@@ -48,31 +48,31 @@ test('remove - instances - simple', t => {
 
   console.log(results)
 
-  // console.log(' \n')
-  // const results2 = []
-  // const a = struct({
-  //   types: {
-  //     a: {
-  //       b: {
-  //         on: (val, stamp, t) => {
-  //           results2.push(t.path())
-  //         }
-  //       }
-  //     },
-  //     blurf: {
-  //       type: 'a'
-  //     }
-  //   },
-  //   aa: {
-  //     type: 'blurf'
-  //   },
-  //   bb: {
-  //     type: 'blurf'
-  //   }
-  // })
+  console.log(' \n')
+  const results2 = []
+  const a = struct({
+    types: {
+      a: {
+        b: {
+          on: (val, stamp, t) => {
+            results2.push(t.path())
+          }
+        }
+      },
+      blurf: {
+        type: 'a'
+      }
+    },
+    aa: {
+      type: 'blurf'
+    },
+    bb: {
+      type: 'blurf'
+    }
+  })
 
-  // a.types.blurf.set(null)
-  // console.log(results2)
+  a.types.blurf.set(null)
+  console.log(results2)
 
   t.end()
 })
