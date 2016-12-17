@@ -127,25 +127,23 @@ test('remove - instances', t => {
   s.set(null, 'stamp')
   t.same(obj.keys(), [ 'nested' ], 'cleared keys on Obj')
   t.same(results, [
-    [ 'obj', 'blurf' ],
-    [ 'obj', 'blurf', 'bla' ],
-    [ 'obj', 'blurf', 'bla', 'a', 'b', 'c' ],
-    [ 'obj', 'blurf', 'x', 'z' ],
-    [ 'obj', 'hello' ],
-    [ 'obj', 'hello', 'bla' ],
-    [ 'obj', 'hello', 'bla', 'a', 'b', 'c' ],
-    [ 'obj', 'hello', 'x', 'z' ],
-    [ 's2' ],
-    [ 's2', 'bla' ],
-    [ 's2', 'bla', 'a', 'b', 'c' ],
-    [ 's2', 'x', 'z' ],
     [ 's' ],
+    [ 'obj', 'blurf', 'bla' ],
+    [ 'obj', 'hello', 'bla' ],
+    [ 's2', 'bla' ],
     [ 's', 'bla' ],
     [ 's', 'bla', 'a', 'b', 'c' ],
+    [ 'obj', 'blurf', 'bla', 'a', 'b', 'c' ],
+    [ 'obj', 'hello', 'bla', 'a', 'b', 'c' ],
+    [ 's2', 'bla', 'a', 'b', 'c' ],
+    [ 'obj', 'blurf' ],
+    [ 'obj', 'hello' ],
+    [ 's2' ],
     [ 'obj', 'nested' ],
-    // [ 'obj', 'blurf', 'x', 'z' ], // double wrong
-    [ 'obj', 'weird', 'z' ],
-    [ 's', 'x', 'z' ]
+    [ 's', 'x', 'z' ],
+    [ 'obj', 'hello', 'x', 'z' ],
+    [ 's2', 'x', 'z' ],
+    [ 'obj', 'weird', 'z' ]
   ], 'fires all listeners on remove')
   t.end()
 })
