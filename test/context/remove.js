@@ -34,7 +34,7 @@ test('context - remove', t => {
   t.end()
 })
 
-test('context - remove', t => {
+test('context - remove - contextProperty', t => {
   var results = []
 
   const a = struct({
@@ -80,15 +80,13 @@ test('context - remove', t => {
     }
   })
 
-  console.log('results', results)
-
   t.same(
     results,
     [
       [ 'z', 'x2', 'b' ],
       [ 'c', 'x', 'z2', 'x2', 'b' ],
       [ 'zInstance', 'x2', 'b' ]
-    ], // this is shit //  [ 'xInstance', 'b' ]
+    ],
     'fires for all instances'
   )
 

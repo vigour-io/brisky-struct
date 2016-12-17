@@ -15,7 +15,6 @@ test('remove - basic', t => {
 
 test('remove - instances - simple', t => {
   const results = []
-
   const s = struct({
     types: {
       a: {
@@ -37,18 +36,18 @@ test('remove - instances - simple', t => {
       aX: {}
     }
   })
-
   const obj = struct({ //eslint-disable-line
     key: 'obj',
     props: { default: s },
     hello: {}
   })
-
   s.set(null)
-
-  console.log(results)
-
-  console.log(' \n')
+  t.same(results, [
+    [ 'x', 'aX', 'b' ],
+    [ 'x', 'aX', 'b', 'c' ],
+    [ 'obj', 'hello', 'x', 'aX', 'b' ],
+    [ 'obj', 'hello', 'x', 'aX', 'b', 'c' ]
+  ])
   const results2 = []
   const a = struct({
     types: {
@@ -70,10 +69,8 @@ test('remove - instances - simple', t => {
       type: 'blurf'
     }
   })
-
   a.types.blurf.set(null)
-  console.log(results2)
-
+  t.same(results2, [ [ 'b' ], [ 'bb', 'b' ], [ 'aa', 'b' ] ])
   t.end()
 })
 
@@ -148,53 +145,53 @@ test('remove - instances', t => {
   t.end()
 })
 
-// test('remove - mixed', t => {
-//   const results = []
-//   const s = struct({
-//     key: 's',
-//     a: 'a',
-//     b: 'b',
-//     c: 'c',
-//     on: (val, stamp, t) => results.push(t.path())
-//   })
-//   const s2 = s.create({
-//     key: 's2',
-//     a: { type: 'struct' }
-//   })
-//   const s3 = s.create({
-//     key: 's3',
-//     a: 'hello'
-//   })
-//   const s4 = s3.create({
-//     key: 's4'
-//   })
-//   s.set({ d: true, a: null, haha: true }, 'stamp')
-//   t.same(s.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys')
-//   t.same(s2.keys(), [ 'b', 'c', 'd', 'haha', 'a' ], 'correct keys on "s2"')
-//   t.same(s3.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s3"')
-//   t.same(s4.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s4"')
-//   t.same(
-//     results, [ [ 's3' ], [ 's4' ], [ 's' ], [ 's2' ] ],
-//     'fires correct listeners'
-//   )
-//   const a = struct({ a: true, b: true })
-//   const b = a.create({ a: { type: 'struct' } })
-//   a.set({ d: true, a: null }, false)
-//   t.same(b.keys(), [ 'b', 'd', 'a' ], 'correct keys on "a"')
-//   t.end()
-// })
+test('remove - mixed', t => {
+  const results = []
+  const s = struct({
+    key: 's',
+    a: 'a',
+    b: 'b',
+    c: 'c',
+    on: (val, stamp, t) => results.push(t.path())
+  })
+  const s2 = s.create({
+    key: 's2',
+    a: { type: 'struct' }
+  })
+  const s3 = s.create({
+    key: 's3',
+    a: 'hello'
+  })
+  const s4 = s3.create({
+    key: 's4'
+  })
+  s.set({ d: true, a: null, haha: true }, 'stamp')
+  t.same(s.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys')
+  t.same(s2.keys(), [ 'b', 'c', 'd', 'haha', 'a' ], 'correct keys on "s2"')
+  t.same(s3.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s3"')
+  t.same(s4.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s4"')
+  t.same(
+    results, [ [ 's3' ], [ 's4' ], [ 's' ], [ 's2' ] ],
+    'fires correct listeners'
+  )
+  const a = struct({ a: true, b: true })
+  const b = a.create({ a: { type: 'struct' } })
+  a.set({ d: true, a: null }, false)
+  t.same(b.keys(), [ 'b', 'd', 'a' ], 'correct keys on "a"')
+  t.end()
+})
 
-// test('remove - keys', t => {
-//   const results = []
-//   const s = struct({
-//     a: 'a',
-//     b: 'b',
-//     c: 'c',
-//     on: (val, stamp, t) => results.push(t.keys().concat())
-//   })
-//   s.set({ a: null })
-//   s.set({ b: null })
-//   s.set({ c: null })
-//   t.same(results, [ [ 'b', 'c' ], [ 'c' ], [] ], 'correct keys results')
-//   t.end()
-// })
+test('remove - keys', t => {
+  const results = []
+  const s = struct({
+    a: 'a',
+    b: 'b',
+    c: 'c',
+    on: (val, stamp, t) => results.push(t.keys().concat())
+  })
+  s.set({ a: null })
+  s.set({ b: null })
+  s.set({ c: null })
+  t.same(results, [ [ 'b', 'c' ], [ 'c' ], [] ], 'correct keys results')
+  t.end()
+})
