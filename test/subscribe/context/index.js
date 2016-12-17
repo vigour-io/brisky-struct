@@ -44,23 +44,10 @@ test('subscription - context - basic - remove', t => {
     collection: { type: 'collection' }
   })
 
-  // s.get([ 'types', 'collection' ]).set([ 1, 2, 3, 4 ])
-
   s.get([ 'collection' ]).set([ 1, 2, 3, 4 ])
 
   const listen = (v, t, s, tree) => {
     var p = v.path()
-    // go the info right hur
-    // tree.$t.context = tree.$tc
-    // tree.$t.contextLevel = tree.$tcl || 1
-    // var p = v.path()
-    // console.log('---->', t === tree.$t, p === tree.$t.path())
-    console.log('---->', v.contextLevel, v.context && v.context.path(), v.context.contextLevel)
-
-    // if changed then go and check if its ACTUALLY removed and get rid of it
-    // send higher up as well thats smooth
-    // if (changes then)
-
     if (p[0] === 's2') {
       p.splice(1, 1)
     } else {
@@ -82,14 +69,25 @@ test('subscription - context - basic - remove', t => {
     }
   }, listen)
 
-  t.same(results, [ '+0/a/b/c', '+1/a/b/c', '+2/a/b/c' ], 'correct initial')
+  t.same(results, [
+    '+0/a/b/c',
+    '+1/a/b/c',
+    '+2/a/b/c',
+    '+3/a/b/c'
+  ], 'correct initial')
 
   const s2 = s.create({ key: 's2' })
   results = []
+
   s2.subscribe({
     collection: { $any: { a: { b: { c: true } } } }
   }, listen)
-  t.same(results, [ '+s2/0/a/b/c', '+s2/1/a/b/c', '+s2/2/a/b/c' ], 'correct initial on instance s2')
+  t.same(results, [
+    '+s2/0/a/b/c',
+    '+s2/1/a/b/c',
+    '+s2/2/a/b/c',
+    '+s2/3/a/b/c'
+  ], 'correct initial on instance s2')
 
   results = []
   s.set({
@@ -99,7 +97,17 @@ test('subscription - context - basic - remove', t => {
       }
     }
   })
-  t.same(results, [ '0/a/b/c', '1/a/b/c', '2/a/b/c', 's2/0/a/b/c', 's2/1/a/b/c', 's2/2/a/b/c' ], 'correct results from context updates')
+
+  t.same(results, [
+    '0/a/b/c',
+    '1/a/b/c',
+    '2/a/b/c',
+    '3/a/b/c',
+    's2/0/a/b/c',
+    's2/1/a/b/c',
+    's2/2/a/b/c',
+    's2/3/a/b/c'
+  ], 'correct results from context updates')
 
   results = []
 
@@ -110,10 +118,12 @@ test('subscription - context - basic - remove', t => {
     }
   })
 
-  console.log(results)
-
-  // this is very weird...
-  // t.same(results, [ '-s2/0/a/b/c' ], 'correct context applied on removed item')
+  t.same(results, [
+    's2/1/a/b/c',
+    's2/2/a/b/c',
+    's2/3/a/b/c',
+    '-s2/3/a/b/c'
+  ], 'correct results from context removal')
 
   results = []
   s2.set({
@@ -122,32 +132,25 @@ test('subscription - context - basic - remove', t => {
     }
   })
 
-  console.log(results)
+  t.same(results, [
+    's2/2/a/b/c',
+    's2/3/a/b/c',
+    '-s2/3/a/b/c'
+  ], 'correct results from context removal')
 
-  // t.same(results, [ '-s2/0/a/b/c' ], 'correct context applied on removed item')
+  results = []
+  s.set({
+    types: {
+      collection: {
+        'WOW': {}
+      }
+    }
+  })
 
-
-  // // console.log(tree.collection.$any.$keys)
-
-  // s2.set({
-  //   collection: {
-  //     1: {
-  //       a: {
-  //         b: {
-  //           c: 'LULLLZ'
-  //         }
-  //       }
-  //     }
-  //   }
-  // })
-
-  // console.log(tree)
-
-  // s2.set({
-  //   collection: {
-  //     0: null
-  //   }
-  // })
+  t.same(results, [
+    '+WOW/a/b/c',
+    '+s2/WOW/a/b/c'
+  ], 'correct results from context update on collection')
 
   t.end()
 })
