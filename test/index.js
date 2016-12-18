@@ -12,5 +12,6 @@
 // require('./props')
 // require('./context')
 // require('./remove')
-require('./subscribe')
-require('./get')
+// require('./subscribe')
+// require('./get')
+require('./set')
