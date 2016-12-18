@@ -44,3 +44,18 @@ test('types ', t => {
   t.same(c2.get('a').keys(), void 0, 'override inheritance')
   t.end()
 })
+
+test('types ', t => {
+  const a = struct({
+    key: 'a',
+    types: {
+      a: 'self'
+    },
+    define: {
+      haha: true
+    },
+    bla: { type: 'a' }
+  })
+  t.equal(a.bla.inherits, a, 'use self in types')
+  t.end()
+})

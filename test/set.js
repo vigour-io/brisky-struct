@@ -18,12 +18,6 @@ test('set - stamp', t => {
   t.end()
 })
 
-test('set - val: null', t => {
-
-
-  t.end()
-})
-
 // test('set - extra argument', t => {
 //   const a = struct({ c: true })
 //   const b = struct({ a: { b: a } })

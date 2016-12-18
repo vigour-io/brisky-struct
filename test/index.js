@@ -1,4 +1,3 @@
-// require('./types')
 // require('./define')
 // require('./inject')
 // require('./serialize')
@@ -15,3 +14,4 @@
 // require('./subscribe')
 // require('./get')
 require('./set')
+require('./types')
