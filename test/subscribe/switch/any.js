@@ -54,7 +54,7 @@ test('subscription - $switch - any - composite - remove', t => {
   t.end()
 })
 
-test('subscription - $switch - any - composite - remove', t => {
+test('subscription - $switch - any - composite - remove (variant)', t => {
   const s = subsTest(t, {
     list: [ 1, 2, 3 ],
     thing: 1
