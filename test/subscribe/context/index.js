@@ -80,7 +80,7 @@ test('subscription - context - basic - remove', t => {
   results = []
 
   s2.subscribe({
-    collection: { $any: { a: { b: { c: true } } } }
+    collection: { $any: { a: { b: { c: 'switch' } } } }
   }, listen)
   t.same(results, [
     '+s2/0/a/b/c',
@@ -102,11 +102,11 @@ test('subscription - context - basic - remove', t => {
     '0/a/b/c',
     '1/a/b/c',
     '2/a/b/c',
-    '3/a/b/c',
-    's2/0/a/b/c',
-    's2/1/a/b/c',
-    's2/2/a/b/c',
-    's2/3/a/b/c'
+    '3/a/b/c'
+    // 's2/0/a/b/c', (since switch)
+    // 's2/1/a/b/c',
+    // 's2/2/a/b/c',
+    // 's2/3/a/b/c'
   ], 'correct results from context updates')
 
   results = []
@@ -152,5 +152,52 @@ test('subscription - context - basic - remove', t => {
     '+s2/WOW/a/b/c'
   ], 'correct results from context update on collection')
 
+  t.end()
+})
+
+test('subscription - context - basic - switch', t => {
+  var results = []
+  const s = create({
+    types: {
+      bla: {
+        a: {
+          b: {
+            c: {
+              val: 'ha!'
+            }
+          }
+        }
+      },
+      collection: {
+        props: {
+          default: { type: 'bla' }
+        },
+        a: 'a',
+        b: 'b',
+        c: 'c'
+      }
+    },
+    collection: { type: 'collection' }
+  })
+
+  const listen = (v, t, s, tree) => {
+    var p = v.path().join('/')
+    results.push(t === 'remove' ? '-' + p : t === 'new' ? '+' + p : p)
+  }
+
+  s.subscribe({
+    collection: { $any: 'switch' }
+  }, listen)
+
+  t.same(results, [ '+collection/a', '+collection/b', '+collection/c' ])
+
+  const s2 = s.create({ key: 's2' })
+  s2.subscribe({
+    collection: { $any: true }
+  }, listen)
+
+  results = []
+  s.get([ 'types', 'collection', 'b' ]).set(null)
+  t.same(results, [ 'collection/c', '-collection/c', 's2/collection/c', '-s2/collection/c' ], 'fires update for switch')
   t.end()
 })
