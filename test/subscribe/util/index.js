@@ -2,36 +2,24 @@ import { create as struct } from '../../../lib/'
 import bs from 'brisky-stamp'
 import logger from './log'
 
-const inDriverTree = (p) => {
-  // while (p) {
-  //   if (typeof p._key === 'string' && /^\$.+\*$/.test(p._key)) {
-  //     return true
-  //   } else {
-  //     p = p._p
-  //   }
-  // }
-}
-
 export default (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
     subs,
     (state, type, subs, tree) => {
-      if (!inDriverTree(tree)) {
-        let path = state && state.path().join('/')
-        let obj = {
-          type: type,
-          tree: tree
-        }
-        if (path) {
-          obj.path = path
-        }
-        if (log) {
-          console.log('FIRE:', path, type, treePath(tree))
-        }
-        updates.push(obj)
+      let path = state && state.path().join('/')
+      let obj = {
+        type: type,
+        tree: tree
       }
+      if (path) {
+        obj.path = path
+      }
+      if (log) {
+        console.log('FIRE:', path, type, treePath(tree))
+      }
+      updates.push(obj)
     }
   )
   var seed = !state.stamp ? bs.cnt : state.stamp - 1
