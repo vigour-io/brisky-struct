@@ -10,6 +10,10 @@ export default {
     commonjs()
   ],
   sourceMap: true,
+  external: [
+    'brisky-stamp',
+    'monotonic-timestamp'
+  ],
   targets: [
     { dest: 'dist/index.js', format: 'cjs' },
     { dest: 'dist/index.es.js', format: 'es' }
