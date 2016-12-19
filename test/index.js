@@ -13,5 +13,5 @@
 // require('./set')
 // require('./iterators')
 // require('./types')
-// require('./subscribe')
-require('./async')
+// require('./async')
+require('./subscribe')
