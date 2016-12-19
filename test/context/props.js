@@ -47,7 +47,5 @@ test('context - props', t => {
   t.equal(app.get([ 'bla', 'props' ]).default.struct.text.get('val'), 'hello')
   t.equal(app.get([ 'bah', 'props' ]).default.struct.text.val, 'yo yo yo')
 
-  console.log()
-
   t.end()
 })

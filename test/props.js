@@ -157,12 +157,8 @@ test('props - context', t => {
   const s = struct({
     types: {
       lurf: {
-        // on: (val, stamp, t) => console.log(t.path()),
         field: {
           val: 'hello'
-          // on: (val, stamp, t) => {
-          //   // console.log('fire flame', t.path())
-          // }
         }
       }
     },
