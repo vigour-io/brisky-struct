@@ -81,7 +81,7 @@ test('subscription - any - filter - root', t => {
         }
       }
     }
-  }, (v, t) => results
+  }, (v, t) => v.key !== 'target' && results
     .push(t === 'remove' ? '-' + v.key : t === 'new' ? '+' + v.key : v.key)
   )
 
