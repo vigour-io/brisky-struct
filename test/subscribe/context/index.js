@@ -199,5 +199,12 @@ test('subscription - context - basic - switch', t => {
   results = []
   s.get([ 'types', 'collection', 'b' ]).set(null)
   t.same(results, [ 'collection/c', '-collection/c', 's2/collection/c', '-s2/collection/c' ], 'fires update for switch')
+
+  results = []
+  s.get([ 'types', 'bla', 'a', 'b', 'c' ]).set('hello')
+  t.same(results, [
+    's2/collection/a',
+    's2/collection/c'
+  ], 'fires update for deep update')
   t.end()
 })
