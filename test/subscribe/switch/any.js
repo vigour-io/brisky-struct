@@ -53,8 +53,10 @@ test('subscription - $switch - any - composite - remove', t => {
     { path: 'thing', type: 'new' }
   ])
   s('update target', [
+    { path: 'thing', type: 'update' },
     { path: 'list/0', type: 'remove' },
-    { path: 'list/1', type: 'new' }
+    { path: 'thing', type: 'update' },
+    { path: 'thing', type: 'update' }
   ], { thing: 2 })
   t.end()
 })
