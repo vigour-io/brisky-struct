@@ -199,6 +199,38 @@ test('async - promise all', t => {
   })
 })
 
+test('async - async generator error handeling', t => {
+  const a = struct()
+
+  const gen = function * () {
+    var i = 6
+    while (i--) {
+      yield new Promise((resolve, reject) => {
+        if (i === 4) {
+          reject(i)
+        } else {
+          resolve(i)
+        }
+      })
+    }
+  }
+
+  const iterator = gen()
+  const results = []
+  const errors = []
+
+  a.on('error', err => errors.push(err))
+  a.on(val => results.push(val))
+
+  a.once(0).then(() => {
+    t.same(results, [ 5, 3, 2, 1, 0 ])
+    t.same(errors, [ 4 ])
+    t.end()
+  })
+
+  a.set(iterator)
+})
+
 test('async - advanced', t => {
   var cnt = 0
   const a = struct()
