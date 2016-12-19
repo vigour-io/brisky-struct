@@ -126,6 +126,48 @@ test('subscription - any - basic - true', t => {
   t.end()
 })
 
+test('subscription - any - basic - val: "switch"', t => {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: 'switch' } }
+  )
+
+  s('initial subscription', [], {})
+
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    {
+      a: {},
+      b: {}
+    }
+  )
+
+  s(
+    'set fields',
+    [],
+    {
+      a: 'a',
+      b: 'b'
+    }
+  )
+
+  s(
+    'remove field',
+    [
+      { path: 'b', type: 'update' },
+      { path: 'b', type: 'remove' }
+    ],
+    { a: null }
+  )
+
+  t.end()
+})
+
 test('subscription - any - basic - val: "property"', t => {
   var s = subsTest(
     t,
@@ -159,7 +201,6 @@ test('subscription - any - basic - val: "property"', t => {
   s(
     'remove field',
     [
-      { path: 'b', type: 'update' },
       { path: 'b', type: 'remove' }
     ],
     { a: null }
