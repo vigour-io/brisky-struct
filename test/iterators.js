@@ -39,3 +39,10 @@ test('iterators - for of', t => {
   t.same(results, [ 1, 2, 3, 4, 5, 6, 7 ], 'expected iteration')
   t.end()
 })
+
+test('iterators - keys', t => {
+  const a = struct()
+  const results = a.keys()
+  t.same(results, [], 'keys returns an empty array')
+  t.end()
+})
