@@ -58,15 +58,25 @@ test('subscription - $switch - basic', t => {
     }
   })
 
-  const result = s('initial subscription', [ { path: 'collection/a/x', type: 'new' } ])
+  const result = s('initial subscription', [
+    { path: 'collection/a/x', type: 'new' },
+    { path: 'query', type: 'new' },
+    { path: 'collection/b/c', type: 'new' },
+    { path: 'query', type: 'new' }
+  ])
+
   const start = tree(result.tree)
 
   s('update query', [
+    { path: 'query', type: 'update' },
+    { path: 'query', type: 'update' },
     { path: 'collection/b/c', type: 'new' },
     { path: 'collection/b/d', type: 'new' }
   ], { query: 'bye' })
 
   s('update query to unicorn', [
+    { path: 'query', type: 'update' },
+    { path: 'query', type: 'update' },
     { path: 'collection/b/c', type: 'remove' },
     { path: 'collection/b/d', type: 'remove' }
   ], { query: 'unicorn' })
@@ -77,13 +87,17 @@ test('subscription - $switch - basic', t => {
   ], { unicorn: '🦄' })
 
   s('update query', [
+    { path: 'query', type: 'update' },
     { path: 'unicorn', type: 'remove' },
+    { path: 'query', type: 'update' },
     { path: 'unicorn', type: 'remove' },
     { path: 'collection/b/c', type: 'new' },
     { path: 'collection/b/d', type: 'new' }
   ], { query: 'bye' })
 
   s('update query', [
+    { path: 'query', type: 'update' },
+    { path: 'query', type: 'update' },
     { path: 'collection/b/c', type: 'remove' },
     { path: 'collection/b/d', type: 'remove' }
   ], { query: 'blax' })
@@ -91,6 +105,7 @@ test('subscription - $switch - basic', t => {
   t.same(start, tree(result.tree), 'equal to start tree (cleared composites')
 
   s('update collection/b/c', [
+    { path: 'collection/b/c', type: 'update' },
     { path: 'collection/b/c', type: 'new' },
     { path: 'collection/b/d', type: 'new' }
   ], { collection: { b: { c: 'blax' } } })
@@ -100,12 +115,15 @@ test('subscription - $switch - basic', t => {
   ], { collection: { b: { d: 'blurf' } } })
 
   s('remove collection/b', [
-   { path: 'collection/b/c', type: 'remove' },
-   { path: 'collection/b/d', type: 'remove' }
+    { path: 'collection/b/c', type: 'remove' },
+    { path: 'query', type: 'remove' },
+    { path: 'collection/b/c', type: 'remove' },
+    { path: 'collection/b/d', type: 'remove' }
   ], { collection: { b: null } })
 
   s('remove collection', [
-   { path: 'collection/a/x', type: 'remove' }
+   { path: 'collection/a/x', type: 'remove' },
+   { path: 'query', type: 'remove' }
   ], { collection: null })
 
   t.same(tree(result.tree), {}, 'empty tree after removal')

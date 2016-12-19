@@ -3,13 +3,13 @@ import bs from 'brisky-stamp'
 import logger from './log'
 
 const inDriverTree = (p) => {
-  while (p) {
-    if (typeof p._key === 'string' && /^\$.+\*$/.test(p._key)) {
-      return true
-    } else {
-      p = p._p
-    }
-  }
+  // while (p) {
+  //   if (typeof p._key === 'string' && /^\$.+\*$/.test(p._key)) {
+  //     return true
+  //   } else {
+  //     p = p._p
+  //   }
+  // }
 }
 
 export default (t, state, subs, log) => {
