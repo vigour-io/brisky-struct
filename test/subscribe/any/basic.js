@@ -159,6 +159,7 @@ test('subscription - any - basic - val: "property"', t => {
   s(
     'remove field',
     [
+      { path: 'b', type: 'update' },
       { path: 'b', type: 'remove' }
     ],
     { a: null }
