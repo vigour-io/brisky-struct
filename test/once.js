@@ -1,5 +1,6 @@
 import test from 'tape'
 import { create as struct } from '../lib/'
+import bs from 'brisky-stamp'
 
 test('once ', t => {
   const a = struct()
@@ -11,9 +12,9 @@ test('once ', t => {
       t.pass('promise, callback')
       t.end()
     })
-    a.set('ha!', 'stamp-2')
+    a.set('ha!')
   })
-  a.set('a', 'stamp')
+  a.set('a')
   a.once('a', (val, stamp, struct) => {
     t.ok('inherits' in struct, 'struct is 3rd argument')
   })
@@ -22,7 +23,7 @@ test('once ', t => {
   }, (val, stamp, struct) => {
     t.ok('inherits' in struct, 'struct is 3rd argument')
   })
-  setTimeout(() => a.set('hello', 'stamp-1'))
+  setTimeout(() => a.set('hello'))
 })
 
 test('once -context', t => {
@@ -38,11 +39,15 @@ test('once -context', t => {
     }
   })
   const b = a.b
-  a.create()
-  b.get('connected').once(true, (val, stamp, struct) => {
-    if (!struct.context) {
-      t.end()
-    }
+  const c = a.create({ key: 'c' }) //eslint-disable-line
+  b.get('connected').once('jurx', (val, stamp, struct) => {
+    bs.on(() => {
+      a.get([ 'b', 'connected' ]).set(true)
+    })
   })
-  b.get('connected').set(true)
+
+  // b.get('connected').once(true, (val, stamp, struct) => {
+  //   t.end()
+  // })
+  b.get('connected').set('jurx')
 })
