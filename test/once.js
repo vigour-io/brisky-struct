@@ -46,8 +46,8 @@ test('once -context', t => {
     })
   })
 
-  // b.get('connected').once(true, (val, stamp, struct) => {
-  //   t.end()
-  // })
+  b.get('connected').once(true, (val, stamp, struct) => {
+    t.end()
+  })
   b.get('connected').set('jurx')
 })
