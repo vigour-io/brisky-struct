@@ -29,7 +29,7 @@
     "observable"
   ],
   "dependencies": {
-    "brisky-stamp": "^2.1.1",
+    "brisky-stamp": "^2.1.3",
     "monotonic-timestamp": "0.0.9"
   },
   "nyc": {
