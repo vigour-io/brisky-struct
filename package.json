@@ -11,7 +11,7 @@
     "pretest": "rollup -c rollup/test.js",
     "prepublish": "npm run build",
     "test": "standard && (node dist/test/index.js | tap-spec)",
-    "dev": "rollup -c rollup/test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js | tap-spec",
+    "dev": "rollup -c rollup/test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js",
     "cover": "nyc npm test"
   },
   "repository": {

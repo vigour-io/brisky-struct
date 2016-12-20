@@ -139,7 +139,7 @@ test('references - normal object for val', t => {
   t.end()
 })
 
-test('get - references', t => {
+test('references - get', t => {
   var cnt = 0
   const state = struct({
     holder: {
@@ -161,15 +161,34 @@ test('get - references', t => {
     state.holder.current.val === state.holder.fields,
     'making a reference using root in a nested field'
   )
-
   t.ok(
     state.holder.current.val._p === state.holder,
     'ref holder is state.holder'
   )
-
   state.holder.current.set([ '@', 'root', 'holder', 'fields' ])
+  t.equal(cnt, 0, 'did not fire')
+  t.end()
+})
+
+test('references - switch using get notations', t => {
+  var cnt = 0
+  const state = struct({})
+
+  state.set({
+    pages: {
+      fields: [ 1, 2, 3 ],
+      a: { field: [ '@', 'parent', 'parent', 'fields' ] }
+    },
+    page: [ '@', 'parent', 'pages', 'a' ]
+  })
+
+  state.set({
+    pages: {
+      b: { field: [ '@', 'parent', 'parent', 'fields' ] }
+    },
+    page: [ '@', 'parent', 'pages', 'b' ]
+  })
 
   t.equal(cnt, 0, 'did not fire')
-
   t.end()
 })
