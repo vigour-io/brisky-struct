@@ -24,3 +24,25 @@ test('once ', t => {
   })
   setTimeout(() => a.set('hello', 'stamp-1'))
 })
+
+test('once -context', t => {
+  const o = struct({
+    props: {
+      default: 'self',
+      connected: { type: 'struct' }
+    }
+  })
+  const a = o.create({
+    b: {
+      connected: false
+    }
+  })
+  const b = a.b
+  a.create()
+  b.get('connected').once(true, (val, stamp, struct) => {
+    if (!struct.context) {
+      t.end()
+    }
+  })
+  b.get('connected').set(true)
+})
