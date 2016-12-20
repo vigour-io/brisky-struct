@@ -171,24 +171,12 @@ test('references - get', t => {
 })
 
 test('references - switch using get notations', t => {
-  var cnt = 0
   const state = struct({})
-
-  state.set({
-    pages: {
-      fields: [ 1, 2, 3 ],
-      a: { field: [ '@', 'parent', 'parent', 'fields' ] }
-    },
-    page: [ '@', 'parent', 'pages', 'a' ]
-  })
-
-  state.set({
-    pages: {
-      b: { field: [ '@', 'parent', 'parent', 'fields' ] }
-    },
-    page: [ '@', 'parent', 'pages', 'b' ]
-  })
-
-  t.equal(cnt, 0, 'did not fire')
+  state.set([
+    { page: { val: [ '@', 'root', 'pages', 'b' ] } },
+    { page: { val: [ '@', 'root', 'pages', 'a' ] } }
+  ][Symbol.iterator]())
+  t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
+  t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
   t.end()
 })
