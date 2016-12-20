@@ -26,7 +26,7 @@ test('once ', t => {
   setTimeout(() => a.set('hello'))
 })
 
-test('once -context', t => {
+test('once - context', t => {
   const o = struct({
     props: {
       default: 'self',
@@ -47,6 +47,7 @@ test('once -context', t => {
   })
 
   b.get('connected').once(true, (val, stamp, struct) => {
+    t.pass('correct set and resolvement')
     t.end()
   })
   b.get('connected').set('jurx')
