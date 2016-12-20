@@ -39,16 +39,23 @@ test('once - context', t => {
     }
   })
   const b = a.b
+  const weird = a.b.connected.create()  //eslint-disable-line
+  const weird2 = a.b.connected.create()  //eslint-disable-line
+  var cnt = 0
+
   const c = a.create({ key: 'c' }) //eslint-disable-line
   b.get('connected').once('jurx', (val, stamp, struct) => {
-    bs.on(() => {
-      a.get([ 'b', 'connected' ]).set(true)
-    })
+    t.equal(cnt, 4)
+    a.get([ 'b', 'connected' ]).set(true)
   })
+
+  b.get('connected').on(() => {
+    cnt++
+  }, 'O2222')
 
   b.get('connected').once(true, (val, stamp, struct) => {
     t.pass('correct set and resolvement')
     t.end()
   })
-  b.get('connected').set('jurx')
+  a.get([ 'b', 'connected' ]).set('jurx')
 })
