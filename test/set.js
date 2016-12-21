@@ -42,8 +42,21 @@ test('set - stamp - remove', t => {
       }
     }
   }, false)
-  t.equal(a.a.b.c, null, 'removed a.a.b.c')
-  t.same(results, [ null, 100 ], 'fires listeners for stamp in keys')
+
+  const b = a.a.b
+
+  a.set({
+    a: {
+      b: {
+        val: null,
+        stamp: 'keepit100'
+      }
+    }
+  }, 'hello')
+
+  t.equal(b.stamp, 'keepit100')
+  t.equal(a.a.b, null, 'removed a.a.b')
+
   a.set({ a: { b: { stamp: 'X' } } }, false)
   t.equal(a.tStamp, 'X', 'correct travel stamp')
   t.end()
