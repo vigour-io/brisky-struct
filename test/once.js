@@ -1,6 +1,5 @@
 import test from 'tape'
 import { create as struct } from '../lib/'
-import bs from 'brisky-stamp'
 
 test('once ', t => {
   const a = struct()
