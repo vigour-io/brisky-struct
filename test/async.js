@@ -169,116 +169,116 @@ test('async', t => {
   stamp.close(s)
 })
 
-// test('async - promise all', t => {
-//   const a = struct()
+test('async - promise all', t => {
+  const a = struct()
 
-//   a.set(Promise.all([
-//     timeout({ val: 'later-1', 1: true }, 0),
-//     timeout({ val: 'later-2', 2: true }, 10),
-//     timeout({ val: 'later-3', 3: true }, 5)
-//   ]))
+  a.set(Promise.all([
+    timeout({ val: 'later-1', 1: true }, 0),
+    timeout({ val: 'later-2', 2: true }, 10),
+    timeout({ val: 'later-3', 3: true }, 5)
+  ]))
 
-//   a.set(a.once('later-3').then(() => {
-//     t.same(a.keys(), [ '1', '2', '3' ], 'correct keys')
-//     t.same(a.val, 'later-3', 'correct val')
-//     return 'lulllz'
-//   }))
+  a.set(a.once('later-3').then(() => {
+    t.same(a.keys(), [ '1', '2', '3' ], 'correct keys')
+    t.same(a.val, 'later-3', 'correct val')
+    return 'lulllz'
+  }))
 
-//   a.once('lulllz', () => {
-//     var cnt = 0
-//     a.on('error', () => ++cnt)
+  a.once('lulllz', () => {
+    var cnt = 0
+    a.on('error', () => ++cnt)
 
-//     a.set(new Promise((resolve, reject) => {
-//       reject()
-//     }))
+    a.set(new Promise((resolve, reject) => {
+      reject()
+    }))
 
-//     setTimeout(() => {
-//       t.equal(cnt, 0, 'does not fire error event')
-//       t.end()
-//     }, 25)
-//   })
-// })
+    setTimeout(() => {
+      t.equal(cnt, 0, 'does not fire error event')
+      t.end()
+    }, 25)
+  })
+})
 
-// test('async - async generator error handeling', t => {
-//   const a = struct()
+test('async - async generator error handeling', t => {
+  const a = struct()
 
-//   const gen = function * () {
-//     var i = 6
-//     while (i--) {
-//       yield new Promise((resolve, reject) => {
-//         if (i === 4) {
-//           reject(i)
-//         } else {
-//           resolve(i)
-//         }
-//       })
-//     }
-//   }
+  const gen = function * () {
+    var i = 6
+    while (i--) {
+      yield new Promise((resolve, reject) => {
+        if (i === 4) {
+          reject(i)
+        } else {
+          resolve(i)
+        }
+      })
+    }
+  }
 
-//   const iterator = gen()
-//   const results = []
-//   const errors = []
+  const iterator = gen()
+  const results = []
+  const errors = []
 
-//   a.on('error', err => errors.push(err))
-//   a.on(val => results.push(val))
+  a.on('error', err => errors.push(err))
+  a.on(val => results.push(val))
 
-//   a.once(0).then(() => {
-//     t.same(results, [ 5, 3, 2, 1, 0 ])
-//     t.same(errors, [ 4 ])
-//     t.end()
-//   })
+  a.once(0).then(() => {
+    t.same(results, [ 5, 3, 2, 1, 0 ])
+    t.same(errors, [ 4 ])
+    t.end()
+  })
 
-//   a.set(iterator)
-// })
+  a.set(iterator)
+})
 
-// test('async - advanced', t => {
-//   var cnt = 0
-//   const a = struct()
+test('async - advanced', t => {
+  var cnt = 0
+  const a = struct()
 
-//   const done = () => {
-//     var total = 0
-//     const walk = (p) => {
-//       p.forEach(p => {
-//         total++
-//         walk(p)
-//       })
-//     }
-//     walk(a)
-//     t.equal(total, 436, 'added all episodes and comments')
-//     t.end()
-//   }
+  const done = () => {
+    var total = 0
+    const walk = (p) => {
+      p.forEach(p => {
+        total++
+        walk(p)
+      })
+    }
+    walk(a)
+    t.equal(total, 436, 'added all episodes and comments')
+    t.end()
+  }
 
-//   const episodes = function * () {
-//     cnt++
-//     var episode = 5
-//     while (episode--) {
-//       yield new Promise(resolve => {
-//         setTimeout(() => {
-//           resolve({
-//             episodes: {
-//               [episode]: {
-//                 title: 'ha!' + episode,
-//                 comments: Promise.resolve(resolve => {
-//                   setTimeout(() => resolve([ 1, 2, 3 ]), 1)
-//                 })
-//               }
-//             }
-//           })
-//         }, 10)
-//       })
-//     }
-//     if (--cnt === 0) { done() }
-//   }
+  const episodes = function * () {
+    cnt++
+    var episode = 5
+    while (episode--) {
+      yield new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            episodes: {
+              [episode]: {
+                title: 'ha!' + episode,
+                comments: Promise.resolve(resolve => {
+                  setTimeout(() => resolve([ 1, 2, 3 ]), 1)
+                })
+              }
+            }
+          })
+        }, 10)
+      })
+    }
+    if (--cnt === 0) { done() }
+  }
 
-//   const seasons = function * () {
-//     var season = 5
-//     while (season--) { yield { seasons: { [season]: episodes } } }
-//   }
+  const seasons = function * () {
+    var season = 5
+    while (season--) { yield { seasons: { [season]: episodes } } }
+  }
 
-//   const scrape = function * () {
-//     var page = 5
-//     while (page--) { yield { shows: { [page]: seasons } } }
-//   }
+  const scrape = function * () {
+    var page = 5
+    while (page--) { yield { shows: { [page]: seasons } } }
+  }
 
-//   a.set(scrape)
-// })
+  a.set(scrape)
+})
