@@ -15,7 +15,7 @@ test('async', t => {
     on: {
       data: {
         log: (val, stamp, t) => {
-          results.push(stamp)
+          results.push(val)
         }
       },
       error: {
@@ -24,7 +24,6 @@ test('async', t => {
     }
   })
 
-  const scnt = stamp.cnt
   const s = stamp.create('click')
 
   // before coveralls support async/await need a solution for this
@@ -78,22 +77,22 @@ test('async', t => {
     a.once('timeout-12', () => {
       t.same(errors, [ 'haha' ], 'fired correct errors')
       t.same(results, [
-        `click-${scnt + 1}`,
-        `click-${scnt + 2}`,
-        `click-${scnt + 3}`,
-        `click-${scnt + 4}`,
-        `click-${scnt + 5}`,
-        `click-${scnt + 6}`,
-        `click-${scnt + 7}`,
-        `click-${scnt + 8}`,
-        `click-${scnt + 9}`,
-        `click-${scnt + 10}`,
-        `click-${scnt + 11}`,
-        `click-${scnt + 12}`,
-        `click-${scnt + 13}`,
-        `click-${scnt + 14}`,
-        `click-${scnt + 15}`,
-        `move-${scnt + 17}`
+        { hello: true, val: {} },
+        'later-1',
+        'timeout-1',
+        'timeout-2',
+        'await-gen-0',
+        'await-gen-1',
+        'await-gen-2',
+        'gen-0',
+        'gen-1',
+        'gen-2',
+        { bla: { bla: {} }, val: 'timeout-3' },
+        'timeout-4',
+        'timeout-5',
+        'timeout-6',
+        'timeout-7',
+        'timeout-12'
       ], 'fired correct results')
 
       a.set(timeout('no stamp!'), false)
@@ -142,31 +141,31 @@ test('async', t => {
         a.once('iterator-3-3').then(() => {
           t.same(errors, [ 'lullllz' ], 'catches iterator errors')
           t.same(results, [
-            `special-${scnt + 19}`,
-            `special-${scnt + 20}`,
-            `special-${scnt + 21}`,
-            `special-${scnt + 22}`,
-            `special-${scnt + 23}`,
-            `special-${scnt + 24}`,
-            `special-${scnt + 25}`,
-            `special-${scnt + 26}`,
-            `special-${scnt + 27}`,
-            `special-${scnt + 28}`,
-            `special-${scnt + 29}`,
-            `special-${scnt + 30}`,
-            `special-${scnt + 31}`,
-            `special-${scnt + 32}`
+            'gen-9',
+            'gen-8',
+            'gen-7',
+            'gen-6',
+            'ha!',
+            'gen-2',
+            'gen-1',
+            'gen-0',
+            'iterator-1',
+            'iterator-2',
+            'iterator-3',
+            'iterator-1-1',
+            'iterator-2-2',
+            'iterator-3-3'
           ], 'correct results')
           t.equal(a.async, void 0, 'removed async queue')
           t.end()
         })
-        stamp.close(s)
+        stamp.close()
       }, 25)
     })
-    stamp.close(s)
+    stamp.close()
   })
 
-  stamp.close(s)
+  stamp.close()
 })
 
 test('async - promise all', t => {

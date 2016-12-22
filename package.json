@@ -11,7 +11,7 @@
     "pretest": "rollup -c rollup/test.js",
     "prepublish": "npm run build",
     "postinstall": "if ! [ -d dist ]; then yarn && npm run build; fi",
-    "test": "standard && (node dist/test/index.js | tap-spec)",
+    "test": "standard && node dist/test/index.js",
     "dev": "rollup -c rollup/test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js",
     "cover": "nyc npm test"
   },
@@ -29,8 +29,7 @@
     "observable"
   ],
   "dependencies": {
-    "brisky-stamp": "^2.1.1",
-    "monotonic-timestamp": "0.0.9"
+    "brisky-stamp": "^3.0.7"
   },
   "nyc": {
     "include": [
@@ -51,7 +50,6 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-watch": "^2.5.0",
     "standard": "^8.1.0",
-    "tap-spec": "4.1.1",
     "tape": "4.6.0"
   },
   "author": "jim de beer",
