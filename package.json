@@ -10,7 +10,7 @@
     "watch": "rollup -c rollup/dist.js -w",
     "pretest": "rollup -c rollup/test.js",
     "prepublish": "npm run build",
-    "postinstall": "if ! [ -d dist ]; then mkdir dist && yarn && npm run build; fi",
+    "postinstall": "[ -d dist ] || npm run build || ( mkdir dist && yarn && npm run build );",
     "test": "standard && node dist/test/index.js",
     "dev": "rollup -c rollup/test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js",
     "cover": "nyc npm test"
