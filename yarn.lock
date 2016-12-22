@@ -196,7 +196,7 @@ braces@^1.8.2:
     preserve "^0.2.0"
     repeat-element "^1.1.2"
 
-brisky-stamp@^3.0.8:
+brisky-stamp@^3.0.11:
   version "3.0.11"
   resolved "https://registry.yarnpkg.com/brisky-stamp/-/brisky-stamp-3.0.11.tgz#d70732401744fe0cf1f4ceb6985e967ff5c74fed"
   dependencies:

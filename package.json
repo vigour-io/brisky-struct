@@ -30,7 +30,7 @@
     "observable"
   ],
   "dependencies": {
-    "brisky-stamp": "^3.0.8"
+    "brisky-stamp": "^3.0.11"
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
