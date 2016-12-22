@@ -11,8 +11,7 @@ export default {
   ],
   sourceMap: true,
   external: [
-    'brisky-stamp',
-    'monotonic-timestamp'
+    'brisky-stamp'
   ],
   targets: [
     { dest: 'dist/index.js', format: 'cjs' },

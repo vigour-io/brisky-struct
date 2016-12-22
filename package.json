@@ -8,11 +8,11 @@
   "scripts": {
     "build": "rollup -c rollup/dist.js",
     "watch": "rollup -c rollup/dist.js -w",
-    "pretest": "rollup -c rollup/test.js",
+    "pretest": "npm run build",
     "prepublish": "npm run build",
     "postinstall": "[ -d dist ] || npm run build || ( mkdir dist && yarn && npm run build );",
-    "test": "standard && node dist/test/index.js",
-    "dev": "rollup -c rollup/test.js -w & nodemon -C -w dist/test/index.js --harmony-async-await dist/test/index.js",
+    "test": "standard && node test/index.js",
+    "dev": "rollup -c rollup/dist.js -w & nodemon --harmony-async-await test/index.js",
     "cover": "nyc npm test"
   },
   "repository": {
