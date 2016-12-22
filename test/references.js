@@ -1,5 +1,5 @@
-import test from 'tape'
-import { create as struct } from '../lib/'
+const test = require('tape')
+const { create: struct } = require('../')
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
@@ -62,7 +62,7 @@ test('references - listeners', t => {
   const e2 = e.create({ key: 'e2' }) //eslint-disable-line
 
   results = []
-  a.set(2, 'stamp-2')
+  a.set(2)
   t.same(results, [
       [ 'c' ],
       [ 'c2' ],
@@ -72,7 +72,7 @@ test('references - listeners', t => {
   ], 'fires only for c (does not fire for a instance)')
 
   results = []
-  a.emit('data', 10)
+  a.emit('data', [ 10 ])
 
   t.same(results, [
       [ 'c' ],

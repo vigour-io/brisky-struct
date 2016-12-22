@@ -1,8 +1,8 @@
-import { create as struct } from '../../../lib/'
-import bs from 'brisky-stamp'
-import logger from './log'
+const { create: struct } = require('../../../')
+const bs = require('brisky-stamp')
+const logger = require('./log')
 
-export default (t, state, subs, log) => {
+module.exports = (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(

@@ -1,6 +1,6 @@
-import test from 'tape'
-import subsTest from '../util'
-import tree from '../util/tree'
+const test = require('tape')
+const subsTest = require('../util')
+const tree = require('../util/tree')
 
 test('subscription - $switch - forceCompare', t => {
   const s = subsTest(t, {

@@ -1,6 +1,6 @@
-import test from 'tape'
-import { create as struct } from '../lib/'
-import stamp from 'brisky-stamp'
+const test = require('tape')
+const { create: struct } = require('../')
+const stamp = require('brisky-stamp')
 
 const timeout = (val, time = 5, err) =>
   new Promise((resolve, reject) =>

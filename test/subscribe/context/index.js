@@ -1,5 +1,5 @@
-import test from 'tape'
-import { create } from '../../../lib/'
+const test = require('tape')
+const { create } = require('../../../')
 
 test('subscription - context - basic', t => {
   var cnt = 0

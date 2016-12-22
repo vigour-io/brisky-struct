@@ -1,5 +1,5 @@
-import test from 'tape'
-import subsTest from '../util'
+const test = require('tape')
+const subsTest = require('../util')
 
 test('subscription - any - merge', t => {
   const s = subsTest(

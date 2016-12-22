@@ -1,5 +1,5 @@
-import test from 'tape'
-import { create as struct } from '../../lib/'
+const test = require('tape')
+const { create: struct } = require('../../')
 
 test('context - props', t => {
   const app = struct({

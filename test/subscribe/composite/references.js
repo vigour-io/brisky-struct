@@ -1,5 +1,5 @@
-import test from 'tape'
-import subsTest from '../util'
+const test = require('tape')
+const subsTest = require('../util')
 test('subscription - composite - root - references', t => {
   const subscription = {
     a: {
