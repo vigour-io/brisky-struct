@@ -109,7 +109,7 @@ test('references - serialized', t => {
       }
     }
   })
-  b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] }, 'stamp')
+  b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] })
 })
 
 test('references - override & remove', t => {
