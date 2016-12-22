@@ -29,7 +29,7 @@
     "observable"
   ],
   "dependencies": {
-    "brisky-stamp": "^3.0.0"
+    "brisky-stamp": "^3.0.6"
   },
   "nyc": {
     "include": [
