@@ -18,6 +18,23 @@ test('set - stamp', t => {
   t.end()
 })
 
+test('set - composed stamp', t => {
+  const a = struct()
+  a.set({
+    a: {
+      b: {
+        c: {
+          val: 'hello',
+          stamp: [ 'hello', 100, 100 ]
+        }
+      }
+    }
+  }, [ 'hello', 2, 2 ])
+  t.same(a.a.b.c.stamp, [ 'hello', 100, 100 ], 'use stamp set in val object')
+  t.same(a.a.b.c.tStamp, [ 'hello', 2, 2 ], 'tStamp is ha-100')
+  t.end()
+})
+
 test('set - stamp - remove', t => {
   var results = []
   const a = struct({
