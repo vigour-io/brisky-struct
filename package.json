@@ -30,12 +30,12 @@
     "observable"
   ],
   "dependencies": {
-    "brisky-stamp": "^3.0.11"
+    "brisky-stamp": "^3.0.11",
+    "rollup-plugin-sourcemaps": "^0.4.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
-    "coveralls": "^2.11.9",
     "nodemon": "^1.11.0",
     "pre-commit": "^1.1.3",
     "rollup": "^0.37.0",
