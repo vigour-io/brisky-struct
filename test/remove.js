@@ -195,3 +195,27 @@ test('remove - keys', t => {
   t.same(results, [ [ 'b', 'c' ], [ 'c' ], [] ], 'correct keys results')
   t.end()
 })
+
+test('remove - instances - own keys', t => {
+  const results = []
+  const a = struct({
+    key: 'A',
+    a: 'a',
+    b: 'b',
+    c: 'c',
+    on: (val, stamp, t) => results.push(t.keys().concat())
+  })
+
+  const b = a.create({ key: 'B', ba: true, b: true }, false)
+  const c = b.create({ key: 'C', bc: true, c: true }, false) // eslint-disable-line
+
+  a.set(null)
+
+  t.same(results, [
+    [ 'a', 'b', 'c' ],
+    [ 'b', 'c', 'ba' ],
+    [ 'b', 'c', 'ba', 'bc' ]
+  ], 'correct keys')
+
+  t.end()
+})
