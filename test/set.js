@@ -40,26 +40,31 @@ test('set - composed stamp instances', t => {
   const a = struct()
   const b = a.create()
   const c = b.create() //eslint-disable-line
-
   const stamp = bs.create(100, 100, 'hello')
-
   a.set({
     val: 'hello',
     stamp
   }, bs.create(2, 2, 'hello'))
-
-  console.log(a.stamp, stamp)
-  console.log(b.stamp, stamp)
-  console.log(c.stamp, stamp)
-
   t.same(a.stamp, stamp, 'a stamp is hello-100')
   t.same(b.stamp, stamp, 'b stamp is hello-100')
   t.same(c.stamp, stamp, 'c stamp is hello-100')
-
   a.set({
     val: 'hello',
     stamp: bs.create(100, 100, 'hello')
   }, bs.create(2, 2, 'hello'))
+
+  const stamp2 = bs.create(3, 3, 'hello')
+
+  a.set({
+    val: 'hello',
+    a: { val: true, stamp },
+    b: { val: true, stamp }
+  }, stamp2)
+
+  t.same(a.a.stamp, stamp, 'a.a stamp is hello-100')
+  t.same(a.b.stamp, stamp, 'a.b stamp is hello-100')
+  t.same(b.tStamp, stamp2, 'b tStamp is hello-100')
+  t.same(c.tStamp, stamp2, 'c tStamp is hello-100')
   t.end()
 })
 
