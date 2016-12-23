@@ -52,9 +52,9 @@ test('set - composed stamp instances', t => {
   console.log(b.stamp, stamp)
   console.log(c.stamp, stamp)
 
-  t.same(a.stamp, stamp, 'stamp is hello-100')
-  t.same(b.stamp, stamp, 'stamp is hello-100')
-  t.same(c.stamp, stamp, 'stamp is hello-100')
+  t.same(a.stamp, stamp, 'a stamp is hello-100')
+  t.same(b.stamp, stamp, 'b stamp is hello-100')
+  t.same(c.stamp, stamp, 'c stamp is hello-100')
 
   a.set({
     val: 'hello',
