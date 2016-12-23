@@ -282,3 +282,54 @@ test('subscription - context - basic - override', t => {
   ], 'fires update for deep update')
   t.end()
 })
+
+test('subscription - context - resolve', t => {
+  var results = []
+  const s = create({
+    types: {
+      hello: {
+        b: {
+          c: {
+            d: {
+              val: 'ha!'
+            }
+          }
+        }
+      },
+      bla: {
+        a: {
+          type: 'hello'
+        }
+      },
+      collection: {
+        props: {
+          default: { type: 'bla' }
+        },
+        a: 'a',
+        b: 'b',
+        c: 'c'
+      }
+    },
+    collection: { type: 'collection' }
+  })
+
+  const listen = (v, t, s, tree) => {
+    var p = v.path().join('/')
+    results.push(t === 'remove' ? '-' + p : t === 'new' ? '+' + p : p)
+  }
+
+  const s2 = s.create({ key: 's2' })
+  s2.subscribe({
+    collection: {
+      $any: {
+        a: { b: { c: { d: true } } }
+      }
+    }
+  }, listen)
+
+  results = []
+  s2.get([ 'collection', 'a', 'a', 'b', 'c', 'd' ]).set('RESOLVE')
+
+  t.same(results, [ 's2/collection/a/a/b/c/d' ], 'fires update for deep update')
+  t.end()
+})
