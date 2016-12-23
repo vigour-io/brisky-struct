@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const { create: struct } = require('../../')
 
 test('context - resolve - simple', t => {
   var results = []
@@ -111,7 +111,7 @@ test('context - resolve - multiple', t => {
     }
   })
 
-  a.b.c.d.set('haha', 'stamp-3')
+  a.b.c.d.set('haha')
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
@@ -121,7 +121,7 @@ test('context - resolve - multiple', t => {
 
   results = []
   const z3D = x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ])
-  z3D.set({ bla: true }, 'stamp-4')
+  z3D.set({ bla: true })
   t.same(
     results, [ [ 'x3', 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ] ],
     'fires for resolved context'
@@ -132,7 +132,7 @@ test('context - resolve - multiple', t => {
   t.same(x2.y2.context, null, 'cleared context on "x2.y2"')
 
   results = []
-  a.get([ 'b', 'c', 'd' ]).set('ha!', 'stamp-5')
+  a.get([ 'b', 'c', 'd' ]).set('ha!')
 
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
@@ -142,7 +142,7 @@ test('context - resolve - multiple', t => {
   ], 'fires all contexts and instance when original updates')
 
   results = []
-  a.get([ 'b', 'c', 'd' ]).set({ bla: 'nice' }, 'stamp-6')
+  a.get([ 'b', 'c', 'd' ]).set({ bla: 'nice' })
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],
@@ -152,7 +152,7 @@ test('context - resolve - multiple', t => {
   results = []
   x3.get([ 'y3', 'z3', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ]).set('myself!', false)
 
-  a.get([ 'b', 'c', 'd' ]).set('yo yo yo', 'stamp-7')
+  a.get([ 'b', 'c', 'd' ]).set('yo yo yo')
   t.same(results, [
     [ 'x', 'y', 'z', 'b', 'c', 'd' ],
     [ 'x2', 'y2', 'z2', 'y', 'z', 'b', 'c', 'd' ],

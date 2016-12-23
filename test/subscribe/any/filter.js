@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../../')
+const { create: struct } = require('../../../')
 
 test('subscription - any - sort', t => {
   var results = []
@@ -85,26 +85,26 @@ test('subscription - any - filter - root', t => {
     .push(t === 'remove' ? '-' + v.key : t === 'new' ? '+' + v.key : v.key)
   )
 
-  t.same(results, [ '+a' ], 'initial subscription')
+  t.same(results, [ '+a', '+target' ], 'initial subscription')
   results = []
   s.target.set('b')
-  t.same(results, [ 'b' ], 'replace a')
+  t.same(results, [ 'target', 'b' ], 'replace a')
 
   results = []
   s.target.set('*')
-  t.same(results, [ 'a', '+b', '+c' ], 'add all')
+  t.same(results, [ 'target', 'a', '+b', '+c' ], 'add all')
 
   results = []
   s.target.set('b')
-  t.same(results, [ 'b', '-b', '-c' ], 'use b') // this breaks everything now
+  t.same(results, [ 'target', 'b', '-b', '-c' ], 'use b') // this breaks everything now
 
   results = []
   s.target.set('nothing') // this crashes...
-  t.same(results, [ '-b' ], 'use nothing') // this breaks everything now
+  t.same(results, [ 'target', '-b' ], 'use nothing') // this breaks everything now
 
   results = []
   s.target.set('*')
-  t.same(results, [ '+a', '+b', '+c' ], 'add all')
+  t.same(results, [ 'target', '+a', '+b', '+c' ], 'add all')
 
   results = []
   s.set({ hello: 'yes' })

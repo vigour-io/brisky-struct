@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const { create: struct } = require('../../')
 
 test('context - basic', t => {
   const instance = struct({

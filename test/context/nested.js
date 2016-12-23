@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const { create: struct } = require('../../')
 
 test('context - nested', t => {
   const feline = struct({
@@ -160,10 +160,8 @@ test('context - nested', t => {
     'bird.runs': { val: false, count: 1 },
     'seagull.runs': { val: false, count: 1 },
     'pigeon.runs': { val: false, count: 1 },
-    // why does this fire twice? -- once for pigeon and once for bird
     'animals.mySeagull.likes.woundedPigeon.runs': { val: false, count: 1 },
-    // ----------
-
+    'seagull.likes.woundedPigeon.runs': { val: false, count: 1 },
     'animals.mySeagull.runs': { val: true, count: 1 }
   }, 'first slow event fired as expected')
 

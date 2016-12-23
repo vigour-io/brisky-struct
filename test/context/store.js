@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const { create: struct } = require('../../')
 test('context - apply and resolve', t => {
   const obj = struct({ a: { b: { c: true } } })
   const base2 = obj.create({ key: 'base2' })

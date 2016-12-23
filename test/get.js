@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('get - defaults', t => {
   const a = struct()
@@ -20,5 +20,15 @@ test('get - origin', t => {
   const b = struct({ a: { b: a } })
   const c = struct(b)
   t.equal(c.get(['a', 'b', 'c']), a.c, 'references')
+  t.end()
+})
+
+test('get - types', t => {
+  const a = struct({
+    types: {
+      a: { x: true }
+    }
+  })
+  t.equal(a.get(['types', 'a', 'x']), a.types.a.x, 'types')
   t.end()
 })

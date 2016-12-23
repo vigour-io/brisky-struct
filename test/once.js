@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('once ', t => {
   const a = struct()
@@ -11,9 +11,9 @@ test('once ', t => {
       t.pass('promise, callback')
       t.end()
     })
-    a.set('ha!', 'stamp-2')
+    a.set('ha!')
   })
-  a.set('a', 'stamp')
+  a.set('a')
   a.once('a', (val, stamp, struct) => {
     t.ok('inherits' in struct, 'struct is 3rd argument')
   })
@@ -22,5 +22,49 @@ test('once ', t => {
   }, (val, stamp, struct) => {
     t.ok('inherits' in struct, 'struct is 3rd argument')
   })
-  setTimeout(() => a.set('hello', 'stamp-1'))
+  setTimeout(() => a.set('hello'))
+})
+
+test('once - context', t => {
+  const o = struct({
+    props: {
+      default: 'self',
+      connected: { type: 'struct' }
+    }
+  })
+  const a = o.create({
+    b: {
+      connected: false
+    }
+  })
+  const b = a.b
+  const weird = a.b.connected.create()  //eslint-disable-line
+  const weird2 = a.b.connected.create()  //eslint-disable-line
+  var cnt = 0
+
+  const c = a.create({ key: 'c' }) //eslint-disable-line
+
+  b.get('connected').once('jurx', (val, stamp, struct) => {})
+
+  b.get('connected').on(() => {
+    cnt++
+  }, 'O2222')
+
+  b.get('connected').once('jurx', (val, stamp, struct) => {
+    t.equal(cnt, 4)
+  })
+
+  b.get('connected').once('jurx', (val, stamp, struct) => {
+    t.equal(cnt, 4)
+    a.get([ 'b', 'connected' ]).set(true)
+  })
+
+  b.get('connected').once(true, (val, stamp, struct) => {
+    t.pass('correct set and resolvement')
+    t.end()
+  })
+
+  b.get('connected').once('jurx', (val, stamp, struct) => {})
+
+  a.get([ 'b', 'connected' ]).set('jurx')
 })

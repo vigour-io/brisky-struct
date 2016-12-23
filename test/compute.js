@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('compute ', t => {
   const a = struct({

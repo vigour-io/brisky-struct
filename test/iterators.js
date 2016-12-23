@@ -1,5 +1,6 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
+const bs = require('brisky-stamp')
 
 test('iterators - functional', t => {
   const a = struct({ key: 1, a: 'a', b: 'b', c: 'c' })
@@ -27,6 +28,9 @@ test('iterators - functional', t => {
 
   const empty = struct({})
   t.same(empty.filter(val => true), [], 'filter returns empty array')
+
+  empty.push('hello', bs.create())
+  t.same(empty.keys().length, 1, 'push extra key')
   t.end()
 })
 
@@ -37,5 +41,12 @@ test('iterators - for of', t => {
     results.push(val.compute())
   }
   t.same(results, [ 1, 2, 3, 4, 5, 6, 7 ], 'expected iteration')
+  t.end()
+})
+
+test('iterators - keys', t => {
+  const a = struct()
+  const results = a.keys()
+  t.same(results, [], 'keys returns an empty array')
   t.end()
 })

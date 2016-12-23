@@ -1,6 +1,6 @@
 const test = require('tape')
 const subsTest = require('../util')
-const struct = require('../../../')
+const { create: struct } = require('../../../')
 
 test('subscription - any - basic', t => {
   const s = subsTest(
@@ -121,6 +121,48 @@ test('subscription - any - basic - true', t => {
       { path: 'hello', type: 'new' }
     ],
     { hello: true }
+  )
+
+  t.end()
+})
+
+test('subscription - any - basic - val: "switch"', t => {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: 'switch' } }
+  )
+
+  s('initial subscription', [], {})
+
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    {
+      a: {},
+      b: {}
+    }
+  )
+
+  s(
+    'set fields',
+    [],
+    {
+      a: 'a',
+      b: 'b'
+    }
+  )
+
+  s(
+    'remove field',
+    [
+      { path: 'b', type: 'update' },
+      { path: 'b', type: 'remove' }
+    ],
+    { a: null }
   )
 
   t.end()

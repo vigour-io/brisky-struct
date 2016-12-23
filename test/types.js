@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('types ', t => {
   const a = struct({
@@ -12,6 +12,7 @@ test('types ', t => {
     },
     field: { type: 'something' }
   })
+
   const b = a.create({
     types: {
       something: {
@@ -26,7 +27,7 @@ test('types ', t => {
     y: { type: 'bla' }
   })
   t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged "something" type')
-  t.equal(b.get('y').keys(), void 0, 'override "bla" type')
+  t.same(b.get('y').keys(), [], 'override "bla" type')
   t.equal(b.get('y').compute(), 'override!', 'type with string')
   t.same(a.get('field').keys(), [ 'field' ], '"field" on a has "field"')
   const c = struct({
@@ -40,6 +41,21 @@ test('types ', t => {
     }
   })
   const c2 = c.create({ a: { type: 'a' } })
-  t.same(c2.get('a').keys(), void 0, 'override inheritance')
+  t.same(c2.get('a').keys(), [], 'override inheritance')
+  t.end()
+})
+
+test('types ', t => {
+  const a = struct({
+    key: 'a',
+    types: {
+      a: 'self'
+    },
+    define: {
+      haha: true
+    },
+    bla: { type: 'a' }
+  })
+  t.equal(a.bla.inherits, a, 'use self in types')
   t.end()
 })

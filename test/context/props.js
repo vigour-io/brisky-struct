@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../../')
+const { create: struct } = require('../../')
 
 test('context - props', t => {
   const app = struct({
@@ -46,8 +46,6 @@ test('context - props', t => {
   t.equal(app.get([ 'bla', 'field', 'text', 'compute' ]), 'hello')
   t.equal(app.get([ 'bla', 'props' ]).default.struct.text.get('val'), 'hello')
   t.equal(app.get([ 'bah', 'props' ]).default.struct.text.val, 'yo yo yo')
-
-  console.log()
 
   t.end()
 })

@@ -1,24 +1,23 @@
-const struct = require('../../../')
+const { create: struct } = require('../../../')
 const bs = require('brisky-stamp')
 const logger = require('./log')
 
-module.exports = exports = (t, state, subs, log) => {
+module.exports = (t, state, subs, log) => {
   state = state.inherits ? state : struct(state)
   var updates = []
   const tree = state.subscribe(
     subs,
-    (state, type, stamp, subs, tree, sType) => {
+    (state, type, subs, tree) => {
       let path = state && state.path().join('/')
       let obj = {
         type: type,
-        tree: tree,
-        sType: sType
+        tree: tree
       }
       if (path) {
         obj.path = path
       }
       if (log) {
-        console.log('FIRE:', path, type, sType || 'normal', treePath(tree))
+        console.log('FIRE:', path, type, treePath(tree))
       }
       updates.push(obj)
     }
@@ -105,8 +104,6 @@ function resolveStamps (tree, seed) {
     }
   }
 }
-
-exports.copy = copy
 
 function copy (tree, strip) {
   const result = {}

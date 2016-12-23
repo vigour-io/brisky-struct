@@ -46,15 +46,23 @@ test('subscription - $switch - any - composite - remove', t => {
       }
     }
   })
-  s('initial subscription', [ { path: 'list/0', type: 'new' } ])
+  s('initial subscription', [
+    { path: 'thing', type: 'new' },
+    { path: 'list/0', type: 'new' },
+    { path: 'thing', type: 'new' },
+    { path: 'thing', type: 'new' }
+  ])
   s('update target', [
+    { path: 'thing', type: 'update' },
     { path: 'list/0', type: 'remove' },
-    { path: 'list/1', type: 'new' }
+    { path: 'thing', type: 'update' },
+    { path: 'list/1', type: 'new' },
+    { path: 'thing', type: 'update' }
   ], { thing: 2 })
   t.end()
 })
 
-test('subscription - $switch - any - composite - remove', t => {
+test('subscription - $switch - any - composite - remove (variant)', t => {
   const s = subsTest(t, {
     list: [ 1, 2, 3 ],
     thing: 1
@@ -72,9 +80,17 @@ test('subscription - $switch - any - composite - remove', t => {
       }
     }
   })
-  s('initial subscription', [ { path: 'list/0', type: 'new' } ])
+  s('initial subscription', [
+    { path: 'thing', type: 'new' },
+    { path: 'list/0', type: 'new' },
+    { path: 'thing', type: 'new' },
+    { path: 'thing', type: 'new' }
+  ])
   s('update target', [
-    { path: 'list/0', type: 'remove' }
+    { path: 'thing', type: 'update' },
+    { path: 'list/0', type: 'remove' },
+    { path: 'thing', type: 'update' },
+    { path: 'thing', type: 'update' }
   ], { thing: 'bla' })
   t.end()
 })
@@ -97,9 +113,16 @@ test('subscription - $switch - any - filter', t => {
       }
     }
   })
-  s('initial subscription', [ { path: 'list/2', type: 'new' } ])
+
+  s('initial subscription', [
+    { path: 'list/0/rating', type: 'new' },
+    { path: 'list/1/rating', type: 'new' },
+    { path: 'list/2/rating', type: 'new' },
+    { path: 'list/2', type: 'new' }
+  ])
 
   s('update target', [
+    { path: 'list/2/rating', type: 'update' },
     { path: 'list/2', type: 'remove' }
   ], { list: { 2: { rating: 0 } } })
   t.end()
@@ -133,19 +156,27 @@ test('subscription - $switch - any - filter', t => {
   })
 
   s('initial subscription', [
+    { path: 'list/0/bla/rating', type: 'new' },
     { path: 'unicorn', type: 'new' },
+    { path: 'list/1/bla/rating', type: 'new' },
     { path: 'list/1/bla', type: 'new' },
+    { path: 'list/2/bla/rating', type: 'new' },
     { path: 'list/2/bla', type: 'new' },
+    { path: 'list/3/bla/rating', type: 'new' },
     { path: 'unicorn', type: 'new' }
   ])
 
   s('remove 0', [
+    { path: 'list/1/bla/rating', type: 'update' },
     { path: 'unicorn', type: 'remove' },
     { path: 'list/1/bla', type: 'new' },
+    { path: 'list/2/bla/rating', type: 'update' },
     { path: 'list/1/bla', type: 'remove' },
     { path: 'list/2/bla', type: 'new' },
+    { path: 'list/3/bla/rating', type: 'update' },
     { path: 'list/2/bla', type: 'remove' },
     { path: 'unicorn', type: 'new' },
+    { path: 'list/3/bla/rating', type: 'remove' },
     { path: 'unicorn', type: 'remove' }
   ], { list: { 0: { bla: { rating: 10 } } } })
 

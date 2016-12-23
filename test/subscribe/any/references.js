@@ -1,6 +1,6 @@
 const test = require('tape')
 const subsTest = require('../util')
-const struct = require('../../../')
+const { create: struct } = require('../../../')
 
 test('subscription - any - references - fields', t => {
   const s = subsTest(

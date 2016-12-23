@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('props - normal field', t => {
   const s = struct({
@@ -149,6 +149,36 @@ test('props - reset', t => {
   s.set({ reset: [ 'c', 'a' ] })
 
   t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
+
+  t.end()
+})
+
+test('props - context', t => {
+  const s = struct({
+    types: {
+      lurf: {
+        field: {
+          val: 'hello'
+        }
+      }
+    },
+    hello: {
+      props: {
+        lurf: { type: 'lurf' }
+      },
+      lurf: {}
+    }
+  })
+
+  s.set({
+    types: {
+      lurf: {
+        field: 'blue'
+      }
+    }
+  })
+
+  t.equal(s.get([ 'hello', 'lurf', 'field' ]).compute(), 'blue', 'correct inhertiance')
 
   t.end()
 })

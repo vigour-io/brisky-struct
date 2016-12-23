@@ -1,5 +1,5 @@
 const test = require('tape')
-const struct = require('../')
+const { create: struct } = require('../')
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
@@ -62,7 +62,7 @@ test('references - listeners', t => {
   const e2 = e.create({ key: 'e2' }) //eslint-disable-line
 
   results = []
-  a.set(2, 'stamp-2')
+  a.set(2)
   t.same(results, [
       [ 'c' ],
       [ 'c2' ],
@@ -72,7 +72,7 @@ test('references - listeners', t => {
   ], 'fires only for c (does not fire for a instance)')
 
   results = []
-  a.emit('data', 10)
+  a.emit('data', [ 10 ])
 
   t.same(results, [
       [ 'c' ],
@@ -109,7 +109,7 @@ test('references - serialized', t => {
       }
     }
   })
-  b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] }, 'stamp')
+  b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] })
 })
 
 test('references - override & remove', t => {
@@ -139,7 +139,7 @@ test('references - normal object for val', t => {
   t.end()
 })
 
-test('get - references', t => {
+test('references - get', t => {
   var cnt = 0
   const state = struct({
     holder: {
@@ -161,15 +161,22 @@ test('get - references', t => {
     state.holder.current.val === state.holder.fields,
     'making a reference using root in a nested field'
   )
-
   t.ok(
     state.holder.current.val._p === state.holder,
     'ref holder is state.holder'
   )
-
   state.holder.current.set([ '@', 'root', 'holder', 'fields' ])
-
   t.equal(cnt, 0, 'did not fire')
+  t.end()
+})
 
+test('references - switch using get notations', t => {
+  const state = struct({})
+  state.set([
+    { page: { val: [ '@', 'root', 'pages', 'b' ] } },
+    { page: { val: [ '@', 'root', 'pages', 'a' ] } }
+  ][Symbol.iterator]())
+  t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
+  t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
   t.end()
 })

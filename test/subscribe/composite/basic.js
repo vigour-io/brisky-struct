@@ -1,9 +1,8 @@
-'use strict'
 const test = require('tape')
 const subsTest = require('../util')
+const { create: struct } = require('../../../')
 
 test('subscription - composite - root', t => {
-  const struct = require('../../../')
   const subs = {
     a: {
       b: {

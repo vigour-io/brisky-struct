@@ -104,17 +104,3 @@ test('subscription - basic - nested removal', t => {
   )
   t.end()
 })
-
-// test('basic - top', t => {
-//   t.plan(2)
-//   const s = require('../s')
-//   const state = s({ haha: true }, false)
-//   const cnt = { new: 0, update: 0 }
-//   state.subscribe({ val: true }, (target, type, stamp, subs, tree, sType) => {
-//     if (sType) { cnt[sType]++ }
-//     cnt[type]++
-//   })
-//   state.set('lullz')
-//   t.equal(cnt.new, 1, 'fired new twice')
-//   t.equal(cnt.update, 1, 'fired update twice')
-// })
