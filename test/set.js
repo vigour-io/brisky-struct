@@ -52,19 +52,33 @@ test('set - composed stamp instances', t => {
     val: 'hello',
     stamp: bs.create(100, 100, 'hello')
   }, bs.create(2, 2, 'hello'))
-
-  const stamp2 = bs.create(3, 3, 'hello')
-
+  const stamp2 = bs.create(3, 3, 'y')
   a.set({
     val: 'hello',
-    a: { val: true, stamp },
-    b: { val: true, stamp }
+    a: { val: 'a', stamp },
+    b: { val: 'b', stamp }
   }, stamp2)
-
   t.same(a.a.stamp, stamp, 'a.a stamp is hello-100')
   t.same(a.b.stamp, stamp, 'a.b stamp is hello-100')
-  t.same(b.tStamp, stamp2, 'b tStamp is hello-100')
-  t.same(c.tStamp, stamp2, 'c tStamp is hello-100')
+  t.same(a.tStamp, stamp2, 'a tStamp is y-3')
+  t.same(b.tStamp, stamp2, 'b tStamp is y-3')
+  t.same(c.tStamp, stamp2, 'c tStamp is y-3')
+
+  const stamp3 = bs.create(3, 3, 3)
+  const stamp4 = bs.create(4, 4, 4)
+  a.set({
+    val: 'hello',
+    a: 'a',
+    c: 'c',
+    d: 'd',
+    stamp: stamp3
+  }, stamp4)
+
+  t.same(a.tStamp, stamp4, 'a tStamp is 4')
+  t.same(a.stamp, stamp3, 'a stamp is 3')
+  t.same(a.c.stamp, stamp4, 'a.c stamp is 4')
+  t.same(c.tStamp, stamp4, 'c tStamp is 4')
+  t.same(c.stamp, stamp3, 'c stamp is 3')
   t.end()
 })
 
