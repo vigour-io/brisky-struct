@@ -40,8 +40,8 @@
     "brisky-stamp": "^3.0.11"
   },
   "devDependencies": {
-    "nyc": "^10.0.0",
     "source-map-support": "^0.4.7",
+    "nyc": "^10.0.0",
     "coveralls": "^2.11.9",
     "nodemon": "^1.11.0",
     "pre-commit": "^1.1.3",
