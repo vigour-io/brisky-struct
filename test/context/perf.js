@@ -1,8 +1,9 @@
 const test = require('tape')
 const { struct } = require('../../')
 
-test('context - nested', t => {
+test('context - perf - remove', t => {
   const cl = struct.create({
+    instances: false,
     props: {
       default: 'self'
     }
@@ -32,8 +33,6 @@ test('context - nested', t => {
   var d = Date.now()
   thing.set(null)
   d = Date.now() - d
-
-  console.log(d, 'ms')
 
   t.ok(d < 100, 'removing context with props:self does not take longer then 100ms')
 
