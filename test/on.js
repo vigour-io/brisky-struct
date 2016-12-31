@@ -214,7 +214,7 @@ test('on - non data ', t => {
       }
     }
   })
-  const ref1 = ref.create()
+  const ref1 = ref.create() //eslint-disable-line
   ref.x.emit('bla')
   t.equal(cnt, 1)
   t.end()
