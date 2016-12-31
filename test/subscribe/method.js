@@ -40,7 +40,13 @@ test('subscription - multiple subscriptions', t => {
   }, t => results.push(t.path()))
 
   s.subscribe({
-    a: true
+    b: true
   }, t => results.push(t.path()))
+
+  s.a.set(10)
+  s.b.set(10)
+
+  t.same(results, [ [ 'a' ], [ 'b' ], [ 'a' ], [ 'b' ] ])
+
   t.end()
 })

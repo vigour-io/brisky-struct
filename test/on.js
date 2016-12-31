@@ -202,3 +202,20 @@ test('on - create ', t => {
   })
   a.create({ key: 'b', val: 'its b' }, 'lullz')
 })
+
+test('on - non data ', t => {
+  var cnt = 0
+  const ref = struct({
+    x: {
+      on: {
+        bla: () => {
+          cnt++
+        }
+      }
+    }
+  })
+  const ref1 = ref.create()
+  ref.x.emit('bla')
+  t.equal(cnt, 1)
+  t.end()
+})
