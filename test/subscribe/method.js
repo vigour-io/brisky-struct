@@ -24,3 +24,29 @@ test('subscription - parse', t => {
   t.same(results[results.length - 1], [], 'parse val true')
   t.end()
 })
+
+test('subscription - multiple subscriptions', t => {
+  const results = []
+  const s = struct({
+    a: true,
+    b: true,
+    c: true
+  })
+
+  // and now unsubscribe
+
+  s.subscribe({
+    a: true
+  }, t => results.push(t.path()))
+
+  s.subscribe({
+    b: true
+  }, t => results.push(t.path()))
+
+  s.a.set(10)
+  s.b.set(10)
+
+  t.same(results, [ [ 'a' ], [ 'b' ], [ 'a' ], [ 'b' ] ])
+
+  t.end()
+})
