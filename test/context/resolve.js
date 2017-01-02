@@ -36,8 +36,8 @@ test('context - resolve - simple', t => {
   const resolved = zC.set('haha', 'stamp-1')
   t.not(resolved, zC, 'resolved context (level 2)')
   t.same(results, [ [ 'x', 'y', 'z', 'b', 'c' ] ], 'fired correct listeners')
-  t.equal(zC.context, null, 'cleared context on resolve')
-  t.equal(zC.contextLevel, null, 'cleared contextLevel on resolve')
+  t.equal(zC._c, null, 'cleared context on resolve')
+  t.equal(zC._cLevel, null, 'cleared contextLevel on resolve')
 
   const z2B = x.get([ 'y', 'z2', 'b' ])
   const resolved2 = z2B.set('haha', 'stamp-2')
@@ -127,9 +127,9 @@ test('context - resolve - multiple', t => {
     'fires for resolved context'
   )
 
-  t.same(a.b.c.context, null, 'cleared context on "a.b.c"')
-  t.same(x.y.context, null, 'cleared context on "x.y"')
-  t.same(x2.y2.context, null, 'cleared context on "x2.y2"')
+  t.same(a.b.c._c, null, 'cleared context on "a.b.c"')
+  t.same(x.y._c, null, 'cleared context on "x.y"')
+  t.same(x2.y2._c, null, 'cleared context on "x2.y2"')
 
   results = []
   a.get([ 'b', 'c', 'd' ]).set('ha!')
