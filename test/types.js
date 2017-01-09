@@ -113,7 +113,7 @@ test('switch types', t => {
   // console.log('\n 🦊  RESULT INSTANCE 3 OWN KEYS + REMOVAL: 🦊')
   // console.log(JSON.stringify(a3.serialize(), false, 2))
 
-  // console.log('\n 🦊  RESULT INSTANCE 3-2 OWN KEYS + REMOVAL: 🦊')
+  console.log('\n 🦊🦏  RESULT INSTANCE 3-2 OWN KEYS + REMOVAL: 🦊🦏')
   console.log(JSON.stringify(a32.serialize(), false, 2))
 
   console.log(a3.keys())
