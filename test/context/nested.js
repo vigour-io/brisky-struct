@@ -67,30 +67,30 @@ test('context - nested', t => {
   t.ok(animals.get(['mySeagull', 'flies']).compute(), 'my seagull flies')
 
   t.equals(
-    animals.get(['mySeagull', 'flies']).context, animals.get('mySeagull'),
+    animals.get(['mySeagull', 'flies'])._c, animals.get('mySeagull'),
     'my seagull flies in context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'flies']).contextLevel, 1,
+    animals.get(['mySeagull', 'flies'])._cLevel, 1,
     'contextLevel is 1'
   )
 
   t.ok(animals.get(['mySeagull', 'swims']).compute(), 'my seagull swims')
 
   t.equals(
-    animals.get(['mySeagull', 'swims']).context, animals.get('mySeagull'),
+    animals.get(['mySeagull', 'swims'])._c, animals.get('mySeagull'),
     'my seagull swims in context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'swims']).contextLevel, 1,
+    animals.get(['mySeagull', 'swims'])._cLevel, 1,
     'contextLevel is 1'
   )
 
   t.ok(animals.get(['mySeagull', 'runs']).compute(), 'my seagull runs')
 
-  t.notOk(animals.get(['mySeagull', 'runs']).context, 'my seagull runs out of context')
+  t.notOk(animals.get(['mySeagull', 'runs'])._c, 'my seagull runs out of context')
 
   t.equals(
     animals.get(['mySeagull', 'hunts', 'kitten', 'runs']).compute(), false,
@@ -98,18 +98,18 @@ test('context - nested', t => {
   )
 
   t.notOk(
-    animals.get(['mySeagull', 'hunts', 'kitten', 'runs']).context,
+    animals.get(['mySeagull', 'hunts', 'kitten', 'runs'])._c,
     'hunted kitten can not run out of context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'hunts', 'kitten', 'swims']).context,
+    animals.get(['mySeagull', 'hunts', 'kitten', 'swims'])._c,
     animals.get(['mySeagull', 'hunts', 'kitten']),
     'hunted kitten can not swim in context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'hunts', 'kitten', 'swims']).contextLevel, 1,
+    animals.get(['mySeagull', 'hunts', 'kitten', 'swims'])._cLevel, 1,
     'contextLevel is 1'
   )
 
@@ -119,24 +119,24 @@ test('context - nested', t => {
   )
 
   t.equals(
-    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims']).context,
+    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims'])._c,
     animals.get(['mySeagull', 'likes', 'woundedPigeon']),
     'wounded pigeon can not swim in context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims']).contextLevel, 1,
+    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims'])._cLevel, 1,
     'contextLevel is 1'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.context,
+    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims'])._c._c,
     animals.get('mySeagull'),
     'wounded pigeon can not swim in context of context'
   )
 
   t.equals(
-    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims']).context.contextLevel, 2,
+    animals.get(['mySeagull', 'likes', 'woundedPigeon', 'swims'])._c._cLevel, 2,
     'contextLevel of context is 2'
   )
 
@@ -179,7 +179,7 @@ test('context - nested', t => {
   })
   const a2 = a.create()
   const d = a2.get([ 'a', 'b', 'c', 'd' ])
-  a.a.b.c.context = null
-  t.equal(d.parent().context, a2, 'sets context on parent from child')
+  a.a.b.c._c = null
+  t.equal(d.parent()._c, a2, 'sets context on parent from child')
   t.end()
 })

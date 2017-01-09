@@ -90,12 +90,12 @@ test('context - props', t => {
   )
 
   t.equals(
-    students.get(['first', 'gender']).context, students.get('first'),
+    students.get(['first', 'gender'])._c, students.get('first'),
     'gender is in context'
   )
 
   t.equals(
-    students.get(['first', 'gender']).contextLevel, 1,
+    students.get(['first', 'gender'])._cLevel, 1,
     'contextLevel is 1'
   )
 
@@ -110,12 +110,12 @@ test('context - props', t => {
   )
 
   t.equals(
-    students.get(['second', 'gender']).context, students.get('second'),
+    students.get(['second', 'gender'])._c, students.get('second'),
     'gender is in context'
   )
 
   t.equals(
-    students.get(['second', 'gender']).contextLevel, 1,
+    students.get(['second', 'gender'])._cLevel, 1,
     'contextLevel is 1'
   )
 
@@ -132,12 +132,12 @@ test('context - props', t => {
   )
 
   t.equals(
-    students.get(['third', 'gender']).context, students.get('third'),
+    students.get(['third', 'gender'])._c, students.get('third'),
     'gender is in context'
   )
 
   t.equals(
-    students.get(['third', 'gender']).contextLevel, 1,
+    students.get(['third', 'gender'])._cLevel, 1,
     'contextLevel is 1'
   )
 
