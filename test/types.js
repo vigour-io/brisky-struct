@@ -92,23 +92,31 @@ test('switch types', t => {
   const a1 = a.bla.create()
   const a2 = a.bla.create({ MYOWN: true })
   const a3 = a.bla.create({ hello: null })
+  const a32 = a3.create({
+    'HA': true
+  })
 
   a.bla.set({ type: 'b' })
 
-  console.log('\nINHERITS: 👁')
-  console.log(JSON.stringify(a.bla.poep, false, 2), a.bla.keys())
+  // console.log('\nINHERITS: 👁')
+  // console.log(JSON.stringify(a.bla.poep, false, 2), a.bla.keys())
 
-  console.log('\n\nRESULTS: 👁')
-  console.log(JSON.stringify(a.bla.serialize(), false, 2))
+  // console.log('\n\nRESULTS: 👁')
+  // console.log(JSON.stringify(a.bla.serialize(), false, 2))
 
-  console.log('\nRESULT INSTANCE: 👁')
-  console.log(JSON.stringify(a1.serialize(), false, 2))
+  // console.log('\nRESULT INSTANCE: 👁')
+  // console.log(JSON.stringify(a1.serialize(), false, 2))
 
-  console.log('\nRESULT INSTANCE 2 OWN KEYS: 👁')
-  console.log(JSON.stringify(a2.serialize(), false, 2))
+  // console.log('\nRESULT INSTANCE 2 OWN KEYS: 👁')
+  // console.log(JSON.stringify(a2.serialize(), false, 2))
 
-  console.log('\nRESULT INSTANCE 3 OWN KEYS: 👁')
-  console.log(JSON.stringify(a3.serialize(), false, 2))
+  // console.log('\n 🦊  RESULT INSTANCE 3 OWN KEYS + REMOVAL: 🦊')
+  // console.log(JSON.stringify(a3.serialize(), false, 2))
+
+  // console.log('\n 🦊  RESULT INSTANCE 3-2 OWN KEYS + REMOVAL: 🦊')
+  console.log(JSON.stringify(a32.serialize(), false, 2))
+
+  console.log(a3.keys())
 
   t.end()
 })
