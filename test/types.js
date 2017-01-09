@@ -68,7 +68,8 @@ test('switch types', t => {
         hello: true
       },
       b: {
-        x: true
+        XXXXXXXX: true,
+        YYYYYYYY: true
       },
       a: {
         props: {
@@ -81,16 +82,33 @@ test('switch types', t => {
     },
     bla: {
       type: 'a',
-      hello: true,
+      hello: {},
       gurky: { type: 'gurky' },
-      val: 'smurt',
-      a: 'blabla'
+      val: 'smurt'
+      // a: 'blabla'
     }
   })
 
   const a1 = a.bla.create()
+  const a2 = a.bla.create({ MYOWN: true })
+  const a3 = a.bla.create({ hello: null })
 
   a.bla.set({ type: 'b' })
+
+  console.log('\nINHERITS: 👁')
+  console.log(JSON.stringify(a.bla.poep, false, 2), a.bla.keys())
+
+  console.log('\n\nRESULTS: 👁')
+  console.log(JSON.stringify(a.bla.serialize(), false, 2))
+
+  console.log('\nRESULT INSTANCE: 👁')
+  console.log(JSON.stringify(a1.serialize(), false, 2))
+
+  console.log('\nRESULT INSTANCE 2 OWN KEYS: 👁')
+  console.log(JSON.stringify(a2.serialize(), false, 2))
+
+  console.log('\nRESULT INSTANCE 3 OWN KEYS: 👁')
+  console.log(JSON.stringify(a3.serialize(), false, 2))
 
   t.end()
 })
