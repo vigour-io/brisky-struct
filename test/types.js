@@ -64,6 +64,9 @@ test('switch types', t => {
   const a = struct({
     key: 'a',
     types: {
+      gurky: {
+        hello: true
+      },
       b: {
         x: true
       },
@@ -79,6 +82,7 @@ test('switch types', t => {
     bla: {
       type: 'a',
       hello: true,
+      gurky: { type: 'gurky' },
       val: 'smurt',
       a: 'blabla'
     }
