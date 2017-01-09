@@ -25,6 +25,7 @@
     "vector",
     "functional",
     "memory efficient",
+    "emitter",
     "subscriptions",
     "realtime",
     "observable"
