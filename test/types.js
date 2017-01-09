@@ -64,6 +64,9 @@ test('switch types', t => {
   const a = struct({
     key: 'a',
     types: {
+      b: {
+        x: true
+      },
       a: {
         props: {
           default: {
@@ -73,7 +76,14 @@ test('switch types', t => {
         a: true
       }
     },
-    bla: { type: 'a' }
+    bla: {
+      type: 'a',
+      hello: true,
+      a: 'blabla'
+    }
   })
+
+  a.bla.set({ type: 'b' })
+
   t.end()
 })
