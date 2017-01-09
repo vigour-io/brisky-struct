@@ -79,9 +79,12 @@ test('switch types', t => {
     bla: {
       type: 'a',
       hello: true,
+      val: 'smurt',
       a: 'blabla'
     }
   })
+
+  const a1 = a.bla.create()
 
   a.bla.set({ type: 'b' })
 
