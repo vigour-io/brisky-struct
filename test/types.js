@@ -104,6 +104,7 @@ test('switch types - keys', t => {
 })
 
 test('switch types - subscriptions', t => {
+  var cnt = 0
   const a = struct({
     key: 'a',
     types: {
@@ -129,11 +130,14 @@ test('switch types - subscriptions', t => {
     }
   })
 
-  a.subscribe(true, () => {
-    console.log('yo fire!')
+  a.subscribe({ bla: { hello: true } }, () => {
+    cnt++
   })
 
+  cnt = 0
   a.bla.set({ type: 'b' })
+
+  t.equal(cnt, 1, 'fires subscription on type change')
 
   t.end()
 })
