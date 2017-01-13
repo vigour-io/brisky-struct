@@ -158,6 +158,6 @@ test('types - switch - creation / context', t => {
     x: { bla: true }
   })
   const b3 = b2.create({ x: { type: 'what' } })
-  t.same(b3.x.keys(), [ 'a' ], 'correct keys on "b.x" removes inherited')
+  t.same(b3.x.keys(), [ 'a', 'bla' ], 'correct keys on "b.x" removes inherited')
   t.end()
 })
