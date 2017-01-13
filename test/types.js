@@ -85,38 +85,36 @@ test('switch types', t => {
       hello: {},
       gurky: { type: 'gurky' },
       val: 'smurt'
-      // a: 'blabla'
     }
   })
 
   const a1 = a.bla.create()
   const a2 = a.bla.create({ MYOWN: true })
   const a3 = a.bla.create({ hello: null })
-  const a32 = a3.create({
-    'HA': true
-  })
+  const a32 = a3.create({ HA: true })
 
+  console.log('go create')
+  const fieldInstance = a.bla.hello.create()
+
+  console.log('fieldInstance:', fieldInstance.keys(), a.bla.hello.keys())
+  console.log('\nlets switch types:')
   a.bla.set({ type: 'b' })
+
+  console.log('fieldInstance:', fieldInstance.keys(), a.bla.hello.keys())
 
   // console.log('\nINHERITS: 👁')
   // console.log(JSON.stringify(a.bla.poep, false, 2), a.bla.keys())
-
   // console.log('\n\nRESULTS: 👁')
   // console.log(JSON.stringify(a.bla.serialize(), false, 2))
-
   // console.log('\nRESULT INSTANCE: 👁')
   // console.log(JSON.stringify(a1.serialize(), false, 2))
-
   // console.log('\nRESULT INSTANCE 2 OWN KEYS: 👁')
   // console.log(JSON.stringify(a2.serialize(), false, 2))
-
   // console.log('\n 🦊  RESULT INSTANCE 3 OWN KEYS + REMOVAL: 🦊')
   // console.log(JSON.stringify(a3.serialize(), false, 2))
-
-  console.log('\n 🦊🦏  RESULT INSTANCE 3-2 OWN KEYS + REMOVAL: 🦊🦏')
-  console.log(JSON.stringify(a32.serialize(), false, 2))
-
-  console.log(a3.keys())
+  // console.log('\n\n\nRESULT INSTANCE 3-2 OWN KEYS + REMOVAL: ')
+  // console.log(JSON.stringify(a32.serialize(), false, 2))
+  // console.log('\na3 keys', a3.keys())
 
   t.end()
 })
