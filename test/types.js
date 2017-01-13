@@ -40,12 +40,12 @@ test('types ', t => {
       }
     }
   })
-  const c2 = c.create({ a: { type: 'a' } })
+  const c2 = c.create({ a: { type: 'a', reset: true } })
   t.same(c2.get('a').keys(), [], 'override inheritance')
   t.end()
 })
 
-test('types ', t => {
+test('types - simple ', t => {
   const a = struct({
     key: 'a',
     types: {
@@ -60,7 +60,7 @@ test('types ', t => {
   t.end()
 })
 
-test('switch types - keys', t => {
+test('types - switch - keys', t => {
   const a = struct({
     key: 'a',
     types: {
@@ -106,11 +106,12 @@ test('switch types - keys', t => {
   t.same(a1.keys(), [ 'a' ], 'correct keys on "a1"')
   t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on "a2"')
   t.same(a3.keys(), [ 'a' ], 'correct keys on "a3"')
+  t.same(a32.keys(), [ 'a', 'HA' ], 'correct keys on "a3-2"')
 
   t.end()
 })
 
-test('switch types - subscriptions', t => {
+test('types - switch - subscriptions', t => {
   var cnt = 0
   const a = struct({
     key: 'a',
@@ -136,18 +137,27 @@ test('switch types - subscriptions', t => {
       val: 'smurt'
     }
   })
-
   a.subscribe({ bla: { hello: true } }, () => { cnt++ })
-
   cnt = 0
   a.bla.set({ type: 'b' })
-
   t.equal(cnt, 1, 'fires subscription on type change')
-
   t.end()
 })
 
-test('switch types - creation / context', t => {
-  var cnt = 0
+test('types - switch - creation / context', t => {
+  const x = struct({ hello: true })
+  const b = struct({
+    types: { what: { a: true } },
+    props: { x: x },
+    x: { type: 'what' }
+  })
+  t.same(b.x.keys(), [ 'a' ], 'correct keys on "b.x" removes inherited')
+  const b2 = struct({
+    types: { what: { a: true } },
+    props: { x: x },
+    x: { bla: true }
+  })
+  const b3 = b2.create({ x: { type: 'what' } })
+  t.same(b3.x.keys(), [ 'a' ], 'correct keys on "b.x" removes inherited')
   t.end()
 })
