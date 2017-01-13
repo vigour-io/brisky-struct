@@ -102,3 +102,38 @@ test('switch types - keys', t => {
 
   t.end()
 })
+
+test('switch types - subscriptions', t => {
+  const a = struct({
+    key: 'a',
+    types: {
+      gurky: {
+        hello: true
+      },
+      b: {
+        XXXXXXXX: true,
+        YYYYYYYY: true
+      },
+      a: {
+        props: {
+          default: { b: {} }
+        },
+        a: true
+      }
+    },
+    bla: {
+      type: 'a',
+      hello: {},
+      gurky: { type: 'gurky' },
+      val: 'smurt'
+    }
+  })
+
+  a.subscribe(true, () => {
+    console.log('yo fire!')
+  })
+
+  a.bla.set({ type: 'b' })
+
+  t.end()
+})
