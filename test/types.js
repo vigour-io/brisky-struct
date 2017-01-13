@@ -60,7 +60,7 @@ const { create: struct } = require('../')
 //   t.end()
 // })
 
-test('switch types', t => {
+test('switch types - keys', t => {
   const a = struct({
     key: 'a',
     types: {
@@ -73,9 +73,7 @@ test('switch types', t => {
       },
       a: {
         props: {
-          default: {
-            b: { on: { data: () => console.log('fire B') } }
-          }
+          default: { b: {} }
         },
         a: true
       }
@@ -92,29 +90,15 @@ test('switch types', t => {
   const a2 = a.bla.create({ MYOWN: true })
   const a3 = a.bla.create({ hello: null })
   const a32 = a3.create({ HA: true })
-
-  console.log('go create')
   const fieldInstance = a.bla.hello.create()
 
-  console.log('fieldInstance:', fieldInstance.keys(), a.bla.hello.keys())
-  console.log('\nlets switch types:')
   a.bla.set({ type: 'b' })
 
-  console.log('fieldInstance:', fieldInstance.keys(), a.bla.hello.keys())
-
-  // console.log('\nINHERITS: 👁')
-  // console.log(JSON.stringify(a.bla.poep, false, 2), a.bla.keys())
-  // console.log('\n\nRESULTS: 👁')
-  // console.log(JSON.stringify(a.bla.serialize(), false, 2))
-  // console.log('\nRESULT INSTANCE: 👁')
-  // console.log(JSON.stringify(a1.serialize(), false, 2))
-  // console.log('\nRESULT INSTANCE 2 OWN KEYS: 👁')
-  // console.log(JSON.stringify(a2.serialize(), false, 2))
-  // console.log('\n 🦊  RESULT INSTANCE 3 OWN KEYS + REMOVAL: 🦊')
-  // console.log(JSON.stringify(a3.serialize(), false, 2))
-  // console.log('\n\n\nRESULT INSTANCE 3-2 OWN KEYS + REMOVAL: ')
-  // console.log(JSON.stringify(a32.serialize(), false, 2))
-  // console.log('\na3 keys', a3.keys())
+  t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on "a1"')
+  t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on "a2"')
+  t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on "a3"')
+  t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on "a3-2"')
+  t.same(fieldInstance.keys(), [], 'correct keys on "fieldInstance"')
 
   t.end()
 })
