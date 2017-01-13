@@ -94,11 +94,17 @@ test('switch types - keys', t => {
 
   a.bla.set({ type: 'b' })
 
+  t.same(a.bla.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on "a.bla"')
   t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on "a1"')
   t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on "a2"')
   t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on "a3"')
   t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on "a3-2"')
   t.same(fieldInstance.keys(), [], 'correct keys on "fieldInstance"')
+
+  console.log('\n\n\nreset!')
+  a.bla.set({ type: 'a', reset: true })
+  // need to remove hello and gurky
+  t.same(a.bla.keys(), [ 'a' ], 'correct keys on "a.bla"')
 
   t.end()
 })
@@ -137,5 +143,10 @@ test('switch types - subscriptions', t => {
 
   t.equal(cnt, 1, 'fires subscription on type change')
 
+  t.end()
+})
+
+test('switch types - creation / context', t => {
+  var cnt = 0
   t.end()
 })
