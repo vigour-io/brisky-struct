@@ -101,10 +101,11 @@ test('switch types - keys', t => {
   t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on "a3-2"')
   t.same(fieldInstance.keys(), [], 'correct keys on "fieldInstance"')
 
-  console.log('\n\n\nreset!')
   a.bla.set({ type: 'a', reset: true })
-  // need to remove hello and gurky
-  t.same(a.bla.keys(), [ 'a' ], 'correct keys on "a.bla"')
+  t.same(a.bla.keys(), [ 'a' ], 'correct keys on "a.bla"') // need to update instances
+  t.same(a1.keys(), [ 'a' ], 'correct keys on "a1"')
+  t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on "a2"')
+  t.same(a3.keys(), [ 'a' ], 'correct keys on "a3"')
 
   t.end()
 })
