@@ -130,9 +130,7 @@ test('switch types - subscriptions', t => {
     }
   })
 
-  a.subscribe({ bla: { hello: true } }, () => {
-    cnt++
-  })
+  a.subscribe({ bla: { hello: true } }, () => { cnt++ })
 
   cnt = 0
   a.bla.set({ type: 'b' })
