@@ -70,7 +70,7 @@ test('remove - instances - simple', t => {
     }
   })
   a.types.blurf.set(null)
-  t.same(results2, [ [ 'b' ], [ 'bb', 'b' ], [ 'aa', 'b' ] ])
+  t.same(results2, [ [ 'types', 'blurf', 'b' ], [ 'bb', 'b' ], [ 'aa', 'b' ] ])
   t.end()
 })
 
