@@ -187,7 +187,9 @@ test('types - merge and listeners', t => {
     },
     bla: { type: 'derp', on: { data: { gur: () => cnt++ } } }
   })
+  cnt = 0
   a.set({ bla: { type: 'x' } })
+  t.equal(cnt, 1, 'listeners fire when merging type')
   cnt = 0
   a.bla.set('hello')
   t.equal(cnt, 1, 'listeners fire when merging type')
