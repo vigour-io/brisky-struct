@@ -180,9 +180,12 @@ test('types - merge and listeners', t => {
   var cnt = 0
   const a = struct({
     types: {
+      derp: {
+        on: { data: { bla: () => cnt++ } }
+      },
       x: { hello: true }
     },
-    bla: { on: { data: () => cnt++ } }
+    bla: { type: 'derp', on: { data: { gur: () => cnt++ } } }
   })
 
   // console.log(a.bla.emitters)
@@ -193,6 +196,8 @@ test('types - merge and listeners', t => {
   a.bla.set('hello')
 
   // console.log(a.bla.emitters)
+
+  // add some inheritance here as well!
 
   console.log(a.bla.keys())
 
