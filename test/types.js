@@ -164,13 +164,12 @@ test('types - switch - creation / context', t => {
 })
 
 test('types - subscription', t => {
-  const a = struct({
-    types: { what: { a: true } }
+  const results = []
+  const a = struct({ types: { what: { a: true } } })
+  a.subscribe({ types: { $any: true } }, t => {
+    results.push(t.path())
+    console.log(t.path())
   })
-  a.subscribe({
-    types: { $any: true }
-  }, (t) => {
-    console.log('go go', t.path())
-  })
+  a.types.set({ rick: { fun: true } })
   t.end()
 })
