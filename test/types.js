@@ -21,19 +21,16 @@ test('types ', t => {
       },
       bla: 'override!'
     },
-    x: {
-      type: 'something'
-    },
+    x: { type: 'something' },
     y: { type: 'bla' }
   })
+
   t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged "something" type')
   t.same(b.get('y').keys(), [], 'override "bla" type')
   t.equal(b.get('y').compute(), 'override!', 'type with string')
   t.same(a.get('field').keys(), [ 'field' ], '"field" on a has "field"')
   const c = struct({
-    types: {
-      a: true
-    },
+    types: { a: true },
     a: {
       b: {
         c: true
@@ -56,7 +53,6 @@ test('types - simple ', t => {
     },
     bla: { type: 'a' }
   })
-  console.log(a.bla.keys())
   t.equal(a.bla.inherits, a, 'use self in types')
   t.end()
 })
@@ -171,5 +167,11 @@ test('types - subscription', t => {
   })
   a.types.set({ rick: { fun: true } })
   t.same(results, [ [ 'types', 'what' ], [ 'types', 'rick' ] ])
+  t.end()
+})
+
+test('types - non existing', t => {
+  const a = struct({ bla: { type: 'james' } })
+  t.same(a.types.keys(), [ 'james' ])
   t.end()
 })
