@@ -56,6 +56,7 @@ test('types - simple ', t => {
     },
     bla: { type: 'a' }
   })
+  console.log(a.bla.keys())
   t.equal(a.bla.inherits, a, 'use self in types')
   t.end()
 })
@@ -159,5 +160,17 @@ test('types - switch - creation / context', t => {
   })
   const b3 = b2.create({ x: { type: 'what' } })
   t.same(b3.x.keys(), [ 'a', 'bla' ], 'correct keys on "b.x" removes inherited')
+  t.end()
+})
+
+test('types - subscription', t => {
+  const a = struct({
+    types: { what: { a: true } }
+  })
+  a.subscribe({
+    types: { $any: true }
+  }, (t) => {
+    console.log('go go', t.path())
+  })
   t.end()
 })
