@@ -175,3 +175,27 @@ test('types - non existing', t => {
   t.same(a.types.keys(), [ 'james' ])
   t.end()
 })
+
+test('types - merge and listeners', t => {
+  var cnt = 0
+  const a = struct({
+    types: {
+      x: { hello: true }
+    },
+    bla: { on: { data: () => cnt++ } }
+  })
+
+  // console.log(a.bla.emitters)
+
+  a.set({ bla: { type: 'x' } })
+
+  cnt = 0
+  a.bla.set('hello')
+
+  // console.log(a.bla.emitters)
+
+  console.log(a.bla.keys())
+
+  t.equal(cnt, 1, 'listeners fire when merging type')
+  t.end()
+})
