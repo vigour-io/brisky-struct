@@ -168,8 +168,8 @@ test('types - subscription', t => {
   const a = struct({ types: { what: { a: true } } })
   a.subscribe({ types: { $any: true } }, t => {
     results.push(t.path())
-    console.log(t.path())
   })
   a.types.set({ rick: { fun: true } })
+  t.same(results, [ [ 'types', 'what' ], [ 'types', 'rick' ] ])
   t.end()
 })
