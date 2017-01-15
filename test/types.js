@@ -172,6 +172,16 @@ test('types - switch - existing', t => {
   t.end()
 })
 
+test('types - switch - existing - override', t => {
+  const b = struct({
+    types: { what: { a: true }, dirt: {} },
+    x: { type: 'what' }
+  })
+  b.set({ x: { type: { val: 'dirt', stamp: bs.create(false, false, 1) } } }, false)
+  t.same(b.x.keys(), [], 'correct keys')
+  t.end()
+})
+
 test('types - context', t => {
   const b = struct({
     types: { what: { a: true }, dirt: {} },
