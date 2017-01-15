@@ -273,7 +273,6 @@ test('types - prop type null', t => {
     },
     props: {
       a: a
-      // default: { lullz: true }
     },
     a: {
       type: 'hello'
