@@ -158,14 +158,11 @@ test('remove - mixed', t => {
     key: 's2',
     a: { type: 'struct' }
   })
-  console.log('fuck?', results)
   const s3 = s.create({
     key: 's3',
     a: 'hello'
   })
-  const s4 = s3.create({
-    key: 's4'
-  })
+  const s4 = s3.create({ key: 's4' })
 
   s.set({ d: true, a: null, haha: true }, [ 'stamp' ])
   t.same(s.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys')
