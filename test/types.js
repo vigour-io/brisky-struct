@@ -20,7 +20,7 @@ test('types ', t => {
         type: 'something',
         bla: true
       },
-      bla: 'override!'
+      bla: { reset: true, val: 'override!' }
     },
     x: { type: 'something' },
     y: { type: 'bla' }
@@ -157,6 +157,36 @@ test('types - switch - creation / context', t => {
   })
   const b3 = b2.create({ x: { type: 'what' } })
   t.same(b3.x.keys(), [ 'a', 'bla' ], 'correct keys on "b.x" removes inherited')
+  t.end()
+})
+
+test('types - switch - existing', t => {
+  const b = struct({
+    types: { what: { a: true }, dirt: {} },
+    x: { type: 'what' }
+  })
+  b.set({ x: { type: 'dirt' } })
+  t.same(b.x.keys(), [], 'correct keys')
+  b.set({ type: 'b' })
+  b.set({ type: 'gurk' })
+  t.end()
+})
+
+test('types - context', t => {
+  const b = struct({
+    types: { what: { a: true }, dirt: {} },
+    x: { type: 'what' }
+  })
+
+  console.log('bitch!')
+  const b1 = b.create({
+    types: { what: { b: true } },
+    z: { type: 'what' }
+  })
+
+  console.log(b1.types.keys())
+  t.same(b1.z.keys(), [ 'a', 'b' ])
+
   t.end()
 })
 
