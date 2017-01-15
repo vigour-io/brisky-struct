@@ -178,13 +178,11 @@ test('types - context', t => {
     x: { type: 'what' }
   })
 
-  console.log('bitch!')
   const b1 = b.create({
     types: { what: { b: true } },
     z: { type: 'what' }
   })
 
-  console.log(b1.types.keys())
   t.same(b1.z.keys(), [ 'a', 'b' ])
 
   t.end()
