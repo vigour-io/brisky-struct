@@ -25,6 +25,7 @@
     "vector",
     "functional",
     "memory efficient",
+    "emitter",
     "subscriptions",
     "realtime",
     "observable"
@@ -37,7 +38,7 @@
     "instrument": true
   },
   "dependencies": {
-    "brisky-stamp": "^3.0.11"
+    "brisky-stamp": "^3.0.12"
   },
   "devDependencies": {
     "source-map-support": "^0.4.7",

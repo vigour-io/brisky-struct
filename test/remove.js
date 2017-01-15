@@ -70,7 +70,7 @@ test('remove - instances - simple', t => {
     }
   })
   a.types.blurf.set(null)
-  t.same(results2, [ [ 'b' ], [ 'bb', 'b' ], [ 'aa', 'b' ] ])
+  t.same(results2, [ [ 'types', 'blurf', 'b' ], [ 'bb', 'b' ], [ 'aa', 'b' ] ])
   t.end()
 })
 
@@ -158,6 +158,7 @@ test('remove - mixed', t => {
     key: 's2',
     a: { type: 'struct' }
   })
+  console.log('fuck?', results)
   const s3 = s.create({
     key: 's3',
     a: 'hello'
@@ -165,7 +166,8 @@ test('remove - mixed', t => {
   const s4 = s3.create({
     key: 's4'
   })
-  s.set({ d: true, a: null, haha: true }, 'stamp')
+
+  s.set({ d: true, a: null, haha: true }, [ 'stamp' ])
   t.same(s.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys')
   t.same(s2.keys(), [ 'b', 'c', 'd', 'haha', 'a' ], 'correct keys on "s2"')
   t.same(s3.keys(), [ 'b', 'c', 'd', 'haha' ], 'correct keys on "s3"')
