@@ -195,3 +195,12 @@ test('types - merge and listeners', t => {
   t.equal(cnt, 1, 'listeners fire when merging type')
   t.end()
 })
+
+test('types - listeners on types', t => {
+  var cnt = 0
+  const a = struct({ types: {} })
+  a.types.on(() => { cnt++ })
+  a.set({ types: { hello: true } })
+  t.equal(cnt, 1, 'fires correct amount of listeners')
+  t.end()
+})
