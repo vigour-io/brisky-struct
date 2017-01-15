@@ -1,5 +1,6 @@
 const test = require('tape')
 const { create: struct } = require('../')
+const bs = require('brisky-stamp')
 
 test('types ', t => {
   const a = struct({
@@ -201,6 +202,15 @@ test('types - listeners on types', t => {
   const a = struct({ types: {} })
   a.types.on(() => { cnt++ })
   a.set({ types: { hello: true } })
+  t.equal(cnt, 1, 'fires correct amount of listeners')
+  t.end()
+})
+
+test('types - listeners on types override', t => {
+  var cnt = 0
+  const a = struct({ types: {} })
+  a.types.on(() => { cnt++ })
+  a.set({ types: { hello: true, stamp: bs.create(false, false, 1) } }, false)
   t.equal(cnt, 1, 'fires correct amount of listeners')
   t.end()
 })
