@@ -12,6 +12,16 @@ test('props - normal field', t => {
   t.end()
 })
 
+test('props - type struct', t => {
+  const s = struct({
+    props: { default: 'self' },
+    rick: true,
+    something: { type: 'struct' }
+  })
+  t.ok(!s.something.get('rick'))
+  t.end()
+})
+
 test('props - remove', t => {
   const s = struct({
     props: { something: true },
