@@ -252,3 +252,17 @@ test('types - listeners on types override', t => {
   t.equal(cnt, 1, 'fires correct amount of listeners')
   t.end()
 })
+
+test('types - prop type null', t => {
+  const a = struct({
+    props: {
+      default: { hello: true },
+      type: null
+    },
+    x: {}
+  })
+  a.set({ type: 'jurps' })
+  t.same(a.x.keys(), [ 'hello' ])
+  t.same(a.type.keys(), [ 'hello' ])
+  t.end()
+})
