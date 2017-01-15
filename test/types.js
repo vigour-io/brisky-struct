@@ -255,6 +255,9 @@ test('types - listeners on types override', t => {
 
 test('types - prop type null', t => {
   const a = struct({
+    type: {
+      hello: '???'
+    },
     props: {
       default: { hello: true },
       type: null
@@ -264,5 +267,18 @@ test('types - prop type null', t => {
   a.set({ type: 'jurps' })
   t.same(a.x.keys(), [ 'hello' ])
   t.same(a.type.keys(), [ 'hello' ])
+  const b = struct({
+    types: {
+      hello: { x: true }
+    },
+    props: {
+      a: a
+      // default: { lullz: true }
+    },
+    a: {
+      type: 'hello'
+    }
+  })
+  t.same(b.a.type.keys(), [ 'hello' ])
   t.end()
 })
