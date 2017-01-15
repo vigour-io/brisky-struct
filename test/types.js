@@ -181,11 +181,11 @@ test('types - merge and listeners', t => {
   const a = struct({
     types: {
       derp: {
-        on: { data: { bla: () => cnt++ } }
+        on: { data: { bla: () => cnt++, blurf: () => cnt++ } }
       },
       x: { hello: true }
     },
-    bla: { type: 'derp', on: { data: { gur: () => cnt++ } } }
+    bla: { type: 'derp', on: { data: { gur: () => cnt++, blurf: null } } }
   })
   cnt = 0
   a.set({ bla: { type: 'x' } })
