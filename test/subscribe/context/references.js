@@ -2,7 +2,8 @@ const test = require('tape')
 const { create } = require('../../../')
 // const bs = require('brisky-stamp')
 
-test('subscription - context - switch', t => {
+test('subscription - context - references', t => {
+  const results = []
   const orig = create({
     types: {
       ha: { bla: 'hello' }
@@ -18,17 +19,15 @@ test('subscription - context - switch', t => {
     a: { bla: true },
     page: { current: true }
   }, t => {
-    // allready wrong!
-    console.log(t.compute())
+    results.push(t.compute())
   })
 
   orig2.set({ a: { bla: 'w00t' } })
 
-  console.log('\n go go go')
-  orig2.set({
-    bla: 'bla on instance!'
-    // page: { current: [ '@', 'root', 'bla' ] } // this is the situation we want to recreate
-  })
+  orig2.set({ bla: 'bla on instance!' })
+
+  t.ok(!!orig2.page.current)
+  t.same(results, [ 'hello', 'bla on original', 'w00t', 'bla on instance!' ])
 
   t.end()
 })
