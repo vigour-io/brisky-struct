@@ -12,7 +12,7 @@ test('subscription - context - switch', t => {
     page: { current: [ '@', 'root', 'bla' ] }
   })
 
-  const orig2 = orig.create()
+  const orig2 = orig.create({ '🦄': true })
 
   orig2.subscribe({
     a: { bla: true },
@@ -26,7 +26,7 @@ test('subscription - context - switch', t => {
 
   console.log('\n go go go')
   orig2.set({
-    bla: 'bla on instance!',
+    bla: 'bla on instance!'
     // page: { current: [ '@', 'root', 'bla' ] } // this is the situation we want to recreate
   })
 

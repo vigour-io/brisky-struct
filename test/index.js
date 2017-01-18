@@ -1,13 +1,13 @@
-// if (typeof window === 'undefined') {
-//   require('source-map-support').install()
-// }
+if (typeof window === 'undefined') {
+  require('source-map-support').install()
+}
+
 // require('./define')
 // require('./inject')
 // require('./serialize')
 // require('./traversal')
 // require('./references')
 // require('./compute')
-// require('./props')
 // require('./get')
 // require('./iterators')
 // require('./once')
@@ -19,4 +19,5 @@
 // require('./types')
 // require('./references')
 // require('./traversal')
-require('./subscribe')
+// require('./subscribe')
+require('./props')
