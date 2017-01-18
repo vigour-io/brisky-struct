@@ -3,7 +3,7 @@ const { create } = require('../../../')
 // const bs = require('brisky-stamp')
 
 test('subscription - context - references', t => {
-  const results = []
+  var results = []
   const orig = create({
     types: {
       ha: { bla: 'hello' }
@@ -28,6 +28,13 @@ test('subscription - context - references', t => {
 
   t.ok(!!orig2.page.current)
   t.same(results, [ 'hello', 'bla on original', 'w00t', 'bla on instance!' ])
+
+  results = []
+  orig2.set({ bla: 'blurf!' })
+  t.same(results, [ 'blurf!' ])
+
+  // deeper refs
+  // switches
 
   t.end()
 })
