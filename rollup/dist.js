@@ -3,7 +3,7 @@ import commonjs from 'rollup-plugin-commonjs'
 // import sourcemaps from 'rollup-plugin-sourcemaps'
 
 export default {
-  entry: 'lib/index.js',
+  entry: 'src/index.js',
   plugins: [
     nodeResolve({
       jsnext: true
@@ -24,5 +24,4 @@ export default {
 }
 
 // only for dev! -- prob need to get some coverage tools (pretty essential)
-
 // import sourcemaps from 'rollup-plugin-sourcemaps';
