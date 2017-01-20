@@ -295,27 +295,26 @@ test('types - references', t => {
     }
   })
 
-  console.log(s.page.current.val)
   t.equal(s.page.things.uid(), s.page.current.origin().uid())
 
   t.end()
 })
 
-// test('types - nested references', t => {
-//   const s = struct({
-//     types: {
-//       form: {
-//         title: 'hello'
-//       }
-//     },
-//     page: {
-//       current: [ '@', 'parent', 'things' ],
-//       things: {}
-//     }
-//   })
-//   // t.equal(s.page.things.uid(), s.page.current.origin().uid())
-//   t.end()
-// })
+test('types - nested references', t => {
+  const s = struct({
+    types: {
+      form: {
+        title: 'hello'
+      }
+    },
+    page: {
+      current: [ '@', 'parent', 'things', 'ballz' ],
+      things: { type: 'form' }
+    }
+  })
+  t.equal(s.page.things.ballz.uid(), s.page.current.origin().uid())
+  t.end()
+})
 
 // test('types - nested instances', t => {
 //   const s = struct({
