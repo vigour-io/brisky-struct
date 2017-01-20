@@ -30,8 +30,8 @@ test('subscription - $switch - complex', t => {
     }
   })
 
-  console.log(s.page.current === s.page.things)
-  console.log('✨ SECOND ✨', s.page.current.get('title').compute())
+  // console.log(s.page.current === s.page.things)
+  // console.log('✨ SECOND ✨', s.page.current.get('title').compute())
   // console.log(s.page.current.get('title'))
 
   const s2 = s.create({ key: 's2' })
@@ -81,22 +81,34 @@ test('subscription - $switch - complex', t => {
     console.log('🗡  update', state.path().join('/'))
   })
 
-  console.log('\n---------------------------')
+  console.log('\n---------------------------------')
   // s2.set({ page: { current: [ '@', 'root', 'page', 'things' ] } })
   // console.log(s.page.things)
-  s2.set({ page: { current: s.page.things } })
+  // s2.set({ page: { current: s2.get([ 'page', 'things' ]) } }) // messes things up...
 
-  console.log('\n 1--------------------------------')
+  s2.set({ page: { current: [ '@', 'root', 'page', 'things' ] } }) // messes things up...
+
+  // has context needs to be resolved im affraid
+
+  console.log(s2.page.current.val === s.page.things)
+
+  console.log(s.page.current.val === s.page.things)
+
+  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
+
+  console.log('\n1--------------------------------')
   s2.set({ page: { things: { title: 'xhello!' } } })
-  console.log('??????', s2.page.current.val.path())
 
-  console.log('\n 2--------------------------------')
+  // current is not correctly resolved :X
+  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
+
+  console.log('\n2--------------------------------')
   s2.set({ page: { things: { title: 'shurrrrf' } } })
-  console.log('RESULT:', s2.page.current.val.path())
-  s2.page.things.title.set('?????????XXXXX')
-
-  console.log('---------')
-  console.log(s.page.things.get('title').compute())
+  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
+  // console.log('RESULT:', s2.page.current.val.path())
+  // s2.page.things.title.set('?????????XXXXX')
+  console.log('\n---------------------------------')
+  // console.log(s.page.things.get('title').compute())
 
   t.end()
 })
