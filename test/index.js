@@ -18,6 +18,6 @@ if (typeof window === 'undefined') {
 // require('./references')
 // require('./traversal')
 // require('./props')
-// require('./subscribe')
 // require('./references')
-require('./types')
+// require('./types')
+require('./subscribe')
