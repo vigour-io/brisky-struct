@@ -316,6 +316,27 @@ test('types - nested references', t => {
   t.end()
 })
 
+test('types - nested instances', t => {
+  const s = struct({
+    types: {
+      form: {
+        title: 'hello'
+      },
+      blurf: {
+        title: 'blurf',
+        x: { title: 'blurf' }
+      }
+    },
+    page: {
+      things: { type: 'form', x: {} }
+    }
+  })
+  const i = s.page.things.x.create()
+  s.set({ page: { things: { type: 'blurf' } } })
+  t.equal(i.get([ 'title' ]).compute(), 'blurf')
+  t.end()
+})
+
 // test('types - nested instances', t => {
 //   const s = struct({
 //     types: {
