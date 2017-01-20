@@ -34,7 +34,6 @@ const update = (key, t, subs, cb, tree, c, parent) => {
           subs.val === true || (subs.val === 'switch' &&
           (branch.$t !== t || branch.$tc != t._c)) //eslint-disable-line
         ) {
-          // if (t.key === 'current') console.log('GO>', branch.$tc !== t._c, t.path(), t._c)
           cb(t, 'update', subs, branch)
         }
       }

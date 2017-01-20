@@ -86,7 +86,6 @@ const isSwitched = (a, b, branch, t) => {
       return true
     }
   }
-
   if (a === b) {
     return false // test
   } else {

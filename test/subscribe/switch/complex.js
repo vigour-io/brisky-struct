@@ -35,6 +35,7 @@ test('subscription - $switch - complex', t => {
   // console.log(s.page.current.get('title'))
 
   const s2 = s.create({ key: 's2' })
+  const result = []
 
   s2.subscribe({
     page: {
@@ -44,10 +45,9 @@ test('subscription - $switch - complex', t => {
           // val: 1,
           $any: {
             $switch: {
-              // type: { val: true },
+              // type: { val: true }, -- breaks completely
               val: state => {
                 // ---------------------------------
-                console.log('--->', state.origin().key)
                 return state.origin().key === 'title'
                   // title
                   ? { val: true }
@@ -78,37 +78,27 @@ test('subscription - $switch - complex', t => {
       }
     }
   }, state => {
-    console.log('🗡  update', state.path().join('/'))
+    result.push(state.path())
   })
 
-  console.log('\n---------------------------------')
-  // s2.set({ page: { current: [ '@', 'root', 'page', 'things' ] } })
-  // console.log(s.page.things)
-  // s2.set({ page: { current: s2.get([ 'page', 'things' ]) } }) // messes things up...
-
   s2.set({ page: { current: [ '@', 'root', 'page', 'things' ] } }) // messes things up...
+  t.ok(s2.page.current.val === s.page.things, 's2 refs original')
 
-  // has context needs to be resolved im affraid
-
-  console.log(s2.page.current.val === s.page.things)
-
-  console.log(s.page.current.val === s.page.things)
-
-  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
-
-  console.log('\n1--------------------------------')
   s2.set({ page: { things: { title: 'xhello!' } } })
 
-  // current is not correctly resolved :X
-  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
+  t.ok(s2.page.current.val === s2.page.things, 's2 refs resolved after set on page')
 
-  console.log('\n2--------------------------------')
   s2.set({ page: { things: { title: 'shurrrrf' } } })
-  console.log(s2.get([ 'page', 'current', 'title' ]).path(true))
-  // console.log('RESULT:', s2.page.current.val.path())
-  // s2.page.things.title.set('?????????XXXXX')
-  console.log('\n---------------------------------')
-  // console.log(s.page.things.get('title').compute())
+
+  // totaly incorrect context...
+
+  t.same(result, [
+    [ 's2', 'page', 'current' ],
+    [ 's2', 'page', 'things', 'title' ],
+    [ 's2', 'page', 'current' ],
+    [ 's2', 'page', 'things', 'title' ],
+    [ 's2', 'page', 'things', 'title' ]
+  ], 'correct updates')
 
   t.end()
 })
