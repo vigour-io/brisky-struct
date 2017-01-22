@@ -80,7 +80,7 @@ const define = {
       return chain(set(this, val, stamp), this)
     }
   },
-  create (val, stamp) {
+  create (val, stamp) { // add all fields here
     if (stamp === void 0) {
       const ret = create(this, val, bs.create())
       bs.close()
@@ -89,7 +89,7 @@ const define = {
       return create(this, val, stamp)
     }
   },
-  // add api as a mehtod perhaps?
+  // add api as a method perhaps?
   get (key, val, stamp) { return getApi(this, key, val, stamp) },
   push (val, stamp) {
     const key = bs.create()
