@@ -26,10 +26,10 @@ test('types ', t => {
     y: { type: 'bla' }
   })
 
-  t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged "something" type')
-  t.same(b.get('y').keys(), [], 'override "bla" type')
+  t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged something type')
+  t.same(b.get('y').keys(), [], 'override bla type')
   t.equal(b.get('y').compute(), 'override!', 'type with string')
-  t.same(a.get('field').keys(), [ 'field' ], '"field" on a has "field"')
+  t.same(a.get('field').keys(), [ 'field' ], 'field on a has field')
   const c = struct({
     types: { a: true },
     a: {
@@ -92,19 +92,19 @@ test('types - switch - keys', t => {
 
   a.bla.set({ type: 'b' })
 
-  t.same(a.bla.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on "a.bla"')
-  t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on "a1"')
-  t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on "a2"')
-  t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on "a3"')
-  t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on "a3-2"')
-  t.same(fieldInstance.keys(), [], 'correct keys on "fieldInstance"')
+  t.same(a.bla.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on a.bla')
+  t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on a1')
+  t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on a2')
+  t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on a3')
+  t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on a3-2')
+  t.same(fieldInstance.keys(), [], 'correct keys on fieldInstance')
 
   a.bla.set({ type: 'a', reset: true })
-  t.same(a.bla.keys(), [ 'a' ], 'correct keys on "a.bla"') // need to update instances
-  t.same(a1.keys(), [ 'a' ], 'correct keys on "a1"')
-  t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on "a2"')
-  t.same(a3.keys(), [ 'a' ], 'correct keys on "a3"')
-  t.same(a32.keys(), [ 'a', 'HA' ], 'correct keys on "a3-2"')
+  t.same(a.bla.keys(), [ 'a' ], 'correct keys on a.bla') // need to update instances
+  t.same(a1.keys(), [ 'a' ], 'correct keys on a1')
+  t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on a2')
+  t.same(a3.keys(), [ 'a' ], 'correct keys on a3')
+  t.same(a32.keys(), [ 'a', 'HA' ], 'correct keys on a3-2')
 
   t.end()
 })
@@ -149,14 +149,14 @@ test('types - switch - creation / context', t => {
     props: { x: x },
     x: { type: 'what' }
   })
-  t.same(b.x.keys(), [ 'a' ], 'correct keys on "b.x" removes inherited')
+  t.same(b.x.keys(), [ 'a' ], 'correct keys on b.x removes inherited')
   const b2 = struct({
     types: { what: { a: true } },
     props: { x: x },
     x: { bla: true }
   })
   const b3 = b2.create({ x: { type: 'what' } })
-  t.same(b3.x.keys(), [ 'a', 'bla' ], 'correct keys on "b.x" removes inherited')
+  t.same(b3.x.keys(), [ 'a', 'bla' ], 'correct keys on b.x removes inherited')
   t.end()
 })
 
@@ -335,4 +335,49 @@ test('types - nested instances', t => {
   s.set({ page: { things: { type: 'blurf' } } })
   t.equal(i.get([ 'title' ]).compute(), 'blurf')
   t.end()
+})
+
+// add once issue here
+test('types - once', t => {
+  const s = struct()
+  s.get([ 'blurf' ], {}).once('james').then(() => {
+    t.pass('page things has hello value')
+    t.end()
+  })
+  s.set({
+    types: {
+      james: {
+        stamp: [
+          949406183464,
+          'scraper'
+        ],
+        val: 'james',
+        a: {
+          b: {
+            c: {
+              stamp: [
+                949406183464,
+                'scraper'
+              ],
+              val: 'c!'
+            }
+          }
+        }
+      }
+    },
+    blurf: {
+      stamp: [
+        949406183464,
+        'scraper'
+      ],
+      // val: 'james', // this is wrong...
+      type: {
+        stamp: [
+          949406183464,
+          'scraper'
+        ],
+        val: 'james'
+      }
+    }
+  })
 })
