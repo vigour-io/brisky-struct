@@ -8,7 +8,6 @@ const remove = (t, stamp, override, instance, from) => {
   if (t._async) { delete t._async }
 
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
-    console.log('????')
     listener(t.val.emitters.data, null, uid(t))
   }
 
