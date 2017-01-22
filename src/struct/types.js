@@ -110,8 +110,6 @@ const handleInstances = (t, a, stamp) => {
 const merge = (t, type, stamp, reset) => {
   const result = getType(t._p, type, t) || getDefault(t._p)
 
-  console.log('MERGE', type, stamp) // why does this not fire?
-
   const instance = create(
     result,
     ((t._ks || t.val !== void 0) && !reset)
