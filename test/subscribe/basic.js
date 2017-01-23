@@ -37,6 +37,52 @@ test('subscription - basic - root - 1', t => {
   t.end()
 })
 
+test('subscription - basic - shallow - 1', t => {
+  const s = subsTest(
+    t,
+    {
+      val: 'hello',
+      field: 1,
+      bla: 2,
+      blurf: { blars: 1 }
+    },
+    { val: 'shallow' }
+  )
+  s(
+    'initial subscription',
+    [{ type: 'new' }]
+  )
+  s(
+    'update root',
+    [{ type: 'update' }],
+    'bye'
+  )
+  t.end()
+})
+
+test('subscription - basic - shallow - 1', t => {
+  const s = subsTest(
+    t,
+    {
+      val: 'hello',
+      field: 1,
+      bla: 2,
+      blurf: { blars: 1 }
+    },
+    { blurf: { val: 'shallow' } }
+  )
+  s(
+    'initial subscription',
+    [{ path: 'blurf', type: 'new' }]
+  )
+  s(
+    'update root',
+    [{ path: 'blurf', type: 'update' }],
+    { blurf: { blars: 2 } }
+  )
+  t.end()
+})
+
 test('subscription - basic', t => {
   const s = subsTest(
     t,

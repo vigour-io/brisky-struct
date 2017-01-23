@@ -8,7 +8,7 @@ const subscribe = (t, subs, cb, tree) => {
   if (!tree) tree = {}
 
   if (subs.val) {
-    if (subs.val === true) {
+    if (subs.val === true || subs.val === 'shallow') {
       listen(t, () => {
         cb(t, 'update', subs, tree)
         diff(t, subs, cb, tree)
