@@ -31,8 +31,10 @@ const update = (key, t, subs, cb, tree, c, parent) => {
     } else if (branch.$[0] !== stamp[0] || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
       if (subs.val) {
         if (
-          subs.val === true || subs.val === 'shallow' || (subs.val === 'switch' &&
-          (branch.$t !== t || branch.$tc != t._c)) //eslint-disable-line
+          // will become parsed -- with intergers -- also switcgh returns will be parsed
+          subs.val === true ||
+          subs.val === 'shallow' ||
+          (subs.val === 'switch' && (branch.$t !== t || branch.$tc != t._c)) //eslint-disable-line
         ) {
           cb(t, 'update', subs, branch)
         }
@@ -60,7 +62,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       if (diff(t, subs, cb, branch, void 0, branch.$c)) {
         changed = true // cover this
       }
-      if (changed && (subs.val === true || subs.val === 'shallow')) { cb(t, 'update', subs, branch) }
+      if (changed && (subs.val === true)) { cb(t, 'update', subs, branch) }
     }
   } else if (branch) {
     remove(subs, cb, branch)
