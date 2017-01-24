@@ -12,14 +12,14 @@ import uid from '../uid'
 import serialize from '../serialize'
 import functional from './functional'
 import iterator from './iterator'
-import debug from './debug'
+import inspect from './inspect'
 
 // never use chain maybe remove it
 const chain = (c, t) => c === null || c && c !== true ? c : t
 
 var listenerId = 0
 
-const inject = [ { define: functional }, iterator, debug ]
+const inject = [ { define: functional }, iterator, inspect ]
 
 const define = {
   uid () { return uid(this) },
