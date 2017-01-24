@@ -15,8 +15,7 @@ const listener = (t, val, key, stamp) => {
           t[key] = val
         }
       }
-    } else {
-      //  if (val !== null)
+    } else if (val !== null) {
       add(t, val, key)
     }
   } else {
@@ -30,7 +29,7 @@ const listener = (t, val, key, stamp) => {
         }
         t[key] = val
       }
-    } else {
+    } else if (val !== null) {
       add(t, val, key)
     }
   }

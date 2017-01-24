@@ -180,3 +180,21 @@ test('references - switch using get notations', t => {
   t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
   t.end()
 })
+
+test('references - remove referenced & gaurds', t => {
+  const a = struct({
+    a: {
+      b: false
+    }
+  })
+  a.a.b.set(a.a)
+  a.a.b.on(() => {})
+  a.a.on(() => {})
+  a.a.b.set(null)
+  t.same(a.a.emitters.data.struct, [])
+  a.a.set({
+    emitters: { data: { blurf: null } }
+  })
+  t.same(a.a.emitters.data.struct, [])
+  t.end()
+})

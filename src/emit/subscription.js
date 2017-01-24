@@ -1,6 +1,6 @@
 import bs from 'brisky-stamp'
 
-const subscription = (t, stamp) => {
+const subscription = (t, stamp, val) => {
   t.tStamp = stamp
   if (t._p || t._c) {
     let p = t._p
@@ -12,6 +12,11 @@ const subscription = (t, stamp) => {
       if (p.emitters && p.emitters.data && p.emitters.data.struct) {
         let i = p.emitters.data.struct.length
         while (i--) {
+          if (global.logTimes) {
+            //  Hub menu.items.vaporwave.api { val: Reddit menu.items.vaporwave { title, active, link } } null
+
+            console.log('||||======> here we go -----', t, p, p.emitters.data.struct[i])
+          }
           subscription(p.emitters.data.struct[i], stamp)
         }
       }
