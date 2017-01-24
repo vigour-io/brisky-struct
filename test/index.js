@@ -19,5 +19,8 @@ if (typeof window === 'undefined') {
 // require('./traversal')
 // require('./props')
 // require('./references')
-// require('./types') -- merge bug -- try tor ecreate -brender play case (wrong context or somethign)
-require('./subscribe')
+// require('./subscribe')
+require('./types')
+// -- merge bug -- try tor ecreate -brender play case (wrong context or somethign)
+// -- ref bug (also something with merge seems like it)
+// -- set bug

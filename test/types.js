@@ -381,3 +381,27 @@ test('types - once', t => {
     }
   })
 })
+
+// step one
+test('types - nested references', t => {
+  const s = struct({
+    types: {
+      list: {},
+      items: {}
+    },
+    page: {
+      current: [ '@', 'parent', 'things', 'list' ],
+      things: {
+        list: {
+          type: 'list',
+          items: {
+            type: 'items'
+          }
+        }
+      }
+    }
+  })
+
+  console.log(s.page.current.val)
+  t.end()
+})
