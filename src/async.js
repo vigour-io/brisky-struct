@@ -94,8 +94,9 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
           val.value
           .then(resolved => {
             if (t.async && t.async[2] === id) {
+              var n = next(iteratee, t, stamp)
               extendSet(t, resolved, stamp)
-              execIterator(t, iteratee, stamp, id, done, next(iteratee, t, stamp))
+              execIterator(t, iteratee, stamp, id, done, n)
             }
           })
           .catch(err => {
