@@ -448,3 +448,37 @@ test('types - set the same - same don\'t change stamps', t => {
   t.equal(cnt, 1)
   t.end()
 })
+
+test('types - nested sets', t => {
+  const s = struct({
+    types: {
+      title: {
+        a: true,
+        b: {
+          c: [ 1, 2, 3, 4 ],
+          d: true
+        }
+      },
+      grid: {
+        title: {
+          type: 'title'
+        }
+      }
+    },
+    bla: {
+      props: {
+        grid: {
+          type: 'grid',
+          title: { b: { c: 'bla!' } }
+        }
+      },
+      grid: {
+        title: { b: { c: 'X!' } }
+      }
+    }
+  })
+
+  t.same(s.bla.grid.get([ 'title', 'b', 'c' ]).keys(), [ '0', '1', '2', '3' ])
+
+  t.end()
+})

@@ -113,8 +113,6 @@ const merge = (t, type, stamp, reset, original) => {
   const raw = ((t._ks || t.val !== void 0) && !reset)
     ? createSetObj(t, true) : void 0
 
-  // console.log('SET OBJ:', raw, t._ks)
-
   const instance = create(
     result,
     raw,

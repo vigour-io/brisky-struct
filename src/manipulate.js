@@ -64,8 +64,11 @@ const create = (t, val, stamp, parent, key) => {
     }
   }
 
-  if (val !== void 0) set(instance, val, stamp, true)
+  if (val !== void 0) {
+    set(instance, val, stamp, true)
+  }
 
+  // here resolve types as well...
   if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
     resolveReferences(t, instance, stamp)
   }
