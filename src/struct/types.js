@@ -107,13 +107,17 @@ const handleInstances = (t, a, stamp) => {
   }
 }
 
-const merge = (t, type, stamp, reset) => {
+const merge = (t, type, stamp, reset, original) => {
   const result = getType(t._p, type, t) || getDefault(t._p)
+
+  const raw = ((t._ks || t.val !== void 0) && !reset)
+    ? createSetObj(t, true) : void 0
+
+  // console.log('SET OBJ:', raw, t._ks)
 
   const instance = create(
     result,
-    ((t._ks || t.val !== void 0) && !reset)
-    ? createSetObj(t, true) : void 0,
+    raw,
     stamp,
     t._p,
     t.key
@@ -181,7 +185,7 @@ const type = (t, val, key, stamp, isNew, original) => {
     let type = t.type || inheritType(t)
     type = type && type.compute()
     if (type !== val) {
-      t = merge(t, val, stamp, original.reset)
+      t = merge(t, val, stamp, original.reset, original)
     }
   }
 

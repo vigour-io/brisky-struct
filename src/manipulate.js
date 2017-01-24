@@ -89,6 +89,7 @@ const overrideObjects = (t, val, stamp, isNew) => {
             if (!changed) {
               changed = result === 2 ? [ ] : [ key ]
             } else if (result !== 2) {
+              if (t._$p) t = t._$p[t.key]
               changed.push(key)
             }
           }
@@ -111,6 +112,7 @@ const overrideObjects = (t, val, stamp, isNew) => {
               ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
               : setVal(t, val.val, stamp, 1)
           ) {
+            if (t._$p) t = t._$p[t.key]
             changed = true
           }
         }
@@ -141,6 +143,7 @@ const objects = (t, val, stamp, isNew) => {
           if (!changed) {
             changed = result === 2 ? [ ] : [ key ]
           } else if (result !== 2) {
+            if (t._$p) t = t._$p[t.key]
             changed.push(key)
           }
         }
@@ -160,6 +163,7 @@ const objects = (t, val, stamp, isNew) => {
           ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
           : setVal(t, val.val, stamp, 1)
       ) {
+        if (t._$p) t = t._$p[t.key]
         changed = true
       }
     }

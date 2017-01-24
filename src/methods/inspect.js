@@ -5,6 +5,9 @@ import { get } from '../get'
 
 const define = {
   inspect () {
+    if (this._noInspect_) {
+      return this
+    }
     var keys = getKeys(this)
     var val = this.val
     const p = path(this)
@@ -32,5 +35,5 @@ const define = {
 
 export default {
   define,
-  props: { default: 'self' }
+  props: { default: 'self', _noInspect_: true }
 }
