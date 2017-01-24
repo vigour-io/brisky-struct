@@ -424,3 +424,27 @@ test('types - nested references', t => {
   t.equal(s2.page.things.list, s2.page.current.val, 'reference is updated')
   t.end()
 })
+
+test('types - set the same - same don\'t change stamps', t => {
+  var cnt = 0
+  const a = struct({
+    a: {
+      b: { title: { val: 'hello', type: 'title' } }
+    }
+  })
+
+  a.subscribe({
+    a: { b: { title: true } }
+  }, () => {
+    cnt++
+  })
+
+  a.set({
+    a: {
+      b: { title: { val: 'hello', type: 'title' } }
+    }
+  })
+
+  t.equal(cnt, 1)
+  t.end()
+})

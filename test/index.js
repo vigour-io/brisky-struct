@@ -24,3 +24,4 @@ require('./types')
 // -- merge bug -- try tor ecreate -brender play case (wrong context or somethign)
 // -- ref bug (also something with merge seems like it)
 // -- set bug
+// require('./set')

@@ -190,11 +190,11 @@ const type = (t, val, key, stamp, isNew, original) => {
   }
 
   if (t.type) {
-    set(t.type, val, stamp)
+    return set(t.type, val, stamp) && 2
   } else {
     t.type = create(getProp(t, key).struct, val, stamp, t, key)
+    return 2
   }
-  return 2
 }
 
 const inherits = (prop, t) => {
