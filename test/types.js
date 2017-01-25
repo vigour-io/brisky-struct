@@ -1,6 +1,5 @@
 const test = require('tape')
 const { create: struct } = require('../')
-const bs = require('brisky-stamp')
 
 // test('types ', t => {
 //   const a = struct({

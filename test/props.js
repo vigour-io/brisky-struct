@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create: struct, struct: structIns } = require('../')
+const { create: struct } = require('../')
 
 test('props - normal field', t => {
   const s = struct({
