@@ -6,7 +6,7 @@ import { set } from './manipulate'
 var uid = 0
 const extendSet = (t, val, stamp) => {
   if (stamp) {
-    set(t, val, bs.create(bs.type(stamp), bs.src(stamp)))
+    set(t, val, bs.create())
     bs.close()
   } else {
     set(t, val)

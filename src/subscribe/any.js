@@ -95,10 +95,6 @@ const create = (key, keys, t, subs, cb, tree) => {
     let key = keys[i]
     let tt = getOrigin(t, key)
     updateProperty(i, tt, subs, cb, $keys, void 0, branch)
-    // if (tt._c) {
-    //   tt._cLevel = null
-    //   tt._c = null
-    // }
   }
 
   if (subs.$keys && subs.$keys.val) {
@@ -157,10 +153,6 @@ const update = (key, keys, t, subs, cb, branch) => {
       if (updateProperty(i, tt, subs, cb, $keys, void 0, branch)) {
         changed = true
       }
-      // if (tt._c) {
-      //   tt._cLevel = null
-      //   tt._c = null
-      // }
     }
   } else {
     for (let i = 0; i < len2; i++) {
@@ -175,10 +167,6 @@ const update = (key, keys, t, subs, cb, branch) => {
         if (updateProperty(i, tt, subs, cb, $keys, void 0, branch)) {
           changed = true
         }
-        // if (tt._c) {
-        //   tt._cLevel = null
-        //   tt._c = null
-        // }
       }
     }
   }

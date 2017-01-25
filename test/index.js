@@ -19,8 +19,5 @@ require('./references')
 require('./traversal')
 require('./props')
 require('./subscribe')
-// -- merge bug -- try tor ecreate -brender play case (wrong context or somethign) -- mostly in props same issue prob
-require('./set')
-require('./references')
-require('./get')
+// // -- merge bug -- try tor ecreate -brender play case (wrong context or somethign) -- mostly in props same issue prob
 require('./types')

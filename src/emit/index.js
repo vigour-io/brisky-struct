@@ -33,11 +33,8 @@ const fn = (t, val, stamp, emitter, noContext) => {
 }
 
 const data = (t, val, stamp, override, isNew) => {
-  if (!t.stamp || t.stamp[0] !== stamp[0]) {
+  if (!t.stamp || t.stamp !== stamp) {
     t.stamp = override || stamp
-    if (global.logTimes) {
-      console.log('????', t, stamp, val)
-    }
     subscription(t, stamp)
     const own = t.emitters && t.emitters.data
     if (own) {

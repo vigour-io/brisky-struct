@@ -28,7 +28,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       diff(t, subs, cb, branch, void 0, c)
       changed = true
       // ! && ! || !== (thats why != may need to replace)
-    } else if (branch.$[0] !== stamp[0] || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
+    } else if (branch.$ !== stamp || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
       if (subs.val) {
         if (
           // will become parsed -- with intergers -- also switcgh returns will be parsed
@@ -89,10 +89,6 @@ const property = (key, t, subs, cb, tree, removed, composite) => {
       tree,
       composite
     )
-    if (t && t._c) {
-      t._cLevel = null
-      t._c = null
-    }
   }
   return changed
 }
