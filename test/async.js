@@ -243,7 +243,7 @@ test('async - advanced', t => {
       })
     }
     walk(a)
-    t.equal(total, 436, 'added all episodes and comments')
+    t.equal(total, 433, 'added all episodes and comments')
     t.end()
   }
 
