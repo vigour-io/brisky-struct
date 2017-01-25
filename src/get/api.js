@@ -9,7 +9,8 @@ export default (t, key, val, stamp) => {
         bind = t
         t = getOrigin(t, key[i])
         if (!t) {
-          set(bind, { [key[i]]: i === len - 1 ? val : {} }, stamp)
+          let ret = set(bind, { [key[i]]: i === len - 1 ? val : {} }, stamp)
+          if (ret && ret.inherits) { bind = ret }
           t = get(bind, key[i])
         }
         if (typeof t === 'function') { t = bind[key[i]]() }

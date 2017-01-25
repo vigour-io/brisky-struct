@@ -24,4 +24,5 @@ if (typeof window === 'undefined') {
 // -- set bug
 // require('./set')
 // require('./references')
-require('./types')
+// require('./types')
+require('./get')

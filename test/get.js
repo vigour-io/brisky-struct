@@ -32,3 +32,16 @@ test('get - types', t => {
   t.equal(a.get(['types', 'a', 'x']), a.types.a.x, 'types')
   t.end()
 })
+
+test('get - context', t => {
+  const a = struct({
+    a: {
+      b: {}
+    }
+  })
+  const a2 = a.create({ key: 'A2' })
+  a2.get(['a', 'b', 'c', 'd'], {})
+  t.ok(a2.a.b.c.d !== void 0)
+
+  t.end()
+})

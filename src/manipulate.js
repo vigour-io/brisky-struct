@@ -4,32 +4,6 @@ import uid from './uid'
 import instances from './instances'
 import remove from './remove'
 
-export const resolveReferences = (t, instance, stamp) => {
-  const listeners = t.emitters.data.struct
-  const tRoot = root(t, true)
-  var iRoot
-  let i = listeners.length
-  while (i--) {
-    if (root(listeners[i], true) === tRoot) {
-      if (!iRoot) iRoot = root(instance, true)
-      if (iRoot !== tRoot) {
-        let p = path(listeners[i], true) // should be ok
-        if (p[0] === tRoot.key) p.shift()
-        let travel = iRoot
-        if (p.length) {
-          // console.log('go resolve ref to new context (dangerous!)', p)
-          for (let i = 0, len = p.length; i < len; i++) {
-            let key = p[i]
-            travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)
-            travel = travel[key]
-          }
-        }
-        set(travel, instance, stamp)
-      }
-    }
-  }
-}
-
 const create = (t, val, stamp, parent, key) => {
   // can become shorter!
   var instance
@@ -281,6 +255,32 @@ const setVal = (t, val, stamp, ref) => {
   }
 }
 
+const resolveReferences = (t, instance, stamp) => {
+  const listeners = t.emitters.data.struct
+  const tRoot = root(t, true)
+  var iRoot
+  let i = listeners.length
+  while (i--) {
+    if (root(listeners[i], true) === tRoot) {
+      if (!iRoot) iRoot = root(instance, true)
+      if (iRoot !== tRoot) {
+        let p = path(listeners[i], true) // should be ok
+        if (p[0] === tRoot.key) p.shift()
+        let travel = iRoot
+        if (p.length) {
+          // console.log('go resolve ref to new context (dangerous!)', p)
+          for (let i = 0, len = p.length; i < len; i++) {
+            let key = p[i]
+            travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)
+            travel = travel[key]
+          }
+        }
+        set(travel, instance, stamp)
+      }
+    }
+  }
+}
+
 const removeReference = t => {
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
     listener(t.val.emitters.data, null, uid(t))
@@ -289,13 +289,13 @@ const removeReference = t => {
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
-export { set, create }
+export { set, create, resolveReferences }
 
 // -- hack for recursive modules --
 import { resolveContext } from './context'
 import { getProp } from './property'
 import { createType } from './struct/types'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
-import getApi from './get/api'
 import { get } from './get'
+import getApi from './get/api'
 import { root, path } from './traversal'

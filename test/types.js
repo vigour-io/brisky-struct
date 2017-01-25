@@ -482,3 +482,50 @@ test('types - nested sets', t => {
 
   t.end()
 })
+
+test('types - nested references over isntances', t => {
+  // more context
+  const s = struct({
+    // types: {
+      // list: { style: 'pink' },
+      // item: { style: 'blue' },
+      // title: { style: 'red' },
+      // img: { style: 'black' }
+    // },
+    page: {
+      // current: [ '@', 'parent', 'things' ],
+      things: {
+        // list: { } // type: 'list' -- here it goes wrong...
+      }
+    }
+  })
+
+  const s2 = s.create({
+    page: {
+      current: [ '@', 'root', 'page', 'things', 'list', 'items', 'hello', 'img' ]
+    }
+  })
+
+  console.log(s2.page.current)
+  console.log(s2.page.things.list)
+  console.log(s2.page.things.list.items)
+
+  // s.set({
+  //   page: {
+  //     things: {
+  //       list: {
+  //         items: {
+  //           hello: {
+  //             type: 'item',
+  //             img: { type: 'img', val: 'jhonnyboy.jpg' }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // })
+
+  t.same(s2.page.current.val.keys(), [ 'items' ], 'correct keys')
+  t.equal(s2.page.things.list, s2.page.current.val, 'reference is updated')
+  t.end()
+})
