@@ -493,22 +493,20 @@ test('types - nested references over isntances', t => {
       // img: { style: 'black' }
     // },
     page: {
-      // current: [ '@', 'parent', 'things' ],
+      current: [ '@', 'parent', 'things' ],
       things: {
-        // list: { } // type: 'list' -- here it goes wrong...
+        list: { } // type: 'list' -- here it goes wrong...
       }
     }
   })
+
+  // s2.get() get is nto good for this
 
   const s2 = s.create({
     page: {
       current: [ '@', 'root', 'page', 'things', 'list', 'items', 'hello', 'img' ]
     }
   })
-
-  console.log(s2.page.current)
-  console.log(s2.page.things.list)
-  console.log(s2.page.things.list.items)
 
   // s.set({
   //   page: {
@@ -525,7 +523,7 @@ test('types - nested references over isntances', t => {
   //   }
   // })
 
-  t.same(s2.page.current.val.keys(), [ 'items' ], 'correct keys')
-  t.equal(s2.page.things.list, s2.page.current.val, 'reference is updated')
+  t.equal(s2.page.current.val.key, 'img', 'correct keys')
+  t.equal(s2.page.things.list.items.hello.img, s2.page.current.val, 'reference is updated')
   t.end()
 })
