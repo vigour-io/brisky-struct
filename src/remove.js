@@ -2,7 +2,7 @@ import { removeKey, getKeys } from './keys'
 import { data } from './emit'
 import { removeContext } from './emit/context'
 import { listener } from './struct/listener'
-import uid from './uid'
+import { uid } from './uid'
 
 const remove = (t, stamp, override, instance, from) => {
   if (t._async) { delete t._async }

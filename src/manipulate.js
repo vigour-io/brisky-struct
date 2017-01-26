@@ -1,6 +1,6 @@
 import { data, overrideSubscription } from './emit'
 import { listener } from './struct/listener'
-import uid from './uid'
+import { uid } from './uid'
 import instances from './instances'
 import remove from './remove'
 
