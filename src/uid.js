@@ -8,7 +8,7 @@ export const cuid = t => {
       id = id * 33 ^ uid(t)
       t = t._cLevel === 1 ? t._c : t._p
     }
-    return id
+    return id >>> 0
   } else {
     return uid(t) - 1e4
   }
