@@ -41,7 +41,8 @@
     "instrument": true
   },
   "dependencies": {
-    "brisky-stamp": "^4.0.0"
+    "brisky-stamp": "^4.0.0",
+    "string-hash": "^1.1.0"
   },
   "devDependencies": {
     "source-map-support": "^0.4.7",

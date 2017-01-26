@@ -7,7 +7,7 @@ import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
 import { getKeys } from './keys'
 import { getType } from './struct/types'
-import { cuid, uid } from './uid'
+import { cuid, uid, puid } from './uid'
 
 const emitterProperty = struct.props.on.struct.props.default
 
@@ -32,5 +32,6 @@ export {
   getType,
   getVal,
   uid,
-  cuid
+  cuid,
+  puid
 }
