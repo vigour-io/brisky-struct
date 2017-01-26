@@ -3,11 +3,12 @@ export const uid = t => { return t._uid || (t._uid = ++cnt) }
 
 export const cuid = t => {
   if (t._c) {
-    if (t._cLevel === 1) {
-      return (uid(t) - 1e4) + '' + cuid(t._c)
-    } else {
-      return (uid(t) - 1e4) + '' + cuid(t._p)
+    var id = 5381
+    while (t) {
+      id = id * 33 ^ uid(t)
+      t = t._cLevel === 1 ? t._c : t._p
     }
+    return id
   } else {
     return uid(t) - 1e4
   }
