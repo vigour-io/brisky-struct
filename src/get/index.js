@@ -40,4 +40,6 @@ const getFn = t => t.fn || t.inherits && getFn(t.inherits)
 
 const getDefault = t => t.props && t.props.default.struct || getDefault(t.inherits)
 
-export { get, getDefault, getOrigin, getData, getFn }
+const getVal = t => t.val !== void 0 ? t.val : t.inherits && getVal(t.inherits)
+
+export { get, getDefault, getOrigin, getData, getFn, getVal }

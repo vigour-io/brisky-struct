@@ -1,7 +1,7 @@
 import struct from './struct'
 import { create as c, set } from './manipulate'
 import methods from './methods'
-import { get } from './get'
+import { get, getVal } from './get'
 import { getProp as getProperty, property } from './property'
 import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
@@ -22,11 +22,12 @@ export {
   c, // temp
   set,
   struct,
-  get,
-  getProperty,
   property,
   contextProperty,
   emitterProperty,
+  get,
+  getProperty,
   getKeys,
-  getType
+  getType,
+  getVal
 }

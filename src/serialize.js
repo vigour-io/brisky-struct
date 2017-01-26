@@ -1,8 +1,7 @@
-import { get } from './get'
+import { get, getVal } from './get'
 import { getKeys } from './keys'
 import { path } from './traversal'
 
-const getVal = t => t.val !== void 0 ? t.val : t.inherits && getVal(t.inherits)
 const serialize = (t, fn) => {
   var result = {}
   var val = getVal(t)
