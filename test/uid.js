@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create, puid } = require('../')
+const { create, puid, cuid } = require('../')
 
 test('uid - cuid', t => {
   const a = create()
@@ -18,7 +18,7 @@ test('uid - cuid', t => {
   a.a.b.c._uid = 1e4 + 3
   const a2 = a.create()
   a2._uid = 1e4 + 4
-  t.equal(a2.get(['a', 'b', 'c']).uid(true), 1757830017)
+  t.equal(cuid(a2.get(['a', 'b', 'c'])), 1757830017)
   t.end()
 })
 
