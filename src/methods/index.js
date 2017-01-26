@@ -8,7 +8,7 @@ import once from '../once'
 import getApi from '../get/api'
 import bs from 'brisky-stamp'
 import { subscribe, parse } from '../subscribe'
-import { uid, cuid } from '../uid'
+import { uid } from '../uid'
 import serialize from '../serialize'
 import functional from './functional'
 import iterator from './iterator'
@@ -22,7 +22,7 @@ var listenerId = 0
 const inject = [ { define: functional }, iterator, inspect ]
 
 const define = {
-  uid (context) { return context ? cuid(this) : uid(this) },
+  uid () { return uid(this) },
   applyContext (context) { return applyContext(this, context) },
   storeContext () { return storeContext(this) },
   serialize (fn) { return serialize(this, fn) },
