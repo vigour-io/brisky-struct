@@ -1,6 +1,6 @@
 import { compute, origin } from '../compute'
 import { parent, root, path } from '../traversal'
-import { create, set } from '../manipulate'
+import { create, set as _set } from '../manipulate' // this helps with transpiling
 import { getKeys } from '../keys'
 import { generic } from '../emit'
 import { applyContext, storeContext } from '../context'
@@ -70,15 +70,15 @@ const define = {
     if (!id) { id = ++listenerId }
     const temp = { on: {} } // problem with bublé cant set [type] : { [id] }
     temp.on[type] = { [id]: val }
-    return chain(set(this, temp), this)
+    return chain(_set(this, temp), this)
   },
   set (val, stamp) {
     if (stamp === void 0) {
-      const ret = chain(set(this, val, bs.create()), this)
+      const ret = chain(_set(this, val, bs.create()), this)
       bs.close()
       return ret
     } else {
-      return chain(set(this, val, stamp), this)
+      return chain(_set(this, val, stamp), this)
     }
   },
   create (val, stamp) { // add all fields here
@@ -95,11 +95,11 @@ const define = {
   push (val, stamp) {
     const key = bs.create()
     if (stamp === void 0) {
-      const ret = chain(set(this, { [key]: val }, key), this)[key]
+      const ret = chain(_set(this, { [key]: val }, key), this)[key]
       bs.close()
       return ret
     } else {
-      return chain(set(this, { [key]: val }, stamp), this)[key]
+      return chain(_set(this, { [key]: val }, stamp), this)[key]
     }
   },
   compute (val, passon) { return compute(this, val, passon) },
