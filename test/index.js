@@ -20,5 +20,5 @@ if (typeof window === 'undefined') {
 // require('./subscribe')
 // // -- merge bug -- try tor ecreate -brender play case (wrong context or somethign) -- mostly in props same issue prob
 // require('./types')
-require('./uid')
-// require('./async')
+// require('./uid')
+require('./async')

@@ -13,7 +13,7 @@ import functional from './functional'
 import iterator from './iterator'
 import inspect from './inspect'
 
-// never use chain maybe remove it
+// never use chain maybe remove it -- lets remove
 const chain = (c, t) => c === null || c && c !== true ? c : t
 
 var listenerId = 0
