@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create: struct } = require('../')
+const { create: struct, uid } = require('../')
 
 // test('types ', t => {
 //   const a = struct({
@@ -294,7 +294,7 @@ const { create: struct } = require('../')
 //     }
 //   })
 
-//   t.equal(s.page.things.uid(), s.page.current.origin().uid())
+//   t.equal(uid(s.page.things), uid(s.page.current.origin())
 
 //   t.end()
 // })
@@ -311,7 +311,7 @@ const { create: struct } = require('../')
 //       things: { type: 'form' }
 //     }
 //   })
-//   t.equal(s.page.things.ballz.uid(), s.page.current.origin().uid())
+//   t.equal(uid(s.page.things.ballz), uid(s.page.current.origin()))
 //   t.end()
 // })
 

@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create: struct } = require('../')
+const { create: struct, uid } = require('../')
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
@@ -20,7 +20,7 @@ test('references - listeners', t => {
   const c2 = c.create({ key: 'c2' })
   a.set(1, 'stamp-1')
 
-  t.same(b._uid, b.uid(), 'a has uid')
+  t.same(b._uid, uid(b), 'a has uid')
 
   t.same(
     results, [ [ 'c' ], [ 'c2' ] ],

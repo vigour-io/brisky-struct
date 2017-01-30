@@ -14,13 +14,13 @@ const emitterProperty = struct.props.on.struct.props.default
 set(struct, { inject: methods })
 
 // make this nicer need to get acces to real create
-const create = (val, stamp) => c(struct, val, stamp)
+const create = (val, stamp, parent, key) => c(struct, val, stamp, parent, key)
 
 export {
   subscribe,
   parse,
   create,
-  c, // temp
+  c, // temp replace it
   set,
   struct,
   property,
