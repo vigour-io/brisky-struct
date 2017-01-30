@@ -2,9 +2,12 @@ import bs from 'brisky-stamp'
 import { generic } from './emit'
 import { root } from './traversal'
 import { set } from './manipulate'
+import { storeContext, applyContext } from './context'
 
 var uid = 0
-const extendSet = (t, val, stamp) => {
+const extendSet = (t, val, stamp, context) => {
+  // console.log(context)
+  applyContext(t, context)
   if (stamp) {
     set(t, val, bs.create())
     bs.close()
@@ -31,7 +34,7 @@ const generator = (t, val, stamp) => iterator(t, val(t, stamp), stamp)
 
 const promiseQueue = (t, uid, val, error) => {
   if (t.async) {
-    for (let i = 0, end = t.async.length - 2; i < end; i += 3) {
+    for (let i = 0, end = t.async.length - 3; i < end; i += 4) {
       if (t.async[i + 2] === uid) {
         t.async[i] = val
         t.async[i + 2] = void 0
@@ -43,7 +46,7 @@ const promiseQueue = (t, uid, val, error) => {
 }
 
 const done = t => {
-  t.async.splice(0, 3)
+  t.async.splice(0, 4)
   if (t.async.length) { queue(t) }
   if (t.async && !t.async.length) {
     delete t.async
@@ -64,10 +67,10 @@ const execPromise = t => {
   if (async !== void 0) {
     if (Array.isArray(async)) {
       for (let i = 0, len = async.length; i < len; i++) {
-        extendSet(t, async[i], t.async[1])
+        extendSet(t, async[i], t.async[1], t.async[3])
       }
     } else {
-      extendSet(t, async, t.async[1])
+      extendSet(t, async, t.async[1], t.async[3])
     }
   }
   done(t)
@@ -94,7 +97,7 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
           val.value
           .then(resolved => {
             if (t.async && t.async[2] === id) {
-              extendSet(t, resolved, stamp)
+              extendSet(t, resolved, stamp, t.async[3])
               execIterator(t, iteratee, stamp, id, done, next(iteratee, t, stamp))
             }
           })
@@ -105,7 +108,7 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
             }
           })
         } else {
-          extendSet(t, val.value, stamp)
+          extendSet(t, val.value, stamp, t.async[3])
           execIterator(t, iteratee, stamp, id, done, next(iteratee, t, stamp))
         }
       } else {
@@ -120,20 +123,21 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
 const iterator = (t, iteratee, stamp, val) => {
   const id = ++uid
   if (!t.async) {
-    t.async = [ iteratee, stamp, id ]
+    // add 4th context
+    t.async = [ iteratee, stamp, id, storeContext(t) ]
     queue(t)
   } else {
-    t.async.push(iteratee, stamp, id)
+    t.async.push(iteratee, stamp, id, storeContext(t))
   }
 }
 
 const promise = (t, promise, stamp) => {
   const id = ++uid
   if (!t.async) {
-    t.async = [ void 0, stamp, id ]
+    t.async = [ void 0, stamp, id, storeContext(t) ]
     queue(t)
   } else {
-    t.async.push(void 0, stamp, id)
+    t.async.push(void 0, stamp, id, storeContext(t))
   }
   promise
     .then(val => promiseQueue(t, id, val))
