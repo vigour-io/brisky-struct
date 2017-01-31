@@ -24,6 +24,7 @@ const exec = t => {
   if (!t._inProgressS) {
     t._inProgressS = true
     bs.on(() => {
+      // console.log('DO SUBSCRIPTION')
       let i = t.subscriptions.length
       while (i--) { t.subscriptions[i]() }
       t._inProgressS = false
