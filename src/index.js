@@ -7,20 +7,20 @@ import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
 import { getKeys } from './keys'
 import { getType } from './struct/types'
+// maybe remove cuid
 import { cuid, uid, puid } from './uid'
 
 const emitterProperty = struct.props.on.struct.props.default
 
 set(struct, { inject: methods })
 
-// make this nicer need to get acces to real create
-const create = (val, stamp) => c(struct, val, stamp)
+const create = (val, stamp, t = struct, parent, key) =>
+  c(t, val, stamp, parent, key)
 
 export {
   subscribe,
   parse,
   create,
-  c, // temp
   set,
   struct,
   property,

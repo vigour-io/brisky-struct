@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create: struct } = require('../')
+const { create: struct } = require('../../')
 const stamp = require('brisky-stamp')
 
 const timeout = (val, time = 5, err) =>

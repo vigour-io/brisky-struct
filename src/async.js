@@ -4,7 +4,11 @@ import { root } from './traversal'
 import { set } from './manipulate'
 
 var uid = 0
-const extendSet = (t, val, stamp) => {
+const extendSet = (t, val, stamp, context) => {
+  if (t._c) {
+    t._c = null
+    t._cLevel = null
+  }
   if (stamp) {
     set(t, val, bs.create())
     bs.close()
@@ -120,6 +124,7 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
 const iterator = (t, iteratee, stamp, val) => {
   const id = ++uid
   if (!t.async) {
+    // add 4th context
     t.async = [ iteratee, stamp, id ]
     queue(t)
   } else {

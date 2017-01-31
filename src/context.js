@@ -90,11 +90,14 @@ const applyContext = (t, store) => {
       if (ret === void 0 && struct !== void 0) {
         ret = struct
       }
-      if (newTarget) {
-        target = newTarget
-      }
+      if (newTarget) target = newTarget
     }
     return ret
+  } else {
+    if (t._c) {
+      t._c = null
+      t._cLevel = null
+    }
   }
 }
 
@@ -118,9 +121,7 @@ const handleChange = (target, context, path, level) => {
       newLevel = len - (i + 1)
     }
     travelTaget = field
-    if (i === len - 1) {
-      target = travelTaget
-    }
+    if (i === len - 1) target = travelTaget
   }
   if (newContext) {
     if (!newLevel) {
