@@ -124,9 +124,9 @@ const execIterator = (t, iteratee, stamp, id, done, val) => {
 const iterator = (t, iteratee, stamp, val) => {
   const id = ++uid
   if (!t.async) {
-    // add 4th context
     t.async = [ iteratee, stamp, id ]
-    queue(t)
+    // time out is a temp solution
+    setTimeout(() => queue(t))
   } else {
     t.async.push(iteratee, stamp, id)
   }
