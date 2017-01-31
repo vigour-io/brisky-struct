@@ -11,10 +11,11 @@ test('serialize ', t => {
     },
     hello: 'what?',
     greetings: {
-      val: [ '@', 'parent', 'hello' ],
+      val: ['@', 'parent', 'hello'],
       bye: 'bye!'
     }
   })
+
   t.same(a.serialize(), {
     a: {
       b: { c: 'hello' },
@@ -27,6 +28,17 @@ test('serialize ', t => {
   t.same(a.serialize((t, result) => t.key !== 'a' ? result : void 0), {
     hello: 'what?',
     greetings: { bye: 'bye!', val: [ '@', 'root', 'hello' ] }
+  }, 'correct result')
+
+  t.same(a.serialize(true), {
+    a: {
+      b: {
+        c: 'hello'
+      },
+      x: 'what'
+    },
+    greetings: 'what?',
+    hello: 'what?'
   }, 'correct result')
   t.end()
 })

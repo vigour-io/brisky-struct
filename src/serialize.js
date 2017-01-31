@@ -2,6 +2,11 @@ import { get, getVal } from './get'
 import { getKeys } from './keys'
 import { path } from './traversal'
 
+const compute = (t, result) => {
+  const computed = t.compute()
+  return computed !== void 0 && typeof computed !== 'object' ? computed : result
+}
+
 const serialize = (t, fn) => {
   var result = {}
   var val = getVal(t)
@@ -30,7 +35,7 @@ const serialize = (t, fn) => {
   } else if (val !== void 0) {
     result = val
   }
-  return fn ? fn(t, result) : result
+  return fn ? fn === true ? compute(t, result) : fn(t, result) : result
 }
 
 export default serialize
