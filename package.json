@@ -9,7 +9,7 @@
     "build": "rollup -c rollup/build.js",
     "watch": "rollup -c rollup/build.js -w",
     "pretest": "npm run build && standard",
-    "prepublish": "npm run build",
+    "prepublish": "echo \"/*\n!dist\n!docs\n!yarn.lock\" > .npmignore && npm run build",
     "postinstall": "[ -d dist ] || npm run build || ( mkdir dist && npm install --only=dev && npm run build );",
     "test": "node test/index.js",
     "dev": "rollup -c rollup/build.js -w & nodemon --harmony-async-await test/index.js",
