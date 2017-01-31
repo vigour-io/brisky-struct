@@ -126,6 +126,7 @@ const iterator = (t, iteratee, stamp, val) => {
   if (!t.async) {
     t.async = [ iteratee, stamp, id ]
     // time out is a temp solution
+    // should work with bs.on ofcourse....
     setTimeout(() => queue(t))
   } else {
     t.async.push(iteratee, stamp, id)
