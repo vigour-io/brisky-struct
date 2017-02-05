@@ -6,9 +6,9 @@ import { getProp as getProperty, property } from './property'
 import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
 import { getKeys } from './keys'
-import { getType } from './struct/types'
 // // maybe remove cuid
 import { cuid, uid, puid } from './uid'
+import getType from './struct/types/get'
 
 // const emitterProperty = struct.props.on.struct.props.default
 

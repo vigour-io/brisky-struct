@@ -4,13 +4,7 @@ import { uid } from './uid'
 import instances from './instances'
 import remove from './remove'
 
-import { resolveContext } from './context'
-import { getProp } from './property'
-import { createType } from './struct/types'
-import { promise, generator, isGeneratorFunction, iterator } from './async'
-import { get } from './get'
-import getApi from './get/api'
-import { root, path } from './traversal'
+
 
 const create = (t, val, stamp, parent, key) => {
   // can become shorter!
@@ -300,3 +294,10 @@ const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 export { set, create, resolveReferences }
 
 // -- hack for recursive modules --
+import { resolveContext } from './context'
+import { getProp } from './property'
+import createType from './struct/types/create'
+import { promise, generator, isGeneratorFunction, iterator } from './async'
+import { get } from './get'
+import getApi from './get/api'
+import { root, path } from './traversal'

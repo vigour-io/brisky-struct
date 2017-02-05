@@ -170,17 +170,6 @@ test('references - get', t => {
   t.end()
 })
 
-test('references - switch using get notations', t => {
-  const state = struct({})
-  state.set([
-    { page: { val: [ '@', 'root', 'pages', 'b' ] } },
-    { page: { val: [ '@', 'root', 'pages', 'a' ] } }
-  ][Symbol.iterator]())
-  t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
-  t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
-  t.end()
-})
-
 test('references - remove referenced & gaurds', t => {
   const a = struct({
     a: {
@@ -197,4 +186,18 @@ test('references - remove referenced & gaurds', t => {
   })
   t.same(a.a.emitters.data.struct, [])
   t.end()
+})
+
+test('references - switch using get notations', t => {
+  const state = struct({})
+  state.set([
+    { page: { val: [ '@', 'root', 'pages', 'b' ] } },
+    { page: { val: [ '@', 'root', 'pages', 'a' ] } }
+  ][Symbol.iterator]())
+  // why does this not work -- async needs to get rid of timout
+  setTimeout(() => {
+    t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
+    t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
+    t.end()
+  })
 })

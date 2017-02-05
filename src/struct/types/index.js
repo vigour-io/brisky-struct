@@ -1,9 +1,10 @@
-import { create, set } from '../manipulate'
-import { getDefault, get } from '../get'
-import { removeKey, addKey } from '../keys'
-import { getProp } from '../property'
-import { root } from '../traversal'
-import { contextProperty } from '../context'
+import { create, set } from '../../manipulate'
+import { getDefault, get } from '../../get'
+import { removeKey, addKey } from '../../keys'
+import { getProp } from '../../property'
+import { contextProperty } from '../../context'
+import createSetObj from './set'
+import getType from './get'
 
 const inheritType = t => t.type || t.inherits && inheritType(t.inherits)
 
@@ -46,21 +47,6 @@ const extractListeners = (t, instance) => {
     }
   }
 
-  return result
-}
-
-const createSetObj = (t, top) => {
-  const result = {}
-  const keys = t._ks
-  if (t.type && !top) result.type = t.type.compute()
-  if (keys) {
-    for (let i = 0, len = keys.length; i < len; i++) {
-      let key = keys[i]
-      let field = t[key]
-      if (field) result[key] = createSetObj(field, false)
-    }
-  }
-  if (t.val !== void 0) result.val = t.val
   return result
 }
 
@@ -131,43 +117,6 @@ const merge = (t, type, stamp, reset, original) => {
   set(t, null)
   return instance
 }
-
-const createType = (parent, val, t, stamp, key) => {
-  const type = val.type
-  const constructor = getType(parent, type, t, stamp) || t
-  const instance = new constructor.Constructor()
-  instance.inherits = constructor
-  if (constructor.instances !== false) {
-    if (!constructor.instances) {
-      constructor.instances = [ instance ]
-    } else {
-      constructor.instances.push(instance)
-    }
-  }
-  if (constructor !== t && key && t.key === key && !val.reset && (t._ks || t.val !== void 0)) {
-    set(instance, createSetObj(t, true, instance), stamp)
-  }
-  return instance
-}
-
-const getType = (parent, type, t, stamp) => {
-  if (typeof type === 'object') type = type.val
-  var result = getTypeInternal(parent, type, t)
-  if (!result) {
-    parent = root(parent)
-    set(parent, { types: { [type]: {} } }, stamp)
-    result = parent.types[type]
-  }
-  return result
-}
-
-const getTypeInternal = (parent, type, t) =>
-  (!t || typeof type === 'string' || typeof type === 'number') &&
-  (
-    parent.types && get(parent.types, type) ||
-    parent.inherits && getTypeInternal(parent.inherits, type) ||
-    parent._p && getTypeInternal(parent._p, type)
-  )
 
 const type = (t, val, key, stamp, isNew, original) => {
   if (typeof val === 'object') {
@@ -251,4 +200,4 @@ const types = struct => {
   struct.type = create(struct, 'struct')
 }
 
-export { types, createType, getType }
+export { types, getType }
