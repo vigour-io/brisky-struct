@@ -1,7 +1,6 @@
 import hash from 'string-hash'
 var cnt = 1e4 // so now a limition becomes 10k fns normal
 export const uid = t => { return t._uid || (t._uid = ++cnt) }
-console.log('xxxxxxxxxxxxx')
 // context Uid
 export const cuid = t => {
   if (t._c) {
