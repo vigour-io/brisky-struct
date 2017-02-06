@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "1.1.7",
+  "version": "1.1.7-07eac950dc481f97bd86f17325dad9f8675de39c",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -9,8 +9,7 @@
     "build": "rollup -c rollup/build.js",
     "watch": "rollup -c rollup/build.js -w",
     "pretest": "npm run build && standard",
-    "version-commit": "echo $(node -pe \"require('./package.json').version.split('-')[0]\")-$(git log -n 1 --pretty=format:'%H')",
-    "publish-commit": "npm --no-git-tag-version version $(npm run version-commit) --tag unstable",
+    "version-commit": "npm --no-git-tag-version version $(node -pe \"require('./package.json').version.split('-')[0]\")-$(git log -n 1 --pretty=format:'%H') --tag unstable",
     "prepublish": "npm run build",
     "postinstall": "[ -d dist ] || npm run build || ( mkdir dist && npm install --only=dev && npm run build );",
     "test": "node test/index.js",
