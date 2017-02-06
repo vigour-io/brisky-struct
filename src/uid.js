@@ -1,8 +1,7 @@
 import hash from 'string-hash'
 var cnt = 1e4 // so now a limition becomes 10k fns normal
-export const uid = t => { return t._uid || (t._uid = ++cnt) }
-// context Uid
-export const cuid = t => {
+const uid = t => { return t._uid || (t._uid = ++cnt) }
+const cuid = t => {
   if (t._c) {
     var id = 5381
     while (t) {
@@ -14,11 +13,7 @@ export const cuid = t => {
     return uid(t) - 1e4
   }
 }
-
-// can be opt a bit more
-
-// path Uid
-export const puid = t => {
+const puid = t => {
   var id = 5381
   var p = t
   if (t._c) {
@@ -47,3 +42,4 @@ export const puid = t => {
     return (t._puid = id >>> 0)
   }
 }
+export { uid, cuid, puid }
