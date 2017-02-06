@@ -10,7 +10,7 @@
     "watch": "rollup -c rollup/build.js -w",
     "pretest": "npm run build && standard",
     "version-commit": "npm --no-git-tag-version version $(node -pe \"require('./package.json').version.split('-')[0]\")-$(git log -n 1 --pretty=format:'%H')",
-    "publish-commit": "npm run version-commit && npm publish --tag unstable",
+    "publish-commit": "npm run version-commit && npm publish --tag $(git rev-parse --abbrev-ref HEAD)",
     "prepublish": "npm run build",
     "postinstall": "[ -d dist ] || npm run build || ( mkdir dist && npm install --only=dev && npm run build );",
     "test": "node test/index.js",
