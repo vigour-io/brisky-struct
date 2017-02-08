@@ -2,7 +2,6 @@ import { get, getOrigin } from './'
 import { set } from '../manipulate'
 
 export default (t, key, val, stamp) => {
-  console.log('????')
   var bind
   if (typeof key === 'object') {
     if (val !== void 0) {
