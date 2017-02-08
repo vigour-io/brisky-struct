@@ -10,6 +10,7 @@ import { getKeys } from './keys'
 import { cuid, uid, puid } from './uid'
 import getType from './struct/types/get'
 
+if (typeof __filename !== 'undefined') console.log('brisky-struct:', __filename)
 // const emitterProperty = struct.props.on.struct.props.default
 
 set(struct, { inject: methods })
