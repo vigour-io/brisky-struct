@@ -67,7 +67,8 @@ const define = {
     }
     if (!id) { id = ++listenerId }
     const temp = { on: {} } // problem with bublé cant set [type] : { [id] }
-    temp.on[type] = { [id]: val }
+    const r = { [id]: val }
+    temp.on[type] = r
     return chain(set(this, temp), this)
   },
   set: function (val, stamp) { // fixes buble
