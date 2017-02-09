@@ -4,8 +4,6 @@ import { uid } from './uid'
 import instances from './instances'
 import remove from './remove'
 
-
-
 const create = (t, val, stamp, parent, key) => {
   // can become shorter!
   var instance
