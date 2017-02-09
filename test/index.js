@@ -1,6 +1,3 @@
-if (typeof window === 'undefined') {
-  require('source-map-support').install()
-}
 require('./define')
 require('./inject')
 require('./serialize')
