@@ -19,6 +19,7 @@
     "url": "git+https://github.com/vigour-io/brisky-struct.git"
   },
   "browser": {
+    "'./dist/index.js": "./dist/index.browser.js",
     "./src/methods/inspect": false
   },
   "keywords": [
