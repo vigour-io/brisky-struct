@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "1.1.7-59333b32c30878c06af5b10ba5e0dd8640d2bf9e",
+  "version": "1.1.7-43db14efb39f342bdafce1ee7ee3786906e1a323",
   "main": "dist/index.js",
   "scripts": {
     "build": "builder-boy src/index.js dist/index.js",
@@ -45,9 +45,9 @@
   },
   "devDependencies": {
     "builder-boy": "latest",
-    "nyc": "^10.0.0",
     "coveralls": "^2.11.9",
     "nodemon": "^1.11.0",
+    "nyc": "^10.0.0",
     "pre-commit": "^1.1.3",
     "standard": "^8.1.0",
     "tape": "4.6.0"
