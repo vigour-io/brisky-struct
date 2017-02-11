@@ -36,21 +36,5 @@ test('uid - puid', t => {
   const a2 = a.create()
   t.equal(puid(a2.get(['a', 'b', 'c'])), puid(a.get(['a', 'b', 'c'])))
 
-  // var i = 1e6
-  // var cntx = a2.get(['a', 'b', 'c'])
-  // var d = Date.now()
-  // while (i--) {
-  //   puid(cntx)
-  // }
-  // console.log('context', Date.now() - d, 'ms')
-
-  // i = 1e6
-  // var normal = a.get(['a', 'b', 'c'])
-  // d = Date.now()
-  // while (i--) {
-  //   puid(normal)
-  // }
-  // console.log('normal', Date.now() - d, 'ms')
-
   t.end()
 })
