@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "1.1.7-43db14efb39f342bdafce1ee7ee3786906e1a323",
+  "version": "1.2.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "builder-boy src/index.js dist/index.js",
