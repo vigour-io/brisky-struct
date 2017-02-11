@@ -165,6 +165,7 @@ test('props - reset', t => {
 
 test('props - context', t => {
   const s = struct({
+    key: 's',
     types: {
       lurf: {
         field: {

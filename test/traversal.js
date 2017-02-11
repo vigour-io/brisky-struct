@@ -18,3 +18,16 @@ test('parent', t => {
 
   t.end()
 })
+
+test('path - context', t => {
+  const a = struct({
+    a: {
+      x: 'hello',
+      b: { c: true }
+    },
+    x: [ '@', 'root', 'a', 'b', 'c' ]
+  })
+  const a1 = a.create()
+  t.same(a1.get([ 'x', 'val' ]).path(), [ 'a', 'b', 'c' ])
+  t.end()
+})

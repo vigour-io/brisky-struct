@@ -1,5 +1,5 @@
 const test = require('tape')
-const { create: struct } = require('../')
+const { create: struct, uid } = require('../')
 
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
@@ -20,7 +20,7 @@ test('references - listeners', t => {
   const c2 = c.create({ key: 'c2' })
   a.set(1, 'stamp-1')
 
-  t.same(b._uid, b.uid(), 'a has uid')
+  t.same(b._uid, uid(b), 'a has uid')
 
   t.same(
     results, [ [ 'c' ], [ 'c2' ] ],
@@ -170,13 +170,34 @@ test('references - get', t => {
   t.end()
 })
 
+test('references - remove referenced & gaurds', t => {
+  const a = struct({
+    a: {
+      b: false
+    }
+  })
+  a.a.b.set(a.a)
+  a.a.b.on(() => {})
+  a.a.on(() => {})
+  a.a.b.set(null)
+  t.same(a.a.emitters.data.struct, [])
+  a.a.set({
+    emitters: { data: { blurf: null } }
+  })
+  t.same(a.a.emitters.data.struct, [])
+  t.end()
+})
+
 test('references - switch using get notations', t => {
   const state = struct({})
   state.set([
     { page: { val: [ '@', 'root', 'pages', 'b' ] } },
     { page: { val: [ '@', 'root', 'pages', 'a' ] } }
   ][Symbol.iterator]())
-  t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
-  t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
-  t.end()
+  // why does this not work -- async needs to get rid of timout
+  setTimeout(() => {
+    t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
+    t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
+    t.end()
+  })
 })

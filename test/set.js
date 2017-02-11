@@ -26,13 +26,13 @@ test('set - composed stamp', t => {
       b: {
         c: {
           val: 'hello',
-          stamp: bs.create(100, 100, 'hello')
+          stamp: bs.create(100)
         }
       }
     }
   }, bs.create(2, 2, 'hello'))
-  t.same(a.a.b.c.stamp, bs.create(100, 100, 'hello'), 'use stamp set in val object')
-  t.same(a.a.b.c.tStamp, bs.create(2, 2, 'hello'), 'tStamp is hello-100')
+  t.same(a.a.b.c.stamp, bs.create(100), 'use stamp set in val object')
+  t.same(a.a.b.c.tStamp, bs.create(2), 'tStamp is hello-100')
   t.end()
 })
 
@@ -40,7 +40,7 @@ test('set - composed stamp instances', t => {
   const a = struct()
   const b = a.create()
   const c = b.create() //eslint-disable-line
-  const stamp = bs.create(100, 100, 'hello')
+  const stamp = bs.create(100)
   a.set({
     val: 'hello',
     stamp
@@ -50,9 +50,9 @@ test('set - composed stamp instances', t => {
   t.same(c.stamp, stamp, 'c stamp is hello-100')
   a.set({
     val: 'hello',
-    stamp: bs.create(100, 100, 'hello')
-  }, bs.create(2, 2, 'hello'))
-  const stamp2 = bs.create(3, 3, 'y')
+    stamp: bs.create(100)
+  }, bs.create(2))
+  const stamp2 = bs.create(3)
   a.set({
     val: 'hello',
     a: { val: 'a', stamp },
@@ -64,8 +64,8 @@ test('set - composed stamp instances', t => {
   t.same(b.tStamp, stamp2, 'b tStamp is y-3')
   t.same(c.tStamp, stamp2, 'c tStamp is y-3')
 
-  const stamp3 = bs.create(3, 3, 3)
-  const stamp4 = bs.create(4, 4, 4)
+  const stamp3 = bs.create(3)
+  const stamp4 = bs.create(4)
   a.set({
     val: 'hello',
     a: 'a',
@@ -113,14 +113,14 @@ test('set - stamp - remove', t => {
     a: {
       b: {
         val: null,
-        stamp: bs.create(false, false, 'keepit100')
+        stamp: bs.create('keepit100')
       }
     }
   }, 'hello')
 
-  t.same(b.stamp, bs.create(false, false, 'keepit100'))
+  t.same(b.stamp, bs.create('keepit100'))
   t.equal(a.a.b, null, 'removed a.a.b')
-  a.set({ a: { b: { stamp: bs.create(false, false, 'X') } } }, false)
-  t.same(a.tStamp, bs.create(false, false, 'X'), 'correct travel stamp')
+  a.set({ a: { b: { stamp: bs.create('X') } } }, false)
+  t.same(a.tStamp, bs.create('X'), 'correct travel stamp')
   t.end()
 })

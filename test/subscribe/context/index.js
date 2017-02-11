@@ -333,3 +333,5 @@ test('subscription - context - resolve', t => {
   t.same(results, [ 's2/collection/a/a/b/c/d' ], 'fires update for deep update')
   t.end()
 })
+
+require('./references')
