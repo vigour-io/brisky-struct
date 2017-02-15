@@ -20,7 +20,7 @@
     "url": "git+https://github.com/vigour-io/brisky-struct.git"
   },
   "browser": {
-    "./src/methods/inspect": {}
+    "./src/methods/inspect": false
   },
   "keywords": [
     "data structure",
