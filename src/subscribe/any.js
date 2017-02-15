@@ -68,9 +68,9 @@ const any = (key, t, subs, cb, tree, removed) => {
     let keys = parseKeys(t)
     if (subs.$keys) {
       if (subs.$keys.val) {
-        keys = subs.$keys.val(keys, t)
+        keys = subs.$keys.val(keys || [], t)
       } else {
-        keys = subs.$keys(keys, t)
+        keys = subs.$keys(keys || [], t)
       }
     }
     if (keys) {
