@@ -4,7 +4,9 @@
   "version": "1.3.0",
   "main": "dist/index.js",
   "scripts": {
+    "watch": "builder-boy src/index.js dist/index.js -t node -t browser -r -w",
     "build": "builder-boy src/index.js dist/index.js -t node -t browser -r",
+    "dev": "nodemon test/index.js -w test -w dist",
     "lint": "standard --fix",
     "version-commit": "npm --no-git-tag-version version $(node -pe \"require('./package.json').version.split('-')[0]\")-$(git log -n 1 --pretty=format:'%H')",
     "publish-unstable": "npm run version-commit && npm publish --tag unstable",
