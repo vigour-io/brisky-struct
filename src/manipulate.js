@@ -13,8 +13,12 @@ import { root, path } from './traversal'
 
 const create = (t, val, stamp, parent, key) => {
   var instance
+  const hasType = val &&
+    typeof val === 'object' &&
+    val.type && getProp(t, 'type') !== getProp(t, 'default')
+
   if (parent) {
-    if (val && typeof val === 'object' && val.type && getProp(t, 'type') !== getProp(t, 'default')) {
+    if (hasType) {
       instance = createType(parent, val, t, stamp, key)
     } else {
       instance = new t.Constructor()
@@ -33,13 +37,17 @@ const create = (t, val, stamp, parent, key) => {
       parent[key] = instance
     }
   } else {
-    instance = new t.Constructor()
-    instance.inherits = t
-    if (t.instances !== false) {
-      if (!t.instances) {
-        t.instances = [ instance ]
-      } else {
-        t.instances.push(instance)
+    if (hasType && typeof val.type === 'object') {
+      instance = createType(parent, val, t, stamp, key)
+    } else {
+      instance = new t.Constructor()
+      instance.inherits = t
+      if (t.instances !== false) {
+        if (!t.instances) {
+          t.instances = [ instance ]
+        } else {
+          t.instances.push(instance)
+        }
       }
     }
   }

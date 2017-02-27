@@ -94,6 +94,7 @@ const handleInstances = (t, a, stamp) => {
 }
 
 const merge = (t, type, stamp, reset, original) => {
+  console.log(type)
   const result = getType(t._p, type, t) || getDefault(t._p)
 
   const raw = ((t._ks || t.val !== void 0) && !reset)
@@ -128,10 +129,8 @@ const type = (t, val, key, stamp, isNew, original) => {
       val = val.val
     } else if (val.inherits) {
       isObject = true
-      console.log('\n!using a struct as type')
     } else {
       isObject = true
-      console.log('\n!usign normal object')
     }
   }
 
@@ -143,11 +142,14 @@ const type = (t, val, key, stamp, isNew, original) => {
       let type = t.type || inheritType(t)
       type = type && type.compute()
       if (type !== val) {
-        t = merge(t, val, stamp, original.reset, original)
+        t = merge(t, val, stamp, original.reset, original, true)
       }
     }
-  } else if (isNew && !t._p) {
-    console.log('ok need to switch shit up')
+  } else if (isObject && isNew && !t._p) {
+    // if (val.inherits) {
+      // t = merge(t, val, stamp, original.reset, original)
+    // }
+    // console.log('ok need to /switch shit up', t)
   }
 
   if (t.type) {

@@ -4,7 +4,6 @@ import { set } from '../../manipulate'
 
 const createType = (parent, val, t, stamp, key) => {
   const type = val.type
-  console.log('type!', type)
   const constructor = getType(parent, type, t, stamp) || t
   const instance = new constructor.Constructor()
   instance.inherits = constructor
