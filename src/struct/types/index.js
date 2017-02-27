@@ -119,20 +119,33 @@ const merge = (t, type, stamp, reset, original) => {
 }
 
 const type = (t, val, key, stamp, isNew, original) => {
+  var isObject
   if (typeof val === 'object') {
-    if (val.stamp && val.val) {
+    if (!val) {
+      console.log('remove type')
+    } else if (val.stamp && val.val && !val.inherits) {
       if (!stamp) stamp = val.stamp
       val = val.val
-      // need to add references
+    } else if (val.inherits) {
+      isObject = true
+      console.log('\n!using a struct as type')
+    } else {
+      isObject = true
+      console.log('\n!usign normal object')
     }
   }
 
   // and ignore reset ofc
   if (!isNew && t._p) {
-    let type = t.type || inheritType(t)
-    type = type && type.compute()
-    if (type !== val) {
-      t = merge(t, val, stamp, original.reset, original)
+    if (isObject) {
+      console.log('switch using object - not supported yet')
+    } else {
+      let type = t.type || inheritType(t)
+      type = type && type.compute()
+      // dont merge if set using object / struct
+      if (type !== val) {
+        t = merge(t, val, stamp, original.reset, original)
+      }
     }
   }
 
@@ -194,6 +207,7 @@ const types = struct => {
       }
     }
   })
+
   types.struct.props.default.struct = type.struct = struct
   set(struct, { props: { type, types }, types: { struct } })
   struct.types._ks = void 0 // remove struct key

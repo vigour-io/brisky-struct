@@ -7,7 +7,6 @@ const getType = (parent, type, t, stamp) => {
   var result = getTypeInternal(parent, type, t)
   if (!result) {
     parent = root(parent)
-    // set is fucked
     set(parent, { types: { [type]: {} } }, stamp)
     result = parent.types[type]
   }

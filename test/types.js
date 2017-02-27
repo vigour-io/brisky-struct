@@ -483,7 +483,7 @@ test('types - nested sets', t => {
   t.end()
 })
 
-test('types - nested references over isntances', t => {
+test('types - nested references over instances', t => {
   // more context
   const s = struct({
     page: {
@@ -506,3 +506,20 @@ test('types - nested references over isntances', t => {
   t.equal(s2.page.things.list.items.hello.img, s2.page.current.val, 'reference is updated')
   t.end()
 })
+
+test('types - use struct as type', t => {
+  const bla = struct({
+    text: 'its some text'
+  })
+  const s = struct({ type: bla })
+  t.equal(s.inherits, bla, 'correct inheritance')
+  t.same(s.keys(), [ 'text' ], 'correct keys')
+  t.end()
+})
+
+// test('types - use object as type', t => {
+//   const bla = { text: 'its some text' }
+//   const s = struct({ type: bla })
+//   t.same(s.keys(), [ 'text' ], 'correct keys')
+//   t.end()
+// })
