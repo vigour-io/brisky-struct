@@ -12,7 +12,6 @@ import getApi from './get/api'
 import { root, path } from './traversal'
 
 const create = (t, val, stamp, parent, key) => {
-  // can become shorter!
   var instance
   if (parent) {
     if (val && typeof val === 'object' && val.type && getProp(t, 'type') !== getProp(t, 'default')) {
@@ -49,10 +48,11 @@ const create = (t, val, stamp, parent, key) => {
     set(instance, val, stamp, true)
   }
 
-  // here resolve types as well...
+  // here resolve types as well
   if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
     resolveReferences(t, instance, stamp)
   }
+
   return instance
 }
 
@@ -71,7 +71,7 @@ const overrideObjects = (t, val, stamp, isNew) => {
               : setVal(t, val.val, stamp, 1)
           if (result) {
             if (!changed) {
-              changed = result === 2 ? [ ] : [ key ]
+              changed = result === 2 ? [] : [ key ]
             } else if (result !== 2) {
               if (t._$p) t = t._$p[t.key]
               changed.push(key)
@@ -106,7 +106,6 @@ const overrideObjects = (t, val, stamp, isNew) => {
         if (stamp) { data(t, val, stamp, override, isNew) }
         return true
       } else if (stamp !== t.tStamp) {
-        // may need to tighten security on this one
         overrideSubscription(t, override, stamp, isNew)
       }
     }
@@ -271,11 +270,10 @@ const resolveReferences = (t, instance, stamp) => {
     if (root(listeners[i], true) === tRoot) {
       if (!iRoot) iRoot = root(instance, true)
       if (iRoot !== tRoot) {
-        let p = path(listeners[i], true) // should be ok
+        let p = path(listeners[i], true)
         if (p[0] === tRoot.key) p.shift()
         let travel = iRoot
         if (p.length) {
-          // console.log('go resolve ref to new context (dangerous!)', p)
           for (let i = 0, len = p.length; i < len; i++) {
             let key = p[i]
             travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)

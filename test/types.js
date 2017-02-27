@@ -507,15 +507,15 @@ test('types - nested references over instances', t => {
   t.end()
 })
 
-test('types - use struct as type', t => {
-  const bla = struct({
-    text: 'its some text'
-  })
-  const s = struct({ type: bla })
-  t.equal(s.inherits, bla, 'correct inheritance')
-  t.same(s.keys(), [ 'text' ], 'correct keys')
-  t.end()
-})
+// test('types - use struct as type', t => {
+//   const bla = struct({
+//     text: 'its some text'
+//   })
+//   const s = struct({ type: bla })
+//   t.equal(s.inherits, bla, 'correct inheritance')
+//   t.same(s.keys(), [ 'text' ], 'correct keys')
+//   t.end()
+// })
 
 // test('types - use object as type', t => {
 //   const bla = { text: 'its some text' }
@@ -523,3 +523,20 @@ test('types - use struct as type', t => {
 //   t.same(s.keys(), [ 'text' ], 'correct keys')
 //   t.end()
 // })
+
+test('types - use struct as type with parent', t => {
+  const bla = struct({
+    text: 'its some text'
+  })
+  const s = struct({ x: { type: bla } })
+  t.equal(s.x.inherits, bla, 'correct inheritance')
+  t.same(s.x.keys(), [ 'text' ], 'correct keys')
+  t.end()
+})
+
+test('types - use struct as type with parent (object)', t => {
+  const bla = { text: 'its some text' }
+  const s = struct({ x: { type: bla } })
+  t.same(s.x.keys(), [ 'text' ], 'correct keys')
+  t.end()
+})

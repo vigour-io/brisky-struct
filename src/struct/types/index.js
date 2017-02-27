@@ -122,7 +122,7 @@ const type = (t, val, key, stamp, isNew, original) => {
   var isObject
   if (typeof val === 'object') {
     if (!val) {
-      console.log('remove type')
+      // console.log('remove type')
     } else if (val.stamp && val.val && !val.inherits) {
       if (!stamp) stamp = val.stamp
       val = val.val
@@ -138,15 +138,16 @@ const type = (t, val, key, stamp, isNew, original) => {
   // and ignore reset ofc
   if (!isNew && t._p) {
     if (isObject) {
-      console.log('switch using object - not supported yet')
+      // console.log('switch using object - not supported yet')
     } else {
       let type = t.type || inheritType(t)
       type = type && type.compute()
-      // dont merge if set using object / struct
       if (type !== val) {
         t = merge(t, val, stamp, original.reset, original)
       }
     }
+  } else if (isNew && !t._p) {
+    console.log('ok need to switch shit up')
   }
 
   if (t.type) {
