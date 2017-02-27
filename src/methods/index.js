@@ -53,6 +53,16 @@ const define = {
     }
     return this
   },
+  toString () {
+    const r = this.compute()
+    if (typeof r === 'object' || r === void 0) {
+      return ''
+    } if (!isNaN(r)) {
+      return r + ''
+    } else {
+      return r
+    }
+  },
   subscribe (subs, cb, raw, tree) {
     return subscribe(this, !raw ? parse(subs) : subs, cb, tree)
   },
