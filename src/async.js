@@ -1,4 +1,4 @@
-import bs from 'brisky-stamp'
+import bs from 'stamp'
 import { generic } from './emit'
 import { root } from './traversal'
 import { set } from './manipulate'

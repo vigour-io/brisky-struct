@@ -1,6 +1,6 @@
 import { set } from './manipulate'
 import { compute } from './compute'
-import bs from 'brisky-stamp'
+import bs from 'stamp'
 var uid = 0
 
 export default (t, check, callback) => {

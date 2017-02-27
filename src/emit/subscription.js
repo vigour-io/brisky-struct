@@ -1,4 +1,4 @@
-import bs from 'brisky-stamp'
+import bs from 'stamp'
 
 const subscription = (t, stamp, val) => {
   t.tStamp = stamp

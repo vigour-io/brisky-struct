@@ -42,7 +42,7 @@
     "instrument": true
   },
   "dependencies": {
-    "brisky-stamp": "^4.0.0",
+    "stamp": "^4.0.1",
     "string-hash": "^1.1.0"
   },
   "devDependencies": {
