@@ -50,3 +50,86 @@ test('iterators - keys', t => {
   t.same(results, [], 'keys returns an empty array')
   t.end()
 })
+
+test('iterators - find', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.find(val => val.compute() === 1), s[0])
+  t.end()
+})
+
+test('iterators - findIndex', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.findIndex(val => val.compute() === 1), 0)
+  t.end()
+})
+
+test('iterators - every', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.every(val => !isNaN(val.compute())), true)
+  t.end()
+})
+
+test('iterators - some', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.some(val => val.compute() > 3), true)
+  t.end()
+})
+
+test('iterators - indexOf', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.indexOf(1), 0)
+  t.end()
+})
+
+test('iterators - lastIndexOf', t => {
+  const s = struct([ 1, 1, 1, 1 ])
+  t.same(s.lastIndexOf(1), 3)
+  t.end()
+})
+
+test('iterators - includes', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.ok(s.includes(1))
+  t.ok(!s.includes(21))
+  t.ok(!s.includes(1, 1))
+  t.ok(!s.includes(1, -4))
+  t.ok(s.includes(1, -100))
+  t.end()
+})
+
+test('iterators - slice', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.slice(1, 3), [ s[1], s[2] ])
+  t.end()
+})
+
+test('iterators - sort', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.sort((a, b) => a.compute() - b.compute() ? 1 : -1), [
+    s[4], s[3], s[2], s[1], s[0]
+  ])
+  t.end()
+})
+
+test('iterators - reverse', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.reverse(), [ s[4], s[3], s[2], s[1], s[0] ])
+  t.end()
+})
+
+test('toString', t => {
+  const s = struct({
+    a: 'hello',
+    b: 100,
+    c: { x: true },
+    d: void 0,
+    z: { val: 'z', $transform: val => val + '!' }
+  })
+
+  t.equal(s.a + '!', 'hello!')
+  t.equal(s.b + '!', '100!')
+  t.equal(s.c + '!', '!')
+  t.equal(s.d + '!', '!')
+  t.equal(s.z.toString(), 'z!')
+  t.end()
+})

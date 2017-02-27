@@ -94,6 +94,7 @@ const handleInstances = (t, a, stamp) => {
 }
 
 const merge = (t, type, stamp, reset, original) => {
+  console.log(type)
   const result = getType(t._p, type, t) || getDefault(t._p)
 
   const raw = ((t._ks || t.val !== void 0) && !reset)
@@ -119,20 +120,30 @@ const merge = (t, type, stamp, reset, original) => {
 }
 
 const type = (t, val, key, stamp, isNew, original) => {
+  var isObject
   if (typeof val === 'object') {
-    if (val.stamp && val.val) {
+    if (!val) {
+      // console.log('remove type')
+    } else if (val.stamp && val.val && !val.inherits) {
       if (!stamp) stamp = val.stamp
       val = val.val
-      // need to add references
+    } else if (val.inherits) {
+      isObject = true
+    } else {
+      isObject = true
     }
   }
 
   // and ignore reset ofc
   if (!isNew && t._p) {
-    let type = t.type || inheritType(t)
-    type = type && type.compute()
-    if (type !== val) {
-      t = merge(t, val, stamp, original.reset, original)
+    if (isObject) {
+      // console.log('switch using object - not supported yet')
+    } else {
+      let type = t.type || inheritType(t)
+      type = type && type.compute()
+      if (type !== val) {
+        t = merge(t, val, stamp, original.reset, original, true)
+      }
     }
   }
 
@@ -194,6 +205,7 @@ const types = struct => {
       }
     }
   })
+
   types.struct.props.default.struct = type.struct = struct
   set(struct, { props: { type, types }, types: { struct } })
   struct.types._ks = void 0 // remove struct key

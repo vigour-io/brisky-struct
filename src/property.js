@@ -22,7 +22,7 @@ const property = (t, val, key, stamp, struct) => {
 }
 
 const getProp = (t, key) => t.props
-  ? (key in t.props && t.props[key]) || t.props.default
+  ? key && (key in t.props && t.props[key]) || t.props.default
   : getProp(t.inherits, key)
 
 export { getProp, property }

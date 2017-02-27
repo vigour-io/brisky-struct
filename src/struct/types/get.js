@@ -1,13 +1,22 @@
 import { root } from '../../traversal'
 import { get } from '../../get'
-import { set } from '../../manipulate'
+import { set, create } from '../../manipulate'
+import { getProp } from '../../property'
 
 const getType = (parent, type, t, stamp) => {
-  if (typeof type === 'object') type = type.val
+  if (typeof type === 'object') {
+    if (type.inherits) {
+      return type
+    } else if (type.val && type.stamp !== void 0) {
+      type = type.val
+    } else {
+      return create(getProp(t).struct, type, stamp)
+    }
+  }
+
   var result = getTypeInternal(parent, type, t)
   if (!result) {
     parent = root(parent)
-    // set is fucked
     set(parent, { types: { [type]: {} } }, stamp)
     result = parent.types[type]
   }
