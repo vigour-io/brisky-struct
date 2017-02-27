@@ -117,14 +117,19 @@ test('iterators - reverse', t => {
   t.end()
 })
 
-// test('iterators - some', t => {
-//   const s = struct([ 1, 2, 3, 4, 5 ])
-//   t.same(s.slice(1, 3), [ s[1], s[2] ])
-//   t.end()
-// })
+test('toString', t => {
+  const s = struct({
+    a: 'hello',
+    b: 100,
+    c: { x: true },
+    d: void 0,
+    z: { val: 'z', $transform: val => val + '!' }
+  })
 
-// test('iterators - every', t => {
-//   const s = struct([ 1, 2, 3, 4, 5 ])
-//   t.same(s.slice(1, 3), [ s[1], s[2] ])
-//   t.end()
-// })
+  t.equal(s.a + '!', 'hello!')
+  t.equal(s.b + '!', '100!')
+  t.equal(s.c + '!', '!')
+  t.equal(s.d + '!', '!')
+  t.equal(s.z.toString(), 'z!')
+  t.end()
+})

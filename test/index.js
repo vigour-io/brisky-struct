@@ -17,4 +17,4 @@
 // require('./uid')
 // require('./async')
 // require('./types')
-require('./iterators')
+require('./methods')
