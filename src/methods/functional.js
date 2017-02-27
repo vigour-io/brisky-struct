@@ -12,6 +12,25 @@ export default {
   filter (fn) {
     return (getKeys(this) || []).map(key => get(this, key)).filter(fn)
   },
+  find (val) {
+    var keys = getKeys(this)
+    if (keys) {
+      for (let i = 0, len = keys.length; i < len; i++) {
+        let r = get(this, keys[i])
+        if (val(r, i, this)) return r
+      }
+    }
+  },
+  includes (val, index = 0) {
+    var keys = getKeys(this)
+    if (keys) {
+      for (let len = keys.length, i = index > -1 ? index : Math.max(len + index, 0); i < len; i++) {
+        let r = get(this, keys[i])
+        if (r.compute() === val || r === val) return true
+      }
+    }
+    return false
+  },
   forEach (fn) {
     var keys = getKeys(this)
     if (keys) {

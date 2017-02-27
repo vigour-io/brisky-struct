@@ -50,3 +50,19 @@ test('iterators - keys', t => {
   t.same(results, [], 'keys returns an empty array')
   t.end()
 })
+
+test('iterators - find', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.same(s.find(val => val.compute() === 1), s[0])
+  t.end()
+})
+
+test('iterators - includes', t => {
+  const s = struct([ 1, 2, 3, 4, 5 ])
+  t.ok(s.includes(1))
+  t.ok(!s.includes(21))
+  t.ok(!s.includes(1, 1))
+  t.ok(!s.includes(1, -4))
+  t.ok(s.includes(1, -100))
+  t.end()
+})
