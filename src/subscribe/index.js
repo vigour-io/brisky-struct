@@ -6,7 +6,7 @@ const listen = (t, fn) => t.subscriptions.push(fn)
 const subscribe = (t, subs, cb, tree) => {
   if (!t.subscriptions) t.subscriptions = []
   if (!tree) tree = {}
-
+  tree.$t = t
   if (subs.val) {
     if (subs.val === true || subs.val === 'shallow') {
       listen(t, () => {
