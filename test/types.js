@@ -517,12 +517,12 @@ test('types - use struct as type', t => {
   t.end()
 })
 
-// test('types - use object as type', t => {
-//   const bla = { text: 'its some text' }
-//   const s = struct({ type: bla })
-//   t.same(s.keys(), [ 'text' ], 'correct keys')
-//   t.end()
-// })
+test('types - use object as type', t => {
+  const bla = { text: 'its some text' }
+  const s = struct({ type: bla })
+  t.same(s.keys(), [ 'text' ], 'correct keys')
+  t.end()
+})
 
 test('types - use struct as type with parent', t => {
   const bla = struct({

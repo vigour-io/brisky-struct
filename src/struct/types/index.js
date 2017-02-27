@@ -145,11 +145,6 @@ const type = (t, val, key, stamp, isNew, original) => {
         t = merge(t, val, stamp, original.reset, original, true)
       }
     }
-  } else if (isObject && isNew && !t._p) {
-    // if (val.inherits) {
-      // t = merge(t, val, stamp, original.reset, original)
-    // }
-    // console.log('ok need to /switch shit up', t)
   }
 
   if (t.type) {
