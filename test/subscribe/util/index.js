@@ -1,5 +1,5 @@
 const { create: struct } = require('../../../')
-const bs = require('brisky-stamp')
+const bs = require('stamp')
 const logger = require('./log')
 
 module.exports = (t, state, subs, log) => {

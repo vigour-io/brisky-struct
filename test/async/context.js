@@ -1,6 +1,6 @@
 const test = require('tape')
 const { create } = require('../../')
-// const stamp = require('brisky-stamp')
+// const stamp = require('stamp')
 
 const timeout = (val, time = 5, err) =>
   new Promise((resolve, reject) =>

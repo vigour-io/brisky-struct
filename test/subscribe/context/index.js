@@ -1,6 +1,6 @@
 const test = require('tape')
 const { create } = require('../../../')
-const bs = require('brisky-stamp')
+const bs = require('stamp')
 
 test('subscription - context - basic', t => {
   var cnt = 0
