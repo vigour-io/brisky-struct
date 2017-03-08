@@ -94,7 +94,6 @@ const handleInstances = (t, a, stamp) => {
 }
 
 const merge = (t, type, stamp, reset, original) => {
-  console.log(type)
   const result = getType(t._p, type, t) || getDefault(t._p)
 
   const raw = ((t._ks || t.val !== void 0) && !reset)
