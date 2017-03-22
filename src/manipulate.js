@@ -52,9 +52,7 @@ const create = (t, val, stamp, parent, key) => {
     }
   }
 
-  if (val !== void 0) {
-    set(instance, val, stamp, true)
-  }
+  if (val !== void 0) set(instance, val, stamp, true)
 
   // here resolve types as well
   if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
@@ -66,7 +64,8 @@ const create = (t, val, stamp, parent, key) => {
 
 const overrideObjects = (t, val, stamp, isNew) => {
   const override = val.stamp
-  if (!stamp) { stamp = override }
+  if (!stamp) stamp = override
+
   if (val.val === null) {
     return remove(t, stamp, override)
   } else {
