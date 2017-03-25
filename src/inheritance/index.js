@@ -126,25 +126,50 @@ const mergeType = (t, type, stamp, reset, original) => {
   if (listeners) set(instance, listeners, stamp)
 
   handleInstances(t, instance, stamp)
-  t._$p = t._p
-  t._p = null
-  set(t, null)
+  t._$p = t._p // pure hack -- lets just make this work by default
+  // just need to return the t eveyrtime
+  t._p = null // hacky as hell
+  set(t, null) // this is so ineffiecient....
+
+  // lets not create new shit -- not nessecary at all....
   return instance
 }
 // ---------------------------
 
 // this is it for now
 const switchInheritance = (t, inherits, stamp) => {
-  console.log(getKeys(inherits))
-  if (t._ks && getKeys(inherits)) {
+  console.log(getKeys(inherits), t._ks)
+  var inheritsKeys
+  if (t._ks && (inheritsKeys = getKeys(inherits))) {
     // merge keys arrays
-    t._ks = inherits._ks
+    const keys = []
+    let i = t._ks.length
+    while (i--) {
+      if (t._ks[i] in t) keys.push(t._ks[i])
+    }
+
+    let j = inheritsKeys.length
+    while (j--) {
+      console.log(inheritsKeys[j])
+      if (inheritsKeys[j] in t) {
+        console.log('have this key', inheritsKeys[j])
+      } else {
+
+      }
+    }
   }
   // also need to remove shit if it inherits somehting else
 
-  // think about remove
-  if (t.val === void 0 && inherits.val !== void 0) {
-
+  // remove instance
+  const instances = t.inherits.instances
+  if (instances) {
+    let i = instances.length
+    while (i--) {
+      if (instances[i] === t) {
+        instances.splice(i, 1)
+        break
+      }
+    }
   }
 
   t.inherits = inherits
