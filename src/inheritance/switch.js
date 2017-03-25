@@ -10,22 +10,28 @@ const switchInheritance = (t, inherits, stamp) => {
     const keys = []
     let i = t._ks.length
     while (i--) {
-      if (t._ks[i] in t) {
-        keys.push(t._ks[i])
-        // have to do some special merging here
-
+      const key = t._ks[i]
+      if (key in t) {
+        keys.unshift(key)
+        // now you need to resolve inheritance
+        if (key in inherits) {
+          console.log('lets resolve inheritance!')
+          // also need to do deep -- needs to be recursive
+        }
       }
     }
 
     let j = inheritsKeys.length
     while (j--) {
       if (inheritsKeys[j] in t) {
-        console.log('have this key', inheritsKeys[j])
+        console.log('have this key - do nested merging', inheritsKeys[j])
         // have to do some special shit -- merge deep for example
       } else {
-        // keys.push(t.)
+        keys.unshift(inheritsKeys[j])
       }
     }
+
+    t._ks = keys
   }
   // also need to remove shit if it inherits somehting else
 

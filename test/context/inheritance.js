@@ -30,10 +30,13 @@ test('context - switch inheritance - keys', t => {
   })
   switchInheritance(a, b)
   t.same(x.instances.length, 0, 'removed instance')
-  t.same(a.keys(), [ 'b', 'c', 'a', 'x', 'z' ], 'keys')
-  // t.equal(a.get('b'), 'b!', 'vals')
-  // t.equal(a.get([ 'c', 'd' ]), 'd!', 'context')
-  // t.equal(a.get([ 'z', 'bla' ]), void 0, 'remove inherited field')
+  t.same(a.keys(), [ 'b', 'c', 'x', 'z', 'a', 'd' ], 'keys')
+  t.equal(a.get('b').compute(), 'b!', 'vals')
+  t.equal(a.get([ 'c', 'd' ]).compute(), 'd!', 'context')
+
+  t.equal(a.get([ 'z', 'bla' ]), void 0, 'remove inherited field')
+  // this is important!
+
   // t.equal(a.get([ 'z' ]).keys(), [], 'removed keys')
   // t.equal(a.get([ 'x' ]).keys(), [ 'b' ], 'removed one key')
 
