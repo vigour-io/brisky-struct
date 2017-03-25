@@ -1,7 +1,8 @@
 import { create, set } from '../manipulate'
 import { getDefault, get } from '../get'
-import { removeKey, getKeys } from '../keys'
+import { removeKey } from '../keys'
 import getType from '../struct/types/get'
+import switchInheritance from './switch'
 
 // ---------------------------
 // this is all from type can be changed
@@ -135,44 +136,5 @@ const mergeType = (t, type, stamp, reset, original) => {
   return instance
 }
 // ---------------------------
-
-// this is it for now
-const switchInheritance = (t, inherits, stamp) => {
-  console.log(getKeys(inherits), t._ks)
-  var inheritsKeys
-  if (t._ks && (inheritsKeys = getKeys(inherits))) {
-    // merge keys arrays
-    const keys = []
-    let i = t._ks.length
-    while (i--) {
-      if (t._ks[i] in t) keys.push(t._ks[i])
-    }
-
-    let j = inheritsKeys.length
-    while (j--) {
-      console.log(inheritsKeys[j])
-      if (inheritsKeys[j] in t) {
-        console.log('have this key', inheritsKeys[j])
-      } else {
-
-      }
-    }
-  }
-  // also need to remove shit if it inherits somehting else
-
-  // remove instance
-  const instances = t.inherits.instances
-  if (instances) {
-    let i = instances.length
-    while (i--) {
-      if (instances[i] === t) {
-        instances.splice(i, 1)
-        break
-      }
-    }
-  }
-
-  t.inherits = inherits
-}
 
 export { createSetObj, mergeType, switchInheritance }
