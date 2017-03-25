@@ -1,8 +1,10 @@
 import { create, set } from '../manipulate'
 import { getDefault, get } from '../get'
-import { removeKey } from '../keys'
+import { removeKey, getKeys } from '../keys'
 import getType from '../struct/types/get'
 
+// ---------------------------
+// this is all from type can be changed
 const createSetObj = (t, top) => {
   const result = {}
   const keys = t._ks
@@ -36,7 +38,6 @@ const extractListeners = (t, instance) => {
       }
     }
   }
-
   const d = t.emitters && t.emitters.data
   if (d) {
     if (!result) result = {}
@@ -60,6 +61,7 @@ const extractListeners = (t, instance) => {
   return result
 }
 
+// handleInstances - check if it can go faster
 const handleInstances = (t, a, stamp) => {
   const instances = t.instances
   t.instances = null
@@ -103,8 +105,9 @@ const handleInstances = (t, a, stamp) => {
   }
 }
 
-const merge = (t, type, stamp, reset, original) => {
-  console.log(type)
+// move all type stuff to type itself -- first things first a super efficient overtaker
+// mergeType -- > will become merge or something
+const mergeType = (t, type, stamp, reset, original) => {
   const result = getType(t._p, type, t) || getDefault(t._p)
 
   const raw = ((t._ks || t.val !== void 0) && !reset)
@@ -128,5 +131,23 @@ const merge = (t, type, stamp, reset, original) => {
   set(t, null)
   return instance
 }
+// ---------------------------
 
-export { createSetObj, merge }
+// this is it for now
+const switchInheritance = (t, inherits, stamp) => {
+  console.log(getKeys(inherits))
+  if (t._ks && getKeys(inherits)) {
+    // merge keys arrays
+    t._ks = inherits._ks
+  }
+  // also need to remove shit if it inherits somehting else
+
+  // think about remove
+  if (t.val === void 0 && inherits.val !== void 0) {
+
+  }
+
+  t.inherits = inherits
+}
+
+export { createSetObj, mergeType, switchInheritance }
