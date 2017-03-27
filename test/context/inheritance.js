@@ -17,6 +17,15 @@ test('context - switch inheritance - keys', t => {
   })
 
   const a = x.create({
+    // props adds an extra dimension -- same as keys but different...
+    props: {
+      g: () => {
+
+      },
+      h: {
+        hello: true
+      }
+    },
     a: 'a!',
     z: 'z!',
     x: { b: 'yo!' },
