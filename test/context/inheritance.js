@@ -1,5 +1,5 @@
 const test = require('tape')
-const { struct, switchInheritance } = require('../../')
+const { struct, switchInheritance, get } = require('../../')
 
 test('context - switch inheritance - val', t => {
   const a = struct.create()
@@ -45,7 +45,12 @@ test('context - switch inheritance - keys', t => {
   t.equal(a.get('b').compute(), 'b!', 'vals')
   t.equal(a.get([ 'c', 'd' ]).compute(), 'd!', 'context')
 
+  t.same(a.z.keys(), [], 'remove inherited field')
+
+  console.log(a.z.get('bla'), get(a.z, 'bla'))
   t.equal(a.get([ 'z', 'bla' ]), void 0, 'remove inherited field')
+
+  console.log(a.z.inherits.bla)
   // this is important!
 
   // t.equal(a.get([ 'z' ]).keys(), [], 'removed keys')

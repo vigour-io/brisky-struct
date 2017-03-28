@@ -27,7 +27,9 @@ const getOrigin = (t, key) => {
     if (result !== void 0 && result !== null) {
       return result
     } else {
-      return (t = t.val) && typeof t === 'object' && t.inherits && getOrigin(t, key)
+      if ((t = t.val) && typeof t === 'object') {
+        return t.inherits && getOrigin(t, key)
+      }
     }
   }
 }
