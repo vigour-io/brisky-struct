@@ -139,7 +139,7 @@ test('switch inheritance - emitters', t => {
 
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.set('jurfff')
-  t.same(result, { a: 1, gurf: 3 })
+  t.same(result, { a: 1, a11: 0, a1b: 0, gurf: 3, smurx: 0 })
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.b.set('jurfff')
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 3 }
