@@ -2,6 +2,10 @@ import { getKeys } from '../keys'
 import { get, getProps } from '../get'
 import { getProp } from '../property'
 
+const getKeyProp = (t, key) => t.props
+  ? key && (key in t.props && t.props[key])
+  : getKeyProp(t.inherits, key)
+
 const props = (t, inherits) => {
   if (t.props) {
     let own
@@ -35,16 +39,12 @@ const switchInheritance = (t, inherits) => {
     }
     for (let key in tProps) {
       if (tProps[key].struct) {
-        console.log(key, getProp(t, key).struct)
-        switchInheritance(tProps[key].struct, (tProps.default || getProp(t, key)).struct)
+        switchInheritance(tProps[key].struct, (getKeyProp(t, key) || tProps.default || getProp(t, key)).struct)
         props[key] = tProps[key]
       }
     }
-
-    console.log(Object.keys(props), props.dirt.struct.keys())
   }
 
-  // maybe its because when its false it means no keys?
   if (t._ks && (inheritsKeys = getKeys(inherits))) {
     if (!keys) keys = []
     for (let i = 0, len = inheritsKeys.length; i < len; i++) {
