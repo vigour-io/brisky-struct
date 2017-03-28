@@ -112,7 +112,7 @@ test('switch inheritance - emitters', t => {
     }
   })
 
-  const a11 = a1.create({
+  const a11 = a1.create({ //eslint-disable-line
     on: {
       data: {
         bla: () => result.a11++

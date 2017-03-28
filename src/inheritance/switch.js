@@ -1,5 +1,5 @@
 import { getKeys } from '../keys'
-import { get, getProps, getFn, getData } from '../get'
+import { get, getProps, getFn } from '../get'
 import { getProp } from '../property'
 
 const getKeyProp = (t, key) => t.props
