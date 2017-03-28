@@ -93,7 +93,7 @@ test('switch inheritance - emitters', t => {
 })
 
 test('switch inheritance - emitters', t => {
-  const result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
+  var result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   const a = struct.create({ bla: 'bla',
     on: {
       data: () => {
@@ -137,15 +137,15 @@ test('switch inheritance - emitters', t => {
 
   switchInheritance(a, b)
 
-  // t.same()
-  console.log(a.emitters.data.fn)
-
+  result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.set('jurfff')
+  t.same(result, { a: 1, gurf: 3 })
+  result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
+  b.b.set('jurfff')
+  result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 3 }
 
-  // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
   t.end()
 })
-
 
 // needs to jsut use resolve reference
 
