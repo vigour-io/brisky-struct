@@ -147,11 +147,8 @@ const handleEmitters = (t, emitters, inherits, key) => {
 
   if (fn) {
     const inheritsFn = inheritsEmitter && getFn(inheritsEmitter)
-
     if (inheritsFn) {
-      console.log('ok need to start merging some shit!')
       const result = inheritedEmitter(inheritsEmitter)
-      console.log(result)
       for (let key in result) {
         if (!(key in emitter)) {
           newFn.push(result[key])
