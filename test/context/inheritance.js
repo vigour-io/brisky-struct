@@ -19,27 +19,29 @@ test('context - switch inheritance - keys', t => {
   const a = x.create({
     // props adds an extra dimension -- same as keys but different...
     props: {
-      g: () => {
-
-      },
-      h: {
-        hello: true
-      }
+      g: () => {},
+      dirt: { bye: true },
+      h: { hello: true }
     },
     a: 'a!',
     z: 'z!',
     x: { b: 'yo!' },
-    d: true
+    d: true,
+    h: 'o o!'
   })
 
   const b = struct.create({
     b: 'b!',
     c: { d: 'd!' },
-    d: 'hello'
+    d: 'hello',
+    props: {
+      x: 'myballz'
+    }
   })
+
   switchInheritance(a, b)
   t.same(x.instances.length, 0, 'removed instance')
-  t.same(a.keys(), [ 'b', 'c', 'x', 'z', 'a', 'd' ], 'keys')
+  t.same(a.keys(), [ 'b', 'c', 'x', 'z', 'a', 'd', 'h' ], 'keys')
   t.equal(a.get('b').compute(), 'b!', 'vals')
   t.equal(a.get([ 'c', 'd' ]).compute(), 'd!', 'context')
 
