@@ -51,36 +51,23 @@ test('switch inheritance - keys', t => {
 })
 
 test('switch inheritance - instances', t => {
-  const a = struct.create({
-    bla: 'bla'
-  })
-
+  const a = struct.create({ bla: 'bla' })
   const a1 = a.create({
-    gurt: {
-      blurf: true
-    }
+    gurt: { blurf: true }
   })
-
   const a11 = a1.create({
     gurt: {
-      blurf: {
-        blarf: true
-      }
+      blurf: { blarf: true }
     }
   })
-
   const b = struct.create({
     gurt: {
       blurf: {
-        blarf: {
-          haha: true
-        }
+        blarf: { haha: true }
       }
     }
   })
-
   switchInheritance(a, b)
-
   t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
   t.end()
 })
