@@ -39,7 +39,9 @@ const switchInheritance = (t, inherits) => {
     }
     for (let key in tProps) {
       if (tProps[key].struct) {
-        switchInheritance(tProps[key].struct, (getKeyProp(t, key) || tProps.default || getProp(t, key)).struct)
+        switchInheritance(tProps[key].struct, (
+          (tProps.default ? getKeyProp(t, key) : tProps.default) || getProp(t, key)
+        ).struct)
         props[key] = tProps[key]
       }
     }
@@ -51,7 +53,6 @@ const switchInheritance = (t, inherits) => {
       const key = inheritsKeys[i]
       if (!(key in t)) keys.push(key)
     }
-
     for (let i = 0, len = t._ks.length; i < len; i++) {
       const key = t._ks[i]
       if (key in t) {
@@ -65,7 +66,6 @@ const switchInheritance = (t, inherits) => {
       }
     }
     t._ks = keys
-    console.log(keys)
   }
 
   if (inherits !== old) {
@@ -84,15 +84,13 @@ const switchInheritance = (t, inherits) => {
     }
   }
 
-  // also need to take care of EMITTERS
+  // EMITTERS - especialy REFERENCES <---
 
-  // waaay more complex...
-  // if (t.instances) {
-  //   for (let i = 0, len = t.instances.length; i < len; i++) {
-  //     switchInheritance(t.instances[i], t)
-  //   }
-  // }
-
+  if (t.instances) {
+    for (let i = 0, len = t.instances.length; i < len; i++) {
+      switchInheritance(t.instances[i], t)
+    }
+  }
 }
 
 export default switchInheritance
