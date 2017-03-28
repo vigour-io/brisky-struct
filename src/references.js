@@ -14,7 +14,7 @@ const resolveReferences = (t, instance, stamp) => {
     if (root(listeners[i], true) === tRoot) {
       if (!iRoot) iRoot = root(instance, true)
       if (iRoot !== tRoot) {
-        let p = path(listeners[i], true)
+        const p = path(listeners[i], true)
         if (p[0] === tRoot.key) p.shift()
         let travel = iRoot
         if (p.length) {

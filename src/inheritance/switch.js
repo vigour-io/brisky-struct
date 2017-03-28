@@ -1,5 +1,5 @@
 import { getKeys } from '../keys'
-import { get, getProps } from '../get'
+import { get, getProps, getFn, getData } from '../get'
 import { getProp } from '../property'
 
 const getKeyProp = (t, key) => t.props
@@ -61,7 +61,7 @@ const switchInheritance = (t, inherits) => {
         if (prop.struct) {
           switchInheritance(t[key], get(inherits, key, true) || prop.struct)
         } else {
-          console.log('  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switch not supported yet', key)
+          console.log('  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switching inheritance - not supported yet', key)
         }
       }
     }
@@ -85,12 +85,82 @@ const switchInheritance = (t, inherits) => {
   }
 
   // EMITTERS - especialy REFERENCES <---
+  if (t.emitters) {
+    const inheritsEmitters = get(inherits, 'emitters', true)
+    const keys = getKeys(t.emitters)
+    if (keys) {
+      for (let i = 0, len = keys.length; i < len; i++) {
+        handleEmitters(t, t.emitters, inheritsEmitters, keys[i])
+      }
+    }
+  }
 
   if (t.instances) {
     for (let i = 0, len = t.instances.length; i < len; i++) {
       switchInheritance(t.instances[i], t)
     }
   }
+}
+
+// ok so need to make a nice list of shit with keys make a new object
+
+const inheritedEmitter = (emitter, result = {}) => {
+  eachListener(emitter, (listener, key) => {
+    if (typeof listener === 'function' && !(key in result)) {
+      result[key] = listener
+    }
+  })
+  if (emitter.inherits) inheritedEmitter(emitter.inherits, result)
+  return result
+}
+
+const eachListener = (emitter, fn) => {
+  for (let key in emitter) {
+    if (
+      key !== '_p' &&
+      key !== 'key' &&
+      key !== 'fn' &&
+      key !== '_c' &&
+      key !== '_cLevel' &&
+      key !== 'instances' &&
+      key !== 'inherits'
+    ) {
+      fn(emitter[key], key)
+    }
+  }
+}
+
+const handleEmitters = (t, emitters, inherits, key) => {
+  const emitter = emitters[key]
+  const inheritsEmitter = get(inherits, key, true)
+  const fn = emitter.fn
+  const newFn = []
+
+    // const struct = emitter.struct
+  // const newStruct = []
+
+  eachListener(emitter, (listener, key) => {
+    if (typeof listner === 'function') {
+      newFn.push(listener)
+    }
+  })
+
+  if (fn) {
+    const inheritsFn = inheritsEmitter && getFn(inheritsEmitter)
+
+    if (inheritsFn) {
+      console.log('ok need to start merging some shit!')
+      const result = inheritedEmitter(inheritsEmitter)
+      console.log(result)
+      for (let key in result) {
+        if (!(key in emitter)) {
+          newFn.push(result[key])
+        }
+      }
+    }
+  }
+
+  emitter.fn = newFn
 }
 
 export default switchInheritance

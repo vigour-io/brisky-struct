@@ -71,3 +71,97 @@ test('switch inheritance - instances', t => {
   t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
   t.end()
 })
+
+test('switch inheritance - emitters', t => {
+  const a = struct.create({ bla: 'bla' })
+  const a1 = a.create({ gurt: { blurf: true } })
+  const a11 = a1.create({
+    gurt: {
+      blurf: { blarf: true }
+    }
+  })
+  const b = struct.create({
+    gurt: {
+      blurf: {
+        blarf: { haha: true }
+      }
+    }
+  })
+  switchInheritance(a, b)
+  // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
+  t.end()
+})
+
+test('switch inheritance - emitters', t => {
+  const result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
+  const a = struct.create({ bla: 'bla',
+    on: {
+      data: () => {
+        result.a++
+      }
+    }
+  })
+
+  const a1 = a.create({
+    b: {
+      on: {
+        data: () => {
+          result.a1b++
+        }
+      }
+    }
+  })
+
+  const a11 = a1.create({
+    on: {
+      data: {
+        bla: () => result.a11++
+      }
+    }
+  })
+
+  const b = struct.create({
+    on: {
+      data: {
+        gurf: () => result.gurf++
+      }
+    },
+    b: {
+      on: {
+        data: {
+          smurx: () => result.smurx++
+        }
+      }
+    }
+  })
+
+  switchInheritance(a, b)
+
+  // t.same()
+  console.log(a.emitters.data.fn)
+
+  b.set('jurfff')
+
+  // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
+  t.end()
+})
+
+
+// needs to jsut use resolve reference
+
+// test('switch inheritance - references', t => {
+//   const a = struct.create({ bla: 'bla' })
+//   const a1 = a.create({
+//     gurt: { blurf: true }
+//   })
+//   const b = struct.create({
+//     gurt: {
+//       blurf: {
+//         blarf: { haha: true }
+//       }
+//     }
+//   })
+//   switchInheritance(a, b)
+//   // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
+//   t.end()
+// })
