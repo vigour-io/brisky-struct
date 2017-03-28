@@ -6,6 +6,8 @@ import switchInheritance from './switch'
 
 // ---------------------------
 // this is all from type can be changed
+// this will all go
+
 const createSetObj = (t, top) => {
   const result = {}
   const keys = t._ks
@@ -63,6 +65,7 @@ const extractListeners = (t, instance) => {
 }
 
 // handleInstances - check if it can go faster
+// this can also go
 const handleInstances = (t, a, stamp) => {
   const instances = t.instances
   t.instances = null

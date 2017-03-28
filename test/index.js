@@ -17,4 +17,5 @@
 // require('./async')
 // require('./types')
 // require('./methods')
-require('./context')
+// require('./context')
+require('./inheritance')

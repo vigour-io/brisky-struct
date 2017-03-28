@@ -1,5 +1,5 @@
 import { getKeys } from '../keys'
-import { get } from '../get'
+import { get, getProps } from '../get'
 import { getProp } from '../property'
 
 const props = (t, inherits) => {
@@ -9,18 +9,14 @@ const props = (t, inherits) => {
       const prop = getProp(inherits, key)
       if (!prop || t.props[key].struct != prop.struct) { // eslint-disable-line
         if (!own) own = {}
-        if (t.props[key].struct) {
-          own[key] = t.props[key]
-        } else {
-          // cannot change fn
-        }
+        own[key] = t.props[key]
       }
     }
     return own
   }
 }
 
-const switchInheritance = (t, inherits, stamp) => {
+const switchInheritance = (t, inherits) => {
   // if (t.inherits === inherits) { // this opt can go later need to check deep inherits
   //   return
   // }
@@ -32,14 +28,23 @@ const switchInheritance = (t, inherits, stamp) => {
   t.inherits = inherits
 
   if (tProps) {
+    const previous = getProps(inherits)
+    const props = t.props = {}
+    for (let key in previous) {
+      props[key] = previous[key]
+    }
     for (let key in tProps) {
       if (tProps[key].struct) {
-        const prop = getProp(t, key)
-        switchInheritance(tProps[key].struct, prop)
+        console.log(key, getProp(t, key).struct)
+        switchInheritance(tProps[key].struct, (tProps.default || getProp(t, key)).struct)
+        props[key] = tProps[key]
       }
     }
+
+    console.log(Object.keys(props), props.dirt.struct.keys())
   }
 
+  // maybe its because when its false it means no keys?
   if (t._ks && (inheritsKeys = getKeys(inherits))) {
     if (!keys) keys = []
     for (let i = 0, len = inheritsKeys.length; i < len; i++) {
@@ -60,11 +65,8 @@ const switchInheritance = (t, inherits, stamp) => {
       }
     }
     t._ks = keys
+    console.log(keys)
   }
-
-  // also need to take care of INSTANCES
-
-  // also need to take care of EMITTERS
 
   if (inherits !== old) {
     if (instances) {
@@ -82,13 +84,14 @@ const switchInheritance = (t, inherits, stamp) => {
     }
   }
 
-  if (t.instances) {
-    for (let i = 0, len = t.instances.length; i < len; i++) {
-      switchInheritance(t.instances[i], t)
-    }
-  }
+  // also need to take care of EMITTERS
 
-  // fire some listeners
+  // waaay more complex...
+  // if (t.instances) {
+  //   for (let i = 0, len = t.instances.length; i < len; i++) {
+  //     switchInheritance(t.instances[i], t)
+  //   }
+  // }
 
 }
 
