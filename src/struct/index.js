@@ -1,12 +1,11 @@
 import { create, set } from '../manipulate'
 import { property } from '../property'
 import { types } from './types'
-import { getDefault } from '../get'
+import { getDefault, getProps } from '../get'
 import inject from './inject'
 import on from './on'
 
 const struct = {}
-const getProps = t => t.props || getProps(t.inherits)
 
 const props = {
   inject,

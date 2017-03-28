@@ -2,9 +2,6 @@ import { getKeys } from '../keys'
 import { get } from '../get'
 import { getProp } from '../property'
 
-// add this to get -- its being reused
-const getProps = t => t.props || getProps(t.inherits)
-
 const props = (t, inherits) => {
   if (t.props) {
     let own
@@ -23,11 +20,8 @@ const props = (t, inherits) => {
   }
 }
 
-// emitters -- fix it
-
 const switchInheritance = (t, inherits, stamp) => {
   // if (t.inherits === inherits) { // this opt can go later need to check deep inherits
-  //   console.log('  >>>>>> inherits is equal <<<<<')
   //   return
   // }
 
@@ -38,11 +32,10 @@ const switchInheritance = (t, inherits, stamp) => {
   t.inherits = inherits
 
   if (tProps) {
-    console.log('has own property', tProps)
     for (let key in tProps) {
-      console.log('   own prop need to do something', key)
-      if (key in t) {
-        console.log('     has the key - prop do something!', key)
+      if (tProps[key].struct) {
+        const prop = getProp(t, key)
+        switchInheritance(tProps[key].struct, prop)
       }
     }
   }
@@ -58,15 +51,8 @@ const switchInheritance = (t, inherits, stamp) => {
       const key = t._ks[i]
       if (key in t) {
         keys.push(key)
-        console.log('👹 lets resolve inheritance!', `"${key}"`)
         const prop = getProp(t, key)
-
-        // if (tProps && tProps[key]) {
-          // console.log('HAS OWN PROP - but from inheritance... - mystery case', key)
-        // }
-
         if (prop.struct) {
-          console.log('   --- lets resolve! ---', key)
           switchInheritance(t[key], get(inherits, key, true) || prop.struct)
         } else {
           console.log('  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switch not supported yet', key)
@@ -75,6 +61,10 @@ const switchInheritance = (t, inherits, stamp) => {
     }
     t._ks = keys
   }
+
+  // also need to take care of INSTANCES
+
+  // also need to take care of EMITTERS
 
   if (inherits !== old) {
     if (instances) {
@@ -91,6 +81,15 @@ const switchInheritance = (t, inherits, stamp) => {
       inherits.instances.push(t)
     }
   }
+
+  if (t.instances) {
+    for (let i = 0, len = t.instances.length; i < len; i++) {
+      switchInheritance(t.instances[i], t)
+    }
+  }
+
+  // fire some listeners
+
 }
 
 export default switchInheritance

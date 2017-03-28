@@ -1,5 +1,5 @@
 const test = require('tape')
-const { struct, switchInheritance, get } = require('../../')
+const { struct, switchInheritance } = require('../../')
 
 test('context - switch inheritance - val', t => {
   const a = struct.create()
@@ -17,7 +17,6 @@ test('context - switch inheritance - keys', t => {
   })
 
   const a = x.create({
-    // props adds an extra dimension -- same as keys but different...
     props: {
       g: () => {},
       dirt: { bye: true },
@@ -35,7 +34,10 @@ test('context - switch inheritance - keys', t => {
     c: { d: 'd!' },
     d: 'hello',
     props: {
-      x: 'myballz'
+      x: 'myballz',
+      default: {
+        haha: 'fun!'
+      }
     }
   })
 
@@ -44,23 +46,10 @@ test('context - switch inheritance - keys', t => {
   t.same(a.keys(), [ 'b', 'c', 'x', 'z', 'a', 'd', 'h' ], 'keys')
   t.equal(a.get('b').compute(), 'b!', 'vals')
   t.equal(a.get([ 'c', 'd' ]).compute(), 'd!', 'context')
-
-  t.same(a.z.keys(), [], 'remove inherited field')
-
-  console.log(a.z.get('bla'), get(a.z, 'bla'))
+  t.same(a.z.keys(), [], 'correct keys')
   t.equal(a.get([ 'z', 'bla' ]), void 0, 'remove inherited field')
 
-  console.log(a.z.inherits.bla)
-  // this is important!
 
-  // t.equal(a.get([ 'z' ]).keys(), [], 'removed keys')
-  // t.equal(a.get([ 'x' ]).keys(), [ 'b' ], 'removed one key')
-
-  // then do some sets
-
-  // add some instances right hur
-
-  // what do do with instances
   t.end()
 })
 
