@@ -1,14 +1,8 @@
 import { getKeys } from '../keys'
 import { get, getProps, getFn, getData } from '../get'
-// import { getProp } from '../property'
-import { resolveReferences } from '../references'
-import { data, overrideSubscription } from '../emit'
-
-const getProp = (t, key) => {
-  return t.props
-  ? key && (key in t.props && t.props[key]) || t.props.default
-  : getProp(t.inherits, key)
-}
+import { getProp } from '../property'
+import { resolveReferences } from '../references' // rdy for this
+import { data } from '../emit'
 
 const getKeyProp = (t, key) => t.props
   ? key && (key in t.props && t.props[key])
@@ -115,8 +109,6 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
   }
 
-  // if (stamp) { data(t, val, stamp, false, isNew) }
-  // isNew????
   if (stamp && !fromInstance) {
     // also need to check if it ACTUALY changed
     data(t, void 0, stamp, false)
@@ -162,9 +154,7 @@ const handleEmitters = (t, emitters, inherits, key) => {
   // const newStruct = []
 
   eachListener(emitter, (listener, key) => {
-    if (typeof listener === 'function') {
-      newFn.push(listener)
-    }
+    if (typeof listener === 'function') newFn.push(listener)
   })
 
   if (fn) {
