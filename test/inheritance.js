@@ -73,26 +73,6 @@ test('switch inheritance - instances', t => {
 })
 
 test('switch inheritance - emitters', t => {
-  const a = struct.create({ bla: 'bla' })
-  const a1 = a.create({ gurt: { blurf: true } })
-  const a11 = a1.create({
-    gurt: {
-      blurf: { blarf: true }
-    }
-  })
-  const b = struct.create({
-    gurt: {
-      blurf: {
-        blarf: { haha: true }
-      }
-    }
-  })
-  switchInheritance(a, b)
-  // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
-  t.end()
-})
-
-test('switch inheritance - emitters', t => {
   var result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   const a = struct.create({ bla: 'bla',
     on: {
@@ -101,7 +81,6 @@ test('switch inheritance - emitters', t => {
       }
     }
   })
-
   const a1 = a.create({
     b: {
       on: {
@@ -111,7 +90,6 @@ test('switch inheritance - emitters', t => {
       }
     }
   })
-
   const a11 = a1.create({ //eslint-disable-line
     on: {
       data: {
@@ -119,7 +97,6 @@ test('switch inheritance - emitters', t => {
       }
     }
   })
-
   const b = struct.create({
     on: {
       data: {
@@ -134,16 +111,13 @@ test('switch inheritance - emitters', t => {
       }
     }
   })
-
   switchInheritance(a, b)
-
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.set('jurfff')
   t.same(result, { a: 1, a11: 0, a1b: 0, gurf: 3, smurx: 0 })
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.b.set('jurfff')
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 3 }
-
   t.end()
 })
 
