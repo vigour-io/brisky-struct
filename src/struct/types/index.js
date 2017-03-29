@@ -3,7 +3,7 @@ import { getDefault, get } from '../../get'
 import { addKey } from '../../keys'
 import { getProp } from '../../property'
 import { contextProperty } from '../../context'
-import { mergeType } from '../../inheritance'
+import { switchInheritance } from '../../inheritance'
 import getType from './get'
 
 const inheritType = t => t.type || t.inherits && inheritType(t.inherits)
@@ -31,7 +31,10 @@ const type = (t, val, key, stamp, isNew, original) => {
       let type = t.type || inheritType(t)
       type = type && type.compute()
       if (type !== val) {
-        t = mergeType(t, val, stamp, original.reset, original, true)
+        console.log('create something new right hur', type, val)
+        // parent, type, t, stamp)
+        getType(t._p, t, val)
+        // t = mergeType(t, val, stamp, original.reset, original, true)
       }
     }
   }

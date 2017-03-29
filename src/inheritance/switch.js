@@ -1,6 +1,7 @@
 import { getKeys } from '../keys'
-import { get, getProps, getFn } from '../get'
+import { get, getProps, getFn, getData } from '../get'
 import { getProp } from '../property'
+import { resolveReferences } from '../references'
 
 const getKeyProp = (t, key) => t.props
   ? key && (key in t.props && t.props[key])
@@ -79,14 +80,21 @@ const switchInheritance = (t, inherits) => {
       inherits.instances.push(t)
     }
   }
+  const inheritsEmitters = get(inherits, 'emitters', true)
 
   if (t.emitters) {
-    const inheritsEmitters = get(inherits, 'emitters', true)
     const keys = getKeys(t.emitters)
     if (keys) {
       for (let i = 0, len = keys.length; i < len; i++) {
         handleEmitters(t, t.emitters, inheritsEmitters, keys[i])
       }
+    }
+  }
+
+  if (inheritsEmitters) {
+    const data = getData(inherits)
+    if (data && data.struct) {
+      console.log('lets resolve some of dem references')
     }
   }
 

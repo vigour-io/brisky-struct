@@ -14,7 +14,6 @@ const create = (t, val, stamp, parent, key) => {
   const hasType = val &&
     typeof val === 'object' &&
     val.type && getProp(t, 'type') !== getProp(t, 'default')
-
   if (parent) {
     if (hasType) {
       instance = createType(parent, val, t, stamp, key)
@@ -49,21 +48,18 @@ const create = (t, val, stamp, parent, key) => {
       }
     }
   }
-
   if (val !== void 0) set(instance, val, stamp, true)
-
   // here resolve types as well --- resolve reference has bigger implications
+  // needs to handled in switch inheritance as well!
   if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
     resolveReferences(t, instance, stamp)
   }
-
   return instance
 }
 
 const overrideObjects = (t, val, stamp, isNew) => {
   const override = val.stamp
   if (!stamp) stamp = override
-
   if (val.val === null) {
     return remove(t, stamp, override)
   } else {
@@ -78,14 +74,12 @@ const overrideObjects = (t, val, stamp, isNew) => {
             if (!changed) {
               changed = result === 2 ? [] : [ key ]
             } else if (result !== 2) {
-              if (t._$p) t = t._$p[t.key]
               changed.push(key)
             }
           }
         }
       }
       if (changed) {
-        if (t._$p) t = t._$p[t.key]
         if (stamp) { data(t, val, stamp, override, isNew) }
         instances(t, val, stamp, changed, override)
         return true
@@ -101,13 +95,11 @@ const overrideObjects = (t, val, stamp, isNew) => {
               ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
               : setVal(t, val.val, stamp, 1)
           ) {
-            if (t._$p) t = t._$p[t.key]
             changed = true
           }
         }
       }
       if (changed) {
-        if (t._$p) t = t._$p[t.key]
         if (stamp) { data(t, val, stamp, override, isNew) }
         return true
       } else if (stamp !== t.tStamp) {
@@ -131,14 +123,12 @@ const objects = (t, val, stamp, isNew) => {
           if (!changed) {
             changed = result === 2 ? [ ] : [ key ]
           } else if (result !== 2) {
-            if (t._$p) t = t._$p[t.key]
             changed.push(key)
           }
         }
       }
     }
     if (changed) {
-      if (t._$p) t = t._$p[t.key]
       if (stamp) { data(t, val, stamp, false, isNew) }
       instances(t, val, stamp, changed)
       return true
@@ -151,12 +141,10 @@ const objects = (t, val, stamp, isNew) => {
           ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
           : setVal(t, val.val, stamp, 1)
       ) {
-        if (t._$p) t = t._$p[t.key]
         changed = true
       }
     }
     if (changed) {
-      if (t._$p) t = t._$p[t.key]
       if (stamp) { data(t, val, stamp, false, isNew) }
       return true
     }
