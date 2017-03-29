@@ -2,61 +2,61 @@ const test = require('tape')
 const { create: struct, uid } = require('../')
 const bs = require('brisky-stamp')
 
-// test('types ', t => {
-//   const a = struct({
-//     key: 'a',
-//     types: {
-//       something: {
-//         field: 'real'
-//       },
-//       bla: { somehting: 'wrong' }
-//     },
-//     field: { type: 'something' }
-//   })
+test('types ', t => {
+  const a = struct({
+    key: 'a',
+    types: {
+      something: {
+        field: 'real'
+      },
+      bla: { somehting: 'wrong' }
+    },
+    field: { type: 'something' }
+  })
 
-//   const b = a.create({
-//     types: {
-//       something: {
-//         type: 'something',
-//         bla: true
-//       },
-//       bla: { reset: true, val: 'override!' }
-//     },
-//     x: { type: 'something' },
-//     y: { type: 'bla' }
-//   })
+  const b = a.create({
+    types: {
+      something: {
+        type: 'something',
+        bla: true
+      },
+      bla: { reset: true, val: 'override!' }
+    },
+    x: { type: 'something' },
+    y: { type: 'bla' }
+  })
 
-//   t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged something type')
-//   t.same(b.get('y').keys(), [], 'override bla type')
-//   t.equal(b.get('y').compute(), 'override!', 'type with string')
-//   t.same(a.get('field').keys(), [ 'field' ], 'field on a has field')
-//   const c = struct({
-//     types: { a: true },
-//     a: {
-//       b: {
-//         c: true
-//       }
-//     }
-//   })
-//   const c2 = c.create({ a: { type: 'a', reset: true } })
-//   t.same(c2.get('a').keys(), [], 'override inheritance')
-//   t.end()
-// })
+  t.same(b.get('x').keys(), [ 'field', 'bla' ], 'merged something type')
+  t.same(b.get('y').keys(), [], 'override bla type')
+  t.equal(b.get('y').compute(), 'override!', 'type with string')
+  t.same(a.get('field').keys(), [ 'field' ], 'field on a has field')
+  const c = struct({
+    types: { a: true },
+    a: {
+      b: {
+        c: true
+      }
+    }
+  })
+  const c2 = c.create({ a: { type: 'a', reset: true } })
+  t.same(c2.get('a').keys(), [], 'override inheritance')
+  t.end()
+})
 
-// test('types - simple ', t => {
-//   const a = struct({
-//     key: 'a',
-//     types: {
-//       a: 'self'
-//     },
-//     define: {
-//       haha: true
-//     },
-//     bla: { type: 'a' }
-//   })
-//   t.equal(a.bla.inherits, a, 'use self in types')
-//   t.end()
-// })
+test('types - simple ', t => {
+  const a = struct({
+    key: 'a',
+    types: {
+      a: 'self'
+    },
+    define: {
+      haha: true
+    },
+    bla: { type: 'a' }
+  })
+  t.equal(a.bla.inherits, a, 'use self in types')
+  t.end()
+})
 
 test('types - switch - keys', t => {
   const a = struct({
@@ -93,18 +93,20 @@ test('types - switch - keys', t => {
   a.bla.set({ type: 'b' })
 
   t.same(a.bla.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on a.bla')
-  // t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on a1')
-  // t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on a2')
-  // t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on a3')
-  // t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on a3-2')
-  // t.same(fieldInstance.keys(), [], 'correct keys on fieldInstance')
+  t.same(a1.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky' ], 'correct keys on a1')
+  t.same(a2.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'hello', 'gurky', 'MYOWN' ], 'correct keys on a2')
+  t.same(a3.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky' ], 'correct keys on a3')
+  t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on a3-2')
+  t.same(fieldInstance.keys(), [], 'correct keys on fieldInstance')
 
-  // a.bla.set({ type: 'a', reset: true })
-  // t.same(a.bla.keys(), [ 'a' ], 'correct keys on a.bla') // need to update instances
-  // t.same(a1.keys(), [ 'a' ], 'correct keys on a1')
-  // t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on a2')
-  // t.same(a3.keys(), [ 'a' ], 'correct keys on a3')
-  // t.same(a32.keys(), [ 'a', 'HA' ], 'correct keys on a3-2')
+  a.bla.set({ type: 'a', reset: true })
+  // reset does not work anymore ofcourse...
+
+  t.same(a.bla.keys(), [], 'correct keys on a.bla') // need to update instances
+  t.same(a1.keys(), [], 'correct keys on a1')
+  t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on a2')
+  t.same(a3.keys(), [ 'a' ], 'correct keys on a3')
+  t.same(a32.keys(), [ 'a', 'HA' ], 'correct keys on a3-2')
 
   t.end()
 })

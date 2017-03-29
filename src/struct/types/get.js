@@ -13,9 +13,10 @@ const getType = (parent, type, t, stamp) => {
       return create(getProp(t).struct, type, stamp)
     }
   }
-
-  var result = getTypeInternal(parent, type, t)
+  let result = getTypeInternal(parent, type, t)
   if (!result) {
+    // create type
+    console.log('no result - create type', type)
     parent = root(parent)
     set(parent, { types: { [type]: {} } }, stamp)
     result = parent.types[type]

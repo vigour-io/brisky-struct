@@ -49,8 +49,7 @@ const create = (t, val, stamp, parent, key) => {
     }
   }
   if (val !== void 0) set(instance, val, stamp, true)
-  // here resolve types as well --- resolve reference has bigger implications
-  // needs to handled in switch inheritance as well!
+
   if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
     resolveReferences(t, instance, stamp)
   }
@@ -121,7 +120,7 @@ const objects = (t, val, stamp, isNew) => {
             : setVal(t, val.val, stamp, 1)
         if (result) {
           if (!changed) {
-            changed = result === 2 ? [ ] : [ key ]
+            changed = result === 2 ? [] : [ key ]
           } else if (result !== 2) {
             changed.push(key)
           }

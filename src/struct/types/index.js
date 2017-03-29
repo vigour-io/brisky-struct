@@ -23,7 +23,6 @@ const type = (t, val, key, stamp, isNew, original) => {
     }
   }
 
-  // and ignore reset ofc
   if (!isNew && t._p) {
     if (isObject) {
       // console.log('switch using object - not supported yet')
@@ -31,10 +30,10 @@ const type = (t, val, key, stamp, isNew, original) => {
       let type = t.type || inheritType(t)
       type = type && type.compute()
       if (type !== val) {
-        console.log('create something new right hur', type, val)
-        // parent, type, t, stamp)
-        getType(t._p, t, val)
-        // t = mergeType(t, val, stamp, original.reset, original, true)
+        switchInheritance(t, getType(t._p, val, t, stamp))
+        if (original.reset) {
+          set(t, { reset: true }, stamp)
+        }
       }
     }
   }
