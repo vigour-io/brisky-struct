@@ -21,10 +21,6 @@ const props = (t, inherits) => {
 }
 
 const switchInheritance = (t, inherits) => {
-  // if (t.inherits === inherits) { // this opt can go later need to check deep inherits
-  //   return
-  // }
-
   var inheritsKeys, keys
   const old = t.inherits
   const instances = old.instances
@@ -84,7 +80,6 @@ const switchInheritance = (t, inherits) => {
     }
   }
 
-  // EMITTERS - especialy REFERENCES <---
   if (t.emitters) {
     const inheritsEmitters = get(inherits, 'emitters', true)
     const keys = getKeys(t.emitters)

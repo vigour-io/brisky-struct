@@ -147,21 +147,41 @@ test('switch inheritance - emitters', t => {
   t.end()
 })
 
-// needs to jsut use resolve reference
-
-// test('switch inheritance - references', t => {
-//   const a = struct.create({ bla: 'bla' })
-//   const a1 = a.create({
-//     gurt: { blurf: true }
-//   })
-//   const b = struct.create({
-//     gurt: {
-//       blurf: {
-//         blarf: { haha: true }
-//       }
+// test('switch inheritance - references - reverse', t => {
+//   const hub = struct.create()
+//   const hubInstance = hub.create({
+//     page: {
+//       current: [ '@', 'root', 'page', 'glurf' ]
 //     }
 //   })
-//   switchInheritance(a, b)
-//   // t.same(a11.gurt.blurf.blarf.keys(), [ 'haha' ], 'correct keys')
+//   hub.set({
+//     page: {
+//       current: [ '@', 'root', 'page', 'blurk' ],
+//       glurf: { smurk: 'ha!' }
+//     }
+//   })
+//   t.equal(hubInstance.page.glurf.smurk.compute(), 'ha!')
+//   t.end()
+// })
+
+// test('switch inheritance - references', t => {
+//   const hub = struct.create({
+//     x: 'hello'
+//   })
+//   const hubInstance = hub.create({
+//     b: {
+//       hello: true
+//     },
+//     c: {
+//       gurk: true
+//     },
+//     x: 'bye'
+//   })
+//   hub.set({
+//     b: [ '@', 'root', 'x' ],
+//     c: [ '@', 'root', 'y' ]
+//   })
+//   t.equal(hubInstance.b.val, hubInstance.x)
+//   t.equal(hubInstance.c.val, hub.y)
 //   t.end()
 // })
