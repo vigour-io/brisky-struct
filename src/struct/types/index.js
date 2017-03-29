@@ -30,10 +30,8 @@ const type = (t, val, key, stamp, isNew, original) => {
       let type = t.type || inheritType(t)
       type = type && type.compute()
       if (type !== val) {
-        switchInheritance(t, getType(t._p, val, t, stamp))
-        if (original.reset) {
-          set(t, { reset: true }, stamp)
-        }
+        switchInheritance(t, getType(t._p, val, t, stamp), stamp)
+        if (original.reset) set(t, { reset: true }, stamp) // maybe deprecate this...
       }
     }
   }

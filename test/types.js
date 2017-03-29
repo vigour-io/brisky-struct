@@ -111,38 +111,38 @@ test('types - switch - keys', t => {
   t.end()
 })
 
-// test('types - switch - subscriptions', t => {
-//   var cnt = 0
-//   const a = struct({
-//     key: 'a',
-//     types: {
-//       gurky: {
-//         hello: true
-//       },
-//       b: {
-//         XXXXXXXX: true,
-//         YYYYYYYY: true
-//       },
-//       a: {
-//         props: {
-//           default: { b: {} }
-//         },
-//         a: true
-//       }
-//     },
-//     bla: {
-//       type: 'a',
-//       hello: {},
-//       gurky: { type: 'gurky' },
-//       val: 'smurt'
-//     }
-//   })
-//   a.subscribe({ bla: { hello: true } }, () => { cnt++ })
-//   cnt = 0
-//   a.bla.set({ type: 'b' })
-//   t.equal(cnt, 1, 'fires subscription on type change')
-//   t.end()
-// })
+test('types - switch - subscriptions', t => {
+  var cnt = 0
+  const a = struct({
+    key: 'a',
+    types: {
+      gurky: {
+        hello: true
+      },
+      b: {
+        XXXXXXXX: true,
+        YYYYYYYY: true
+      },
+      a: {
+        props: {
+          default: { b: {} }
+        },
+        a: true
+      }
+    },
+    bla: {
+      type: 'a',
+      hello: {},
+      gurky: { type: 'gurky' },
+      val: 'smurt'
+    }
+  })
+  a.subscribe({ bla: { hello: true } }, () => { cnt++ })
+  cnt = 0
+  a.bla.set({ type: 'b' })
+  t.equal(cnt, 1, 'fires subscription on type change')
+  t.end()
+})
 
 // test('types - switch - creation / context', t => {
 //   const x = struct({ hello: true })

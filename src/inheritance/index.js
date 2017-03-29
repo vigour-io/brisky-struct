@@ -2,6 +2,7 @@ import { getKeys } from '../keys'
 import { get, getProps, getFn, getData } from '../get'
 // import { getProp } from '../property'
 import { resolveReferences } from '../references'
+import { data, overrideSubscription } from '../emit'
 
 const getProp = (t, key) => {
   return t.props
@@ -27,7 +28,7 @@ const props = (t, inherits) => {
   }
 }
 
-const switchInheritance = (t, inherits) => {
+const switchInheritance = (t, inherits, stamp, fromInstance) => {
   var inheritsKeys, keys
   const old = t.inherits
   const instances = old.instances
@@ -63,7 +64,7 @@ const switchInheritance = (t, inherits) => {
         keys.push(key)
         const prop = getProp(t, key)
         if (prop.struct) {
-          switchInheritance(t[key], get(inherits, key, true) || prop.struct)
+          switchInheritance(t[key], get(inherits, key, true) || prop.struct, stamp)
         } else {
           console.log('  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switching inheritance - not supported yet', key)
         }
@@ -100,8 +101,8 @@ const switchInheritance = (t, inherits) => {
   }
 
   if (inheritsEmitters) {
-    const data = getData(inherits)
-    if (data && data.struct) {
+    const dataEmitter = getData(inherits)
+    if (dataEmitter && dataEmitter.struct) {
       // check for _p
       console.log('lets resolve some of dem references FROM SWITCH 💋')
       // resolveReferences
@@ -110,8 +111,14 @@ const switchInheritance = (t, inherits) => {
 
   if (t.instances) {
     for (let i = 0, len = t.instances.length; i < len; i++) {
-      switchInheritance(t.instances[i], t)
+      switchInheritance(t.instances[i], t, stamp, true)
     }
+  }
+
+  // if (stamp) { data(t, val, stamp, false, isNew) }
+  // isNew????
+  if (stamp && !fromInstance) {
+    data(t, void 0, stamp, false)
   }
 }
 
