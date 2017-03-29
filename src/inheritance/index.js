@@ -118,6 +118,7 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
   // if (stamp) { data(t, val, stamp, false, isNew) }
   // isNew????
   if (stamp && !fromInstance) {
+    // also need to check if it ACTUALY changed
     data(t, void 0, stamp, false)
   }
 }
@@ -152,15 +153,16 @@ const eachListener = (emitter, fn) => {
 
 const handleEmitters = (t, emitters, inherits, key) => {
   const emitter = emitters[key]
-  const inheritsEmitter = get(inherits, key, true)
+
+  const inheritsEmitter = inherits && get(inherits, key, true)
   const fn = emitter.fn
   const newFn = []
 
-    // const struct = emitter.struct
+  // const struct = emitter.struct
   // const newStruct = []
 
   eachListener(emitter, (listener, key) => {
-    if (typeof listner === 'function') {
+    if (typeof listener === 'function') {
       newFn.push(listener)
     }
   })
