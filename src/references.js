@@ -1,7 +1,7 @@
 import { set, create } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
-import { get } from './get'
+import { get, getVal } from './get'
 import getApi from './get/api'
 import { root, path } from './traversal'
 
@@ -38,4 +38,25 @@ const removeReference = t => {
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
-export { resolveReferences, removeReference, reference }
+const resolveFromValue = (t, val, stamp) => {
+  if (val.instances && val._p && t._p) {
+    const rootInstances = val.root(true).instances
+    if (rootInstances && t.root(true) === val.root(true)) {
+      for (let i = 0, len = rootInstances.length; i < len; i++) {
+        const field = get(rootInstances[i], val.path(true), true)
+        if (field !== val) {
+          const instance = get(rootInstances[i], t.path(true))
+          if (getVal(instance) === val) {
+            instance.set(field, stamp)
+          }
+          instance._c = null
+          instance._cLevel = null
+          field._c = null
+          field._cLevel = null
+        }
+      }
+    }
+  }
+}
+
+export { resolveReferences, removeReference, reference, resolveFromValue }

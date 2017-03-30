@@ -129,18 +129,26 @@ const { struct, switchInheritance } = require('../')
 //   t.end()
 // })
 
-test('references - resolve from listeners', t => {
-  const hub = struct.create({ x: true, y: true })
-  const hubInstance = hub.create({ x: 'hello' })
-  console.log('\n_______________________')
-  hub.set({ y: [ '@', 'root', 'x' ] })
-  t.equal(hubInstance.y.val, hubInstance.x, 'resolve refs')
+// test('references - resolve from listeners', t => {
+//   const hub = struct.create({ x: true, y: true })
+//   const hubInstance = hub.create({ x: 'hello' })
+//   console.log('\n_______________________')
+//   hub.set({ y: [ '@', 'root', 'x' ] })
+//   t.equal(hubInstance.y.val, hubInstance.x, 'resolve refs')
+//   t.end()
+// })
+
+test('references - resolve from instance', t => {
+  const hub = struct.create()
+  const hubInstance = hub.create({ b: { glurf: true }, x: 'x!' })
+  hub.set({ b: [ '@', 'root', 'x' ] })
+  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
   t.end()
 })
 
-// test('references - resolve from instance', t => {
+// test('references - resolve from instance (one field)', t => {
 //   const hub = struct.create()
-//   const hubInstance = hub.create({ b: {}, x: true })
+//   const hubInstance = hub.create({ x: true })
 //   console.log('\n_______________________')
 //   hub.set({ b: [ '@', 'root', 'x' ] })
 //   t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')

@@ -1,7 +1,8 @@
 import { getKeys } from '../keys'
-import { get, getProps, getFn, getData } from '../get'
+import { get, getProps, getFn, getVal } from '../get'
 import { getProp } from '../property'
-import { resolveReferences } from '../references' // rdy for this
+import { resolveFromValue } from '../references' // rdy for this
+// also add resolveFromReference
 import { data } from '../emit'
 
 const getKeyProp = (t, key) => t.props
@@ -79,6 +80,7 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
     if (inherits.instances !== false) {
       if (!inherits.instances) inherits.instances = []
+      console.log('  add to instances....', t, inherits)
       inherits.instances.push(t)
     }
   }
@@ -94,21 +96,15 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
   }
 
-  // if (inheritsEmitters) {
-  //   const dataEmitter = getData(inherits)
-  //   if (dataEmitter && dataEmitter.struct) {
-  //     // check for _p
-  //     console.log('lets resolve some of dem references FROM SWITCH 💋')
-  //     // resolveReferences !!!!
-  //   }
-  // }
-
-  // if (t.val)
-
   if (t.instances) {
     for (let i = 0, len = t.instances.length; i < len; i++) {
       switchInheritance(t.instances[i], t, stamp, true)
     }
+  }
+
+  const val = getVal(t)
+  if (typeof val === 'object' && val.inherits) {
+    resolveFromValue(inherits, val, stamp)
   }
 
   if (stamp && !fromInstance) data(t, void 0, stamp, false)
@@ -146,8 +142,6 @@ const handleEmitters = (t, emitters, inherits, key) => {
   const inheritsEmitter = inherits && get(inherits, key, true)
   const fn = emitter.fn
   const newFn = []
-  // const struct = emitter.struct
-  // const newStruct = []
 
   eachListener(emitter, (listener, key) => {
     if (typeof listener === 'function') newFn.push(listener)
@@ -164,10 +158,6 @@ const handleEmitters = (t, emitters, inherits, key) => {
       }
     }
   }
-
-  // if (struct) {
-  //   console.log('ok resolve mofos')
-  // }
 
   emitter.fn = newFn
 }
