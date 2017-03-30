@@ -265,22 +265,15 @@ const setVal = (t, val, stamp, ref) => {
         listener(val.emitters.data, t, uid(t))
       }
 
-      if (val.instances) {
-        const rootInstances = val.root().instances
-        if (val._p && rootInstances && t.root() === val.root()) {
+      if (val.instances && val._p && t._p) {
+        const rootInstances = val.root(true).instances
+        if (rootInstances && t.root(true) === val.root(true)) {
           for (let i = 0, len = rootInstances.length; i < len; i++) {
-
             const field = get(rootInstances[i], val.path(true), true)
             if (field !== val) {
-              console.log('SWITCH IT!')
               const instance = get(rootInstances[i], t.path(true))
-              if (getVal(instance) === t.val) {
-                console.log('go correct it')
-                instance.set(field, stamp)
-              }
+              if (getVal(instance) === t.val) instance.set(field, stamp)
             }
-            // val.instances
-            // instances[i]
           }
         }
       }
