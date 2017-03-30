@@ -199,3 +199,25 @@ test('switch inheritance - references', t => {
   t.equal(getVal(hubInstance.c), hub.y)
   t.end()
 })
+
+test('switch inheritance - gaurds', t => {
+  const hub = struct.create({
+    x: 'hello'
+  })
+  const hubInstance = hub.create({
+    b: {
+      hello: true
+    },
+    c: {
+      gurk: true
+    },
+    x: 'bye'
+  })
+  hub.set({
+    b: [ '@', 'root', 'x' ],
+    c: [ '@', 'root', 'y' ]
+  })
+  t.equal(hubInstance.b.val, hubInstance.x)
+  t.equal(getVal(hubInstance.c), hub.y)
+  t.end()
+})
