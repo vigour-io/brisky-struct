@@ -99,7 +99,7 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     if (dataEmitter && dataEmitter.struct) {
       // check for _p
       console.log('lets resolve some of dem references FROM SWITCH 💋')
-      // resolveReferences
+      // resolveReferences !!!!
     }
   }
 
@@ -145,11 +145,9 @@ const eachListener = (emitter, fn) => {
 
 const handleEmitters = (t, emitters, inherits, key) => {
   const emitter = emitters[key]
-
   const inheritsEmitter = inherits && get(inherits, key, true)
   const fn = emitter.fn
   const newFn = []
-
   // const struct = emitter.struct
   // const newStruct = []
 

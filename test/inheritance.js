@@ -121,19 +121,27 @@ test('switch inheritance - emitters', t => {
   t.end()
 })
 
-test('switch inheritance - references', t => {
+test('switch inheritance - instances - fields', t => {
   const hub = struct.create()
-  const hubInstance = hub.create({
-    b: {},
-    x: true
-  })
-  hub.set({
-    b: [ '@', 'root', 'x' ]
-  })
-  // this is wild.... has it own value
-  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
+  const hubInstance = hub.create({ b: {} })
+  hub.set({ b: 'bla' })
+  t.equal(hubInstance.b.compute(), 'bla', 'resolves')
   t.end()
 })
+
+// test('switch inheritance - references', t => {
+//   const hub = struct.create()
+//   const hubInstance = hub.create({
+//     b: {},
+//     x: true
+//   })
+//   hub.set({
+//     b: [ '@', 'root', 'x' ]
+//   })
+//   // this is wild.... has it own value
+//   t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
+//   t.end()
+// })
 
 // test('switch inheritance - references - reverse', t => {
 //   const hub = struct.create()
