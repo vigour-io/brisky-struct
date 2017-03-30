@@ -1,4 +1,5 @@
-const get = t => t.val !== void 0 ? t.val : t.inherits && get(t.inherits)
+const get = t => t.val !== void 0
+  ? t.val : t.inherits && get(t.inherits)
 
 const origin = t => t.val && typeof t.val === 'object' && t.val.inherits
   ? origin(t.val) : t

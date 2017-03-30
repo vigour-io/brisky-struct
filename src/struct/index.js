@@ -1,12 +1,11 @@
 import { create, set } from '../manipulate'
 import { property } from '../property'
 import { types } from './types'
-import { getDefault } from '../get'
+import { getDefault, getProps } from '../get'
 import inject from './inject'
 import on from './on'
 
 const struct = {}
-const getProps = t => t.props || getProps(t.inherits)
 
 const props = {
   inject,
@@ -27,9 +26,15 @@ const props = {
     if (!props) {
       const previous = getProps(t)
       props = t.props = {}
-      if (previous) { for (let key in previous) { props[key] = previous[key] } }
+      if (previous) {
+        for (let key in previous) {
+          props[key] = previous[key]
+        }
+      }
     }
-    for (let key in val) { parse(t, val[key], key, stamp, props) }
+    for (let key in val) {
+      parse(t, val[key], key, stamp, props)
+    }
   }
 }
 

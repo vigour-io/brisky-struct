@@ -7,16 +7,13 @@ import { resolveContext } from './context'
 import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
-import { get } from './get'
-import getApi from './get/api'
-import { root, path } from './traversal'
+import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 
 const create = (t, val, stamp, parent, key) => {
   var instance
   const hasType = val &&
     typeof val === 'object' &&
     val.type && getProp(t, 'type') !== getProp(t, 'default')
-
   if (parent) {
     if (hasType) {
       instance = createType(parent, val, t, stamp, key)
@@ -51,22 +48,35 @@ const create = (t, val, stamp, parent, key) => {
       }
     }
   }
-
   if (val !== void 0) {
     set(instance, val, stamp, true)
   }
 
-  // here resolve types as well
-  if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
-    resolveReferences(t, instance, stamp)
+  if (parent) {
+    if (
+      t.emitters &&
+      t.emitters.data &&
+      t.emitters.data.struct
+    ) {
+      resolveReferences(t, instance, stamp)
+    }
+    // this part will go into the actual setting of a struct listener
+    /*
+     else if (
+      instance.emitters &&
+      instance.emitters.data &&
+      instance.emitters.data.struct
+    ) {
+      resolveReferences(t, instance, stamp)
+    }
+    */
   }
-
   return instance
 }
 
 const overrideObjects = (t, val, stamp, isNew) => {
   const override = val.stamp
-  if (!stamp) { stamp = override }
+  if (!stamp) stamp = override
   if (val.val === null) {
     return remove(t, stamp, override)
   } else {
@@ -81,14 +91,12 @@ const overrideObjects = (t, val, stamp, isNew) => {
             if (!changed) {
               changed = result === 2 ? [] : [ key ]
             } else if (result !== 2) {
-              if (t._$p) t = t._$p[t.key]
               changed.push(key)
             }
           }
         }
       }
       if (changed) {
-        if (t._$p) t = t._$p[t.key]
         if (stamp) { data(t, val, stamp, override, isNew) }
         instances(t, val, stamp, changed, override)
         return true
@@ -104,13 +112,11 @@ const overrideObjects = (t, val, stamp, isNew) => {
               ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
               : setVal(t, val.val, stamp, 1)
           ) {
-            if (t._$p) t = t._$p[t.key]
             changed = true
           }
         }
       }
       if (changed) {
-        if (t._$p) t = t._$p[t.key]
         if (stamp) { data(t, val, stamp, override, isNew) }
         return true
       } else if (stamp !== t.tStamp) {
@@ -132,16 +138,14 @@ const objects = (t, val, stamp, isNew) => {
             : setVal(t, val.val, stamp, 1)
         if (result) {
           if (!changed) {
-            changed = result === 2 ? [ ] : [ key ]
+            changed = result === 2 ? [] : [ key ]
           } else if (result !== 2) {
-            if (t._$p) t = t._$p[t.key]
             changed.push(key)
           }
         }
       }
     }
     if (changed) {
-      if (t._$p) t = t._$p[t.key]
       if (stamp) { data(t, val, stamp, false, isNew) }
       instances(t, val, stamp, changed)
       return true
@@ -154,12 +158,10 @@ const objects = (t, val, stamp, isNew) => {
           ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
           : setVal(t, val.val, stamp, 1)
       ) {
-        if (t._$p) t = t._$p[t.key]
         changed = true
       }
     }
     if (changed) {
-      if (t._$p) t = t._$p[t.key]
       if (stamp) { data(t, val, stamp, false, isNew) }
       return true
     }
@@ -261,6 +263,7 @@ const setVal = (t, val, stamp, ref) => {
         getOnProp(val)(val, { data: void 0 }, 'on')
         listener(val.emitters.data, t, uid(t))
       }
+      resolveFromValue(t, val, stamp)
     } else {
       removeReference(t)
       t.val = val
@@ -268,38 +271,5 @@ const setVal = (t, val, stamp, ref) => {
     return true
   }
 }
-
-const resolveReferences = (t, instance, stamp) => {
-  const listeners = t.emitters.data.struct
-  const tRoot = root(t, true)
-  var iRoot
-  let i = listeners.length
-  while (i--) {
-    if (root(listeners[i], true) === tRoot) {
-      if (!iRoot) iRoot = root(instance, true)
-      if (iRoot !== tRoot) {
-        let p = path(listeners[i], true)
-        if (p[0] === tRoot.key) p.shift()
-        let travel = iRoot
-        if (p.length) {
-          for (let i = 0, len = p.length; i < len; i++) {
-            let key = p[i]
-            travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)
-            travel = travel[key]
-          }
-        }
-        set(travel, instance, stamp)
-      }
-    }
-  }
-}
-
-const removeReference = t => {
-  if (t.val && typeof t.val === 'object' && t.val.inherits) {
-    listener(t.val.emitters.data, null, uid(t))
-  }
-}
-
-const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
 export { set, create, resolveReferences }

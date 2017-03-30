@@ -27,10 +27,14 @@ const getOrigin = (t, key) => {
     if (result !== void 0 && result !== null) {
       return result
     } else {
-      return (t = t.val) && typeof t === 'object' && t.inherits && getOrigin(t, key)
+      if ((t = t.val) && typeof t === 'object') {
+        return t.inherits && getOrigin(t, key)
+      }
     }
   }
 }
+
+const getProps = t => t.props || getProps(t.inherits)
 
 // if you removed it dont return...
 const getData = t => t.emitters && t.emitters.data || t.inherits && getData(t.inherits)
@@ -42,4 +46,4 @@ const getDefault = t => t.props && t.props.default.struct || getDefault(t.inheri
 
 const getVal = t => t.val !== void 0 ? t.val : t.inherits && getVal(t.inherits)
 
-export { get, getDefault, getOrigin, getData, getFn, getVal }
+export { get, getDefault, getOrigin, getData, getFn, getVal, getProps }
