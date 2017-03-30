@@ -26,7 +26,7 @@ const props = (t, inherits) => {
 }
 
 const switchInheritance = (t, inherits, stamp, fromInstance) => {
-  return
+  // return
   var inheritsKeys, keys
   const old = t.inherits
   const instances = old.instances
