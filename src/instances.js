@@ -27,7 +27,6 @@ const update = (t, val, key, resolved, from) => {
         addKey(t, key) // no update
       }
     } else if (t[key] && from[key]) {
-      console.log('hello', key)
       switchInheritance(t[key], from[key])
     }
   }
