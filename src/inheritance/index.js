@@ -80,7 +80,6 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
     if (inherits.instances !== false) {
       if (!inherits.instances) inherits.instances = []
-      console.log('  add to instances....', t, inherits)
       inherits.instances.push(t)
     }
   }

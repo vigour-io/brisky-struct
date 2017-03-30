@@ -146,40 +146,38 @@ test('references - resolve from instance', t => {
   t.end()
 })
 
-// test('references - resolve from instance (one field)', t => {
-//   const hub = struct.create()
-//   const hubInstance = hub.create({ x: true })
-//   console.log('\n_______________________')
-//   hub.set({ b: [ '@', 'root', 'x' ] })
-//   t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
-//   t.end()
-// })
+test('references - resolve from instance (one field)', t => {
+  const hub = struct.create()
+  const hubInstance = hub.create({ x: true })
+  hub.set({ b: [ '@', 'root', 'x' ] })
+  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
+  t.end()
+})
 
-// test('references - references resolve from switch', t => {
-//   const hub = struct.create()
-//   const hubInstance = hub.create({ b: {}, x: true })
-//   console.log('\n_______________________')
-//   hub.set({ b: [ '@', 'root', 'x' ] })
-//   t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
-//   t.end()
-// })
+test('references - references resolve from switch', t => {
+  const hub = struct.create()
+  const hubInstance = hub.create({ b: {}, x: true })
+  hub.set({ b: [ '@', 'root', 'x' ] })
+  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
+  t.end()
+})
 
-// test('switch inheritance - references - reverse', t => {
-//   const hub = struct.create()
-//   const hubInstance = hub.create({
-//     page: {
-//       current: [ '@', 'root', 'page', 'glurf' ]
-//     }
-//   })
-//   hub.set({
-//     page: {
-//       current: [ '@', 'root', 'page', 'blurk' ],
-//       glurf: { smurk: 'ha!' }
-//     }
-//   })
-//   t.equal(hubInstance.page.glurf.smurk.compute(), 'ha!')
-//   t.end()
-// })
+test('switch inheritance - references - reverse', t => {
+  const hub = struct.create()
+  const hubInstance = hub.create({
+    page: {
+      current: [ '@', 'root', 'page', 'glurf' ]
+    }
+  })
+  hub.set({
+    page: {
+      current: [ '@', 'root', 'page', 'blurk' ],
+      glurf: { smurk: 'ha!' }
+    }
+  })
+  t.equal(hubInstance.get([ 'page', 'glurf', 'smurk' ]).compute(), 'ha!')
+  t.end()
+})
 
 // test('switch inheritance - references', t => {
 //   const hub = struct.create({
