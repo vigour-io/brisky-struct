@@ -94,14 +94,16 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
   }
 
-  if (inheritsEmitters) {
-    const dataEmitter = getData(inherits)
-    if (dataEmitter && dataEmitter.struct) {
-      // check for _p
-      console.log('lets resolve some of dem references FROM SWITCH 💋')
-      // resolveReferences !!!!
-    }
-  }
+  // if (inheritsEmitters) {
+  //   const dataEmitter = getData(inherits)
+  //   if (dataEmitter && dataEmitter.struct) {
+  //     // check for _p
+  //     console.log('lets resolve some of dem references FROM SWITCH 💋')
+  //     // resolveReferences !!!!
+  //   }
+  // }
+
+  // if (t.val)
 
   if (t.instances) {
     for (let i = 0, len = t.instances.length; i < len; i++) {
@@ -109,14 +111,10 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     }
   }
 
-  if (stamp && !fromInstance) {
-    // also need to check if it ACTUALY changed
-    data(t, void 0, stamp, false)
-  }
+  if (stamp && !fromInstance) data(t, void 0, stamp, false)
 }
 
 // ok so need to make a nice list of shit with keys make a new object
-
 const inheritedEmitter = (emitter, result = {}) => {
   eachListener(emitter, (listener, key) => {
     if (typeof listener === 'function' && !(key in result)) {
@@ -166,6 +164,10 @@ const handleEmitters = (t, emitters, inherits, key) => {
       }
     }
   }
+
+  // if (struct) {
+  //   console.log('ok resolve mofos')
+  // }
 
   emitter.fn = newFn
 }

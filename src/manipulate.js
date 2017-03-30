@@ -8,6 +8,7 @@ import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference } from './references'
+import { get, getVal } from './get'
 
 const create = (t, val, stamp, parent, key) => {
   var instance
@@ -48,10 +49,28 @@ const create = (t, val, stamp, parent, key) => {
       }
     }
   }
-  if (val !== void 0) set(instance, val, stamp, true)
+  if (val !== void 0) {
+    set(instance, val, stamp, true)
+  }
 
-  if (parent && t.emitters && t.emitters.data && t.emitters.data.struct) {
-    resolveReferences(t, instance, stamp)
+  if (parent) {
+    if (
+      t.emitters &&
+      t.emitters.data &&
+      t.emitters.data.struct
+    ) {
+      resolveReferences(t, instance, stamp)
+    }
+    // this part will go into the actual setting of a struct listener
+    /*
+     else if (
+      instance.emitters &&
+      instance.emitters.data &&
+      instance.emitters.data.struct
+    ) {
+      resolveReferences(t, instance, stamp)
+    }
+    */
   }
   return instance
 }
@@ -244,6 +263,26 @@ const setVal = (t, val, stamp, ref) => {
         onContext(val)
         getOnProp(val)(val, { data: void 0 }, 'on')
         listener(val.emitters.data, t, uid(t))
+      }
+
+      if (val.instances) {
+        const rootInstances = val.root().instances
+        if (val._p && rootInstances && t.root() === val.root()) {
+          for (let i = 0, len = rootInstances.length; i < len; i++) {
+
+            const field = get(rootInstances[i], val.path(true), true)
+            if (field !== val) {
+              console.log('SWITCH IT!')
+              const instance = get(rootInstances[i], t.path(true))
+              if (getVal(instance) === t.val) {
+                console.log('go correct it')
+                instance.set(field, stamp)
+              }
+            }
+            // val.instances
+            // instances[i]
+          }
+        }
       }
     } else {
       removeReference(t)

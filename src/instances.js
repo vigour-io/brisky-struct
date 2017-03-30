@@ -19,6 +19,7 @@ const update = (t, val, key, resolved, from) => {
     return true
   } else {
     if (val[key] === null && t[key]) {
+      // do removal better
       if (!t._ks) {
         copy(t)
         addKey(t, key)
