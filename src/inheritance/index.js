@@ -2,7 +2,6 @@ import { getKeys } from '../keys'
 import { get, getProps, getFn, getVal } from '../get'
 import { getProp } from '../property'
 import { resolveFromValue } from '../references' // rdy for this
-// also add resolveFromReference
 import { data } from '../emit'
 
 const getKeyProp = (t, key) => t.props
@@ -26,6 +25,7 @@ const props = (t, inherits) => {
 const switchInheritance = (t, inherits, stamp, fromInstance) => {
   var inheritsKeys, keys
   const old = t.inherits
+  if (!old) return
   const instances = old.instances
   const tProps = props(t, old)
   t.inherits = inherits
