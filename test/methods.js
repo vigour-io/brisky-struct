@@ -1,6 +1,6 @@
 const test = require('tape')
 const { create: struct } = require('../')
-const bs = require('brisky-stamp')
+const bs = require('stamp')
 
 test('iterators - functional', t => {
   const a = struct({ key: 1, a: 'a', b: 'b', c: 'c' })

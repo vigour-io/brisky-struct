@@ -1,6 +1,6 @@
 const test = require('tape')
 const { create } = require('../../../')
-// const bs = require('brisky-stamp')
+// const bs = require('stamp')
 
 test('subscription - context - references', t => {
   var results = []
