@@ -221,3 +221,11 @@ test('switch inheritance - gaurds', t => {
   t.equal(getVal(hubInstance.c), hub.y)
   t.end()
 })
+
+test('switch inheritance - gaurds', t => {
+  const a = struct.create('hello')
+  const a1 = a.create()
+  switchInheritance(a1, struct)
+  t.equal(a1.compute(), void 0)
+  t.end()
+})
