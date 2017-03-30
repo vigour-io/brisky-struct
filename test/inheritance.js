@@ -114,10 +114,24 @@ test('switch inheritance - emitters', t => {
   switchInheritance(a, b)
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.set('jurfff')
-  t.same(result, { a: 1, a11: 0, a1b: 0, gurf: 3, smurx: 0 })
+  t.same(result, { a: 3, a11: 1, a1b: 0, gurf: 3, smurx: 0 })
   result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 0 }
   b.b.set('jurfff')
-  result = { a: 0, a1b: 0, a11: 0, gurf: 0, smurx: 3 }
+  t.same(result, { a: 0, a1b: 2, a11: 0, gurf: 0, smurx: 4 })
+  t.end()
+})
+
+test('switch inheritance - references', t => {
+  const hub = struct.create()
+  const hubInstance = hub.create({
+    b: {},
+    x: true
+  })
+  hub.set({
+    b: [ '@', 'root', 'x' ]
+  })
+  // this is wild.... has it own value
+  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
   t.end()
 })
 
