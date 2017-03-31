@@ -10,6 +10,7 @@
     "lint": "standard --fix",
     "version-commit": "npm --no-git-tag-version version $(node -pe \"require('./package.json').version.split('-')[0]\")-$(git log -n 1 --pretty=format:'%H')",
     "publish-unstable": "npm run version-commit && npm publish --tag unstable",
+    "publish-branch": "npm run version-commit && npm publish --tag $(git rev-parse --abbrev-ref HEAD | sed 's/\\//-/g')",
     "pretest": "npm run build",
     "prepublish": "npm run build",
     "test": "node test/index.js",
