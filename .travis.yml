@@ -6,7 +6,7 @@ before_install:
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 script:
   - npm run travis
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run publish-branch || true; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" != "master" ]; then npm run publish-branch || true; fi'
 notifications:
   email: false
 deploy:
