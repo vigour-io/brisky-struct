@@ -229,3 +229,33 @@ test('switch inheritance - gaurds', t => {
   t.equal(a1.compute(), void 0)
   t.end()
 })
+
+test('refContext 2', { timeout: 2000 }, t => {
+  const scraper = struct.create({
+    page: {}
+  })
+
+  const client1 = scraper.create() // eslint-disable-line
+
+  setTimeout(() => {
+    scraper.set({
+      menu: {
+        items: [{
+          bla: 0,
+          val: ['@', 'root', 'page', 'a'] // this has to resolve to start...
+        }]
+      },
+      page: {
+        a: {
+          b: ['@', 'root', 'page', 'b']
+        },
+        b: {
+          blur: 0,
+          val: ['@', 'root', 'page', 'c']
+        },
+        c: {}
+      }
+    })
+    t.end()
+  }, 100)
+})

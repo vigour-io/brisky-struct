@@ -18,6 +18,9 @@ const create = (t, val, stamp, parent, key) => {
     if (hasType) {
       instance = createType(parent, val, t, stamp, key)
     } else {
+      if (!t) {
+        console.log('fuc👀k>', !t)
+      }
       instance = new t.Constructor()
       instance.inherits = t
       if (t.instances !== false) {
