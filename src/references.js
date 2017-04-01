@@ -36,7 +36,6 @@ const resolveFromValue = (t, val, stamp) => {
     if (rootInstances && t.root(true) === val.root(true)) {
       for (let i = 0, len = rootInstances.length; i < len; i++) {
         const field = getApi(rootInstances[i], val.path(true), true)
-        console.log('getting here....')
         if (field !== val) {
           const instance = getApi(rootInstances[i], t.path(true))
           if (getVal(instance) === val) {
