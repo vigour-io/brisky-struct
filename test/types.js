@@ -540,3 +540,34 @@ test('types - use struct as type with parent (object)', t => {
   t.same(s.x.keys(), [ 'text' ], 'correct keys')
   t.end()
 })
+
+test('types - set the same', { timeout: 3000 }, t => {
+  const scraper = struct({
+    port: 6060,
+    page: {
+      a: { type: 'foo' },
+      b: [ '@', 'root', 'page', 'a' ]
+    }
+  })
+
+  const scraperInstance = scraper.create()
+  scraperInstance.subscribe(true, () => {})
+
+  setTimeout(() => {
+    scraper.set({
+      page: {
+        a: { type: 'foo' },
+        b: [ '@', 'root', 'page', 'a' ]
+      }
+    })
+    setTimeout(() => {
+      scraper.set({
+        page: {
+          a: { type: 'foo' },
+          b: [ '@', 'root', 'page', 'a' ]
+        }
+      })
+      t.end()
+    }, 100)
+  }, 100)
+})
