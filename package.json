@@ -1,7 +1,7 @@
 {
   "name": "brisky-struct",
   "description": "An observable data structure",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "main": "dist/index.js",
   "scripts": {
     "watch": "builder-boy src/index.js dist/index.js -t node -t browser -r -w",
