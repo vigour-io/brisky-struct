@@ -236,26 +236,26 @@ test('refContext 2', { timeout: 2000 }, t => {
   })
 
   const client1 = scraper.create() // eslint-disable-line
+  client1.subscribe(true, () => {})
 
-  setTimeout(() => {
-    scraper.set({
-      menu: {
-        items: [{
-          bla: 0,
-          val: ['@', 'root', 'page', 'a'] // this has to resolve to start...
-        }]
+  scraper.set({
+    menu: {
+      items: [{
+        bla: 0,
+        val: ['@', 'root', 'page', 'a'] // this has to resolve to start...
+      }]
+    },
+    page: {
+      a: {
+        b: ['@', 'root', 'page', 'b']
       },
-      page: {
-        a: {
-          b: ['@', 'root', 'page', 'b']
-        },
-        b: {
-          blur: 0,
-          val: ['@', 'root', 'page', 'c']
-        },
-        c: {}
-      }
-    })
-    t.end()
-  }, 100)
+      b: {
+        blur: 0,
+        val: ['@', 'root', 'page', 'c']
+      },
+      c: {}
+    }
+  })
+  t.equal(scraper.instances[0].get(['page', 'c']), scraper.get(['page', 'c']))
+  t.end()
 })

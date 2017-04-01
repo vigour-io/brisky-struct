@@ -20,14 +20,9 @@ const resolveReferences = (t, instance, stamp) => {
         if (p.length) {
           for (let i = 0, len = p.length; i < len; i++) {
             let key = p[i]
-            if (!travel[key]) {
-              const getf = get(travel, key, true)
-              console.log('yo w00000000t????✨', key)
-              console.log(getf, key, travel)
-              travel = create(getf, void 0, stamp, travel, key)
-            } else {
-              travel = travel[key]
-            }
+            // if ! get(travel, key) == kill it
+            travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)
+            travel = travel[key]
           }
         }
         set(travel, instance, stamp)
@@ -52,15 +47,13 @@ const resolveFromValue = (t, val, stamp) => {
         const field = getApi(rootInstances[i], val.path(true), true)
         if (field !== val) {
           const instance = getApi(rootInstances[i], t.path(true))
-          if (instance) {
-            if (getVal(instance) === val) {
-              instance.set(field, stamp)
-            }
-            instance._c = null
-            instance._cLevel = null
-            field._c = null
-            field._cLevel = null
+          if (getVal(instance) === val) {
+            instance.set(field, stamp)
           }
+          instance._c = null
+          instance._cLevel = null
+          field._c = null
+          field._cLevel = null
         }
       }
     }
