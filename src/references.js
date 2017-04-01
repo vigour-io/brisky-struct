@@ -43,16 +43,18 @@ const resolveFromValue = (t, val, stamp) => {
     const rootInstances = val.root(true).instances
     if (rootInstances && t.root(true) === val.root(true)) {
       for (let i = 0, len = rootInstances.length; i < len; i++) {
-        const field = get(rootInstances[i], val.path(true), true)
+        const field = getApi(rootInstances[i], val.path(true), true)
         if (field !== val) {
-          const instance = get(rootInstances[i], t.path(true))
-          if (getVal(instance) === val) {
-            instance.set(field, stamp)
+          const instance = getApi(rootInstances[i], t.path(true))
+          if (instance) {
+            if (getVal(instance) === val) {
+              instance.set(field, stamp)
+            }
+            instance._c = null
+            instance._cLevel = null
+            field._c = null
+            field._cLevel = null
           }
-          instance._c = null
-          instance._cLevel = null
-          field._c = null
-          field._cLevel = null
         }
       }
     }

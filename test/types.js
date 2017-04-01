@@ -543,7 +543,6 @@ test('types - use struct as type with parent (object)', t => {
 
 test('types - set the same', { timeout: 3000 }, t => {
   const scraper = struct({
-    port: 6060,
     page: {
       a: { type: 'foo' },
       b: [ '@', 'root', 'page', 'a' ]
