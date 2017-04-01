@@ -1,7 +1,7 @@
-import { set, create } from './manipulate'
+import { set } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
-import { get, getVal } from './get'
+import { getVal } from './get'
 import getApi from './get/api'
 import { root, path } from './traversal'
 
@@ -16,16 +16,8 @@ const resolveReferences = (t, instance, stamp) => {
       if (iRoot !== tRoot) {
         const p = path(listeners[i], true)
         if (p[0] === tRoot.key) p.shift()
-        let travel = iRoot
-        if (p.length) {
-          for (let i = 0, len = p.length; i < len; i++) {
-            let key = p[i]
-            // if ! get(travel, key) == kill it
-            travel[key] = travel[key] || create(get(travel, key, true), void 0, stamp, travel, key)
-            travel = travel[key]
-          }
-        }
-        set(travel, instance, stamp)
+        const f = getApi(iRoot, p)
+        if (root(f, true) === tRoot) set(f, instance, stamp)
       }
     }
   }
