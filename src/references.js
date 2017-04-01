@@ -16,7 +16,7 @@ const resolveReferences = (t, instance, stamp) => {
       if (iRoot !== tRoot) {
         const p = path(listeners[i], true)
         if (p[0] === tRoot.key) p.shift()
-        set(getApi(iRoot, p), instance, stamp)
+        set(getApi(iRoot, p, {}), instance, stamp)
       }
     }
   }
