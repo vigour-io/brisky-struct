@@ -29,7 +29,7 @@ const removeReference = t => {
 }
 
 const reference = (t, val, stamp) => {
-  // console.log('---->', t._c, t.key)
+  console.log('set ref', t._c)
   return set(t, getApi(t, val.slice(1), {}, stamp))
 }
 

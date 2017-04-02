@@ -22,8 +22,12 @@ const fn = (t, val, stamp, emitter, noContext) => {
     let i = listeners.length
     if (i && t._p && !noContext) {
       if (context(t, val, stamp, t._p, t.key, t, 1, i, listeners)) {
-        t._c = null
-        t._cLevel = null
+        let clear = t
+        while (clear && clear._c) {
+          clear._c = null
+          clear._cLevel = null
+          clear = clear._p
+        }
       }
     }
     while (i--) { listeners[i](val, stamp, t) }
