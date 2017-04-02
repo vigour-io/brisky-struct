@@ -60,9 +60,8 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
         const prop = getProp(t, key)
         if (prop.struct) {
           switchInheritance(t[key], get(inherits, key, true) || prop.struct, stamp)
-        } else {
-          console.log('  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switching inheritance - not supported yet', key)
         }
+        // '  PROPS ON NEW INHERITANCE IS NOT A STRUCT -- switching inheritance - not supported yet', key)
       }
     }
     t._ks = keys

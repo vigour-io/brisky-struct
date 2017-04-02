@@ -28,10 +28,7 @@ const removeReference = t => {
   }
 }
 
-const reference = (t, val, stamp) => {
-  console.log('set ref', t._c)
-  return set(t, getApi(t, val.slice(1), {}, stamp))
-}
+const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
 const resolveFromValue = (t, val, stamp) => {
   if (val.instances && val._p && t._p) {

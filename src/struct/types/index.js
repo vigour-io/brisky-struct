@@ -12,7 +12,7 @@ const type = (t, val, key, stamp, isNew, original) => {
   var isObject
   if (typeof val === 'object') {
     if (!val) {
-      // console.log('remove type')
+      // 'remove type' -- not supported yet...
     } else if (val.stamp && val.val && !val.inherits) {
       if (!stamp) stamp = val.stamp
       val = val.val
@@ -25,7 +25,7 @@ const type = (t, val, key, stamp, isNew, original) => {
 
   if (!isNew && t._p) {
     if (isObject) {
-      // console.log('switch using object - not supported yet')
+      // 'switch using object - not supported yet'
     } else {
       let type = t.type || inheritType(t)
       type = type && type.compute()
