@@ -3,8 +3,7 @@ import { set } from '../manipulate'
 
 export default (t, key, val, stamp, noContext) => {
   var bind
-
-  // if typeof key === 'fn' // do somehting as well
+  // if typeof key === 'fn' // do somethign as well
 
   if (typeof key === 'object') {
     if (val !== void 0) {
