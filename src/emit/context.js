@@ -2,7 +2,7 @@ import { getFn, getData, get } from '../get'
 import { getKeys } from '../keys'
 import subscription from './subscription'
 
-const strip = (t) => {
+const strip = t => {
   while (t && t._c) {
     t._c = null
     t._cLevel = null
@@ -13,7 +13,7 @@ const strip = (t) => {
 const update = (context, t, val, stamp, key, resolve, level, j, fn) => {
   if (!(key in context)) {
     let n = j
-    if (n) { strip(context) } // dont trust this...
+    if (n) strip(context) // dont trust this, also heavy
     resolve._c = context
     resolve._cLevel = level
     subscription(context, stamp)
