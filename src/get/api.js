@@ -3,6 +3,9 @@ import { set } from '../manipulate'
 
 export default (t, key, val, stamp, noContext) => {
   var bind
+
+  // if typeof key === 'fn' // do somehting as well
+
   if (typeof key === 'object') {
     if (val !== void 0) {
       for (let i = 0, len = key.length; t && i < len; i++) {
@@ -19,14 +22,7 @@ export default (t, key, val, stamp, noContext) => {
       for (let i = 0, len = key.length; t && i < len; i++) {
         bind = t
         t = get(t, key[i], noContext) || getOrigin(t, key[i], noContext)
-        if (
-          (
-            key[i] === 'root' ||
-            key[i] === 'parent' ||
-            key[i] === 'compute' ||
-            key[i] === 'origin'
-          ) && typeof t === 'function'
-        ) { t = bind[key[i]]() }
+        if (typeof t === 'function' && whitelist(key[i])) { t = bind[key[i]]() }
       }
     }
     return t
@@ -37,8 +33,14 @@ export default (t, key, val, stamp, noContext) => {
       set(bind, { [key]: val }, stamp)
       t = get(bind, key, noContext)
     } else {
-      if (typeof t === 'function') { t = bind[key]() }
+      if (typeof t === 'function' && whitelist(key)) { t = bind[key]() }
     }
     return t
   }
 }
+
+const whitelist = key =>
+  key === 'root' ||
+  key === 'parent' ||
+  key === 'compute' ||
+  key === 'origin'
