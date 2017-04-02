@@ -15,7 +15,6 @@ const get = (t, key, noContext) => {
   } else if (t.inherits) {
     const result = get(t.inherits, key, true)
     if (!noContext && result && result.inherits && key !== 'val') {
-      // console.log('GET', key, (new Error()).stack)
       result._c = t
       result._cLevel = 1
     }

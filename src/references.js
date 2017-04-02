@@ -16,7 +16,7 @@ const resolveReferences = (t, instance, stamp) => {
       if (iRoot !== tRoot) {
         const p = path(listeners[i], true)
         if (p[0] === tRoot.key) p.shift()
-        set(getApi(iRoot, p, {}), instance, stamp)
+        set(getApi(iRoot, p, {}), instance, stamp, true)
       }
     }
   }
@@ -28,16 +28,19 @@ const removeReference = t => {
   }
 }
 
-const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
+const reference = (t, val, stamp) => {
+  // console.log('---->', t._c, t.key)
+  return set(t, getApi(t, val.slice(1), {}, stamp))
+}
 
 const resolveFromValue = (t, val, stamp) => {
   if (val.instances && val._p && t._p) {
     const rootInstances = val.root(true).instances
     if (rootInstances && t.root(true) === val.root(true)) {
       for (let i = 0, len = rootInstances.length; i < len; i++) {
-        const field = getApi(rootInstances[i], val.path(true), true)
+        const field = getApi(rootInstances[i], path(val, true), void 0, void 0, true)
         if (field !== val) {
-          const instance = getApi(rootInstances[i], t.path(true))
+          const instance = getApi(rootInstances[i], path(t, true))
           if (getVal(instance) === val) {
             instance.set(field, stamp)
           }

@@ -18,9 +18,6 @@ const create = (t, val, stamp, parent, key) => {
     if (hasType) {
       instance = createType(parent, val, t, stamp, key)
     } else {
-      if (!t) {
-        console.log('fuc👀k>', !t)
-      }
       instance = new t.Constructor()
       instance.inherits = t
       if (t.instances !== false) {
@@ -63,16 +60,6 @@ const create = (t, val, stamp, parent, key) => {
     ) {
       resolveReferences(t, instance, stamp)
     }
-    // this part will go into the actual setting of a struct listener
-    /*
-     else if (
-      instance.emitters &&
-      instance.emitters.data &&
-      instance.emitters.data.struct
-    ) {
-      resolveReferences(t, instance, stamp)
-    }
-    */
   }
   return instance
 }
