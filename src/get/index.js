@@ -1,3 +1,4 @@
+
 const get = (t, key, noContext) => {
   if (key in t) {
     const result = t[key]
@@ -14,6 +15,7 @@ const get = (t, key, noContext) => {
   } else if (t.inherits) {
     const result = get(t.inherits, key, true)
     if (!noContext && result && result.inherits && key !== 'val') {
+      // console.log('GET', key, (new Error()).stack)
       result._c = t
       result._cLevel = 1
     }
@@ -21,14 +23,14 @@ const get = (t, key, noContext) => {
   }
 }
 
-const getOrigin = (t, key) => {
+const getOrigin = (t, key, noContext) => {
   if (t) {
-    let result = get(t, key)
+    let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
       return result
     } else {
       if ((t = t.val) && typeof t === 'object') {
-        return t.inherits && getOrigin(t, key)
+        return t.inherits && getOrigin(t, key, noContext)
       }
     }
   }
