@@ -99,9 +99,8 @@ test('types - switch - keys', t => {
   t.same(a32.keys(), [ 'XXXXXXXX', 'YYYYYYYY', 'gurky', 'HA' ], 'correct keys on a3-2')
   t.same(fieldInstance.keys(), [], 'correct keys on fieldInstance')
 
-  a.bla.set({ type: 'a', reset: true })
   // reset does not work anymore ofcourse...
-
+  a.bla.set({ type: 'a', reset: true })
   t.same(a.bla.keys(), [], 'correct keys on a.bla') // need to update instances
   t.same(a1.keys(), [], 'correct keys on a1')
   t.same(a2.keys(), [ 'a', 'MYOWN' ], 'correct keys on a2')

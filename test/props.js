@@ -149,12 +149,7 @@ test('props - reset', t => {
 
   t.same(s.keys(), [], 'removed keys')
 
-  s.set({
-    a: 'a',
-    b: 'b',
-    c: 'c',
-    d: 'd'
-  })
+  s.set({ a: 'a', b: 'b', c: 'c', d: 'd' })
 
   s.set({ reset: [ 'c', 'a' ] })
 
