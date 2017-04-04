@@ -193,9 +193,13 @@ test('props - reset - deep', t => {
   const s = struct({
     a: 'a',
     b: 'b',
-    c: {
-      e: true
-    }
+    c: { e: true }
+  })
+
+  s.subscribe({
+    $any: true
+  }, s => {
+    console.log(' --> hello', s)
   })
 
   s.set({ reset: true })

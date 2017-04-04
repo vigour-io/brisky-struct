@@ -4,6 +4,7 @@ import { types } from './types'
 import { getDefault, getProps } from '../get'
 import inject from './inject'
 import on from './on'
+import reset from './reset'
 
 const struct = {}
 
@@ -13,14 +14,6 @@ const props = {
   key: (t, val) => { t.key = val },
   instances: (t, val) => { t.instances = val },
   $transform: (t, val) => { t.$transform = val },
-  reset: (t, val, key, stamp, isNew, original) => {
-    if (!original.type) {
-      t.forEach(val === true
-        ? p => p.set(null, stamp)
-        : (p, key) => val.indexOf(key) === -1 && p.set(null, stamp)
-      )
-    }
-  },
   props: (t, val, pkey, stamp) => {
     var props = t.props
     if (!props) {
@@ -115,6 +108,6 @@ props.default = (t, val, key, stamp) => property(t, val, key, stamp, struct)
 props.default.struct = struct
 struct.inherits = {}
 
-inject(struct, [ on, types ])
+inject(struct, [ on, types, reset ])
 
 export default struct
