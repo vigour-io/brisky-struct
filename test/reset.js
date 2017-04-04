@@ -5,7 +5,7 @@ test('reset - basic ', t => {
   const a = struct.create({
     a: {
       b: {
-        c : true
+        c: true
       },
       x: true
     },
