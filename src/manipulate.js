@@ -9,7 +9,7 @@ import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 
-const create = (t, val, stamp, parent, key) => {
+const create = (t, val, stamp, parent, key, reset) => {
   var instance
   const hasType = val &&
     typeof val === 'object' &&
@@ -49,7 +49,7 @@ const create = (t, val, stamp, parent, key) => {
     }
   }
   if (val !== void 0) {
-    set(instance, val, stamp, true)
+    set(instance, val, stamp, true, reset)
   }
 
   if (parent) {
@@ -64,7 +64,7 @@ const create = (t, val, stamp, parent, key) => {
   return instance
 }
 
-const overrideObjects = (t, val, stamp, isNew) => {
+const overrideObjects = (t, val, stamp, isNew, reset) => {
   const override = val.stamp
   if (!stamp) stamp = override
   if (val.val === null) {
@@ -72,10 +72,13 @@ const overrideObjects = (t, val, stamp, isNew) => {
   } else {
     if (t.instances) {
       let changed
+
+      // this is where you handle resetting
+
       for (let key in val) {
         if (key !== 'stamp') {
           let result = key !== 'val'
-              ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
+              ? getProp(t, key)(t, val[key], key, stamp, isNew, val, reset)
               : setVal(t, val.val, stamp, 1)
           if (result) {
             if (!changed) {
@@ -99,7 +102,7 @@ const overrideObjects = (t, val, stamp, isNew) => {
         if (key !== 'stamp') {
           if (
             key !== 'val'
-              ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
+              ? getProp(t, key)(t, val[key], key, stamp, isNew, val, reset)
               : setVal(t, val.val, stamp, 1)
           ) {
             changed = true
@@ -116,15 +119,15 @@ const overrideObjects = (t, val, stamp, isNew) => {
   }
 }
 
-const objects = (t, val, stamp, isNew) => {
+const objects = (t, val, stamp, isNew, reset) => {
   if (val.stamp) {
-    return overrideObjects(t, val, stamp, isNew)
+    return overrideObjects(t, val, stamp, isNew, reset)
   } else if (t.instances) {
     let changed
     for (let key in val) {
       if (key !== 'stamp') {
         let result = key !== 'val'
-            ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
+            ? getProp(t, key)(t, val[key], key, stamp, isNew, val, reset)
             : setVal(t, val.val, stamp, 1)
         if (result) {
           if (!changed) {
@@ -145,7 +148,7 @@ const objects = (t, val, stamp, isNew) => {
     for (let key in val) {
       if (
         key !== 'val'
-          ? getProp(t, key)(t, val[key], key, stamp, isNew, val)
+          ? getProp(t, key)(t, val[key], key, stamp, isNew, val, reset)
           : setVal(t, val.val, stamp, 1)
       ) {
         changed = true
@@ -158,15 +161,17 @@ const objects = (t, val, stamp, isNew) => {
   }
 }
 
-const set = (t, val, stamp, isNew) => {
+const set = (t, val, stamp, isNew, reset) => {
   if (t._c) {
-    return resolveContext(t, val, stamp)
+    // handle reset :X
+    return resolveContext(t, val, stamp, reset)
   } else {
     const type = typeof val
     if (type === 'function') {
       if (isGeneratorFunction(val)) {
         generator(t, val, stamp)
       } else if (setVal(t, val, stamp)) {
+        // SINGLE - handle reset
         return isChanged(t, val, stamp, isNew)
       }
     } else if (type === 'object') {
@@ -175,21 +180,26 @@ const set = (t, val, stamp, isNew) => {
       } else {
         if (val.inherits) {
           if (setVal(t, val, stamp, true)) {
+            // SINGLE - handle reset
             return isChanged(t, val, stamp, isNew)
           }
         } else if (val.then && typeof val.then === 'function') {
+          // handle reset :X ?
           promise(t, val, stamp)
         } else if (val.next && typeof val.next === 'function') {
+          // handle reset :X ?
           iterator(t, val, stamp)
         } else if (val[0] && val[0] === '@') {
           if (reference(t, val, stamp)) {
+            // SINGLE - handle reset
             return isChanged(t, val, stamp, isNew)
           }
         } else {
-          return objects(t, val, stamp, isNew)
+          return objects(t, val, stamp, isNew, reset)
         }
       }
     } else if (setVal(t, val, stamp)) {
+      // SINGLE - handle reset
       return isChanged(t, val, stamp, isNew)
     }
   }

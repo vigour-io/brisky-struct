@@ -81,7 +81,10 @@ const define = {
     temp.on[type][id] = val
     return chain(set(this, temp), this)
   },
-  set: function (val, stamp) { // fixes buble
+  reset (val, stamp) {
+
+  },
+  set: function (val, stamp, reset) { // fixes buble
     if (stamp === void 0) {
       const ret = chain(set(this, val, bs.create()), this)
       bs.close()
