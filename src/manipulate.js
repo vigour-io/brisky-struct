@@ -8,8 +8,7 @@ import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
-
-// const property = (t, val, key, stamp, struct, reset) => {
+import { getKeys } from './keys'
 
 const create = (t, val, stamp, parent, key, reset) => {
   var instance
@@ -66,6 +65,48 @@ const create = (t, val, stamp, parent, key, reset) => {
   return instance
 }
 
+const removeAllFields = (t, stamp) => {
+  const keys = getKeys(t)
+  let changed
+  if (keys) {
+    let i = keys.length
+    while (i--) {
+      if (keys[i] in t) {
+        remove(t[keys[i]], stamp)
+        changed = true
+      }
+    }
+  }
+  return changed
+}
+
+const removeSomeFields = (t, stamp, val, changed, isBool) => {
+  const keys = getKeys(t)
+  if (!val.val && t.val !== void 0) {
+    console.log('  remove val')
+    if (isBool) {
+
+    } else {
+
+    }
+  }
+  if (keys) {
+    let i = keys.length
+    while (i--) {
+      const key = keys[i]
+      if (!(key in val) && (key in t)) {
+        remove(t[key], stamp)
+        if (isBool) {
+
+        } else {
+
+        }
+      }
+    }
+  }
+  return changed
+}
+
 const overrideObjects = (t, val, stamp, isNew, reset) => {
   const override = val.stamp
   if (!stamp) stamp = override
@@ -74,9 +115,6 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
   } else {
     if (t.instances) {
       let changed
-
-      // this is where you handle resetting
-
       for (let key in val) {
         if (key !== 'stamp') {
           let result = key !== 'val'
@@ -91,6 +129,12 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
           }
         }
       }
+
+      if (reset) {
+        const changeNest = removeSomeFields(t, stamp, val, changed)
+        if (!changed) changed = changeNest
+      }
+
       if (changed) {
         if (stamp) { data(t, val, stamp, override, isNew) }
         instances(t, val, stamp, changed, override)
@@ -111,6 +155,9 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
           }
         }
       }
+
+      if (reset && removeSomeFields(t, stamp, val, void 0, true)) changed = true
+
       if (changed) {
         if (stamp) { data(t, val, stamp, override, isNew) }
         return true
@@ -121,10 +168,7 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
   }
 }
 
-// t, val, stamp, isNew, reset
 const objects = (t, val, stamp, isNew, reset) => {
-  // (t, val, key, stamp, struct, isNew, reset)
-
   if (val.stamp) {
     return overrideObjects(t, val, stamp, isNew, reset)
   } else if (t.instances) {
@@ -143,6 +187,12 @@ const objects = (t, val, stamp, isNew, reset) => {
         }
       }
     }
+
+    if (reset) {
+      const changeNest = removeSomeFields(t, stamp, val, changed)
+      if (!changed) changed = changeNest
+    }
+
     if (changed) {
       if (stamp) { data(t, val, stamp, false, isNew) }
       instances(t, val, stamp, changed)
@@ -159,6 +209,9 @@ const objects = (t, val, stamp, isNew, reset) => {
         changed = true
       }
     }
+
+    if (reset && removeSomeFields(t, stamp, val, void 0, true)) changed = true
+
     if (changed) {
       if (stamp) { data(t, val, stamp, false, isNew) }
       return true
@@ -166,15 +219,8 @@ const objects = (t, val, stamp, isNew, reset) => {
   }
 }
 
-const removeAllFields = (t, stamp) => {
-  console.log('--REMOVE ALL FIELDS--', t.path())
-}
-
 const set = (t, val, stamp, isNew, reset) => {
-  if (reset) console.log('go reset..', t.path())
-
   if (t._c) {
-    // handle reset :X
     return resolveContext(t, val, stamp, reset)
   } else {
     const type = typeof val
@@ -182,8 +228,9 @@ const set = (t, val, stamp, isNew, reset) => {
       if (isGeneratorFunction(val)) {
         generator(t, val, stamp)
       } else if (setVal(t, val, stamp)) {
-        // SINGLE - handle reset
         if (reset) removeAllFields(t, stamp)
+        return isChanged(t, val, stamp, isNew)
+      } else if (reset && removeAllFields(t, stamp)) {
         return isChanged(t, val, stamp, isNew)
       }
     } else if (type === 'object') {
@@ -192,8 +239,9 @@ const set = (t, val, stamp, isNew, reset) => {
       } else {
         if (val.inherits) {
           if (setVal(t, val, stamp, true)) {
-            // SINGLE - handle reset
             if (reset) removeAllFields(t, stamp)
+            return isChanged(t, val, stamp, isNew)
+          } else if (reset && removeAllFields(t, stamp)) {
             return isChanged(t, val, stamp, isNew)
           }
         } else if (val.then && typeof val.then === 'function') {
@@ -204,8 +252,9 @@ const set = (t, val, stamp, isNew, reset) => {
           iterator(t, val, stamp)
         } else if (val[0] && val[0] === '@') {
           if (reference(t, val, stamp)) {
-            // SINGLE - handle reset
             if (reset) removeAllFields(t, stamp)
+            return isChanged(t, val, stamp, isNew)
+          } else if (reset && removeAllFields(t, stamp)) {
             return isChanged(t, val, stamp, isNew)
           }
         } else {
@@ -213,8 +262,9 @@ const set = (t, val, stamp, isNew, reset) => {
         }
       }
     } else if (setVal(t, val, stamp)) {
-      // SINGLE - handle reset
       if (reset) removeAllFields(t, stamp)
+      return isChanged(t, val, stamp, isNew)
+    } else if (reset && removeAllFields(t, stamp)) {
       return isChanged(t, val, stamp, isNew)
     }
   }

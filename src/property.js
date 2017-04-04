@@ -6,7 +6,6 @@ import { contextProperty } from './context'
 // (t, val[key], key, stamp, isNew, val, reset)
 
 const property = (t, val, key, stamp, struct, isNew, reset) => {
-  if (reset) console.log('RESET?', reset)
   var changed
   const result = get(t, key)
   if (result && result.inherits) {

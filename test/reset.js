@@ -10,23 +10,31 @@ test('reset - basic ', t => {
       },
       x: true
     },
-    // b: {
-    //   c: true,
-    //   d: true
-    // },
-    // c: 'bla'
+    b: {
+      c: true,
+      d: true
+    },
+    c: 'bla'
   })
 
 
   console.log('----------------')
-  // a.set({
-  //   a: {
-  //     b: 'ha!'
-  //   },
-  //   // b: {
-  //   //   d: 'smurf'
-  //   // }
-  // }, void 0, true)
+  a.set({
+    a: {
+      b: 'ha!'
+    },
+    b: {
+      d: {
+        e: true
+      }
+    }
+    // b: {
+    //   d: 'smurf'
+    // }
+  }, void 0, true)
+
+  console.log(a)
+  console.log(a.b.d)
 
   // t.same(a.keys(), [ 'a', 'b' ])
   // t.same(a.a.keys(), [ 'b' ])
