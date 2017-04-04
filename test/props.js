@@ -138,26 +138,6 @@ test('props - self', t => {
   t.end()
 })
 
-test('props - reset', t => {
-  const s = struct({
-    a: 'a',
-    b: 'b',
-    c: 'c'
-  })
-
-  s.set({ reset: true })
-
-  t.same(s.keys(), [], 'removed keys')
-
-  s.set({ a: 'a', b: 'b', c: 'c', d: 'd' })
-
-  s.set({ reset: [ 'c', 'a' ] })
-
-  t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
-
-  t.end()
-})
-
 test('props - context', t => {
   const s = struct({
     key: 's',
@@ -185,6 +165,40 @@ test('props - context', t => {
   })
 
   t.equal(s.get([ 'hello', 'lurf', 'field' ]).compute(), 'blue', 'correct inhertiance')
+
+  t.end()
+})
+
+test('props - reset', t => {
+  const s = struct({
+    a: 'a',
+    b: 'b',
+    c: 'c'
+  })
+
+  s.set({ reset: true })
+
+  t.same(s.keys(), [], 'removed keys')
+
+  s.set({ a: 'a', b: 'b', c: 'c', d: 'd' })
+
+  s.set({ reset: [ 'c', 'a' ] })
+
+  t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
+
+  t.end()
+})
+
+test('props - reset - deep', t => {
+  const s = struct({
+    a: 'a',
+    b: 'b',
+    c: {
+      e: true
+    }
+  })
+
+  s.set({ reset: true })
 
   t.end()
 })
