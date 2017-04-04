@@ -10,14 +10,11 @@ test('subscription - multiple subscriptions', t => {
   s.subscribe({
     page: {
       $any: {
-        bla: {
-          title: true,
-          description: true
-        }
+        title: true,
+        description: true
       }
     }
   }, t => {
-    console.log('yo yo yo yo', t.path())
     results.push(t)
   })
 
@@ -26,33 +23,31 @@ test('subscription - multiple subscriptions', t => {
   s.set({
     page: {
       a: {
-        bla: {
-          title: {
-            val: 'x',
-            stamp: date
-          }
+        title: {
+          val: 'x',
+          stamp: date
         }
       }
     }
   }, false)
   stamp.close()
 
-  console.log('\n\n\nyo gimme some change right hur!!!')
+  t.same(results, [ s.page.a.title ])
 
   results = []
   s.set({
     page: {
       a: {
-        bla: {
-          description: {
-            val: 'bla',
-            stamp: date
-          }
+        description: {
+          val: 'bla',
+          stamp: date
         }
       }
     }
   }, false)
   stamp.close()
+
+  t.same(results, [ s.page.a.description ])
 
   console.log(results)
 
