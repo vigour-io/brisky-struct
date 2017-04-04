@@ -81,22 +81,22 @@ const define = {
     temp.on[type][id] = val
     return chain(set(this, temp), this)
   },
-  set: function (val, stamp) { // fixes buble
+  set: function (val, stamp, reset) { // function fixes buble
     if (stamp === void 0) {
-      const ret = chain(set(this, val, bs.create()), this)
+      const ret = chain(set(this, val, bs.create(), void 0, reset), this)
       bs.close()
       return ret
     } else {
-      return chain(set(this, val, stamp), this)
+      return chain(set(this, val, stamp, void 0, reset), this)
     }
   },
-  create (val, stamp) { // add all fields here
+  create (val, stamp, reset) { // add all fields here
     if (stamp === void 0) {
-      const ret = create(this, val, bs.create())
+      const ret = create(this, val, bs.create(), void 0, void 0, reset)
       bs.close()
       return ret
     } else {
-      return create(this, val, stamp)
+      return create(this, val, stamp, void 0, void 0, reset)
     }
   },
   // add api as a method perhaps?
@@ -111,7 +111,7 @@ const define = {
       return chain(set(this, { [key]: val }, stamp), this)[key]
     }
   },
-  compute: function (val, passon) { return compute(this, val, passon) }, // fixes buble
+  compute: function (val, passon) { return compute(this, val, passon) }, // function fixes buble
   origin () { return origin(this) },
   keys () { return getKeys(this) || [] }
 }

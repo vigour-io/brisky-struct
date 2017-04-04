@@ -3,7 +3,7 @@ import { removeContextKey } from './keys'
 import { create } from './manipulate'
 import { removeContext as emit } from './emit/context'
 
-const resolveContext = (t, val, stamp) => {
+const resolveContext = (t, val, stamp, reset) => {
   let level = t._cLevel
   var cntx = t._c
   let key
@@ -39,17 +39,17 @@ const resolveContext = (t, val, stamp) => {
   }
   t._c = null
   t._cLevel = null
-  return contextProperty(cntx, val, stamp, key, get(cntx, key, true))
+  return contextProperty(cntx, val, stamp, key, get(cntx, key, true), reset)
 }
 
-const contextProperty = (t, val, stamp, key, property) => {
+const contextProperty = (t, val, stamp, key, property, reset) => {
   if (val === null) {
     emit(t, key, stamp)
     t[key] = null
     removeContextKey(t, key)
     return val
   } else {
-    return create(property, val, stamp, t, key)
+    return create(property, val, stamp, t, key, reset)
   }
 }
 

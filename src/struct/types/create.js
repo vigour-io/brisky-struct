@@ -1,7 +1,11 @@
 import getType from './get'
-// import { createSetObj } from '../../inheritance'
 import { set } from '../../manipulate'
 
+// create set obj can go away
+
+// need to add listeners??? -- this is a rly strange case...
+
+// has to happen when you create an instance of soemthing and change the type... rly weird
 const createSetObj = (t, top) => {
   const result = {}
   const keys = t._ks
@@ -30,7 +34,9 @@ const createType = (parent, val, t, stamp, key) => {
     }
   }
 
-  if (constructor !== t && key && t.key === key && !val.reset && (t._ks || t.val !== void 0)) {
+  //   if (constructor !== t && key && t.key === key && !val.reset && (t._ks || t.val !== void 0)) {
+
+  if (constructor !== t && key && t.key === key && (t._ks || t.val !== void 0)) {
     // this has to become stronger / better
     // also need to call merge in the update path from original
     // need to handle types better -- from original to context and vice-versa
