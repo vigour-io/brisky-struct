@@ -3,34 +3,58 @@ const { struct } = require('../../')
 const stamp = require('stamp')
 
 test('subscription - multiple subscriptions', t => {
-  const results = []
+  var results = []
 
   const s = struct.create()
 
   s.subscribe({
     page: {
       $any: {
-        title: true,
-        description: true
+        bla: {
+          title: true,
+          description: true
+        }
       }
     }
-  }, (t) => {
-    console.log(t.path())
+  }, t => {
+    console.log('yo yo yo yo', t.path())
+    results.push(t)
   })
 
   const date = stamp.create()
 
-  console.log('yo gimme some change right hur!!!')
-
   s.set({
     page: {
       a: {
-        title: {
-          stamp: date
+        bla: {
+          title: {
+            val: 'x',
+            stamp: date
+          }
         }
       }
     }
-  })
+  }, false)
+  stamp.close()
+
+  console.log('\n\n\nyo gimme some change right hur!!!')
+
+  results = []
+  s.set({
+    page: {
+      a: {
+        bla: {
+          description: {
+            val: 'bla',
+            stamp: date
+          }
+        }
+      }
+    }
+  }, false)
+  stamp.close()
+
+  console.log(results)
 
   t.end()
 })
