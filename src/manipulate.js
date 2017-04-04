@@ -84,7 +84,6 @@ const removeAllFields = (t, stamp) => {
 const removeSomeFields = (t, stamp, val, changed, isBool) => {
   const keys = getKeys(t)
   if (!val.val && t.val !== void 0) {
-    console.log('  remove val')
     val.val = void 0
     if (isBool) {
       changed = true
