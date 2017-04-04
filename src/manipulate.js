@@ -65,6 +65,7 @@ const create = (t, val, stamp, parent, key, reset) => {
   return instance
 }
 
+// rename this
 const removeAllFields = (t, stamp) => {
   const keys = getKeys(t)
   let changed
@@ -84,10 +85,11 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
   const keys = getKeys(t)
   if (!val.val && t.val !== void 0) {
     console.log('  remove val')
+    val.val = void 0
     if (isBool) {
-
-    } else {
-
+      changed = true
+    } else if (!changed) {
+      changed = []
     }
   }
   if (keys) {
@@ -97,9 +99,13 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
       if (!(key in val) && (key in t)) {
         remove(t[key], stamp)
         if (isBool) {
-
+          changed = true
         } else {
-
+          if (!changed) {
+            changed = [ key ]
+          } else {
+            changed.push(key)
+          }
         }
       }
     }
@@ -187,12 +193,10 @@ const objects = (t, val, stamp, isNew, reset) => {
         }
       }
     }
-
     if (reset) {
       const changeNest = removeSomeFields(t, stamp, val, changed)
       if (!changed) changed = changeNest
     }
-
     if (changed) {
       if (stamp) { data(t, val, stamp, false, isNew) }
       instances(t, val, stamp, changed)
