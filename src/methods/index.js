@@ -82,15 +82,16 @@ const define = {
     return chain(set(this, temp), this)
   },
   reset (val, stamp) {
-
+    return this.set(val, stamp, void 0, true)
   },
+  // const set = (t, val, stamp, isNew, reset) => {
   set: function (val, stamp, reset) { // fixes buble
     if (stamp === void 0) {
-      const ret = chain(set(this, val, bs.create()), this)
+      const ret = chain(set(this, val, bs.create(), void 0, reset), this)
       bs.close()
       return ret
     } else {
-      return chain(set(this, val, stamp), this)
+      return chain(set(this, val, stamp, void 0, reset), this)
     }
   },
   create (val, stamp) { // add all fields here

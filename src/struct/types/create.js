@@ -2,6 +2,10 @@ import getType from './get'
 import { set } from '../../manipulate'
 
 // create set obj can go away
+
+// need to add listeners??? -- this is a rly strange case...
+
+// has to happen when you create an instance of soemthing and change the type... rly weird
 const createSetObj = (t, top) => {
   const result = {}
   const keys = t._ks

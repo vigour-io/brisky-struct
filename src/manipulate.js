@@ -161,6 +161,10 @@ const objects = (t, val, stamp, isNew, reset) => {
   }
 }
 
+const removeAllFields = () => {
+  console.log('--REMOVE ALL FIELDS--')
+}
+
 const set = (t, val, stamp, isNew, reset) => {
   if (t._c) {
     // handle reset :X
@@ -181,6 +185,7 @@ const set = (t, val, stamp, isNew, reset) => {
         if (val.inherits) {
           if (setVal(t, val, stamp, true)) {
             // SINGLE - handle reset
+            if (reset) removeAllFields
             return isChanged(t, val, stamp, isNew)
           }
         } else if (val.then && typeof val.then === 'function') {
@@ -192,6 +197,7 @@ const set = (t, val, stamp, isNew, reset) => {
         } else if (val[0] && val[0] === '@') {
           if (reference(t, val, stamp)) {
             // SINGLE - handle reset
+            if (reset) removeAllFields
             return isChanged(t, val, stamp, isNew)
           }
         } else {
@@ -200,6 +206,7 @@ const set = (t, val, stamp, isNew, reset) => {
       }
     } else if (setVal(t, val, stamp)) {
       // SINGLE - handle reset
+      if (reset) removeAllFields
       return isChanged(t, val, stamp, isNew)
     }
   }
