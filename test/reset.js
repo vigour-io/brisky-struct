@@ -2,7 +2,6 @@ const test = require('tape')
 const { struct } = require('../')
 
 test('reset - basic ', t => {
-
   const a = struct.create({
     a: {
       b: {
@@ -16,9 +15,6 @@ test('reset - basic ', t => {
     },
     c: 'bla'
   })
-
-
-  console.log('----------------')
   a.set({
     a: {
       b: 'ha!'
@@ -27,28 +23,50 @@ test('reset - basic ', t => {
       d: {
         e: true
       }
+    },
+    b: {
+      d: 'smurf'
     }
-    // b: {
-    //   d: 'smurf'
-    // }
   }, void 0, true)
-
-  console.log(a)
-  console.log(a.b.d)
-
-  // t.same(a.keys(), [ 'a', 'b' ])
-  // t.same(a.a.keys(), [ 'b' ])
-  // t.same(a.a.b.keys(), [])
-  // t.same(a.b.keys(), [ 'd' ])
-
+  t.same(a.keys(), [ 'a', 'b' ])
+  t.same(a.a.keys(), [ 'b' ])
+  t.same(a.a.b.keys(), [])
+  t.same(a.b.keys(), [ 'd' ])
   t.end()
 })
 
-// test('reset - listeners ', t => {
-//   const results = []
-//   const a = struct.create()
-//   t.equal(a.on(val => { results.push(val) }), a, 'returns struct')
-//   a.set('hello')
-//   t.same(results, [ 'hello' ], 'add listener using method')
-//   t.end()
-// })
+test('reset - listeners ', t => {
+  var results = {
+    a: 0,
+    b: 0,
+    c: 0
+  }
+
+  const a = struct.create({
+    a: {
+      on: () => results.a++,
+      b: {
+        on: () => results.b++,
+        c: { on: () => results.c++ }
+      }
+    }
+  })
+
+  results = {
+    a: 0,
+    b: 0,
+    c: 0
+  }
+
+  a.set({
+    a: {
+      b: {
+        bla: true
+      }
+    }
+  }, void 0, true)
+
+  t.same(results, { a: 0, b: 1, c: 1 })
+
+  t.end()
+})
