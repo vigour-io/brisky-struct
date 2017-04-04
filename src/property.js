@@ -3,7 +3,10 @@ import { addKey } from './keys'
 import { create, set } from './manipulate'
 import { contextProperty } from './context'
 
-const property = (t, val, key, stamp, struct, reset) => {
+// (t, val[key], key, stamp, isNew, val, reset)
+
+const property = (t, val, key, stamp, struct, isNew, reset) => {
+  if (reset) console.log('RESET?', reset)
   var changed
   const result = get(t, key)
   if (result && result.inherits) {

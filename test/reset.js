@@ -2,7 +2,6 @@ const test = require('tape')
 const { struct } = require('../')
 
 test('reset - basic ', t => {
-  console.log('----------------')
 
   const a = struct.create({
     a: {
@@ -20,14 +19,14 @@ test('reset - basic ', t => {
 
 
   console.log('----------------')
-  a.set({
-    a: {
-      b: 'ha!'
-    },
-    // b: {
-    //   d: 'smurf'
-    // }
-  }, void 0, true)
+  // a.set({
+  //   a: {
+  //     b: 'ha!'
+  //   },
+  //   // b: {
+  //   //   d: 'smurf'
+  //   // }
+  // }, void 0, true)
 
   // t.same(a.keys(), [ 'a', 'b' ])
   // t.same(a.a.keys(), [ 'b' ])
