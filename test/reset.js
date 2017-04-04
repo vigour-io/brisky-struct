@@ -23,9 +23,6 @@ test('reset - basic ', t => {
       d: {
         e: true
       }
-    },
-    b: {
-      d: 'smurf'
     }
   }, void 0, true)
   t.same(a.keys(), [ 'a', 'b' ])
