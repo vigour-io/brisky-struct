@@ -15,7 +15,9 @@ test('reset - basic ', t => {
     c: 'bla'
   })
 
-  a.set()
+  a.set({
+
+  })
 
   t.end()
 })

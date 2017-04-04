@@ -81,11 +81,7 @@ const define = {
     temp.on[type][id] = val
     return chain(set(this, temp), this)
   },
-  reset (val, stamp) {
-    return this.set(val, stamp, void 0, true)
-  },
-  // const set = (t, val, stamp, isNew, reset) => {
-  set: function (val, stamp, reset) { // fixes buble
+  set: function (val, stamp, reset) { // function fixes buble
     if (stamp === void 0) {
       const ret = chain(set(this, val, bs.create(), void 0, reset), this)
       bs.close()
@@ -115,7 +111,7 @@ const define = {
       return chain(set(this, { [key]: val }, stamp), this)[key]
     }
   },
-  compute: function (val, passon) { return compute(this, val, passon) }, // fixes buble
+  compute: function (val, passon) { return compute(this, val, passon) }, // function fixes buble
   origin () { return origin(this) },
   keys () { return getKeys(this) || [] }
 }
