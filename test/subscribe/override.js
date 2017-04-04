@@ -19,9 +19,12 @@ test('subscription - multiple subscriptions', t => {
   })
 
   const date = stamp.create()
-
+  var cnt = 0
   s.set({
     page: {
+      on: () => {
+        cnt++
+      },
       a: {
         title: {
           val: 'x',
@@ -29,7 +32,7 @@ test('subscription - multiple subscriptions', t => {
         }
       }
     }
-  }, false)
+  }, stamp.create())
   stamp.close()
 
   t.same(results, [ s.page.a.title ])
@@ -44,12 +47,11 @@ test('subscription - multiple subscriptions', t => {
         }
       }
     }
-  }, false)
+  }, stamp.create())
   stamp.close()
 
+  t.equal(cnt, 1)
   t.same(results, [ s.page.a.description ])
-
-  console.log(results)
 
   t.end()
 })

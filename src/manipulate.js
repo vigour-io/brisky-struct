@@ -9,6 +9,7 @@ import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 import { getKeys } from './keys'
+import { create as createStamp } from 'stamp'
 
 const create = (t, val, stamp, parent, key, reset) => {
   var instance
@@ -115,6 +116,8 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
 const overrideObjects = (t, val, stamp, isNew, reset) => {
   const override = val.stamp
   if (!stamp) stamp = override
+  // createStamp() //override
+
   if (val.val === null) {
     return remove(t, stamp, override)
   } else {
