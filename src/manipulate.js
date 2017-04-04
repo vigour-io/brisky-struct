@@ -176,6 +176,7 @@ const set = (t, val, stamp, isNew, reset) => {
         generator(t, val, stamp)
       } else if (setVal(t, val, stamp)) {
         // SINGLE - handle reset
+        if (reset) removeAllFields
         return isChanged(t, val, stamp, isNew)
       }
     } else if (type === 'object') {

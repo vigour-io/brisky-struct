@@ -94,13 +94,13 @@ const define = {
       return chain(set(this, val, stamp, void 0, reset), this)
     }
   },
-  create (val, stamp) { // add all fields here
+  create (val, stamp, reset) { // add all fields here
     if (stamp === void 0) {
-      const ret = create(this, val, bs.create())
+      const ret = create(this, val, bs.create(), void 0, void 0, reset)
       bs.close()
       return ret
     } else {
-      return create(this, val, stamp)
+      return create(this, val, stamp, void 0, void 0, reset)
     }
   },
   // add api as a method perhaps?
