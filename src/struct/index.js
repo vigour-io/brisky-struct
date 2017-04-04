@@ -4,7 +4,6 @@ import { types } from './types'
 import { getDefault, getProps } from '../get'
 import inject from './inject'
 import on from './on'
-import reset from './reset'
 
 const struct = {}
 
@@ -108,6 +107,6 @@ props.default = (t, val, key, stamp) => property(t, val, key, stamp, struct)
 props.default.struct = struct
 struct.inherits = {}
 
-inject(struct, [ on, types, reset ])
+inject(struct, [ on, types ])
 
 export default struct

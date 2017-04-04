@@ -169,40 +169,40 @@ test('props - context', t => {
   t.end()
 })
 
-test('props - reset', t => {
-  const s = struct({
-    a: 'a',
-    b: 'b',
-    c: 'c'
-  })
+// test('props - reset', t => {
+//   const s = struct({
+//     a: 'a',
+//     b: 'b',
+//     c: 'c'
+//   })
 
-  s.set({ reset: true })
+//   s.set({ reset: true })
 
-  t.same(s.keys(), [], 'removed keys')
+//   t.same(s.keys(), [], 'removed keys')
 
-  s.set({ a: 'a', b: 'b', c: 'c', d: 'd' })
+//   s.set({ a: 'a', b: 'b', c: 'c', d: 'd' })
 
-  s.set({ reset: [ 'c', 'a' ] })
+//   s.set({ reset: [ 'c', 'a' ] })
 
-  t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
+//   t.same(s.keys(), [ 'a', 'c' ], 'removed keys (and exclude)')
 
-  t.end()
-})
+//   t.end()
+// })
 
-test('props - reset - deep', t => {
-  const s = struct({
-    a: 'a',
-    b: 'b',
-    c: { e: true }
-  })
+// test('props - reset - deep', t => {
+//   const s = struct({
+//     a: 'a',
+//     b: 'b',
+//     c: { e: true }
+//   })
 
-  s.subscribe({
-    $any: true
-  }, s => {
-    console.log(' --> hello', s)
-  })
+//   s.subscribe({
+//     $any: true
+//   }, s => {
+//     console.log(' --> hello', s)
+//   })
 
-  s.set({ reset: true })
+//   s.set({ reset: true })
 
-  t.end()
-})
+//   t.end()
+// })

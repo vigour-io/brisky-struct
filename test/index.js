@@ -16,6 +16,6 @@
 // require('./methods')
 // require('./context')
 // require('./subscribe')
-// require('./types') // also has reset
+require('./types') // also has reset
 // require('./inheritance')
 require('./props')
