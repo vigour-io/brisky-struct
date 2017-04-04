@@ -8,9 +8,10 @@ const property = (t, val, key, stamp, struct, reset) => {
   const result = get(t, key)
   if (result && result.inherits) {
     if (result._c) {
-      contextProperty(t, val, stamp, key, result)
+      // also need to do some stuff here
+      contextProperty(t, val, stamp, key, result, reset)
     } else {
-      set(result, val, stamp, reset)
+      set(result, val, stamp, void 0, reset)
       changed = val === null
     }
   } else {

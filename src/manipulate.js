@@ -10,6 +10,9 @@ import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 
 const create = (t, val, stamp, parent, key, reset) => {
+
+  console.log(reset)
+
   var instance
   const hasType = val &&
     typeof val === 'object' &&
@@ -166,6 +169,8 @@ const removeAllFields = () => {
 }
 
 const set = (t, val, stamp, isNew, reset) => {
+  if (reset) console.log('go reset..', t.path())
+
   if (t._c) {
     // handle reset :X
     return resolveContext(t, val, stamp, reset)
