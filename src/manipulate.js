@@ -115,6 +115,7 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
 const overrideObjects = (t, val, stamp, isNew, reset) => {
   const override = val.stamp
   if (!stamp) stamp = override
+
   if (val.val === null) {
     return remove(t, stamp, override)
   } else {
