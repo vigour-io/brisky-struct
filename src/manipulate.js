@@ -223,8 +223,6 @@ const objects = (t, val, stamp, isNew, reset) => {
 }
 
 const set = (t, val, stamp, isNew, reset) => {
-  if (reset) console.log('RESET', t.path(true))
-
   if (t._c) {
     return resolveContext(t, val, stamp, reset)
   } else {
