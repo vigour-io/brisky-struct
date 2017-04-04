@@ -1,7 +1,7 @@
 import getType from './get'
-// import { createSetObj } from '../../inheritance'
 import { set } from '../../manipulate'
 
+// create set obj can go away
 const createSetObj = (t, top) => {
   const result = {}
   const keys = t._ks
@@ -30,7 +30,9 @@ const createType = (parent, val, t, stamp, key) => {
     }
   }
 
-  if (constructor !== t && key && t.key === key && !val.reset && (t._ks || t.val !== void 0)) {
+  //   if (constructor !== t && key && t.key === key && !val.reset && (t._ks || t.val !== void 0)) {
+
+  if (constructor !== t && key && t.key === key && (t._ks || t.val !== void 0)) {
     // this has to become stronger / better
     // also need to call merge in the update path from original
     // need to handle types better -- from original to context and vice-versa
