@@ -13,6 +13,7 @@ import functional from './functional'
 import iterator from './iterator'
 import inspect from './inspect'
 
+// add puid as default
 // never use chain maybe remove it -- lets remove
 const chain = (c, t) => c === null || c && c !== true ? c : t
 
