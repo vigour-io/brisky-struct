@@ -10,7 +10,7 @@ const getType = (parent, type, t, stamp) => {
     } else if (type.val && type.stamp !== void 0) {
       type = type.val
     } else {
-      return create(getProp(t).struct, type, stamp)
+      return create(getProp(t).struct, type, stamp, parent)
     }
   }
   let result = getTypeInternal(parent, type, t)

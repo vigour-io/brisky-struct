@@ -569,3 +569,21 @@ test('types - set the same', { timeout: 3000 }, t => {
     }, 100)
   }, 100)
 })
+
+test('types - use object type creates correct types', t => {
+  const a = struct({
+    types: {
+      x: 'hello!',
+      y: {
+        type: {
+          thing: {
+            type: 'x'
+          }
+        }
+      }
+    }
+  })
+  t.same(a.types.y.get('types').keys(), [], 'types y doesnt have own types')
+  t.same(a.types.y.get('thing').compute(), 'hello!')
+  t.end()
+})
