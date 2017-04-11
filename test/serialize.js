@@ -40,5 +40,17 @@ test('serialize ', t => {
     greetings: 'what?',
     hello: 'what?'
   }, 'correct result')
+
+  const x = struct({
+    key: 'x',
+    blarf: {},
+    bla: [ '@', 'root', 'blarf' ]
+  })
+
+  t.same(x.serialize(), {
+    blarf: {},
+    bla: [ '@', 'root', 'blarf' ]
+  })
+
   t.end()
 })
