@@ -1,18 +1,26 @@
 import bs from 'stamp'
 
+const handleStruct = (p, stamp) => {
+  if (p.emitters && p.emitters.data && p.emitters.data.struct && p.tStamp !== stamp) {
+    p.tStamp = stamp
+    let i = p.emitters.data.struct.length
+    while (i--) {
+      subscription(p.emitters.data.struct[i], stamp)
+      handleStruct(p.emitters.data.struct[i])
+    }
+  }
+}
+
 const subscription = (t, stamp, val) => {
   t.tStamp = stamp
   if (t._p || t._c) {
     let p = t._p
     if (t._c && t._cLevel === 1) p = t._c
+
     while (p && (!p.tStamp || p.tStamp !== stamp)) {
       p.tStamp = stamp
-      if (p.emitters && p.emitters.data && p.emitters.data.struct) {
-        let i = p.emitters.data.struct.length
-        while (i--) {
-          subscription(p.emitters.data.struct[i], stamp)
-        }
-      }
+      handleStruct(p, stamp)
+
       if (p.subscriptions) exec(p)
       p = p._p
     }

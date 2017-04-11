@@ -113,7 +113,8 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
 }
 
 const overrideObjects = (t, val, stamp, isNew, reset) => {
-  const override = val.stamp
+  var override = val.stamp
+
   if (!stamp) stamp = override // also need to use this for _t stmap but not for travel :/
 
   if (val.val === null) {

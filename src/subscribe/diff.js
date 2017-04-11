@@ -1,3 +1,8 @@
+import { property } from './property'
+import { any, composite as anyComposite } from './any'
+import root from './root'
+import $switch from './switch'
+import parent from './parent'
 
 const diff = (t, subs, cb, tree, removed, composite) => {
   var changed
@@ -49,8 +54,3 @@ const parse = (key, t, subs, cb, tree, removed, composite) => {
 
 export { diff, parse }
 
-import { property } from './property'
-import { any, composite as anyComposite } from './any'
-import root from './root'
-import $switch from './switch'
-import parent from './parent'
