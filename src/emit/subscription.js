@@ -1,13 +1,14 @@
 import bs from 'stamp'
 
 const handleStruct = (p, stamp) => {
-  if (p.emitters && p.emitters.data && p.emitters.data.struct && p.tStamp !== stamp) {
-    p.tStamp = stamp
+  if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
+    p.__tStamp = stamp
     let i = p.emitters.data.struct.length
     while (i--) {
       subscription(p.emitters.data.struct[i], stamp)
       handleStruct(p.emitters.data.struct[i])
     }
+    p.__tStamp = null
   }
 }
 
