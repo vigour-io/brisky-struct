@@ -133,8 +133,10 @@ const composite = (key, t, subs, cb, branch, removed, c) => {
   } else {
     for (let k in c) {
       let target = keys[k]
-      if (updateProperty(k, target.$t, subs, cb, keys, target.$c, branch)) {
-        changed = true
+      if (target) {
+        if (updateProperty(k, target.$t, subs, cb, keys, target.$c, branch)) {
+          changed = true
+        }
       }
     }
   }
