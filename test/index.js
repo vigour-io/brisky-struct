@@ -1,6 +1,5 @@
 require('./define')
 require('./inject')
-require('./serialize')
 require('./traversal')
 require('./references')
 require('./compute')
@@ -19,4 +18,5 @@ require('./types') // also has reset
 require('./inheritance')
 require('./props')
 require('./reset')
+require('./serialize')
 require('./subscribe')

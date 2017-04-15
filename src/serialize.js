@@ -16,6 +16,9 @@ const serialize = (t, fn) => {
     val = [ '@', 'root' ]
     let i = p.length
     while (i--) { val[i + 2] = p[i] }
+    if (t.root().key) {
+      val.splice(2, 1)
+    }
   }
   if (keys) {
     let onlyNumbers = true

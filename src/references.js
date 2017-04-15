@@ -38,7 +38,7 @@ const resolveFromValue = (t, val, stamp) => {
         const field = getApi(rootInstances[i], path(val, true), void 0, void 0, true)
         if (field !== val) {
           const instance = getApi(rootInstances[i], path(t, true))
-          if (getVal(instance) === val) {
+          if (instance && getVal(instance) === val) {
             instance.set(field, stamp)
           }
           instance._c = null
