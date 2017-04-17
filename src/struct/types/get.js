@@ -3,7 +3,29 @@ import { get } from '../../get'
 import { set, create } from '../../manipulate'
 import { getProp } from '../../property'
 
-var cnt = 0
+// import hash from 'string-hash'
+// var cnt = 0
+// const empty = hash('nill')
+// const obj = {}
+// const makeHash = (obj, id = 5381) => {
+//   for (let key in obj) {
+//     id = id * 33 ^ hash(key + '')
+//     const item = obj[key]
+//     if (item && typeof item === 'object') {
+//       if (!item.inherits) {
+//         id = id * 33 ^ makeHash(item, id)
+//       }
+//     } else if (typeof item === 'function') {
+//       id = id * 33 ^ hash(item.toString())
+//     } else if (item === null) {
+//       id = id * 33 ^ empty
+//     } else if (item) {
+//       id = id * 33 ^ hash(item.toString() || '0')
+//     }
+//   }
+//   return id >>> 0
+// }
+
 const getType = (parent, type, t, stamp) => {
   if (typeof type === 'object') {
     if (type.inherits) {
@@ -11,16 +33,10 @@ const getType = (parent, type, t, stamp) => {
     } else if (type.val && type.stamp !== void 0) {
       type = type.val
     } else {
-      ++cnt
       if (!type._created) {
-        // console.log(type)
-        type._created = create(getProp(t).struct, type)
+        type._created = create(getProp(t).struct, type, stamp, parent)
       }
-
-      // console.log('fok w000t')
       return type._created
-
-      // return create(getProp(t).struct, type, stamp, parent)
     }
   }
   let result = getTypeInternal(parent, type, t)
@@ -34,9 +50,9 @@ const getType = (parent, type, t, stamp) => {
   return result
 }
 
-setTimeout(() => {
-  console.log(cnt)
-}, 1e3)
+// setTimeout(() => {
+//   console.log(cnt, obj)
+// }, 1e3)
 
 const getTypeInternal = (parent, type, t) =>
   (!t || typeof type === 'string' || typeof type === 'number') &&
