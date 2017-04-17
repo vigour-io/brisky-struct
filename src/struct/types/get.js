@@ -3,6 +3,7 @@ import { get } from '../../get'
 import { set, create } from '../../manipulate'
 import { getProp } from '../../property'
 
+var cnt = 0
 const getType = (parent, type, t, stamp) => {
   if (typeof type === 'object') {
     if (type.inherits) {
@@ -10,19 +11,32 @@ const getType = (parent, type, t, stamp) => {
     } else if (type.val && type.stamp !== void 0) {
       type = type.val
     } else {
-      return create(getProp(t).struct, type, stamp, parent)
+      ++cnt
+      if (!type._created) {
+        // console.log(type)
+        type._created = create(getProp(t).struct, type)
+      }
+
+      // console.log('fok w000t')
+      return type._created
+
+      // return create(getProp(t).struct, type, stamp, parent)
     }
   }
   let result = getTypeInternal(parent, type, t)
   if (!result) {
     // create type
-    console.log('no result - create type', type)
+    // console.log('no result - create type', type)
     parent = root(parent)
     set(parent, { types: { [type]: {} } }, stamp)
     result = parent.types[type]
   }
   return result
 }
+
+setTimeout(() => {
+  console.log(cnt)
+}, 1e3)
 
 const getTypeInternal = (parent, type, t) =>
   (!t || typeof type === 'string' || typeof type === 'number') &&
