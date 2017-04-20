@@ -72,9 +72,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
           delete branch.$stored
         }
       }
-
       branch.$t = t
-
       if (subs.val === 'switch') {
         if ((t.val && typeof t.val === 'object' && t.val.inherits)) {
           branch.$val = switchuid(t)
@@ -82,9 +80,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
           delete branch.$val
         }
       }
-
       changed = diff(t, subs, cb, branch, void 0, c) || changed
-      // changed = true
     } else if (branch.$c) {
       if (diff(t, subs, cb, branch, void 0, branch.$c)) {
         changed = true // cover this

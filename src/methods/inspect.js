@@ -12,7 +12,7 @@ const define = {
     var val = this.val
     const p = path(this)
     var type = get(this, 'type').compute()
-    const start = type[0].toUpperCase() + type.slice(1) + ' ' + (p.length ? `${p.join('.')} ` : '')
+    const start = type && type[0].toUpperCase() + type.slice(1) + ' ' + (p.length ? `${p.join('.')} ` : '')
     if (val && typeof val === 'object' && val.inherits) {
       val = val.inspect()
     }

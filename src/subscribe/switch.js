@@ -13,12 +13,12 @@ const CompositeDriverChange = (key, tkey, t, subs, cb, tree, removed, composite)
 const $switch = (key, t, subs, cb, tree, removed, composite) => {
   var $switch = subs[key]
   if (!$switch) {
-    let tkey = key.slice(0, -1) // this means from composite
+    const tkey = key.slice(0, -1) // this means from composite
     CompositeDriverChange(key, tkey, t, subs[tkey], cb, tree, removed, composite)
   } else {
     if ($switch.val) {
-      let dKey = key + '*'
-      let driverBranch = tree[dKey]
+      const dKey = key + '*'
+      const driverBranch = tree[dKey]
       if (driverBranch) {
         if (diff(t, $switch, cb, driverBranch, removed, composite)) {
           return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
@@ -30,6 +30,8 @@ const $switch = (key, t, subs, cb, tree, removed, composite) => {
         if (create(dKey, t, $switch, cb, tree)) {
           return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
         }
+        // this can be done ofc
+        // return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
       }
     } else {
       return body(key, t, subs, cb, tree, removed, $switch, true, composite)
