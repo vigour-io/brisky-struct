@@ -2,6 +2,7 @@ import { diff } from '../diff'
 import remove from './remove'
 import { getOrigin } from '../../get'
 import { storeContext } from '../../context'
+import { puid } from '../../uid'
 
 const store = (t, branch) => {
   if (t._c._c) {
@@ -14,6 +15,15 @@ const store = (t, branch) => {
 }
 
 const dummy = [ 0 ]
+
+const switchuid = t => {
+  var uid = 5381
+  while (t && t.val && typeof t.val === 'object' && t.val.inherits) {
+    t = t.val
+    uid * 33 ^ puid(t)
+  }
+  return uid >>> 0
+}
 
 const update = (key, t, subs, cb, tree, c, parent) => {
   var branch = tree[key]
@@ -34,7 +44,13 @@ const update = (key, t, subs, cb, tree, c, parent) => {
           // will become parsed -- with intergers -- also switcgh returns will be parsed
           subs.val === true ||
           subs.val === 'shallow' ||
-          (subs.val === 'switch' && (branch.$t !== t || branch.$tc != t._c)) //eslint-disable-line
+          (subs.val === 'switch' && (
+            branch.$t !== t ||
+            // (delete / void 0 field later)
+            branch.$tc != t._c || // eslint-disable-line
+            (t.val && typeof t.val === 'object' && t.val.inherits && branch.$val !== switchuid(t)) ||
+            branch.$val // means removed reference
+          ))
         ) {
           cb(t, 'update', subs, branch)
         }
@@ -55,6 +71,14 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       }
 
       branch.$t = t
+
+      if (subs.val === 'switch') {
+        if ((t.val && typeof t.val === 'object' && t.val.inherits)) {
+          branch.$val = switchuid(t)
+        } else if (branch.$val) {
+          delete branch.$val
+        }
+      }
 
       diff(t, subs, cb, branch, void 0, c)
       changed = true
