@@ -8,8 +8,11 @@ import { origin } from '../compute'
 const driverChange = (key, tkey, t, subs, cb, tree, removed, composite) => {
   const branch = tree[key]
   // can flavour it a little bit
-  if (diff(t, subs, cb, branch, removed, composite)) {
-    return body(tkey, t, subs, cb, tree, removed, subs.val, false, composite)
+  if (diff(t, subs, (state, type, subs, tree) => {
+    cb(state, type, subs, tree)
+    body(tkey, t, subs, cb, tree, removed, subs.val, false, composite)
+  }, branch, removed, composite)) {
+    // return body(tkey, t, subs, cb, tree, removed, subs.val, false, composite)
   }
 }
 
