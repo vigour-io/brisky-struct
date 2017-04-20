@@ -34,9 +34,11 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
       branch.$ = stamp
       if (t._c) { store(t, branch) }
-      if (subs.val) { cb(t, 'new', subs, branch) }
-      diff(t, subs, cb, branch, void 0, c)
-      changed = true
+      if (subs.val) {
+        cb(t, 'new', subs, branch)
+        changed = true
+      }
+      changed = diff(t, subs, cb, branch, void 0, c) || changed
       // ! && ! || !== (thats why != may need to replace)
     } else if (branch.$ !== stamp || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
       if (subs.val) {
@@ -52,6 +54,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
             branch.$val // means removed reference
           ))
         ) {
+          changed = true
           cb(t, 'update', subs, branch)
         }
       }
@@ -80,17 +83,18 @@ const update = (key, t, subs, cb, tree, c, parent) => {
         }
       }
 
-      diff(t, subs, cb, branch, void 0, c)
-      changed = true
+      changed = diff(t, subs, cb, branch, void 0, c) || changed
+      // changed = true
     } else if (branch.$c) {
       if (diff(t, subs, cb, branch, void 0, branch.$c)) {
         changed = true // cover this
+        if (subs.val === true) {
+          cb(t, 'update', subs, branch)
+        }
       }
-      if (changed && (subs.val === true)) { cb(t, 'update', subs, branch) }
     }
   } else if (branch) {
-    remove(subs, cb, branch)
-    changed = true
+    changed = remove(subs, cb, branch) || (subs.val && true)
   }
   return changed
 }
@@ -100,8 +104,7 @@ const property = (key, t, subs, cb, tree, removed, composite) => {
   if (removed) {
     const branch = tree[key]
     if (branch) {
-      remove(subs, cb, branch)
-      changed = true
+      changed = remove(subs, cb, branch) || (subs.val && true)
     }
   } else {
     t = getOrigin(t, key)

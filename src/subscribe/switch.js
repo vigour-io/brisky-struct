@@ -3,9 +3,7 @@ import remove from './property/remove'
 import { update } from './property'
 import { origin } from '../compute'
 
-// const driver = (t, type) => {}
-
-const driverChange = (key, tkey, t, subs, cb, tree, removed, composite) => {
+const CompositeDriverChange = (key, tkey, t, subs, cb, tree, removed, composite) => {
   const branch = tree[key]
   if (diff(t, subs, cb, branch, removed, composite)) {
     return body(tkey, t, subs, cb, tree, removed, subs.val, false, composite)
@@ -16,7 +14,7 @@ const $switch = (key, t, subs, cb, tree, removed, composite) => {
   var $switch = subs[key]
   if (!$switch) {
     let tkey = key.slice(0, -1) // this means from composite
-    driverChange(key, tkey, t, subs[tkey], cb, tree, removed, composite)
+    CompositeDriverChange(key, tkey, t, subs[tkey], cb, tree, removed, composite)
   } else {
     if ($switch.val) {
       let dKey = key + '*'
@@ -29,8 +27,9 @@ const $switch = (key, t, subs, cb, tree, removed, composite) => {
           if (branch) { update(key, t, branch.$subs, cb, tree, composite) }
         }
       } else if (!driverBranch) {
-        create(dKey, t, $switch, cb, tree)
-        return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
+        if (create(dKey, t, $switch, cb, tree)) {
+          return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
+        }
       }
     } else {
       return body(key, t, subs, cb, tree, removed, $switch, true, composite)

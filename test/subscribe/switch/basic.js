@@ -236,3 +236,55 @@ test('subscription - $switch - nested', t => {
 
   t.end()
 })
+
+test('subscription - $switch - driver', t => {
+  var cnt = 0
+  const s = subsTest(t, {
+    field: 'a',
+    x: 100
+  }, {
+    field: {
+      $switch: {
+        video: {
+          val: 1
+        },
+        val: (t, subs, tree) => {
+          cnt++
+          // alo check PROPS -- needs to get excluded!
+          if (t.compute() === 'a') {
+            return { root: { x: { val: true } }, _: 'ha' }
+          } else {
+            return { root: { x: { val: true } }, _: 'bla' }
+          }
+        }
+      }
+    }
+  })
+  s('initial subscription', [])
+
+  t.equal(cnt, 0)
+
+  cnt = 0
+  s('set video', [
+   { path: 'field/video', type: 'new' },
+   { path: 'x', type: 'new' }
+  ], {
+    field: {
+      video: true
+    }
+  })
+  t.equal(cnt, 1)
+
+  cnt = 0
+  // console.log('GO GO GO GO🎄🎄🎄🎄🎄')
+  s('update random field', [], {
+    field: {
+      video: {
+        time: 'hello'
+      }
+    }
+  })
+  t.equal(cnt, 0)
+
+  t.end()
+})
