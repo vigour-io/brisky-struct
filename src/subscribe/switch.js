@@ -30,8 +30,6 @@ const $switch = (key, t, subs, cb, tree, removed, composite) => {
         if (create(dKey, t, $switch, cb, tree)) {
           return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
         }
-        // this can be done ofc
-        // return body(key, t, subs, cb, tree, removed, $switch.val, true, composite)
       }
     } else {
       return body(key, t, subs, cb, tree, removed, $switch, true, composite)
