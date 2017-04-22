@@ -3,29 +3,6 @@ import { get } from '../../get'
 import { set, create } from '../../manipulate'
 import { getProp } from '../../property'
 
-// import hash from 'string-hash'
-// var cnt = 0
-// const empty = hash('nill')
-// const obj = {}
-// const makeHash = (obj, id = 5381) => {
-//   for (let key in obj) {
-//     id = id * 33 ^ hash(key + '')
-//     const item = obj[key]
-//     if (item && typeof item === 'object') {
-//       if (!item.inherits) {
-//         id = id * 33 ^ makeHash(item, id)
-//       }
-//     } else if (typeof item === 'function') {
-//       id = id * 33 ^ hash(item.toString())
-//     } else if (item === null) {
-//       id = id * 33 ^ empty
-//     } else if (item) {
-//       id = id * 33 ^ hash(item.toString() || '0')
-//     }
-//   }
-//   return id >>> 0
-// }
-
 const getType = (parent, type, t, stamp) => {
   if (typeof type === 'object') {
     if (type.inherits) {

@@ -5,7 +5,7 @@ import { get, getVal } from './get'
 import { getProp as getProperty, property } from './property'
 import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
-import { getKeys } from './keys'
+import { getKeys, addKey, removeKey, removeContextKey } from './keys'
 import { compute } from './compute'
 // // maybe remove cuid
 import { cuid, uid, puid } from './uid'
@@ -33,6 +33,9 @@ export {
   get,
   getProperty,
   getKeys,
+  removeContextKey,
+  addKey,
+  removeKey,
   getType,
   getVal,
   uid,

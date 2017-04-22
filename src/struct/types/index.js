@@ -18,8 +18,10 @@ const type = (t, val, key, stamp, isNew, original) => {
       val = val.val
     } else if (val.inherits) {
       isObject = true
+      return
     } else {
       isObject = true
+      return
     }
   }
 

@@ -21,11 +21,22 @@ const createSetObj = (t, top) => {
   return result
 }
 
+var obj = {}
+
 const createType = (parent, val, t, stamp, key) => {
   const type = val.type
   const constructor = getType(parent, type, t, stamp) || t
+
+  if (typeof val.type === 'object' && !val.type.stamp) {
+    delete val.type
+  }
   const instance = new constructor.Constructor()
   instance.inherits = constructor
+  // console.log('count')
+  // if (typeof type === 'object') {
+  //   // console.log('--->', type)
+  // }
+  obj[type] = obj[type] ? obj[type] + 1 : 1
   if (constructor.instances !== false) {
     if (!constructor.instances) {
       constructor.instances = [ instance ]

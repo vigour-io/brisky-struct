@@ -9,6 +9,7 @@ const struct = {}
 
 const props = {
   inject,
+  _created: (t, val) => { t._created = val },
   async: (t, val) => { if (t.async && !val) { delete t.async } },
   key: (t, val) => { t.key = val },
   instances: (t, val) => { t.instances = val },
