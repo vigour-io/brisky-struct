@@ -191,13 +191,39 @@ test('references - remove referenced & gaurds', t => {
 test('references - switch using get notations', t => {
   const state = struct({})
   state.set([
-    { page: { val: [ '@', 'root', 'pages', 'b' ] } },
-    { page: { val: [ '@', 'root', 'pages', 'a' ] } }
+      { page: { val: [ '@', 'root', 'pages', 'b' ] } },
+      { page: { val: [ '@', 'root', 'pages', 'a' ] } }
   ][Symbol.iterator]())
-  // why does this not work -- async needs to get rid of timout
+    // why does this not work -- async needs to get rid of timout
   setTimeout(() => {
     t.same(state.pages.b.emitters.data.struct, [], 'empty struct on b')
     t.same(state.pages.a.emitters.data.struct, [ state.page ], 'page on a')
     t.end()
   })
+})
+
+test('references - circulair', t => {
+  const state = struct({})
+  state.set({
+    content: {
+      a: {
+        items: [
+          [ '@', 'root', 'content', 'a' ]
+        ]
+      }
+    }
+  })
+
+  state.subscribe({ a: true }, (state) => {
+    // console.log('???', state.path())
+  })
+
+  const a = state.create() //eslint-disable-line
+
+  state.set({
+    a: 'bla'
+  })
+
+  t.pass('does not crash')
+  t.end()
 })
