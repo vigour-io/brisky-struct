@@ -49,9 +49,9 @@ const getParent = (t, tree) => {
           }
         }
       } else if (tree._key.indexOf('any') === 1 && path.length) {
-        console.log('???', tree._key)
+        // console.log('???', tree._key, path[0])
         // refactor this a little but later
-        path[0] = tree.$keys[path[0]].$t.key
+        path[0] = tree.$keys[path[0]] ? tree.$keys[path[0]].$t.key : path[0]
       }
     }
     tree = tree._p
