@@ -10,7 +10,6 @@ export default (t, subs, cb, tree, removed) => {
       composite(tree)
     }
     const parente = getParent(t, tree)
-    console.log(parente)
     const c = diff(parente, subs, cb, branch)
     return c
   } else if (branch) {
