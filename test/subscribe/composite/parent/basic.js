@@ -129,3 +129,65 @@ test(`subscription - composite - parent - $any`, t => {
   t.end()
 })
 
+test(`subscription - composite - parent - $any - references`, t => {
+  const s = subsTest(
+    t,
+    {
+      jur: [ 'a', 'b', 'c', 'd' ],
+      collection: {
+        items: {
+          x: [ '@', 'root', 'jur', 0 ],
+          y: [ '@', 'root', 'jur', 1 ]
+        }
+      }
+    },
+    {
+      collection: {
+        items: {
+          $any: {
+            parent: {
+              parent: {
+                focus: { val: true }
+              }
+            }
+          }
+        }
+      }
+    }
+  )
+
+  s('initial subscription', [], {})
+  // { path: 'collection/focus', type: 'new' }
+  // fire each!!!
+  // just fire focus for each
+  // not just one and then give the correct branch + subs then you have it
+  // never do the first - why
+  s('set focus', [
+    { path: 'collection/focus', type: 'new' },
+    { path: 'collection/focus', type: 'new' }
+  ], {
+    collection: {
+      focus: true
+    }
+  })
+
+  s('set focus', [
+    { path: 'collection/focus', type: 'update' },
+    { path: 'collection/focus', type: 'update' }
+  ], {
+    collection: {
+      focus: false
+    }
+  })
+
+  s('set focus (2nd)', [
+    { path: 'collection/focus', type: 'update' },
+    { path: 'collection/focus', type: 'update' }
+  ], {
+    collection: {
+      focus: true
+    }
+  })
+
+  t.end()
+})

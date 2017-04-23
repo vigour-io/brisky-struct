@@ -1,5 +1,5 @@
 require('./basic')
 require('./references')
-require('./parent')
 require('./mixed')
 require('./any')
+require('./parent')

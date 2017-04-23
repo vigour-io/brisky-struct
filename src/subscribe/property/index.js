@@ -14,7 +14,7 @@ const store = (t, branch) => {
   }
 }
 
-const dummy = [ 0 ]
+const dummy = 0
 
 const switchuid = t => {
   var uid = 5381
@@ -29,6 +29,8 @@ const update = (key, t, subs, cb, tree, c, parent) => {
   var branch = tree[key]
   var changed
   if (t) {
+    // console.log('PROPERTY:', t, !!(branch && branch.$c))
+
     const stamp = t.tStamp || dummy  // needs to use stamp as well (if dstamp is gone)
     if (!branch) {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
@@ -82,9 +84,13 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       }
       changed = diff(t, subs, cb, branch, void 0, c) || changed
     } else if (branch.$c) {
+      // console.log('go $c!', branch.$)
       if (diff(t, subs, cb, branch, void 0, branch.$c)) {
+        // console.log('CHANGED', t)
         changed = true // cover this
-        if (subs.val === true) {
+        // shallow hack
+        // maybe add switch as well?
+        if (subs.val === true || subs.val === 'shallow') {
           cb(t, 'update', subs, branch)
         }
       }

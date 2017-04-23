@@ -148,6 +148,7 @@ const update = (key, keys, t, subs, cb, branch) => {
   const $keys = branch.$keys
   const len1 = keys.length
   var len2 = $keys.length
+
   if (len1 > len2) {
     for (let i = 0; i < len1; i++) {
       let key = keys[i]

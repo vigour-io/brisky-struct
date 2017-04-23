@@ -9,8 +9,10 @@ export default (t, subs, cb, tree, removed) => {
       branch = tree.parent = { _p: tree, _key: 'parent' }
       composite(tree)
     }
-    let tx = getParent(t, tree)
-    return diff(tx, subs, cb, branch)
+    const parente = getParent(t, tree)
+    console.log(parente)
+    const c = diff(parente, subs, cb, branch)
+    return c
   } else if (branch) {
     diff(branch.$t, subs, cb, branch, true)
     return true
@@ -35,7 +37,7 @@ const getParent = (t, tree) => {
   var cnt = 1
   var i = 0
   while (tree) {
-    if (tree._key) {
+    if (tree._key !== void 0) {
       if (tree._key[0] !== '$') {
         if (tree._key === 'parent') {
           cnt++
@@ -47,6 +49,7 @@ const getParent = (t, tree) => {
           }
         }
       } else if (tree._key.indexOf('any') === 1 && path.length) {
+        console.log('???', tree._key)
         // refactor this a little but later
         path[0] = tree.$keys[path[0]].$t.key
       }
@@ -56,13 +59,33 @@ const getParent = (t, tree) => {
   return get(root(t), path)
 }
 
+// const composite = tree => {
+//   console.log('-----------------')
+//   var key = 'parent'
+//   while (
+//     tree._p &&
+//     (!(tree.$c) ||
+//     !(key in tree.$c) ||
+//     tree.$c[key] !== 'root')
+//   ) {
+//     console.log(key)
+//     let tkey = tree._key
+//     if (tkey !== 'parent' && tkey !== 'root') {
+//       if (!('$c' in tree)) { tree.$c = {} }
+//       tree.$c[key] = 'parent'
+//     }
+//     key = tkey
+//     tree = tree._p
+//   }
+// }
+
 const composite = tree => {
   var key = 'parent'
   var parentcounter = 1
   while (tree._p && parentcounter) {
     let tkey = tree._key
     if (tkey !== 'parent') {
-      if (parentcounter === 1 && tkey !== 'root') { // && tkey !== '$any'
+      if (parentcounter === 1 && tkey !== 'root') {
         if (!tree.$c) { tree.$c = {} }
         if (!(key in tree.$c) || tree.$c[key] !== 'root') {
           tree.$c[key] = 'parent'
