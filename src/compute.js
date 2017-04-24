@@ -8,7 +8,7 @@ const transform = t => t.$transform !== void 0
   ? t.$transform
   : t.inherits && transform(t.inherits)
 
-const compute = (t, val, passon) => {
+const compute = (t, val, passon, arg) => {
   if (val === void 0) {
     val = t.val
     if (val === void 0) { val = get(t.inherits) }
@@ -18,7 +18,7 @@ const compute = (t, val, passon) => {
     if (type === 'object') {
       if (val.inherits) {
         const v = val
-        val = compute(val, void 0, passon)
+        val = compute(val, void 0, passon, arg)
         if (val === void 0) {
           val = v
         }
@@ -28,7 +28,7 @@ const compute = (t, val, passon) => {
     }
   }
   const trans = transform(t)
-  return trans ? trans(val, passon || t) : val
+  return trans ? trans(val, passon || t, arg) : val
 }
 
 export { origin, compute }

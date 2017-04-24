@@ -112,7 +112,7 @@ const define = {
       return chain(set(this, { [key]: val }, stamp), this)[key]
     }
   },
-  compute: function (val, passon) { return compute(this, val, passon) }, // function fixes buble
+  compute: function (val, passon, arg) { return compute(this, val, passon, arg) }, // function fixes buble
   origin () { return origin(this) },
   keys () { return getKeys(this) || [] }
 }

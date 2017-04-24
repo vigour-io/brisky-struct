@@ -21,27 +21,25 @@ const remove = (subs, cb, tree) => {
   const key = tree._key
   const parent = tree._p
   if (parent.$keys) {
-    parent.$keys.splice(key, 1)
-    const len = parent.$keys.length
-    let i = len
-    if (tree.$c) {
-      while (i-- > key) {
-        parent.$keys[i]._key = i
-        // if (parent.$keys[i].$c) {
-        //   // if (!parent.$c[i]) {
-        //   //   'RE-ADD' // may need this later
-        //   // }
-        // } else if (parent.$c[i]) {
-        //   composite(parent, i)
-        // }
-      }
-      if (parent.$c[len]) {
-        composite(parent, len)
+    if (Array.isArray(parent.$keys)) {
+      parent.$keys.splice(key, 1)
+      const len = parent.$keys.length
+      let i = len
+      if (tree.$c) {
+        while (i-- > key) {
+          parent.$keys[i]._key = i
+        }
+        if (parent.$c[len]) {
+          composite(parent, len)
+        }
+      } else {
+        while (i-- > key) {
+          parent.$keys[i]._key = i
+        }
       }
     } else {
-      while (i-- > key) {
-        parent.$keys[i]._key = i
-      }
+      if (tree.$c && parent.$c[key]) { composite(parent, key) }
+      delete parent.$keys[key]
     }
   } else {
     if (tree.$c) { composite(parent, key) }
