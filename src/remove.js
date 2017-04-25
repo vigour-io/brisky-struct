@@ -5,6 +5,10 @@ import { listener } from './struct/listener'
 import { uid } from './uid'
 
 const remove = (t, stamp, override, instance, from) => {
+  if (!t) {
+    console.log('no t how?')
+    return
+  }
   if (t._async) { delete t._async }
 
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
