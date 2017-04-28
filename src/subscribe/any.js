@@ -212,7 +212,7 @@ const removeFieldsObject = (key, subs, branch, cb, tre) => {
   }
 }
 
-const updateObject = (key, keys, t, subs, cb, branch) => {
+const updateObject = (key$, keys, t, subs, cb, branch) => {
   var changed
   const $keys = branch.$keys
   const len1 = keys.length
