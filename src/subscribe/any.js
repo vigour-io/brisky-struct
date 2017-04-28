@@ -207,8 +207,8 @@ const createObject = (key, keys, t, subs, cb, tree) => {
 
 const removeFieldsObject = (key, subs, branch, cb, tre) => {
   const $keys = branch.$keys
-  for (let key in $keys) {
-    remove(subs, cb, $keys[key])
+  for (let key$ in $keys) {
+    remove(subs, cb, $keys[key$])
   }
 }
 
