@@ -163,23 +163,21 @@ const update = (key, keys, t, subs, cb, branch) => {
   var len2 = $keys.length
   if (len1 > len2) {
     for (let i = 0; i < len1; i++) {
-      let key = keys[i]
-      let tt = getOrigin(t, key)
-      if (updateProperty(i, tt, subs, cb, $keys, void 0, branch)) {
+      const key = keys[i]
+      if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch)) {
         changed = true
       }
     }
   } else {
     for (let i = 0; i < len2; i++) {
-      let key = keys[i]
+      const key = keys[i]
       if (!key) {
         remove(subs, cb, $keys[i])
         len2--
         i--
         changed = true
       } else {
-        let tt = getOrigin(t, key)
-        if (updateProperty(i, tt, subs, cb, $keys, void 0, branch)) {
+        if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch)) {
           changed = true
         }
       }
