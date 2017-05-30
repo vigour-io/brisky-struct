@@ -116,11 +116,7 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
   var override = val.stamp
 
   if (override && t.stamp) {
-    //     console.log((t.stamp >>> 0), (override >>> 0), t.stamp, override)
-
     if (Math.abs(t.stamp) > Math.abs(override)) {
-      // console.log('HERE', t.root()._uid_, t.stamp, '>', override)
-      // console.log('diff:', (t.stamp | 0) - (override | 0))
       return false
     }
   }
