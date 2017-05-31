@@ -117,7 +117,7 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
 
   if (override && t.stamp && !reset) {
     if (Math.abs(t.stamp) > Math.abs(override)) {
-      // return false
+      return false
     }
   }
 
