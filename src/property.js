@@ -3,8 +3,6 @@ import { addKey } from './keys'
 import { create, set } from './manipulate'
 import { contextProperty } from './context'
 
-// (t, val[key], key, stamp, isNew, val, reset)
-
 const property = (t, val, key, stamp, struct, isNew, reset) => {
   var changed
   const result = get(t, key)

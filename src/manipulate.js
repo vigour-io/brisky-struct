@@ -65,7 +65,7 @@ const create = (t, val, stamp, parent, key, reset) => {
   return instance
 }
 
-// rename this
+// reset functions
 const removeAllFields = (t, stamp) => {
   const keys = getKeys(t)
   let changed
@@ -111,6 +111,7 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
   }
   return changed
 }
+// --------------
 
 const overrideObjects = (t, val, stamp, isNew, reset) => {
   var override = val.stamp
