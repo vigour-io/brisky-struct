@@ -109,42 +109,42 @@ test('context - props', t => {
     'gender of Mert is male'
   )
 
-  // t.equals(
-  //   students.get(['second', 'gender'])._c, students.get('second'),
-  //   'gender is in context'
-  // )
+  t.equals(
+    students.get(['second', 'gender'])._c, students.get('second'),
+    'gender is in context'
+  )
 
-  // t.equals(
-  //   students.get(['second', 'gender'])._cLevel, 1,
-  //   'contextLevel is 1'
-  // )
+  t.equals(
+    students.get(['second', 'gender'])._cLevel, 1,
+    'contextLevel is 1'
+  )
 
-  // t.equals(
-  //   students.get(['second', 'gender', 'parent']), students.get('second'),
-  //   'parent of gender for Mert is second'
-  // )
+  t.equals(
+    students.get(['second', 'gender', 'parent']), students.get('second'),
+    'parent of gender for Mert is second'
+  )
 
-  // students.set({ third: { name: 'Lale', type: 'female', reset: true } })
+  students.set({ third: { name: 'Lale', type: 'female', reset: true } })
 
-  // t.equals(
-  //   students.get(['third', 'gender']).compute(), 'female',
-  //   'gender of Lale is female'
-  // )
+  t.equals(
+    students.get(['third', 'gender']).compute(), 'female',
+    'gender of Lale is female'
+  )
 
-  // t.equals(
-  //   students.get(['third', 'gender'])._c, students.get('third'),
-  //   'gender is in context'
-  // )
+  t.equals(
+    students.get(['third', 'gender'])._c, students.get('third'),
+    'gender is in context'
+  )
 
-  // t.equals(
-  //   students.get(['third', 'gender'])._cLevel, 1,
-  //   'contextLevel is 1'
-  // )
+  t.equals(
+    students.get(['third', 'gender'])._cLevel, 1,
+    'contextLevel is 1'
+  )
 
-  // t.equals(
-  //   students.get(['third', 'gender', 'parent']), students.get('third'),
-  //   'parent of gender for Lale is third'
-  // )
+  t.equals(
+    students.get(['third', 'gender', 'parent']), students.get('third'),
+    'parent of gender for Lale is third'
+  )
 
   t.end()
 })
