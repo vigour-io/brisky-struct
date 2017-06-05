@@ -24,7 +24,7 @@ test('context - basic', t => {
   )
 
   t.equals(
-    instance.get(['_parent', 'child', 'grandChild']).compute(), 'rebel',
+    extended.get(['_parent', 'child', 'grandChild']).compute(), 'rebel',
     'extended has primitive'
   )
 
