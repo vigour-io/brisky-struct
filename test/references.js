@@ -243,36 +243,9 @@ test('references - with array keys in context', t => {
     ]
   })
 
-  master.set({
-    movies: {
-      0: {
-        on: {
-          data (val, stamp, t) {
-            console.log('fired on master', t.path(), t.origin().serialize())
-          }
-        }
-      }
-    }
-  })
-
   const branch1 = master.create({
     movieC: {
       favourite: true
-    },
-    movies: {
-      0: {
-        on: {
-          data (val, stamp, t) {
-            console.log('fired on branch1', t.path(), t.origin().serialize())
-          }
-        }
-      }
-    }
-  })
-
-  branch1.set({
-    movieC: {
-      progress: 0.2
     }
   })
 
@@ -290,23 +263,22 @@ test('references - with array keys in context', t => {
 
   branch1.set({
     movieC: {
-      progress: 0.5
+      progress: 0.2
     }
   })
+
+  t.same(
+    master.get('movies').serialize(),
+    [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on master'
+  )
+  t.same(
+    branch1.get('movies').serialize(),
+    [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch1'
+  )
 
   const branch2 = master.create({
-    movies: {
-      1: {
-        on: {
-          data (val, stamp, t) {
-            console.log('fired on branch2', t.path(), t.origin().serialize())
-          }
-        }
-      }
-    }
-  })
-
-  branch2.set({
     movieC: {
       favourite: true
     }
@@ -330,6 +302,22 @@ test('references - with array keys in context', t => {
       progress: 0.2
     }
   })
+
+  t.same(
+    master.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on master'
+  )
+  t.same(
+    branch1.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch1'
+  )
+  t.same(
+    branch2.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch2'
+  )
 
   t.end()
 })
