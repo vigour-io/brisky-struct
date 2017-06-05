@@ -1,8 +1,6 @@
 const test = require('tape')
-const { create: struct } = require('../')
-// const { create: struct, uid } = require('../')
+const { create: struct, uid } = require('../')
 
-/*
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
   const b = struct({ val: a, $transform: val => val * 5 })
@@ -229,8 +227,8 @@ test('references - circular', t => {
   t.pass('does not crash')
   t.end()
 })
-*/
 
+/*
 test('references - with array keys in context', t => {
   const master = struct({
     movieC: {
@@ -321,3 +319,4 @@ test('references - with array keys in context', t => {
 
   t.end()
 })
+*/
