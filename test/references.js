@@ -1,6 +1,8 @@
 const test = require('tape')
-const { create: struct, uid } = require('../')
+const { create: struct } = require('../')
+// const { create: struct, uid } = require('../')
 
+/*
 test('references - listeners', t => {
   const a = struct({ $transform: val => val * 5 })
   const b = struct({ val: a, $transform: val => val * 5 })
@@ -225,5 +227,109 @@ test('references - circular', t => {
   })
 
   t.pass('does not crash')
+  t.end()
+})
+*/
+
+test('references - with array keys in context', t => {
+  const master = struct({
+    movieC: {
+      year: 1998,
+      imdb: 7.7,
+      title: 'Run Lola Run'
+    },
+    movies: [
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  master.set({
+    movies: {
+      0: {
+        on: {
+          data (val, stamp, t) {
+            console.log('fired on master', t.path(), t.origin().serialize())
+          }
+        }
+      }
+    }
+  })
+
+  const branch1 = master.create({
+    movieC: {
+      favourite: true
+    },
+    movies: {
+      0: {
+        on: {
+          data (val, stamp, t) {
+            console.log('fired on branch1', t.path(), t.origin().serialize())
+          }
+        }
+      }
+    }
+  })
+
+  branch1.set({
+    movieC: {
+      progress: 0.2
+    }
+  })
+
+  master.set({
+    movieB: {
+      year: 2003,
+      imdb: 7.7,
+      title: 'Good Bye Lenin'
+    },
+    movies: [
+      ['@', 'root', 'movieB'],
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  branch1.set({
+    movieC: {
+      progress: 0.5
+    }
+  })
+
+  const branch2 = master.create({
+    movies: {
+      1: {
+        on: {
+          data (val, stamp, t) {
+            console.log('fired on branch2', t.path(), t.origin().serialize())
+          }
+        }
+      }
+    }
+  })
+
+  branch2.set({
+    movieC: {
+      favourite: true
+    }
+  })
+
+  master.set({
+    movieA: {
+      year: 2004,
+      imdb: 7.5,
+      title: 'The Edukators'
+    },
+    movies: [
+      ['@', 'root', 'movieA'],
+      ['@', 'root', 'movieB'],
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  branch2.set({
+    movieC: {
+      progress: 0.2
+    }
+  })
+
   t.end()
 })
