@@ -202,7 +202,7 @@ test('references - switch using get notations', t => {
   })
 })
 
-test('references - circulair', t => {
+test('references - circular', t => {
   const state = struct({})
   state.set({
     content: {
