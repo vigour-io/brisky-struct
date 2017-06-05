@@ -227,3 +227,96 @@ test('references - circular', t => {
   t.pass('does not crash')
   t.end()
 })
+
+/*
+test('references - with array keys in context', t => {
+  const master = struct({
+    movieC: {
+      year: 1998,
+      imdb: 7.7,
+      title: 'Run Lola Run'
+    },
+    movies: [
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  const branch1 = master.create({
+    movieC: {
+      favourite: true
+    }
+  })
+
+  master.set({
+    movieB: {
+      year: 2003,
+      imdb: 7.7,
+      title: 'Good Bye Lenin'
+    },
+    movies: [
+      ['@', 'root', 'movieB'],
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  branch1.set({
+    movieC: {
+      progress: 0.2
+    }
+  })
+
+  t.same(
+    master.get('movies').serialize(),
+    [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on master'
+  )
+  t.same(
+    branch1.get('movies').serialize(),
+    [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch1'
+  )
+
+  const branch2 = master.create({
+    movieC: {
+      favourite: true
+    }
+  })
+
+  master.set({
+    movieA: {
+      year: 2004,
+      imdb: 7.5,
+      title: 'The Edukators'
+    },
+    movies: [
+      ['@', 'root', 'movieA'],
+      ['@', 'root', 'movieB'],
+      ['@', 'root', 'movieC']
+    ]
+  })
+
+  branch2.set({
+    movieC: {
+      progress: 0.2
+    }
+  })
+
+  t.same(
+    master.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on master'
+  )
+  t.same(
+    branch1.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch1'
+  )
+  t.same(
+    branch2.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch2'
+  )
+
+  t.end()
+})
+*/
