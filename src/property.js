@@ -22,8 +22,26 @@ const property = (t, val, key, stamp, struct, isNew, reset) => {
   return changed
 }
 
+const propertyNE = (t, val, key, stamp, struct, isNew, reset) => {
+  var changed
+  const result = get(t, key)
+  if (result && result.inherits) {
+    if (result._c) {
+      // also need to do some stuff here
+      contextProperty(t, val, stamp, key, result, reset)
+    } else {
+      set(result, val, stamp, void 0, reset)
+      changed = val === null
+    }
+  } else {
+    changed = true
+    create(struct, val, stamp, t, key, reset)
+  }
+  return changed
+}
+
 const getProp = (t, key) => t.props
   ? key && (key in t.props && t.props[key]) || t.props.default
   : getProp(t.inherits, key)
 
-export { getProp, property }
+export { getProp, property, propertyNE }

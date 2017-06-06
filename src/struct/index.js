@@ -1,5 +1,5 @@
 import { create, set } from '../manipulate'
-import { property } from '../property'
+import { property, propertyNE } from '../property'
 import { types } from './types'
 import { getDefault, getProps } from '../get'
 import inject from './inject'
@@ -46,6 +46,8 @@ const parse = (t, val, key, stamp, props) => {
     if (props[key]) { delete props[key] }
   } else if (typeof val !== 'function') {
     let struct
+    const p = val.nonEnumerable ? propertyNE : property
+    delete val.nonEnumerable
     if (typeof val === 'object' && val.inherits) {
       struct = val
     } else if (val === 'self') {
@@ -65,7 +67,7 @@ const parse = (t, val, key, stamp, props) => {
     }
 
     const definition = (t, val, key, stamp, isNew, reset) =>
-      property(t, val, key, stamp, struct, isNew, reset)
+      p(t, val, key, stamp, struct, isNew, reset)
 
     definition.struct = struct
     props[key] = definition
