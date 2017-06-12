@@ -21,13 +21,13 @@ An observable data structure
 
 ```js
   const struct = require('brisky-struct')
-  const master = struct.create({ key: 'value' })
+  const master = struct.create({ firstKey: 'value' })
 ```
 
 ### Serialize
 
 ```js
-  console.log(master.serialize()) // → { "key": "value" }
+  console.log(master.serialize()) // → { "firstKey": "value" }
 ```
 
 ### Set
@@ -36,19 +36,19 @@ An observable data structure
 
 ```js
   master.set({ newKey: { subKey: 'subValue' } })
-  console.log(master.serialize()) // → { "key": "value", "newKey": { "subKey": "subValue" } }
+  console.log(master.serialize()) // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
 ```
 
 ### Get
 
 ```js
-  console.log(master.get('newKey').serialize()) // → { subKey: "subValue" }
+  console.log(master.get('newKey').serialize()) // → { "subKey": "subValue" }
 ```
 
 ### Compute
 
 ```js
-  console.log(master.get('key').compute()) // → "value"
+  console.log(master.get('firstKey').compute()) // → "value"
   const sub = master.get(['newKey', 'subKey'])
   console.log(sub.compute()) // → "subValue"
 ```
