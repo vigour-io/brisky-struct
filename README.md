@@ -93,16 +93,28 @@ An observable data structure
 
 #### On
 
-⚠ Only named listeners won't override previous.
+##### Default listener
 
 ```js
   var results = []
   master.set({ on: val => results.push(val) })
   master.set({ third: 3 })
-  results // → [ { "third": 3 } ]
+  results // → [ { "third": 3 } ]
+```
+
+##### Data listener
+
+```js
   master.set({ on: { data: val => results.push(val) } })
   master.set({ fourth: 4 })
-  results // → [ { "third": 3 }, { "fourth": 4 } ]
+  results // → [ { "third": 3 }, { "fourth": 4 } ]
+```
+
+###### Named data listener
+
+⚠ Only named listeners won't override previous.
+
+```js
   master.set({ on: { data: { namedListener: val => results.push(val) } } })
   master.set({ fifth: 5 })
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
