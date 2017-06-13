@@ -119,3 +119,18 @@ An observable data structure
   master.set({ firstKey: 'again' })
   results // → [ "changed", "again" ]
 ```
+
+### Events
+
+#### Emit
+
+⚠ Events fired on a path can be listened only at that exact path.
+```js
+  const errors = []
+  master.on('error', err => errors.push(err))
+  master.emit('error', 'satellites are not aligned')
+  errors // → [ "satellites are not aligned" ]
+  sub.on('error', err => errors.push(err))
+  sub.emit('error', 'splines are not reticulated')
+  errors // → [ "satellites are not aligned", "splines are not reticulated" ]
+```
