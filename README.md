@@ -53,6 +53,8 @@ An observable data structure
   sub.compute() // → "subValue"
 ```
 
+## Navigate
+
 ### Key
 
 ```js
@@ -63,4 +65,18 @@ An observable data structure
 
 ```js
   sub.path() // → ["newKey", "subKey"]
+```
+
+### Parent
+
+```js
+  sub.parent().key // → "newKey"
+  sub.parent().serialize() // → { "subKey": "subValue" }
+```
+
+### Root
+
+```js
+  sub.root().serialize() // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
+  sub.root() === master //  → true
 ```
