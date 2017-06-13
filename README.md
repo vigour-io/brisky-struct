@@ -45,6 +45,12 @@ An observable data structure
   master.get('newKey').serialize() // → { "subKey": "subValue" }
 ```
 
+### Keys
+
+```js
+  master.keys() // → ["firstKey", "newKey"]
+```
+
 ### Compute
 
 ```js
