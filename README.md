@@ -89,11 +89,9 @@ An observable data structure
 
 ## Listen
 
-### Data Changes
+### On
 
-#### On
-
-##### Default listener
+#### Default listener
 
 ```js
   var results = []
@@ -102,7 +100,7 @@ An observable data structure
   results // → [ { "third": 3 } ]
 ```
 
-##### Data listener
+#### Data listener
 
 ```js
   master.set({ on: { data: val => results.push(val) } })
@@ -110,7 +108,7 @@ An observable data structure
   results // → [ { "third": 3 }, { "fourth": 4 } ]
 ```
 
-##### Named data listener
+#### Named data listener
 
 ⚠ Only named listeners won't override previous.
 
@@ -120,7 +118,7 @@ An observable data structure
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
 ```
 
-##### On as a method
+#### On as a method
 
 ```js
   results = []
@@ -132,9 +130,9 @@ An observable data structure
   results // → [ "changed", "again" ]
 ```
 
-#### Once
+### Once
 
-##### Once as a method
+#### Once as a method
 
 ```js
   results = []
@@ -146,7 +144,7 @@ An observable data structure
   results // → [ "three" ]
 ```
 
-##### Once as a promise
+#### Once as a promise
 
 ```js
   results = []
@@ -157,9 +155,7 @@ An observable data structure
   results // → [ "changed" ]
 ```
 
-### Events
-
-#### Emit
+### Emit
 
 ⚠ Events fired on a path can be listened only at that exact path.
 ```js
