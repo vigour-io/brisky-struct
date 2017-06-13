@@ -48,7 +48,7 @@ An observable data structure
 ### Compute
 
 ```js
-  console.log(master.get('firstKey').compute()) // → "value"
+  master.get('firstKey').compute() // → "value"
   const sub = master.get(['newKey', 'subKey'])
   sub.compute() // → "subValue"
 ```
