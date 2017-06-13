@@ -110,7 +110,7 @@ An observable data structure
   results // → [ { "third": 3 }, { "fourth": 4 } ]
 ```
 
-###### Named data listener
+##### Named data listener
 
 ⚠ Only named listeners won't override previous.
 
