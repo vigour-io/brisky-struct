@@ -120,16 +120,27 @@ An observable data structure
   results // → [ "changed", "again" ]
 ```
 
-#### Once
+#### Once as a method
 
 ```js
   results = []
   const third = master.get('third')
-  third.once().then(val => results.push(val))
+  third.once('three', val => results.push(val))
+  third.set('will be ignored')
+  results // → [ ]
   third.set('three')
   results // → [ "three" ]
+```
+
+#### Once as a promise
+
+```js
+  results = []
+  third.once().then(val => results.push(val))
+  third.set('changed')
+  results // → [ "changed" ]
   third.set('will be ignored')
-  results // → [ "three" ]
+  results // → [ "changed" ]
 ```
 
 ### Events
