@@ -94,7 +94,7 @@ An observable data structure
 ⚠ Only named listeners won't override previous.
 
 ```js
-  const results = []
+  var results = []
   master.set({ on: val => results.push(val) })
   master.set({ third: 3 })
   results // → [ { "third": 3 } ]
@@ -104,4 +104,16 @@ An observable data structure
   master.set({ on: { data: { namedListener: val => results.push(val) } } })
   master.set({ fifth: 5 })
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
+```
+
+### On as a method
+
+```js
+  results = []
+  const first = master.get('firstKey')
+  first.on(val => results.push(val))
+  first.set('changed')
+  results // → [ "changed" ]
+  master.set({ firstKey: 'again' })
+  results // → [ "changed", "again" ]
 ```
