@@ -120,7 +120,7 @@ An observable data structure
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
 ```
 
-#### On as a method
+##### On as a method
 
 ```js
   results = []
@@ -132,7 +132,9 @@ An observable data structure
   results // → [ "changed", "again" ]
 ```
 
-#### Once as a method
+#### Once
+
+##### Once as a method
 
 ```js
   results = []
@@ -144,7 +146,7 @@ An observable data structure
   results // → [ "three" ]
 ```
 
-#### Once as a promise
+##### Once as a promise
 
 ```js
   results = []
