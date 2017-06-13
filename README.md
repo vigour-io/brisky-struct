@@ -27,7 +27,7 @@ An observable data structure
 ### Serialize
 
 ```js
-  console.log(master.serialize()) // → { "firstKey": "value" }
+  master.serialize() // → { "firstKey": "value" }
 ```
 
 ### Set
@@ -36,13 +36,13 @@ An observable data structure
 
 ```js
   master.set({ newKey: { subKey: 'subValue' } })
-  console.log(master.serialize()) // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
+  master.serialize() // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
 ```
 
 ### Get
 
 ```js
-  console.log(master.get('newKey').serialize()) // → { "subKey": "subValue" }
+  master.get('newKey').serialize() // → { "subKey": "subValue" }
 ```
 
 ### Compute
@@ -50,17 +50,17 @@ An observable data structure
 ```js
   console.log(master.get('firstKey').compute()) // → "value"
   const sub = master.get(['newKey', 'subKey'])
-  console.log(sub.compute()) // → "subValue"
+  sub.compute() // → "subValue"
 ```
 
 ### Key
 
 ```js
-  console.log(sub.key) // → "subKey"
+  sub.key // → "subKey"
 ```
 
 ### Path
 
 ```js
-  console.log(sub.path()) // → ["newKey", "subKey"]
+  sub.path() // → ["newKey", "subKey"]
 ```
