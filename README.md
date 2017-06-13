@@ -89,7 +89,9 @@ An observable data structure
 
 ## Listen
 
-### On
+### Data Changes
+
+#### On
 
 ⚠ Only named listeners won't override previous.
 
@@ -106,7 +108,7 @@ An observable data structure
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
 ```
 
-### On as a method
+#### On as a method
 
 ```js
   results = []
