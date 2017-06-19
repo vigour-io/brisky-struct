@@ -21,13 +21,13 @@ An observable data structure
 
 ```js
   const struct = require('brisky-struct')
-  const master = struct.create({ firstKey: 'value' })
+  const root = struct.create({ firstKey: 'value' })
 ```
 
 ### Serialize
 
 ```js
-  master.serialize() // → { "firstKey": "value" }
+  root.serialize() // → { "firstKey": "value" }
 ```
 
 ### Set
@@ -35,27 +35,34 @@ An observable data structure
 ⚠ Default behaviour is merge.
 
 ```js
-  master.set({ newKey: { subKey: 'subValue' } })
-  master.serialize() // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
+  root.set({ second: { subKey: 'subValue' } })
+  root.serialize() // → { "firstKey": "value", "second": { "subKey": "subValue" } }
 ```
 
 ### Get
 
 ```js
-  master.get('newKey').serialize() // → { "subKey": "subValue" }
+  root.get('second').serialize() // → { "subKey": "subValue" }
 ```
 
 ### Keys
 
 ```js
-  master.keys() // → ["firstKey", "newKey"]
+  root.keys() // → [ "firstKey", "second" ]
+```
+
+### Remove
+
+```js
+  root.set({ firstKey: null })
+  root.get('firstKey') // → undefined
+  root.keys() // → [ "second" ]
 ```
 
 ### Compute
 
 ```js
-  master.get('firstKey').compute() // → "value"
-  const sub = master.get(['newKey', 'subKey'])
+  const sub = root.get(['second', 'subKey'])
   sub.compute() // → "subValue"
 ```
 
@@ -70,21 +77,21 @@ An observable data structure
 ### Path
 
 ```js
-  sub.path() // → ["newKey", "subKey"]
+  sub.path() // → ["second", "subKey"]
 ```
 
 ### Parent
 
 ```js
-  sub.parent().key // → "newKey"
+  sub.parent().key // → "second"
   sub.parent().serialize() // → { "subKey": "subValue" }
 ```
 
 ### Root
 
 ```js
-  sub.root().serialize() // → { "firstKey": "value", "newKey": { "subKey": "subValue" } }
-  sub.root() === master //  → true
+  sub.root().serialize() // → { "second": { "subKey": "subValue" } }
+  sub.root() === root //  → true
 ```
 
 ## Listen
@@ -95,26 +102,26 @@ An observable data structure
 
 ```js
   var results = []
-  master.set({ on: val => results.push(val) })
-  master.set({ third: 3 })
+  root.set({ on: val => results.push(val) })
+  root.set({ third: 3 })
   results // → [ { "third": 3 } ]
 ```
 
 #### Data listener
 
 ```js
-  master.set({ on: { data: val => results.push(val) } })
-  master.set({ fourth: 4 })
+  root.set({ on: { data: val => results.push(val) } })
+  root.set({ fourth: 4 })
   results // → [ { "third": 3 }, { "fourth": 4 } ]
 ```
 
 #### Named data listener
 
-⚠ Only named listeners won't override previous.
+⚠ Only named listeners won't override existing listener. Notice that `fifth` appears twice in the results array.
 
 ```js
-  master.set({ on: { data: { namedListener: val => results.push(val) } } })
-  master.set({ fifth: 5 })
+  root.set({ on: { data: { namedListener: val => results.push(val) } } })
+  root.set({ fifth: 5 })
   results // → [ { "third": 3 }, { "fourth": 4 }, { "fifth": 5 }, { "fifth": 5 } ]
 ```
 
@@ -122,11 +129,11 @@ An observable data structure
 
 ```js
   results = []
-  const first = master.get('firstKey')
-  first.on(val => results.push(val))
-  first.set('changed')
+  const third = root.get('third')
+  third.on(val => results.push(val))
+  third.set('changed')
   results // → [ "changed" ]
-  master.set({ firstKey: 'again' })
+  root.set({ third: 'again' })
   results // → [ "changed", "again" ]
 ```
 
@@ -136,34 +143,73 @@ An observable data structure
 
 ```js
   results = []
-  const third = master.get('third')
-  third.once('three', val => results.push(val))
-  third.set('will be ignored')
+  const fourth = root.get('fourth')
+  fourth.once('four', val => results.push(val))
+  fourth.set('will be ignored')
   results // → [ ]
-  third.set('three')
-  results // → [ "three" ]
+  fourth.set('four')
+  results // → [ "four" ]
 ```
 
 #### Once as a promise
 
 ```js
   results = []
-  third.once().then(val => results.push(val))
-  third.set('changed')
+  fourth.once().then(val => results.push(val))
+  fourth.set('changed')
   results // → [ "changed" ]
-  third.set('will be ignored')
+  fourth.set('will be ignored')
   results // → [ "changed" ]
 ```
 
 ### Emit
 
 ⚠ Events fired on a path can be listened only at that exact path.
+
 ```js
   const errors = []
-  master.on('error', err => errors.push(err))
-  master.emit('error', 'satellites are not aligned')
+  root.on('error', err => errors.push(err))
+  root.emit('error', 'satellites are not aligned')
   errors // → [ "satellites are not aligned" ]
   sub.once('error', err => errors.push(err))
   sub.emit('error', 'splines are not reticulated')
   errors // → [ "satellites are not aligned", "splines are not reticulated" ]
+```
+
+# More about get and set
+
+## Get with set
+
+Second parameter of get is a default value for the path.
+
+⚠ It'll be `set` and returned in absence of given path otherwise it'll be ignored.
+
+```js
+  root.get('firstKey', 'newValue').compute() // → "newValue"
+  root.get('firstKey').compute() // → "newValue"
+  root.get('fifth', 'newValue').compute() // → 5
+```
+
+## Get a path with methods
+
+⚠ Available methods are `root`, `parent` and `compute`.
+
+```js
+  root.get(['firstKey', 'compute']) // → "newValue"
+  root.get(['second', 'subKey', 'parent']).serialize() // → { "subKey": "subValue" }
+  sub.get(['root', 'fifth', 'compute']) // → 5
+```
+
+## Set without merge (reset)
+
+Third parameter of set is a reset flag.
+
+⚠ Second parameter is a stamp, will come to our plate on further chapters.
+
+```js
+  const second =  root.get('second')
+  second.set({ newSubKey: 'newSubValue' })
+  second.serialize() // → { "subKey": "subValue", "newSubKey": "newSubValue" }
+  second.set({ onlySubKey: 'onlySubValue' }, void 0, true)
+  second.serialize() // → { "onlySubKey": "onlySubValue" }
 ```
