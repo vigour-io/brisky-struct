@@ -117,7 +117,7 @@ An observable data structure
 
 #### Named data listener
 
-⚠ Only named listeners won't override existing listener. Notice that `fifth` appears twice in the results array.
+⚠ Only named listeners won't override existing listeners. Notice that `fifth` appears twice in the results array.
 
 ```js
   root.set({ on: { data: { namedListener: val => results.push(val) } } })
