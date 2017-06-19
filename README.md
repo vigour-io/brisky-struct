@@ -261,7 +261,13 @@ Third parameter of set is a reset flag.
   master.get(['movies', 'tt0408777']).serialize()
   // → { "year": 2004, "imdb": 7.5, "title": "The Edukators" }
 
-  master.get(['movies', 'tt0130827']).set({ rating: 'R' })
+  master.get(['movies', 'tt0130827', 'rating'], 'R')
   branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
   branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
+
+  branchJ.get(['movies', 'tt0130827', 'rating']).set('G')
+  branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
+  master.get(['movies', 'tt0130827', 'rating']).set('PG')
+  branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "PG"
+  branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "G"
 ```
