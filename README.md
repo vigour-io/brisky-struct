@@ -213,3 +213,64 @@ Third parameter of set is a reset flag.
   second.set({ onlySubKey: 'onlySubValue' }, void 0, true)
   second.serialize() // → { "onlySubKey": "onlySubValue" }
 ```
+
+# Master and branches
+
+```js
+  const master = struct.create({
+    movies: {
+      tt0130827: {
+       year: 1998,
+       imdb: 7.7,
+       title: 'Run Lola Run'
+      },
+      tt0301357: {
+        year: 2003,
+        imdb: 7.7,
+        title: 'Good Bye Lenin'
+      },
+      tt0408777: {
+        year: 2004,
+        imdb: 7.5,
+        title: 'The Edukators'
+      }
+    }
+  })
+
+  const branchM = master.create({
+    userName:'Mustafa',
+    movies: {
+      tt0130827: {
+        favourite: true
+      },
+      tt0408777: {
+        favourite: true
+      }
+    }
+  })
+  
+  const branchJ = master.create({
+    userName:'Jim',
+    movies: {
+      tt0301357: {
+        favourite: true
+      }
+    }
+  })
+  
+  master.get('userName') // → undefined
+
+  branchM.get(['movies', 'tt0408777']).serialize()
+  // → { "year": 2004, "imdb": 7.5, "title": "The Edukators", "favourite": true }
+  branchJ.get(['movies', 'tt0408777']).serialize()
+  // → { "year": 2004, "imdb": 7.5, "title": "The Edukators" }
+  master.get(['movies', 'tt0408777']).serialize()
+  // → { "year": 2004, "imdb": 7.5, "title": "The Edukators" }
+
+  master.get(['movies', 'tt0130827']).set({
+    rating: 'R'
+  })
+  
+  branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
+  branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
+```
