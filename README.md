@@ -240,21 +240,15 @@ Third parameter of set is a reset flag.
   const branchM = master.create({
     userName:'Mustafa',
     movies: {
-      tt0130827: {
-        favourite: true
-      },
-      tt0408777: {
-        favourite: true
-      }
+      tt0130827: { favourite: true },
+      tt0408777: { favourite: true }
     }
   })
   
   const branchJ = master.create({
     userName:'Jim',
     movies: {
-      tt0301357: {
-        favourite: true
-      }
+      tt0301357: { favourite: true }
     }
   })
   
@@ -267,10 +261,7 @@ Third parameter of set is a reset flag.
   master.get(['movies', 'tt0408777']).serialize()
   // → { "year": 2004, "imdb": 7.5, "title": "The Edukators" }
 
-  master.get(['movies', 'tt0130827']).set({
-    rating: 'R'
-  })
-  
+  master.get(['movies', 'tt0130827']).set({ rating: 'R' })
   branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
   branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
 ```
