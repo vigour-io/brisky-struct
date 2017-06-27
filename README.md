@@ -91,7 +91,7 @@ sub.parent().serialize() // → { "subKey": "subValue" }
 
 ```js
 sub.root().serialize() // → { "second": { "subKey": "subValue" } }
-sub.root() === root //  → true
+sub.root() === root // → true
 ```
 
 ## Listen
