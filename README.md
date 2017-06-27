@@ -164,7 +164,7 @@ results // → [ "changed" ]
 
 ### Emit
 
-⚠ Events fired on a path can be listened only at that exact path.
+⚠ Events fired on a path can be listened only at exact same path.
 
 ```js
 const errors = []
