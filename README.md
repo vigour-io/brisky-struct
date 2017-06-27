@@ -268,6 +268,7 @@ branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
 branchJ.get(['movies', 'tt0130827', 'rating']).set('G')
 branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
 master.get(['movies', 'tt0130827', 'rating']).set('PG')
+
 branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "PG"
 branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "G"
 ```
