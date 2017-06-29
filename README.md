@@ -91,7 +91,7 @@ sub.parent().serialize() // → { "subKey": "subValue" }
 
 ```js
 sub.root().serialize() // → { "second": { "subKey": "subValue" } }
-sub.root() === root //  → true
+sub.root() === root // → true
 ```
 
 ## Listen
@@ -164,7 +164,7 @@ results // → [ "changed" ]
 
 ### Emit
 
-⚠ Events fired on a path can be listened only at that exact path.
+⚠ Events fired on a path can be listened only at exact same path.
 
 ```js
 const errors = []
@@ -267,6 +267,7 @@ branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
 
 branchJ.get(['movies', 'tt0130827', 'rating']).set('G')
 branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "R"
+
 master.get(['movies', 'tt0130827', 'rating']).set('PG')
 branchM.get(['movies', 'tt0130827', 'rating', 'compute']) // → "PG"
 branchJ.get(['movies', 'tt0130827', 'rating', 'compute']) // → "G"
