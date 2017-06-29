@@ -10,6 +10,8 @@ import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 import { getKeys } from './keys'
 
+console.log('yo yo yo')
+
 const create = (t, val, stamp, parent, key, reset) => {
   var instance
   const hasType = val &&
@@ -118,7 +120,8 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
 
   if (override && t.stamp && !reset) {
     if (Math.abs(t.stamp) > Math.abs(override)) {
-      return false
+      // console.log('CONFLICT 😇')
+      // return false
     }
   }
 
