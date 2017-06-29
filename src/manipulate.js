@@ -120,8 +120,8 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
 
   if (override && t.stamp && !reset) {
     if (Math.abs(t.stamp) > Math.abs(override)) {
-      // console.log('CONFLICT 😇')
-      // return false
+      // console.log('CONFLICT 😇', t.path())
+      return false
     }
   }
 
