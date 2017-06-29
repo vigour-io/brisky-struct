@@ -119,8 +119,8 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
   var override = val.stamp
 
   if (override && t.stamp && !reset) {
+    // conflict resolution
     if (Math.abs(t.stamp) > Math.abs(override)) {
-      // console.log('CONFLICT 😇', t.path())
       return false
     }
   }
