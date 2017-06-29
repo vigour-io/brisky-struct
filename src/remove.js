@@ -6,7 +6,7 @@ import { uid } from './uid'
 
 const remove = (t, stamp, override, instance, from) => {
   if (!t) {
-    console.log('no t how?')
+    // when remvoing something that does not exist
     return
   }
   if (t._async) { delete t._async }
