@@ -10,8 +10,6 @@ import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
 import { getKeys } from './keys'
 
-console.log('yo yo yo')
-
 const create = (t, val, stamp, parent, key, reset) => {
   var instance
   const hasType = val &&
