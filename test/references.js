@@ -318,3 +318,25 @@ test('references - with array keys in context', t => {
 
   t.end()
 })
+
+test('references - virtual listeners', t => {
+  const master = struct({
+    realThing: 'is a thing',
+    pointer: {
+      on: {
+        data (val, stamp, t) {
+          console.log(val, t.path(), t._c)
+        }
+      },
+      val: ['@', 'root', 'realThing']
+    }
+  })
+
+  const branch1 = master.create({
+    realThing: 'override'
+  })
+
+  console.log(branch1.serialize())
+
+  t.end()
+})
