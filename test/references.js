@@ -228,7 +228,6 @@ test('references - circular', t => {
   t.end()
 })
 
-/*
 test('references - with array keys in context', t => {
   const master = struct({
     movieC: {
@@ -276,7 +275,7 @@ test('references - with array keys in context', t => {
     'list of movies is corect on branch1'
   )
 
-  const branch2 = master.create({
+  const branch2 = branch1.create({
     movieC: {
       favourite: true
     }
@@ -319,4 +318,3 @@ test('references - with array keys in context', t => {
 
   t.end()
 })
-*/
