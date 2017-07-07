@@ -1,7 +1,10 @@
+/*
 require('./define')
 require('./inject')
 require('./traversal')
+*/
 require('./references')
+/*
 require('./compute')
 require('./get')
 require('./once')
@@ -17,7 +20,7 @@ require('./props')
 require('./reset')
 require('./serialize')
 require('./types')
-require('./references')
 require('./set')
 require('./subscribe')
 require('./non-enumerable')
+*/

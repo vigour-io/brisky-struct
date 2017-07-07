@@ -1,5 +1,5 @@
 import { getFn, getData } from '../get'
-import { exec as context, virtual } from './context'
+import { exec as context } from './context'
 import subscription from './subscription'
 import { root, path } from '../traversal'
 import getApi from '../get/api'
@@ -42,7 +42,6 @@ const data = (t, val, stamp, override, isNew) => {
   if (!t.stamp || t.stamp !== stamp) {
     t.stamp = override || stamp
     subscription(t, stamp)
-    const own = t.emitters && t.emitters.data
     const refs = t.inherits && t.inherits.emitters &&
       t.inherits.emitters.data && t.inherits.emitters.data.struct
     if (refs) {
@@ -51,19 +50,14 @@ const data = (t, val, stamp, override, isNew) => {
         const pRoot = root(refs[i], true)
         const pPath = path(refs[i], true)
         if (pRoot.key) pPath.shift()
-
         const fakeRef = getApi(root(t, true), pPath)
-        if (root(t.inherits, true) === pRoot && fakeRef === refs[i]) {
-          console.log('time to go')
-        }
-        if (refs[i]._p) {
-          if (virtual()) {
-            refs[i]._c = null
-            refs[i]._cLevel = null
-          }
+        const emitter = getData(refs[i])
+        if (root(t.inherits, true) === pRoot && fakeRef._c && emitter) {
+          fn(fakeRef, val, stamp, emitter, true)
         }
       }
     }
+    const own = t.emitters && t.emitters.data
     if (own) {
       const struct = own.struct
       fn(t, val, stamp, own)
