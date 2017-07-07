@@ -1,7 +1,6 @@
 import { getKeys } from '../keys'
-import { get, getProps, getFn, getVal } from '../get'
+import { get, getProps, getFn } from '../get'
 import { getProp } from '../property'
-import { resolveFromValue } from '../references' // rdy for this
 import { data } from '../emit'
 
 const getKeyProp = (t, key) => t.props
@@ -98,11 +97,6 @@ const switchInheritance = (t, inherits, stamp, fromInstance) => {
     for (let i = 0, len = t.instances.length; i < len; i++) {
       switchInheritance(t.instances[i], t, stamp, true)
     }
-  }
-
-  const val = getVal(t)
-  if (typeof val === 'object' && val.inherits) {
-    resolveFromValue(inherits, val, stamp)
   }
 
   if (stamp && !fromInstance) data(t, void 0, stamp, false)
