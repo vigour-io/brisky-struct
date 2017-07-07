@@ -325,7 +325,7 @@ test('references - virtual listeners', t => {
     pointer: {
       on: {
         data (val, stamp, t) {
-          // console.log(val, t.path(), t._c)
+          console.log(val, t.path(), t._c)
         }
       },
       val: ['@', 'root', 'realThing']
@@ -335,9 +335,8 @@ test('references - virtual listeners', t => {
   master.key = 'master'
 
   const branch1 = master.create({
-    realThing: 'override', // right here
+    realThing: 'override'
   })
-
 
   console.log(branch1.serialize())
 
