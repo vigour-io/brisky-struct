@@ -38,25 +38,29 @@ const fn = (t, val, stamp, emitter, noContext) => {
   }
 }
 
+const references = (t, val, stamp) => {
+  const refs = t.inherits && t.inherits.emitters &&
+    t.inherits.emitters.data && t.inherits.emitters.data.struct
+  if (refs) {
+    let i = refs.length
+    while (i--) {
+      const pRoot = root(refs[i], true)
+      const pPath = path(refs[i], true)
+      if (pRoot.key) pPath.shift()
+      const fakeRef = getApi(root(t, true), pPath)
+      const emitter = getData(refs[i])
+      if (root(t.inherits, true) === pRoot && fakeRef._c && emitter) {
+        fn(fakeRef, val, stamp, emitter, true)
+      }
+      references(refs[i], val, stamp)
+    }
+  }
+}
+
 const data = (t, val, stamp, override, isNew) => {
   if (!t.stamp || t.stamp !== stamp) {
     t.stamp = override || stamp
     subscription(t, stamp)
-    const refs = t.inherits && t.inherits.emitters &&
-      t.inherits.emitters.data && t.inherits.emitters.data.struct
-    if (refs) {
-      let i = refs.length
-      while (i--) {
-        const pRoot = root(refs[i], true)
-        const pPath = path(refs[i], true)
-        if (pRoot.key) pPath.shift()
-        const fakeRef = getApi(root(t, true), pPath)
-        const emitter = getData(refs[i])
-        if (root(t.inherits, true) === pRoot && fakeRef._c && emitter) {
-          fn(fakeRef, val, stamp, emitter, true)
-        }
-      }
-    }
     const own = t.emitters && t.emitters.data
     if (own) {
       const struct = own.struct
@@ -78,6 +82,7 @@ const data = (t, val, stamp, override, isNew) => {
         }
       }
     }
+    references(t, val, stamp)
   }
 }
 
