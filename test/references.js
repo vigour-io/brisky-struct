@@ -325,7 +325,7 @@ test('references - virtual listeners', t => {
     pointer: {
       on: {
         data (val, stamp, t) {
-          console.log(val, t.path(), t._c, t._cLevel)
+          console.log(val, t.path(), t._c)
         }
       },
       val: ['@', 'root', 'realThing']

@@ -44,17 +44,20 @@ const references = (t, val, stamp) => {
   if (refs) {
     let i = refs.length
     while (i--) {
-      const pRoot = root(refs[i], true)
-      const pPath = path(refs[i], true)
-      if (pRoot.key) pPath.shift()
-      const fakeRef = getApi(root(t, true), pPath)
+      const rRoot = root(refs[i], true)
+      const rPath = path(refs[i], true)
+      if (rRoot.key) rPath.shift()
+      const fakeRef = getApi(root(t, true), rPath)
       const emitter = getData(refs[i])
-      if (root(t.inherits, true) === pRoot && fakeRef._c && emitter) {
-        fn(fakeRef, val, stamp, emitter, true)
+      if (fakeRef._c) {
+        if (root(t.inherits, true) === rRoot && emitter) {
+          fn(fakeRef, val, stamp, emitter, true)
+        }
+        references(refs[i], val, stamp)
       }
-      references(refs[i], val, stamp)
     }
-  } else if (t.inherits) {
+  }
+  if (t.inherits) {
     references(t.inherits, val, stamp)
   }
 }
