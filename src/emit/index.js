@@ -54,6 +54,8 @@ const references = (t, val, stamp) => {
       }
       references(refs[i], val, stamp)
     }
+  } else if (t.inherits) {
+    references(t.inherits, val, stamp)
   }
 }
 

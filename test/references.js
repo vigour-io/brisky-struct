@@ -340,5 +340,11 @@ test('references - virtual listeners', t => {
 
   console.log(branch1.serialize())
 
+  const branch2 = branch1.create({
+    realThing: 'double override'
+  })
+
+  console.log(branch2.serialize())
+
   t.end()
 })
