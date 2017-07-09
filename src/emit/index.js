@@ -38,25 +38,58 @@ const fn = (t, val, stamp, emitter, noContext) => {
   }
 }
 
-const references = (t, val, stamp) => {
+const refFn = (ref, t, val, stamp) => {
+  const emitter = getData(ref)
+  if (emitter) {
+    const listeners = getFn(emitter)
+    if (listeners) {
+      let i = listeners.length
+      while (i--) {
+        listeners[i](val, stamp, t)
+      }
+      let clear = t
+      while (clear && clear._c) {
+        clear._c = null
+        clear._cLevel = null
+        clear = clear._p
+      }
+    } else {
+      emitter.listeners = []
+    }
+  }
+}
+
+const references = (t, val, stamp, orig) => {
   const refs = t.inherits && t.inherits.emitters &&
     t.inherits.emitters.data && t.inherits.emitters.data.struct
   if (refs) {
     let i = refs.length
     while (i--) {
-      const rRoot = root(refs[i], true)
-      const rPath = path(refs[i], true)
+      let rRoot = root(refs[i], true)
+      let rPath = path(refs[i], true)
       if (rRoot.key) rPath.shift()
-      const fakeRef = getApi(root(t, true), rPath)
-      const emitter = getData(refs[i])
-      if (fakeRef._c && root(t.inherits, true) === rRoot && emitter) {
-        fn(fakeRef, val, stamp, emitter, true)
-        references(refs[i], val, stamp)
+      let fakeRef = getApi(root(orig, true), rPath)
+      if (fakeRef._c && root(t.inherits, true) === rRoot) {
+        refFn(refs[i], fakeRef, val, stamp)
+        let lrefs = refs[i].emitters && refs[i].emitters.data &&
+          refs[i].emitters.data.struct
+        if (lrefs) {
+          let j = lrefs.length
+          while (j--) {
+            const lrRoot = root(lrefs[j], true)
+            const lrPath = path(lrefs[j], true)
+            if (lrRoot.key) lrPath.shift()
+            const lfakeRef = getApi(root(orig, true), lrPath)
+            if (lfakeRef._c && rRoot === root(t.inherits, true)) {
+              refFn(lrefs[j], lfakeRef, val, stamp)
+            }
+          }
+        }
       }
     }
   }
   if (t.inherits) {
-    references(t.inherits, val, stamp)
+    references(t.inherits, val, stamp, orig)
   }
 }
 
@@ -85,7 +118,7 @@ const data = (t, val, stamp, override, isNew) => {
         }
       }
     }
-    references(t, val, stamp)
+    references(t, val, stamp, t)
   }
 }
 
