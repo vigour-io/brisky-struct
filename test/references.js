@@ -322,6 +322,9 @@ test('references - with array keys in context', t => {
 test('references - virtual listeners', t => {
   t.plan(9)
 
+  let branch1 = void 0
+  let branch2 = void 0
+
   const master = struct({
     types: {
       pointer: {
@@ -361,7 +364,7 @@ test('references - virtual listeners', t => {
 
   master.key = 'master'
 
-  const branch1 = master.create()
+  branch1 = master.create()
 
   branch1.set({
     realThing: 'override',
@@ -375,7 +378,7 @@ test('references - virtual listeners', t => {
     }
   })
 
-  const branch2 = branch1.create()
+  branch2 = branch1.create()
 
   branch2.set({
     realThing: 'double override'
