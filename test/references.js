@@ -338,7 +338,7 @@ test('references - virtual listeners', t => {
     pointer2: {
       type: 'pointer',
       val: ['@', 'root', 'pointer1']
-    },
+    }
   })
 
   master.key = 'master'
@@ -348,6 +348,10 @@ test('references - virtual listeners', t => {
     pointer3: {
       type: 'pointer',
       val: ['@', 'root', 'realThing']
+    },
+    pointer4: {
+      type: 'pointer',
+      val: ['@', 'root', 'pointer2']
     }
   })
 
