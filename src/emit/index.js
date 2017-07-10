@@ -59,9 +59,7 @@ const refFn = (ref, t, val, stamp) => {
   }
 }
 
-const references = (t, val, stamp, orig) => {
-  const refs = t.inherits && t.inherits.emitters &&
-    t.inherits.emitters.data && t.inherits.emitters.data.struct
+const refIterate = (refs, val, stamp, orig, inherits) => {
   if (refs) {
     let i = refs.length
     while (i--) {
@@ -69,27 +67,26 @@ const references = (t, val, stamp, orig) => {
       let rPath = path(refs[i], true)
       if (rRoot.key) rPath.shift()
       let fakeRef = getApi(root(orig, true), rPath)
-      if (fakeRef._c && root(t.inherits, true) === rRoot) {
+      if (fakeRef._c && root(inherits, true) === rRoot) {
         refFn(refs[i], fakeRef, val, stamp)
-        let lrefs = refs[i].emitters && refs[i].emitters.data &&
+        let localRefs = refs[i].emitters &&
+          refs[i].emitters.data &&
           refs[i].emitters.data.struct
-        if (lrefs) {
-          let j = lrefs.length
-          while (j--) {
-            const lrRoot = root(lrefs[j], true)
-            const lrPath = path(lrefs[j], true)
-            if (lrRoot.key) lrPath.shift()
-            const lfakeRef = getApi(root(orig, true), lrPath)
-            if (lfakeRef._c && rRoot === root(t.inherits, true)) {
-              refFn(lrefs[j], lfakeRef, val, stamp)
-            }
-          }
-        }
+        refIterate(localRefs, val, stamp, orig, inherits)
+        refContext(refs[i], val, stamp, orig)
       }
     }
   }
+}
+
+const refContext = (t, val, stamp, orig) => {
+  const contextRefs = t.inherits &&
+    t.inherits.emitters &&
+    t.inherits.emitters.data &&
+    t.inherits.emitters.data.struct
+  refIterate(contextRefs, val, stamp, orig, t.inherits)
   if (t.inherits) {
-    references(t.inherits, val, stamp, orig)
+    refContext(t.inherits, val, stamp, orig)
   }
 }
 
@@ -118,7 +115,7 @@ const data = (t, val, stamp, override, isNew) => {
         }
       }
     }
-    references(t, val, stamp, t)
+    refContext(t, val, stamp, t)
   }
 }
 
