@@ -44,17 +44,17 @@ const iterate = (refs, val, stamp, orig, roots) => {
 }
 
 const context = (t, val, stamp, orig, roots) => {
-  if (!roots) {
-    roots = [root(t.inherits, true)]
-  } else {
-    roots.push(root(t.inherits, true))
-  }
-  const contextRefs = t.inherits &&
-    t.inherits.emitters &&
-    t.inherits.emitters.data &&
-    t.inherits.emitters.data.struct
-  iterate(contextRefs, val, stamp, orig, roots)
   if (t.inherits) {
+    if (!roots) {
+      roots = [root(t.inherits, true)]
+    } else {
+      roots.push(root(t.inherits, true))
+    }
+    const contextRefs = t.inherits &&
+      t.inherits.emitters &&
+      t.inherits.emitters.data &&
+      t.inherits.emitters.data.struct
+    iterate(contextRefs, val, stamp, orig, roots)
     context(t.inherits, val, stamp, orig, roots)
   }
 }
