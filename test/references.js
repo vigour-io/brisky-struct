@@ -321,23 +321,24 @@ test('references - with array keys in context', t => {
 
 test('references - virtual listeners', t => {
   const master = struct({
+    types: {
+      pointer: {
+        on: {
+          data (val, stamp, t) {
+            console.log(t.path(), val, t._c)
+          }
+        }
+      }
+    },
     realThing: 'is a thing',
     pointer1: {
-      on: {
-        data (val, stamp, t) {
-          console.log('pointer 1', val, t.path(), t._c)
-        }
-      },
+      type: 'pointer',
       val: ['@', 'root', 'realThing']
     },
     pointer2: {
-      on: {
-        data (val, stamp, t) {
-          console.log('pointer 2', val, t.path(), t._c)
-        }
-      },
+      type: 'pointer',
       val: ['@', 'root', 'pointer1']
-    }
+    },
   })
 
   master.key = 'master'
@@ -345,11 +346,7 @@ test('references - virtual listeners', t => {
   const branch1 = master.create({
     realThing: 'override',
     pointer3: {
-      on: {
-        data (val, stamp, t) {
-          console.log('pointer 3', val, t.path(), t._c)
-        }
-      },
+      type: 'pointer',
       val: ['@', 'root', 'realThing']
     }
   })
