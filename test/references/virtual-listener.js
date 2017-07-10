@@ -149,9 +149,11 @@ test('references - virtual listeners', t => {
       type: 'pointer',
       val: ['@', 'root', 'realThing']
     },
-    pointer4: {
-      type: 'pointer',
-      val: ['@', 'root', 'pointer2']
+    deep: {
+      pointer4: {
+        type: 'pointer',
+        val: ['@', 'root', 'pointer2']
+      }
     }
   })
 
@@ -178,7 +180,9 @@ test('references - virtual listeners', t => {
       pointer1: ['@', 'root', 'master', 'realThing'],
       pointer2: ['@', 'root', 'pointer1'],
       pointer3: ['@', 'root', 'realThing'],
-      pointer4: ['@', 'root', 'pointer2']
+      deep: {
+        pointer4: ['@', 'root', 'pointer2']
+      }
     },
     'branch1 has pointer1, pointer2, pointer3 & pointer4'
   )
@@ -190,7 +194,9 @@ test('references - virtual listeners', t => {
       pointer1: ['@', 'root', 'master', 'realThing'],
       pointer2: ['@', 'root', 'pointer1'],
       pointer3: ['@', 'root', 'realThing'],
-      pointer4: ['@', 'root', 'pointer2']
+      deep: {
+        pointer4: ['@', 'root', 'pointer2']
+      }
     },
     'branch2 has pointer1, pointer2, pointer3 & pointer4'
   )

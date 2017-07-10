@@ -40,14 +40,14 @@ const getRootPath = (t, path) => {
   return root
 }
 
-const iterate = (refs, val, stamp, oRoot, iRoot) => {
+const iterate = (refs, val, stamp, oRoot, tRoot) => {
   let i = refs.length
   while (i--) {
     let rPath = []
     const rRoot = getRootPath(refs[i], rPath)
     if (rRoot) {
       let c = oRoot
-      if (rRoot === iRoot || doesInherit(rRoot, iRoot)) {
+      if (tRoot === rRoot || doesInherit(tRoot, rRoot)) {
         let j = rPath.length
         let next = c
         while (next) {
@@ -61,7 +61,7 @@ const iterate = (refs, val, stamp, oRoot, iRoot) => {
         let localRefs = ref.emitters &&
             ref.emitters.data &&
             ref.emitters.data.struct
-        if (localRefs) iterate(localRefs, val, stamp, oRoot, iRoot)
+        if (localRefs) iterate(localRefs, val, stamp, oRoot, tRoot)
         context(ref, val, stamp, oRoot)
       }
     }
@@ -78,7 +78,7 @@ const context = (t, val, stamp, oRoot) => {
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot, getRoot(t.inherits))
+      iterate(contextRefs, val, stamp, oRoot, getRoot(t))
     }
     context(t.inherits, val, stamp, oRoot)
   }

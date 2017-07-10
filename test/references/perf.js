@@ -31,15 +31,17 @@ test('references - performance of virtual listeners', t => {
       type: 'pointer',
       val: ['@', 'root', 'realThing']
     },
-    pointer4: {
-      type: 'pointer',
-      val: ['@', 'root', 'pointer2']
+    deep: {
+      pointer4: {
+        type: 'pointer',
+        val: ['@', 'root', 'pointer2']
+      }
     }
   })
 
   let d = Date.now()
 
-  let i = 3e3
+  let i = 2e3
   while (i--) {
     branch1.set({
       realThing: i % 2 ? 'not override' : 'override'
@@ -48,7 +50,7 @@ test('references - performance of virtual listeners', t => {
 
   const branch2 = branch1.create()
 
-  i = 3e3
+  i = 2e3
   while (i--) {
     branch2.set({
       realThing: i % 2 ? 'double override' : 'not double override'
