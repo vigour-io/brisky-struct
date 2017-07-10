@@ -1,8 +1,7 @@
 import { getFn, getData } from '../get'
 import { exec as context } from './context'
 import subscription from './subscription'
-import { root, path } from '../traversal'
-import getApi from '../get/api'
+import refContext from './references'
 
 const onGeneric = (t, key) => t.emitters && t.emitters[key] ||
   t.inherits && onGeneric(t.inherits, key)
@@ -35,63 +34,6 @@ const fn = (t, val, stamp, emitter, noContext) => {
     while (i--) { listeners[i](val, stamp, t) }
   } else {
     emitter.listeners = []
-  }
-}
-
-const refFn = (ref, t, val, stamp) => {
-  const emitter = getData(ref)
-  if (emitter) {
-    const listeners = getFn(emitter)
-    if (listeners) {
-      let i = listeners.length
-      while (i--) {
-        listeners[i](val, stamp, t)
-      }
-      let clear = t
-      while (clear && clear._c) {
-        clear._c = null
-        clear._cLevel = null
-        clear = clear._p
-      }
-    } else {
-      emitter.listeners = []
-    }
-  }
-}
-
-const refIterate = (refs, val, stamp, orig, roots) => {
-  if (refs) {
-    let i = refs.length
-    while (i--) {
-      let rRoot = root(refs[i], true)
-      let rPath = path(refs[i], true)
-      if (rRoot.key) rPath.shift()
-      let fakeRef = getApi(root(orig, true), rPath)
-      if (fakeRef._c && ~roots.indexOf(rRoot)) {
-        refFn(refs[i], fakeRef, val, stamp)
-        let localRefs = refs[i].emitters &&
-          refs[i].emitters.data &&
-          refs[i].emitters.data.struct
-        refIterate(localRefs, val, stamp, orig, roots)
-        refContext(refs[i], val, stamp, orig, roots)
-      }
-    }
-  }
-}
-
-const refContext = (t, val, stamp, orig, roots) => {
-  if (!roots) {
-    roots = [root(t.inherits, true)]
-  } else {
-    roots.push(root(t.inherits, true))
-  }
-  const contextRefs = t.inherits &&
-    t.inherits.emitters &&
-    t.inherits.emitters.data &&
-    t.inherits.emitters.data.struct
-  refIterate(contextRefs, val, stamp, orig, roots)
-  if (t.inherits) {
-    refContext(t.inherits, val, stamp, orig, roots)
   }
 }
 
