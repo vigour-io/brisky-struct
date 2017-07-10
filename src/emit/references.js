@@ -23,39 +23,58 @@ const fn = (ref, t, val, stamp) => {
   }
 }
 
-const iterate = (refs, val, stamp, orig, roots) => {
+// dont know if this is enough....
+const equalInherit = (t, r) => t.inherits && (t.inherits === r || equalInherit(t.inherits, r))
+
+const iterate = (refs, val, stamp, orig, rootT) => {
   if (refs) {
+    let s
     let i = refs.length
     while (i--) {
-      let rRoot = root(refs[i], true)
-      let rPath = path(refs[i], true)
-      if (rRoot.key) rPath.shift()
-      let fakeRef = getApi(root(orig, true), rPath)
-      if (fakeRef._c && ~roots.indexOf(rRoot)) {
-        fn(refs[i], fakeRef, val, stamp)
-        let localRefs = refs[i].emitters &&
-          refs[i].emitters.data &&
-          refs[i].emitters.data.struct
-        iterate(localRefs, val, stamp, orig, roots)
-        context(refs[i], val, stamp, orig, roots)
+      let p = refs[i]
+      let rRoot = p
+      let path = []
+      while (p) {
+        path.push(rRoot.key)
+        rRoot = p
+        p = p._p
+      }
+      if (rRoot) {
+        // this is stu[id]
+        let t = s || (s = root(orig, true))
+        let j = path.length
+        let prev = t
+        while (j--) {
+          prev = t
+          t = t[path[j]]
+          if (!t) {
+            if (rRoot === rootT || equalInherit(rRoot, rootT)) {
+              const ref = refs[i]
+              ref._c = prev
+              ref._cLevel = j + 1
+              fn(ref, ref, val, stamp)
+              let localRefs = ref.emitters &&
+                ref.emitters.data &&
+                ref.emitters.data.struct
+              iterate(localRefs, val, stamp, orig, rootT)
+              context(refs[i], val, stamp, orig)
+            }
+            break
+          }
+        }
       }
     }
   }
 }
 
-const context = (t, val, stamp, orig, roots) => {
+const context = (t, val, stamp, orig) => {
   if (t.inherits) {
-    if (!roots) {
-      roots = [root(t.inherits, true)]
-    } else {
-      roots.push(root(t.inherits, true))
-    }
     const contextRefs = t.inherits &&
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
-    iterate(contextRefs, val, stamp, orig, roots)
-    context(t.inherits, val, stamp, orig, roots)
+    iterate(contextRefs, val, stamp, orig, root(t.inherits, true))
+    context(t.inherits, val, stamp, orig)
   }
 }
 

@@ -23,8 +23,6 @@ test('references - performance of virtual listeners', t => {
 
   master.key = 'master'
 
-  let d = Date.now()
-
   const branch1 = master.create()
 
   branch1.set({
@@ -38,6 +36,8 @@ test('references - performance of virtual listeners', t => {
       val: ['@', 'root', 'pointer2']
     }
   })
+
+  let d = Date.now()
 
   let i = 1e3
   while (i--) {
@@ -56,8 +56,8 @@ test('references - performance of virtual listeners', t => {
   }
 
   d = Date.now() - d
-
-  t.ok(d < 200, 'reference emitters take less than 200ms')
+  console.log('reference emitters:', d + 'ms')
+  t.ok(d < 100, 'reference emitters take less than 200ms')
 
   t.end()
 })
