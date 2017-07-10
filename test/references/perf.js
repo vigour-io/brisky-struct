@@ -57,7 +57,7 @@ test('references - performance of virtual listeners', t => {
 
   d = Date.now() - d
   console.log('virtual reference emitters:', d + 'ms')
-  t.ok(d < 150, 'virtual reference emitters take less than 150ms')
+  t.ok(d < 200, 'virtual reference emitters take less than 200ms')
 
   t.end()
 })
