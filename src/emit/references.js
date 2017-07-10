@@ -23,10 +23,10 @@ const fn = (t, val, stamp, c, cLevel) => {
 
 // Lookup until root of master
 // to find a given ancestor
-const doesInheritRoot = (t, r) => (
-  t.inherits && (t.inherits === r || doesInheritRoot(t.inherits, r))
+const inheritAncestor = (t, r) => (
+  t.inherits && (t.inherits === r || inheritAncestor(t.inherits, r))
 ) || (
-  t._p && (t._p === r || doesInheritRoot(t._p, r))
+  t._p && (t._p === r || inheritAncestor(t._p, r))
 )
 
 // Get local root
@@ -55,24 +55,22 @@ const iterate = (refs, val, stamp, oRoot) => {
   while (i--) {
     let rPath = []
     const rRoot = getRootPath(refs[i], rPath)
-    if (rRoot) {
+    if (oRoot === rRoot || inheritAncestor(oRoot, rRoot)) {
       let c = oRoot
-      if (oRoot === rRoot || doesInheritRoot(oRoot, rRoot)) {
-        let j = rPath.length
-        let next = c
-        while (next) {
-          c = next
-          next = c[rPath[j--]]
-        }
-        fn(refs[i], val, stamp, c, j + 1)
-        let localRefs = refs[i].emitters &&
-            refs[i].emitters.data &&
-            refs[i].emitters.data.struct
-        if (localRefs) {
-          iterate(localRefs, val, stamp, oRoot)
-        }
-        context(refs[i], val, stamp, oRoot)
+      let j = rPath.length
+      let next = c
+      while (next) {
+        c = next
+        next = c[rPath[j--]]
       }
+      fn(refs[i], val, stamp, c, j + 1)
+      let localRefs = refs[i].emitters &&
+          refs[i].emitters.data &&
+          refs[i].emitters.data.struct
+      if (localRefs) {
+        iterate(localRefs, val, stamp, oRoot)
+      }
+      context(refs[i], val, stamp, oRoot)
     }
   }
 }
