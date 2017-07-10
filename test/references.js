@@ -327,18 +327,22 @@ test('references - virtual listeners', t => {
       pointer: {
         on: {
           data (val, stamp, struct) {
-            if (struct.key === 'pointer1' && val === 'override' && struct._c === branch1) {
-              t.pass('pointer1 fired for override')
-            } else if (struct.key === 'pointer2' && val === 'override' && struct._c === branch1) {
-              t.pass('pointer2 fired for override')
-            } else if (struct.key === 'pointer1' && val === 'double override' && struct._c === branch2) {
-              t.pass('pointer1 fired for double override')
-            } else if (struct.key === 'pointer2' && val === 'double override' && struct._c === branch2) {
-              t.pass('pointer2 fired for double override')
-            } else if (struct.key === 'pointer3' && val === 'double override' && struct._c === branch2) {
-              t.pass('pointer3 fired for double override')
-            } else if (struct.key === 'pointer4' && val === 'double override' && struct._c === branch2) {
-              t.pass('pointer4 fired for double override')
+            if (val === 'override' && struct._c === branch1) {
+              if (struct.key === 'pointer1') {
+                t.pass('pointer1 fired for override')
+              } else if (struct.key === 'pointer2') {
+                t.pass('pointer2 fired for override')
+              }
+            } else if (val === 'double override' && struct._c === branch2) {
+              if (struct.key === 'pointer1') {
+                t.pass('pointer1 fired for double override')
+              } else if (struct.key === 'pointer2') {
+                t.pass('pointer2 fired for double override')
+              } else if (struct.key === 'pointer3') {
+                t.pass('pointer3 fired for double override')
+              } else if (struct.key === 'pointer4') {
+                t.pass('pointer4 fired for double override')
+              }
             }
           }
         }
