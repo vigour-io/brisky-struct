@@ -1,20 +1,18 @@
 import { getFn, getData } from '../get'
 
-const fn = (t, val, stamp) => {
+const fn = (t, val, stamp, c, cLevel) => {
   const emitter = getData(t)
   if (emitter) {
     const listeners = getFn(emitter)
     if (listeners) {
+      t._c = c
+      t._cLevel = cLevel
       let i = listeners.length
       while (i--) {
         listeners[i](val, stamp, t)
       }
-      let clear = t
-      while (clear && clear._c) {
-        clear._c = null
-        clear._cLevel = null
-        clear = clear._p
-      }
+      t._c = null
+      t._cLevel = null
     } else {
       emitter.listeners = []
     }
@@ -54,15 +52,12 @@ const iterate = (refs, val, stamp, oRoot, tRoot) => {
           c = next
           next = c[rPath[j--]]
         }
-        const ref = refs[i]
-        ref._c = c
-        ref._cLevel = j + 1
-        fn(ref, val, stamp)
-        let localRefs = ref.emitters &&
-            ref.emitters.data &&
-            ref.emitters.data.struct
+        fn(refs[i], val, stamp, c, j + 1)
+        let localRefs = refs[i].emitters &&
+            refs[i].emitters.data &&
+            refs[i].emitters.data.struct
         if (localRefs) iterate(localRefs, val, stamp, oRoot, tRoot)
-        context(ref, val, stamp, oRoot)
+        context(refs[i], val, stamp, oRoot)
       }
     }
   }
