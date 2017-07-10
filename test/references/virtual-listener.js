@@ -95,10 +95,11 @@ test('references - with array keys in context', t => {
 test('references - virtual listeners', t => {
   t.plan(9)
 
+  let master = void 0
   let branch1 = void 0
   let branch2 = void 0
 
-  const master = struct({
+  master = struct({
     types: {
       pointer: {
         on: {
@@ -119,6 +120,10 @@ test('references - virtual listeners', t => {
               } else if (struct.key === 'pointer4') {
                 t.pass('pointer4 fired for double override')
               }
+            } else if (
+              ~['override', 'double override'].indexOf(val) &&
+              !struct._c) {
+              t.fail('master emitters should not fire')
             }
           }
         }

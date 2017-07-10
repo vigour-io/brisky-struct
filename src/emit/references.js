@@ -1,8 +1,7 @@
 import { getFn, getData } from '../get'
-import { root } from '../traversal'
 
-const fn = (ref, t, val, stamp) => {
-  const emitter = getData(ref)
+const fn = (t, val, stamp) => {
+  const emitter = getData(t)
   if (emitter) {
     const listeners = getFn(emitter)
     if (listeners) {
@@ -22,57 +21,66 @@ const fn = (ref, t, val, stamp) => {
   }
 }
 
-// dont know if this is enough....
-const equalInherit = (t, r) => t.inherits && (t.inherits === r || equalInherit(t.inherits, r))
+const doesInherit = (t, r) => t.inherits && (t.inherits === r || doesInherit(t.inherits, r))
 
-const iterate = (refs, val, stamp, orig, rootT) => {
-  let s
+const getRoot = (t) => {
+  let root = t
+  while (root._p) {
+    root = root._p
+  }
+  return root
+}
+
+const getRootPath = (t, path) => {
+  let root = t
+  while (root._p) {
+    path.push(root.key)
+    root = root._p
+  }
+  return root
+}
+
+const iterate = (refs, val, stamp, oRoot, iRoot) => {
   let i = refs.length
   while (i--) {
-    let p = refs[i]
-    let rRoot = p
-    let path = []
-    while (p) {
-      path.push(rRoot.key)
-      rRoot = p
-      p = p._p
-    }
+    let rPath = []
+    const rRoot = getRootPath(refs[i], rPath)
     if (rRoot) {
-      let t = s || (s = root(orig, true))
-      let j = path.length
-      let prev = t
-      while (j--) {
-        prev = t
-        t = t[path[j]]
-        if (!t) {
-          if (rRoot === rootT || equalInherit(rRoot, rootT)) {
-            const ref = refs[i]
-            ref._c = prev
-            ref._cLevel = j + 1
-            fn(ref, ref, val, stamp)
-            let localRefs = ref.emitters &&
-                ref.emitters.data &&
-                ref.emitters.data.struct
-            if (localRefs) iterate(localRefs, val, stamp, orig, rootT)
-            context(refs[i], val, stamp, orig)
-          }
-          break
+      let c = oRoot
+      if (rRoot === iRoot || doesInherit(rRoot, iRoot)) {
+        let j = rPath.length
+        let next = c
+        while (next) {
+          c = next
+          next = c[rPath[j--]]
         }
+        const ref = refs[i]
+        ref._c = c
+        ref._cLevel = j + 1
+        fn(ref, val, stamp)
+        let localRefs = ref.emitters &&
+            ref.emitters.data &&
+            ref.emitters.data.struct
+        if (localRefs) iterate(localRefs, val, stamp, oRoot, iRoot)
+        context(ref, val, stamp, oRoot)
       }
     }
   }
 }
 
-const context = (t, val, stamp, orig) => {
+const context = (t, val, stamp, oRoot) => {
   if (t.inherits) {
+    if (!oRoot) {
+      oRoot = getRoot(t)
+    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, orig, root(t.inherits, true))
+      iterate(contextRefs, val, stamp, oRoot, getRoot(t.inherits))
     }
-    context(t.inherits, val, stamp, orig)
+    context(t.inherits, val, stamp, oRoot)
   }
 }
 

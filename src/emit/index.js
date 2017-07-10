@@ -62,7 +62,7 @@ const data = (t, val, stamp, override, isNew) => {
         }
       }
     }
-    refContext(t, val, stamp, t)
+    refContext(t, val, stamp)
   }
 }
 
