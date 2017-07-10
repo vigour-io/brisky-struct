@@ -60,7 +60,9 @@ const iterate = (refs, val, stamp, oRoot) => {
         let localRefs = refs[i].emitters &&
             refs[i].emitters.data &&
             refs[i].emitters.data.struct
-        if (localRefs) iterate(localRefs, val, stamp, oRoot)
+        if (localRefs) {
+          iterate(localRefs, val, stamp, oRoot)
+        }
         context(refs[i], val, stamp, oRoot)
       }
     }
