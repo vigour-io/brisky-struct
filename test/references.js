@@ -320,12 +320,26 @@ test('references - with array keys in context', t => {
 })
 
 test('references - virtual listeners', t => {
+  t.plan(9)
+
   const master = struct({
     types: {
       pointer: {
         on: {
-          data (val, stamp, t) {
-            console.log(t.path(), val, t._c)
+          data (val, stamp, struct) {
+            if (struct.key === 'pointer1' && val === 'override' && struct._c === branch1) {
+              t.pass('pointer1 fired for override')
+            } else if (struct.key === 'pointer2' && val === 'override' && struct._c === branch1) {
+              t.pass('pointer2 fired for override')
+            } else if (struct.key === 'pointer1' && val === 'double override' && struct._c === branch2) {
+              t.pass('pointer1 fired for double override')
+            } else if (struct.key === 'pointer2' && val === 'double override' && struct._c === branch2) {
+              t.pass('pointer2 fired for double override')
+            } else if (struct.key === 'pointer3' && val === 'double override' && struct._c === branch2) {
+              t.pass('pointer3 fired for double override')
+            } else if (struct.key === 'pointer4' && val === 'double override' && struct._c === branch2) {
+              t.pass('pointer4 fired for double override')
+            }
           }
         }
       }
@@ -343,7 +357,9 @@ test('references - virtual listeners', t => {
 
   master.key = 'master'
 
-  const branch1 = master.create({
+  const branch1 = master.create()
+
+  branch1.set({
     realThing: 'override',
     pointer3: {
       type: 'pointer',
@@ -355,13 +371,43 @@ test('references - virtual listeners', t => {
     }
   })
 
-  const branch2 = branch1.create({
+  const branch2 = branch1.create()
+
+  branch2.set({
     realThing: 'double override'
   })
 
-  console.log(master.serialize())
-  console.log(branch1.serialize())
-  console.log(branch2.serialize())
+  t.same(
+    master.serialize(),
+    {
+      realThing: 'is a thing',
+      pointer1: ['@', 'root', 'realThing'],
+      pointer2: ['@', 'root', 'pointer1']
+    },
+    'master has pointer1 & pointer2'
+  )
 
-  t.end()
+  t.same(
+    branch1.serialize(),
+    {
+      realThing: 'override',
+      pointer1: ['@', 'root', 'master', 'realThing'],
+      pointer2: ['@', 'root', 'pointer1'],
+      pointer3: ['@', 'root', 'realThing'],
+      pointer4: ['@', 'root', 'pointer2']
+    },
+    'branch1 has pointer1, pointer2, pointer3 & pointer4'
+  )
+
+  t.same(
+    branch2.serialize(),
+    {
+      realThing: 'double override',
+      pointer1: ['@', 'root', 'master', 'realThing'],
+      pointer2: ['@', 'root', 'pointer1'],
+      pointer3: ['@', 'root', 'realThing'],
+      pointer4: ['@', 'root', 'pointer2']
+    },
+    'branch2 has pointer1, pointer2, pointer3 & pointer4'
+  )
 })
