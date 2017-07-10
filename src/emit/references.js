@@ -23,11 +23,11 @@ const fn = (t, val, stamp, c, cLevel) => {
 
 // Lookup until root of master
 // to find a given ancestor
-const inheritAncestor = (t, r) => (
-  t.inherits && (t.inherits === r || inheritAncestor(t.inherits, r))
+const isAncestor = (t, r, cache) => ((
+  t.inherits && (t.inherits === r || isAncestor(t.inherits, r, cache))
 ) || (
-  t._p && (t._p === r || inheritAncestor(t._p, r))
-)
+  t._p && (t._p === r || isAncestor(t._p, r, cache))
+)) && cache.y.push(r)
 
 // Get local root
 const getRoot = (t) => {
@@ -50,46 +50,54 @@ const getRootPath = (t, path) => {
 
 // Iterate over given references list
 // and fire emitters if conditions are met
-const iterate = (refs, val, stamp, oRoot) => {
+const iterate = (refs, val, stamp, oRoot, cache) => {
   let i = refs.length
   while (i--) {
     let rPath = []
     const rRoot = getRootPath(refs[i], rPath)
-    if (oRoot === rRoot || inheritAncestor(oRoot, rRoot)) {
+    if (~cache.n.indexOf(rRoot)) {
+      // pass
+    } else if (~cache.y.indexOf(rRoot) || isAncestor(oRoot, rRoot, cache)) {
       let c = oRoot
       let j = rPath.length
-      let next = c
-      while (next) {
-        c = next
-        next = c[rPath[j--]]
+      let prev = c
+      while (j--) {
+        prev = c
+        c = c[rPath[j]]
+        if (c === void 0) {
+          fn(refs[i], val, stamp, prev, j + 1)
+          let localRefs = refs[i].emitters &&
+            refs[i].emitters.data &&
+            refs[i].emitters.data.struct
+          if (localRefs) {
+            iterate(localRefs, val, stamp, oRoot, cache)
+          }
+          context(refs[i], val, stamp, oRoot, cache)
+          break
+        }
       }
-      fn(refs[i], val, stamp, c, j + 1)
-      let localRefs = refs[i].emitters &&
-          refs[i].emitters.data &&
-          refs[i].emitters.data.struct
-      if (localRefs) {
-        iterate(localRefs, val, stamp, oRoot)
-      }
-      context(refs[i], val, stamp, oRoot)
+    } else {
+      cache.n.push(rRoot)
     }
   }
 }
 
 // When there's no local references
 // there can be still inherited references
-const context = (t, val, stamp, oRoot) => {
+const context = (t, val, stamp, oRoot, cache) => {
   if (t.inherits) {
     if (!oRoot) {
       oRoot = getRoot(t)
+      cache = { y: [], n: [] }
     }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot)
+      iterate(contextRefs, val, stamp, oRoot, cache)
     }
-    context(t.inherits, val, stamp, oRoot)
+    context(t.inherits, val, stamp, oRoot, cache)
   }
 }
 
