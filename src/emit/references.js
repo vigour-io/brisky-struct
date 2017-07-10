@@ -1,6 +1,5 @@
 import { getFn, getData } from '../get'
-import { root, path } from '../traversal'
-import getApi from '../get/api'
+import { root } from '../traversal'
 
 const fn = (ref, t, val, stamp) => {
   const emitter = getData(ref)

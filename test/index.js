@@ -11,6 +11,7 @@
 // require('./async')
 // require('./methods')
 // require('./context')
+require('./references')
 // require('./inheritance')
 // require('./props')
 // require('./reset')
@@ -19,4 +20,3 @@
 // require('./set')
 // require('./subscribe')
 // require('./non-enumerable')
-require('./references')
