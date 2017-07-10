@@ -39,7 +39,7 @@ test('references - performance of virtual listeners', t => {
 
   let d = Date.now()
 
-  let i = 5e3
+  let i = 3e3
   while (i--) {
     branch1.set({
       realThing: i % 2 ? 'not override' : 'override'
@@ -48,7 +48,7 @@ test('references - performance of virtual listeners', t => {
 
   const branch2 = branch1.create()
 
-  i = 5e3
+  i = 3e3
   while (i--) {
     branch2.set({
       realThing: i % 2 ? 'double override' : 'not double override'
@@ -57,7 +57,7 @@ test('references - performance of virtual listeners', t => {
 
   d = Date.now() - d
   console.log('virtual reference emitters:', d + 'ms')
-  t.ok(d < 200, 'virtual reference emitters take less than 200ms')
+  t.ok(d < 100, 'virtual reference emitters take less than 100ms')
 
   t.end()
 })
