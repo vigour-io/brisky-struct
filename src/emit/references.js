@@ -32,7 +32,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
 ))
 
 // Get local root
-const getRoot = (t) => {
+const getRoot = t => {
   var root = t
   while (root._p) {
     root = root._p
