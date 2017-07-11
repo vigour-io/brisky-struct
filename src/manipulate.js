@@ -7,7 +7,7 @@ import { resolveContext } from './context'
 import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
-import { reference, removeReference, resolveReferences } from './references'
+import { reference, resolveReferences, removeReference } from './references'
 import { getKeys } from './keys'
 
 const create = (t, val, stamp, parent, key, reset) => {

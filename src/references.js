@@ -11,10 +11,6 @@ const removeReference = t => {
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
-// Lookup until root of master
-// to find a given ancestor
-const rootDiff = (t, r, diff) => (t === r && diff) || (t._p && rootDiff(t._p, r, diff + 1))
-
 // Get local root
 const getRoot = t => {
   var root = t
@@ -34,8 +30,6 @@ const getRootPath = (t, path) => {
   return root
 }
 
-// When there's no local references
-// there can be still inherited references
 const resolveReferences = (t, instance, stamp) => {
   const iRoot = getRoot(instance)
   const refs = t.emitters.data.struct
