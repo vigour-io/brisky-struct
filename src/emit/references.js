@@ -4,23 +4,23 @@ import subscription from './subscription'
 // Fire emitters in context
 // then clean the context
 const fn = (t, val, stamp, c, cLevel) => {
+  t._c = c
+  t._cLevel = cLevel
+  subscription(t, stamp)
   const emitter = getData(t)
   if (emitter) {
     const listeners = getFn(emitter)
     if (listeners) {
-      t._c = c
-      t._cLevel = cLevel
       let i = listeners.length
-      subscription(c, stamp)
       while (i--) {
         listeners[i](val, stamp, t)
       }
-      t._c = null
-      t._cLevel = null
     } else {
       emitter.listeners = []
     }
   }
+  t._c = null
+  t._cLevel = null
 }
 
 // Lookup until root of master

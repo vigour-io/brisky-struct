@@ -12,7 +12,7 @@ const handleStruct = (p, stamp) => {
   }
 }
 
-const subscription = (t, stamp, val) => {
+const subscription = (t, stamp) => {
   t.tStamp = stamp
   if (t._p || t._c) {
     let p = t._p
