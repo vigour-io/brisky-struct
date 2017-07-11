@@ -52,10 +52,6 @@ const exec = (t, val, stamp, parent, key, resolve, level, j, fn) => {
   return clear
 }
 
-const virtual = (t, stamp) => {
-
-}
-
 // removal
 const remove = (t, stamp) => {
   const data = getData(t)
@@ -128,4 +124,4 @@ const removeContext = (context, key, stamp) => {
   }
 }
 
-export { removeContext, exec, virtual }
+export { removeContext, exec }
