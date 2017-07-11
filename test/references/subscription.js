@@ -1,7 +1,7 @@
 const test = require('tape')
 const { create: struct } = require('../../')
 
-test('references - virtual subscription', t => {
+test('references - subscription', t => {
   t.plan(3)
 
   const master = struct({
@@ -49,7 +49,7 @@ test('references - virtual subscription', t => {
         realThing: 'override'
       },
       otherDeep: {
-        pointer1: ['@', 'root', 'master', 'deep', 'realThing']
+        pointer1: ['@', 'root', 'deep', 'realThing']
       }
     },
     'branch1 has pointer1 & pointer2'
