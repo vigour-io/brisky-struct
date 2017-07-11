@@ -23,11 +23,11 @@ const fn = (t, val, stamp, c, cLevel) => {
 
 // Lookup until root of master
 // to find a given ancestor
-const isAncestor = (t, r, cache) => ((
-  t.inherits && (t.inherits === r || isAncestor(t.inherits, r, cache))
+const isAncestor = (t, r, pc) => ((t === r && pc) || (
+  t._p && isAncestor(t._p, r, pc + 1)
 ) || (
-  t._p && (t._p === r || isAncestor(t._p, r, cache))
-)) && cache.y.push(r)
+  t.inherits && isAncestor(t.inherits, r, pc)
+))
 
 // Get local root
 const getRoot = (t) => {
@@ -50,16 +50,15 @@ const getRootPath = (t, path) => {
 
 // Iterate over given references list
 // and fire emitters if conditions are met
-const iterate = (refs, val, stamp, oRoot, cache) => {
+const iterate = (refs, val, stamp, oRoot) => {
   let i = refs.length
   while (i--) {
     let rPath = []
     const rRoot = getRootPath(refs[i], rPath)
-    if (~cache.n.indexOf(rRoot)) {
-      // pass
-    } else if (~cache.y.indexOf(rRoot) || isAncestor(oRoot, rRoot, cache)) {
+    let pc = isAncestor(oRoot, rRoot, 1)
+    if (pc) {
       let c = oRoot
-      let j = rPath.length
+      let j = rPath.length - pc + 1
       let prev = c
       while (j--) {
         prev = c
@@ -70,34 +69,31 @@ const iterate = (refs, val, stamp, oRoot, cache) => {
             refs[i].emitters.data &&
             refs[i].emitters.data.struct
           if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, cache)
+            iterate(localRefs, val, stamp, oRoot)
           }
-          context(refs[i], val, stamp, oRoot, cache)
+          context(refs[i], val, stamp, oRoot)
           break
         }
       }
-    } else {
-      cache.n.push(rRoot)
     }
   }
 }
 
 // When there's no local references
 // there can be still inherited references
-const context = (t, val, stamp, oRoot, cache) => {
+const context = (t, val, stamp, oRoot) => {
   if (t.inherits) {
     if (!oRoot) {
       oRoot = getRoot(t)
-      cache = { y: [], n: [] }
     }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot, cache)
+      iterate(contextRefs, val, stamp, oRoot)
     }
-    context(t.inherits, val, stamp, oRoot, cache)
+    context(t.inherits, val, stamp, oRoot)
   }
 }
 
