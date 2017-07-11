@@ -55,7 +55,7 @@ const iterate = (refs, val, stamp, oRoot) => {
   while (i--) {
     let rPath = []
     const rRoot = getRootPath(refs[i], rPath)
-    let pc = isAncestor(oRoot, rRoot, 1)
+    let pc = isAncestor(oRoot.inherits, rRoot, 1)
     if (pc) {
       let c = oRoot
       let j = rPath.length - pc + 1
