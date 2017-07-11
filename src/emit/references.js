@@ -33,7 +33,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
 
 // Get local root
 const getRoot = (t) => {
-  let root = t
+  var root = t
   while (root._p) {
     root = root._p
   }
@@ -42,7 +42,7 @@ const getRoot = (t) => {
 
 // Get local root and reversed path
 const getRootPath = (t, path) => {
-  let root = t
+  var root = t
   while (root._p) {
     path.push(root.key)
     root = root._p
@@ -53,11 +53,11 @@ const getRootPath = (t, path) => {
 // Iterate over given references list
 // and fire emitters if conditions are met
 const iterate = (refs, val, stamp, oRoot) => {
-  let i = refs.length
+  var i = refs.length
   while (i--) {
-    let rPath = []
+    const rPath = []
     const rRoot = getRootPath(refs[i], rPath)
-    let pc = isAncestor(oRoot.inherits, rRoot, 1)
+    const pc = isAncestor(oRoot.inherits, rRoot, 1)
     if (pc) {
       let c = oRoot
       let j = rPath.length - pc + 1
