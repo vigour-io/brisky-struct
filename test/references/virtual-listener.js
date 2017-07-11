@@ -201,3 +201,104 @@ test('references - virtual listeners', t => {
     'branch2 has pointer1, pointer2, pointer3 & pointer4'
   )
 })
+
+test('references - deep virtual listeners', t => {
+  t.plan(6)
+
+  let branch1 = void 0
+  let branch2 = void 0
+
+  const master = struct({
+    types: {
+      pointer: {
+        on: {
+          data (val, stamp, struct) {
+            if (val === 'override' && struct._c === branch1) {
+              if (struct.key === 'pointer1') {
+                t.pass('pointer1 fired for override')
+              }
+            } else if (val === 'double override' && struct._c === branch2) {
+              if (struct.key === 'pointer1') {
+                t.pass('pointer1 fired for double override')
+              } else if (struct.key === 'pointer2') {
+                t.pass('pointer2 fired for double override')
+              }
+            } else if (
+              ~['override', 'double override'].indexOf(val) &&
+              !struct._c) {
+              t.fail('master emitters should not fire')
+            }
+          }
+        }
+      }
+    },
+    deep: {
+      realThing: 'is a thing'
+    },
+    otherDeep: {
+      pointer1: {
+        type: 'pointer',
+        val: ['@', 'root', 'deep', 'realThing']
+      }
+    }
+  })
+
+  master.key = 'master'
+
+  branch1 = master.create()
+
+  branch1.set({
+    deep: {
+      realThing: 'override'
+    },
+    otherDeep: {
+      pointer2: {
+        type: 'pointer',
+        val: ['@', 'parent', 'pointer1']
+      }
+    }
+  })
+
+  branch2 = branch1.get('deep').create()
+
+  branch2.set({
+    otherDeep: 'confusion',
+    realThing: 'double override'
+  })
+
+  t.same(
+    master.serialize(),
+    {
+      deep: {
+        realThing: 'is a thing'
+      },
+      otherDeep: {
+        pointer1: ['@', 'root', 'deep', 'realThing']
+      }
+    },
+    'master has pointer1'
+  )
+
+  t.same(
+    branch1.serialize(),
+    {
+      deep: {
+        realThing: 'override'
+      },
+      otherDeep: {
+        pointer1: ['@', 'root', 'master', 'deep', 'realThing'],
+        pointer2: ['@', 'root', 'otherDeep', 'pointer1']
+      }
+    },
+    'branch1 has pointer1 & pointer2'
+  )
+
+  t.same(
+    branch2.serialize(),
+    {
+      realThing: 'double override',
+      otherDeep: 'confusion'
+    },
+    'branch2 has confusion'
+  )
+})
