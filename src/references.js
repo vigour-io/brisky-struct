@@ -3,13 +3,13 @@ import { listener } from './struct/listener'
 import { uid } from './uid'
 import getApi from './get/api'
 
+const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
+
 const removeReference = t => {
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
     listener(t.val.emitters.data, null, uid(t))
   }
 }
-
-const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
 // Get local root
 const getRoot = t => {
@@ -54,4 +54,4 @@ const resolveReferences = (t, instance, stamp) => {
   }
 }
 
-export { removeReference, reference, resolveReferences }
+export { reference, removeReference, resolveReferences }
