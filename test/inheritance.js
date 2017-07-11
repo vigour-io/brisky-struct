@@ -1,5 +1,5 @@
 const test = require('tape')
-const { struct, switchInheritance } = require('../')
+const { struct, switchInheritance, getVal } = require('../')
 
 test('switch inheritance - val', t => {
   const a = struct.create()
@@ -129,7 +129,6 @@ test('switch inheritance - instances - fields', t => {
   t.end()
 })
 
-/*
 test('references - resolve from listeners', t => {
   const hub = struct.create({ x: true, y: true })
   const hubInstance = hub.create({ x: 'hello' })
@@ -222,7 +221,6 @@ test('switch inheritance - gaurds', t => {
   t.equal(getVal(hubInstance.c), hub.y)
   t.end()
 })
-*/
 
 test('switch inheritance - gaurds', t => {
   const a = struct.create('hello')
