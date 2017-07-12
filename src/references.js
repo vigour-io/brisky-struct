@@ -22,10 +22,20 @@ const getRoot = t => {
 }
 
 // Get local root and reversed path
-const getRootPath = (t, path) => {
+const getRootPathRev = (t, path) => {
   var root = t
   while (root._p) {
     path.push(root.key)
+    root = root._p
+  }
+  return root
+}
+
+// Get local root and path
+const getRootPath = (t, path) => {
+  var root = t
+  while (root._p) {
+    path.unshift(root.key)
     root = root._p
   }
   return root
@@ -37,7 +47,7 @@ const resolveReferences = (t, instance, stamp) => {
   var i = refs.length
   while (i--) {
     const rPath = []
-    const rRoot = getRootPath(refs[i], rPath)
+    const rRoot = getRootPathRev(refs[i], rPath)
     if (iRoot.inherits === rRoot) {
       let bind
       let s = iRoot
