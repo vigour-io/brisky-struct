@@ -136,7 +136,7 @@ const resolveFromValue = (t, val, stamp) => {
         const vinstance = val.instances[i]
         // console.log('ADDING', t.key, '->', val.key, vRoot.key, '->', getRoot(vinstance).key)
         const ref = getApi(getRoot(vinstance), tPath, {})
-        if (ref._c) {
+        if (ref._c || !ref.val) {
           set(ref, vinstance, stamp)
           ref._c = null
           ref._cLevel = null
