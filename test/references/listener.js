@@ -92,7 +92,7 @@ test('references - with array keys in context', t => {
 
   branch2.set({
     movieC: {
-      progress: 0.3
+      progress: 0.4
     }
   })
 
@@ -135,21 +135,21 @@ test('references - with array keys in context', t => {
   )
   */
 
-  console.log('branch1 movieA', branch1.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch1 movieA', branch1.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong master
   console.log('branch1 movieB', branch1.get(['movies', '1', 'val', 'root', 'k', 'compute']))
-  console.log('branch1 movieC', branch1.get(['movies', '2', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch1 movieC', branch1.get(['movies', '2', 'val', 'root', 'k', 'compute'])) // wrong branch1
 
-  console.log('branch2 moiveA', branch2.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
-  console.log('branch2 movieB', branch2.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch2 moiveA', branch2.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong master
+  console.log('branch2 movieB', branch2.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong branch2
   console.log('branch2 movieC', branch2.get(['movies', '2', 'val', 'root', 'k', 'compute']))
 
   console.log('branch3 moiveA', branch3.get(['movies', '0', 'val', 'root', 'k', 'compute']))
-  console.log('branch3 movieB', branch3.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch3 movieB', branch3.get(['movies', '1', 'val', 'root', 'k', 'compute']))
   console.log('branch3 movieC', branch3.get(['movies', '2', 'val', 'root', 'k', 'compute']))
 
-  console.log('branch4 moiveA', branch4.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
-  console.log('branch4 movieB', branch4.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
-  console.log('branch4 movieC', branch4.get(['movies', '2', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch4 moiveA', branch4.get(['movies', '0', 'val', 'root', 'k', 'compute']))
+  console.log('branch4 movieB', branch4.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong branch4
+  console.log('branch4 movieC', branch4.get(['movies', '2', 'val', 'root', 'k', 'compute']))
 
   t.same(
     branch1.get(['movies', '1', 'progress', 'compute']), 0.3,
@@ -168,7 +168,7 @@ test('references - with array keys in context', t => {
     'third movie on branch2 is favourited'
   )
   t.same(
-    branch2.get(['movies', '2', 'progress', 'compute']), 0.3,
+    branch2.get(['movies', '2', 'progress', 'compute']), 0.4,
     'third movie on branch2 has correct progress'
   )
   t.same(
@@ -224,7 +224,6 @@ test('references - listeners', t => {
             ) {
               t.fail('master emitters should not fire')
             }
-            console.log(val, struct.key, struct.get(['root', 'realThing', 'compute']))
           }
         }
       }

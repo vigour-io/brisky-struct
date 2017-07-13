@@ -3,6 +3,7 @@ import { listener } from './struct/listener'
 import { uid } from './uid'
 import { getVal } from './get'
 import getApi from './get/api'
+import { removeKey } from './keys'
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
@@ -55,7 +56,7 @@ const updateInstances = (t, val, override) => {
     }
     // console.log('CHECKING', instance.get(['root', 'k', 'compute']), instance.key)
     if (instance.val) {
-      if (instance.val.inherits === getVal(override)) {
+      if (instance.val.inherits === getVal(t)) {
         let vinstance
         if (val.instances) {
           // console.log('VINSTANCES', instance.get(['root', 'k', 'compute']), instance.key)
@@ -83,6 +84,7 @@ const updateInstances = (t, val, override) => {
             }
             t.instances.splice(i, 1)
             delete instance._p[instance.key]
+            removeKey(instance._p, instance.key)
           }
           // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
         }
@@ -121,8 +123,7 @@ const resolveReferences = (t, instance, stamp) => {
     const rRoot = getRootPath(refs[i], rPath)
     if (doesInherit(iRoot.inherits, rRoot)) {
       // console.log('*ADDING', refs[i].key, '->', instance.key, refs[i].get(['root', 'k', 'compute']), '->', instance.get(['root', 'k', 'compute']))
-      const ref = getApi(iRoot, rPath)
-      set(ref, instance, stamp)
+      set(getApi(iRoot, rPath, {}), instance, stamp)
     }
   }
 }
