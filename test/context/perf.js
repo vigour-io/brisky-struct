@@ -34,7 +34,7 @@ test('context - perf - remove', t => {
   thing.set(null)
   d = Date.now() - d
 
-  t.ok(d < 200, 'removing context with props:self does not take longer then 200ms')
+  t.ok(d < 300, 'removing context with props:self does not take longer then 300ms')
 
   t.end()
 })
