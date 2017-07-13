@@ -44,13 +44,18 @@ const updateInstance = (t, val) => {
   }
 }
 
-const updateInstances = (t, val) => {
+const updateInstances = (t, val, override) => {
   let i = t.instances.length
   while (i--) {
     const instance = t.instances[i]
+    if (override) {
+      instance.inherits = override
+    } else {
+      override = t
+    }
     // console.log('CHECKING', instance.get(['root', 'k', 'compute']), instance.key)
     if (instance.val) {
-      if (instance.val.inherits === getVal(t)) {
+      if (instance.val.inherits === getVal(override)) {
         let vinstance
         if (val.instances) {
           // console.log('VINSTANCES', instance.get(['root', 'k', 'compute']), instance.key)
@@ -67,11 +72,19 @@ const updateInstances = (t, val) => {
         }
         if (!vinstance) {
           listener(instance.val.emitters.data, null, uid(instance))
-          if (instance.instances) {
-            updateInstances(instance, val)
+          if (instance._ks) {
+            if (instance.instances) {
+              updateInstances(instance, val)
+            }
+            delete instance.val
+          } else {
+            if (instance.instances) {
+              updateInstances(instance, val, override)
+            }
+            t.instances.splice(i, 1)
+            delete instance._p[instance.key]
           }
           // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
-          delete instance.val
         }
       }
     } else if (instance.instances) {
