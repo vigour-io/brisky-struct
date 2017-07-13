@@ -17,8 +17,7 @@ const remove = (t, stamp, override, instance, from) => {
 
   if (!instance && t.inherits.instances) {
     const instances = t.inherits.instances
-    const len = instances.length
-    let i = len
+    let i = instances.length
     while (i--) {
       if (instances[i] === t) {
         instances.splice(i, 1)

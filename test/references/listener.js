@@ -3,6 +3,7 @@ const { create: struct } = require('../../')
 
 test('references - with array keys in context', t => {
   const master = struct({
+    k: 'master',
     movieC: {
       year: 1998,
       imdb: 7.7,
@@ -14,6 +15,7 @@ test('references - with array keys in context', t => {
   })
 
   const branch1 = master.create({
+    k: 'branch1',
     movieC: {
       favourite: true
     }
@@ -49,8 +51,23 @@ test('references - with array keys in context', t => {
   )
 
   const branch2 = branch1.create({
-    movieC: {
+    k: 'branch2',
+    movieB: {
       favourite: true
+    }
+  })
+
+  const branch3 = branch1.create({
+    k: 'branch3',
+    movieC: {
+      progress: 0.3
+    }
+  })
+
+  const branch4 = branch3.create({
+    k: 'branch4',
+    movieB: {
+      favourite: false
     }
   })
 
@@ -67,9 +84,21 @@ test('references - with array keys in context', t => {
     ]
   })
 
+  branch1.set({
+    movieB: {
+      progress: 0.3
+    }
+  })
+
   branch2.set({
     movieC: {
-      progress: 0.2
+      progress: 0.3
+    }
+  })
+
+  branch3.set({
+    movieA: {
+      favourite: true
     }
   })
 
@@ -87,6 +116,72 @@ test('references - with array keys in context', t => {
     branch2.get('movies').serialize(),
     [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
     'list of movies is corect on branch2'
+  )
+  t.same(
+    branch3.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch3'
+  )
+  t.same(
+    branch4.get('movies').serialize(),
+    [['@', 'root', 'movieA'], ['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
+    'list of movies is corect on branch4'
+  )
+
+  /*
+  t.equals(
+    branch1.get(['movies', '0', 'val', 'root']), branch1, // branch3 - wrong
+    'branch1 movie0 is correct'
+  )
+  */
+
+  console.log('branch1 movieA', branch1.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch1 movieB', branch1.get(['movies', '1', 'val', 'root', 'k', 'compute']))
+  console.log('branch1 movieC', branch1.get(['movies', '2', 'val', 'root', 'k', 'compute'])) // wrong
+
+  console.log('branch2 moiveA', branch2.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch2 movieB', branch2.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch2 movieC', branch2.get(['movies', '2', 'val', 'root', 'k', 'compute']))
+
+  console.log('branch3 moiveA', branch3.get(['movies', '0', 'val', 'root', 'k', 'compute']))
+  console.log('branch3 movieB', branch3.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch3 movieC', branch3.get(['movies', '2', 'val', 'root', 'k', 'compute']))
+
+  console.log('branch4 moiveA', branch4.get(['movies', '0', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch4 movieB', branch4.get(['movies', '1', 'val', 'root', 'k', 'compute'])) // wrong
+  console.log('branch4 movieC', branch4.get(['movies', '2', 'val', 'root', 'k', 'compute'])) // wrong
+
+  t.same(
+    branch1.get(['movies', '1', 'progress', 'compute']), 0.3,
+    'second movie on branch1 has correct progress'
+  )
+  t.same(
+    branch1.get(['movies', '2', 'progress', 'compute']), 0.2,
+    'third movie on branch1 has correct progress'
+  )
+  t.same(
+    branch2.get(['movies', '1', 'favourite', 'compute']), true,
+    'second movie on branch2 is favourited'
+  )
+  t.same(
+    branch2.get(['movies', '2', 'favourite', 'compute']), true,
+    'third movie on branch2 is favourited'
+  )
+  t.same(
+    branch2.get(['movies', '2', 'progress', 'compute']), 0.3,
+    'third movie on branch2 has correct progress'
+  )
+  t.same(
+    branch3.get(['movies', '2', 'progress', 'compute']), 0.3,
+    'third movie on branch3 has correct progress'
+  )
+  t.same(
+    branch3.get(['movies', '0', 'favourite', 'compute']), true,
+    'first movie on branch3 is favourited'
+  )
+  t.same(
+    branch4.get(['movies', '1', 'favourite', 'compute']), false,
+    'second movie on branch4 is unfavourited'
   )
 
   t.end()

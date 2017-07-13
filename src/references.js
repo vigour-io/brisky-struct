@@ -12,33 +12,91 @@ const removeReference = t => {
   }
 }
 
-// Get local root
-const getRoot = t => {
-  var root = t
-  while (root._p) {
-    root = root._p
+const getOnProp = t => t.props && t.props.on || getOnProp(t.inherits)
+
+const onContext = (t, context) => {
+  if (t.emitters) {
+    if (context) {
+      t.emitters._c = context
+      t.emitters._cLevel = 1
+    }
+  } else if (t.inherits) {
+    onContext(t.inherits, context || t)
   }
-  return root
 }
 
-// Get local root and reversed path
-const getRootPathRev = (t, path) => {
-  var root = t
-  while (root._p) {
-    path.push(root.key)
-    root = root._p
+const updateInstance = (t, val) => {
+  // console.log(t.key, val.get(['root', 'k', 'compute']), '->', t.get(['root', 'k', 'compute']), val.key)
+  listener(t.val.emitters.data, null, uid(t))
+  if (t.instances) {
+    updateInstances(t, val)
   }
-  return root
+  t.val = val
+  if (val.emitters) {
+    if (!val.emitters.data) {
+      getOnProp(val)(val, { data: void 0 }, 'on')
+    }
+    listener(val.emitters.data, t, uid(t))
+  } else {
+    onContext(val)
+    getOnProp(val)(val, { data: void 0 }, 'on')
+    listener(val.emitters.data, t, uid(t))
+  }
+}
+
+const updateInstances = (t, val) => {
+  let i = t.instances.length
+  while (i--) {
+    const instance = t.instances[i]
+    // console.log('CHECKING', instance.get(['root', 'k', 'compute']), instance.key)
+    if (instance.val) {
+      if (instance.val.inherits === getVal(t)) {
+        let vinstance
+        if (val.instances) {
+          // console.log('VINSTANCES', instance.get(['root', 'k', 'compute']), instance.key)
+          const iRoot = getRoot(instance)
+          let j = val.instances.length
+          while (j--) {
+            if (getRoot(val.instances[j]) === iRoot) {
+              // console.log('VINSTANCE', instance.get(['root', 'k', 'compute']), val.instances[j])
+              vinstance = val.instances[j]
+              updateInstance(instance, vinstance)
+              break
+            }
+          }
+        }
+        if (!vinstance) {
+          listener(instance.val.emitters.data, null, uid(instance))
+          if (instance.instances) {
+            updateInstances(instance, val)
+          }
+          // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
+          delete instance.val
+        }
+      }
+    } else if (instance.instances) {
+      updateInstances(instance, val)
+    }
+  }
+}
+
+const doesInherit = (t, r) => t === r || (t.inherits && doesInherit(t.inherits, r))
+
+// Get local root
+const getRoot = t => {
+  while (t._p) {
+    t = t._p
+  }
+  return t
 }
 
 // Get local root and path
 const getRootPath = (t, path) => {
-  var root = t
-  while (root._p) {
-    path.unshift(root.key)
-    root = root._p
+  while (t._p) {
+    path.unshift(t.key)
+    t = t._p
   }
-  return root
+  return t
 }
 
 const resolveReferences = (t, instance, stamp) => {
@@ -47,20 +105,11 @@ const resolveReferences = (t, instance, stamp) => {
   var i = refs.length
   while (i--) {
     const rPath = []
-    const rRoot = getRootPathRev(refs[i], rPath)
-    if (iRoot.inherits === rRoot) {
-      let bind
-      let s = iRoot
-      let j = rPath.length
-      while (j--) {
-        bind = s
-        s = s[rPath[j]]
-        if (!s) {
-          set(bind, { [rPath[j]]: {} })
-          s = bind[rPath[j]]
-        }
-      }
-      set(s, instance, stamp)
+    const rRoot = getRootPath(refs[i], rPath)
+    if (doesInherit(iRoot.inherits, rRoot)) {
+      // console.log('*ADDING', refs[i].key, '->', instance.key, refs[i].get(['root', 'k', 'compute']), '->', instance.get(['root', 'k', 'compute']))
+      const ref = getApi(iRoot, rPath)
+      set(ref, instance, stamp)
     }
   }
 }
@@ -77,18 +126,19 @@ const resolveFromValue = (t, val, stamp) => {
       while (i--) {
         const field = getApi(rootInstances[i], vPath, void 0, void 0, true)
         if (field !== val) {
+          // console.log('ADDING', t.key, '->', field.key, vRoot.get(['k', 'compute']), '->', rootInstances[i].get(['k', 'compute']))
           const instance = getApi(rootInstances[i], tPath)
           if (instance && getVal(instance) === val) {
             set(instance, field, stamp)
           }
           instance._c = null
           instance._cLevel = null
-          field._c = null
-          field._cLevel = null
         }
+        field._c = null
+        field._cLevel = null
       }
     }
   }
 }
 
-export { reference, removeReference, resolveReferences, resolveFromValue }
+export { reference, removeReference, resolveReferences, resolveFromValue, updateInstances }
