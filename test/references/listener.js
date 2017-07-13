@@ -199,13 +199,16 @@ test('references - listeners', t => {
       pointer: {
         on: {
           data (val, stamp, struct) {
-            if (val.val === 'override' && struct.root(true) === branch1) {
+            if (val.compute) {
+              val = val.compute()
+            }
+            if (val === 'override' && struct.root(true) === branch1) {
               if (struct.key === 'pointer1') {
                 t.pass('pointer1 fired for override')
               } else if (struct.key === 'pointer2') {
                 t.pass('pointer2 fired for override')
               }
-            } else if (val.val === 'double override' && struct.root(true) === branch2) {
+            } else if (val === 'double override' && struct.root(true) === branch2) {
               if (struct.key === 'pointer1') {
                 t.pass('pointer1 fired for double override')
               } else if (struct.key === 'pointer2') {
@@ -216,11 +219,12 @@ test('references - listeners', t => {
                 t.pass('pointer4 fired for double override')
               }
             } else if (
-              ~['override', 'double override'].indexOf(val.val) &&
+              ~['override', 'double override'].indexOf(val) &&
               struct.root(true) === master
             ) {
               t.fail('master emitters should not fire')
             }
+            console.log(val, struct.key, struct.get(['root', 'realThing', 'compute']))
           }
         }
       }
