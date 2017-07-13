@@ -27,7 +27,7 @@ const onContext = (t, context) => {
 }
 
 const updateInstance = (t, val) => {
-  // console.log('UPDATING', t.key, val.get(['root', 'k', 'compute']), '->', t.get(['root', 'k', 'compute']), val.key)
+  // console.log('UPDATING', t.key, '->', val.key, getRoot(t).key, '->', getRoot(val).key, '->')
   listener(t.val.emitters.data, null, uid(t))
   if (t.instances) {
     updateInstances(t, val)
@@ -54,17 +54,14 @@ const updateInstances = (t, val, override) => {
     } else {
       override = t
     }
-    // console.log('CHECKING', instance.get(['root', 'k', 'compute']), instance.key)
     if (instance.val) {
       if (instance.val.inherits === getVal(t)) {
         let vinstance
         if (val.instances) {
-          // console.log('VINSTANCES', instance.get(['root', 'k', 'compute']), instance.key)
           const iRoot = getRoot(instance)
           let j = val.instances.length
           while (j--) {
             if (getRoot(val.instances[j]) === iRoot) {
-              // console.log('VINSTANCE', instance.get(['root', 'k', 'compute']), val.instances[j])
               vinstance = val.instances[j]
               updateInstance(instance, vinstance)
               break
@@ -72,7 +69,7 @@ const updateInstances = (t, val, override) => {
           }
         }
         if (!vinstance) {
-          // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
+          // console.log('DELETING', getRoot(instance).key, instance.key)
           listener(instance.val.emitters.data, null, uid(instance))
           if (instance._ks) {
             if (instance.instances) {
@@ -122,7 +119,7 @@ const resolveReferences = (t, instance, stamp) => {
     const rPath = []
     const rRoot = getRootPath(refs[i], rPath)
     if (doesInherit(iRoot.inherits, rRoot)) {
-      // console.log('*ADDING', refs[i].key, '->', instance.key, refs[i].get(['root', 'k', 'compute']), '->', instance.get(['root', 'k', 'compute']))
+      // console.log('ADDING', refs[i].key, '->', instance.key, rRoot.key, '->', iRoot.key)
       set(getApi(iRoot, rPath, {}), instance, stamp)
     }
   }
@@ -130,26 +127,20 @@ const resolveReferences = (t, instance, stamp) => {
 
 const resolveFromValue = (t, val, stamp) => {
   if (val.instances && val._p && t._p) {
-    const vPath = []
-    const vRoot = getRootPath(val, vPath)
+    const vRoot = getRoot(val)
     const tPath = []
     const tRoot = getRootPath(t, tPath)
-    const rootInstances = vRoot.instances
-    if (rootInstances && tRoot === vRoot) {
-      let i = rootInstances.length
-      while (i--) {
-        const field = getApi(rootInstances[i], vPath, void 0, void 0, true)
-        if (field !== val) {
-          // console.log('ADDING', t.key, '->', field.key, vRoot.get(['k', 'compute']), '->', rootInstances[i].get(['k', 'compute']))
-          const instance = getApi(rootInstances[i], tPath)
-          if (instance && getVal(instance) === val) {
-            set(instance, field, stamp)
-          }
-          instance._c = null
-          instance._cLevel = null
+    if (tRoot === vRoot) {
+      let i = val.instances.length
+      while(i--) {
+        const vinstance = val.instances[i]
+        // console.log('ADDING', t.key, '->', val.key, vRoot.key, '->', getRoot(vinstance).key)
+        const ref = getApi(getRoot(vinstance), tPath, {})
+        if (ref._c) {
+          set(ref, vinstance, stamp)
+          ref._c = null
+          ref._cLevel = null
         }
-        field._c = null
-        field._cLevel = null
       }
     }
   }
