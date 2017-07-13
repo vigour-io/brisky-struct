@@ -3,7 +3,7 @@ const { create: struct } = require('../../')
 
 test('references - with array keys in context', t => {
   const master = struct({
-    k: 'master',
+    key: 'master',
     movieC: {
       year: 1998,
       imdb: 7.7,
@@ -15,7 +15,7 @@ test('references - with array keys in context', t => {
   })
 
   const branch1 = master.create({
-    k: 'branch1',
+    key: 'branch1',
     movieC: {
       favourite: true
     }
@@ -51,21 +51,21 @@ test('references - with array keys in context', t => {
   })
 
   const branch2 = branch1.create({
-    k: 'branch2',
+    key: 'branch2',
     movieB: {
       favourite: true
     }
   })
 
   const branch3 = branch1.create({
-    k: 'branch3',
+    key: 'branch3',
     movieC: {
       progress: 0.3
     }
   })
 
   const branch4 = branch3.create({
-    k: 'branch4',
+    key: 'branch4',
     movieB: {
       favourite: false
     }
