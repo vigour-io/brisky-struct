@@ -27,7 +27,7 @@ const onContext = (t, context) => {
 }
 
 const updateInstance = (t, val) => {
-  // console.log(t.key, val.get(['root', 'k', 'compute']), '->', t.get(['root', 'k', 'compute']), val.key)
+  // console.log('UPDATING', t.key, val.get(['root', 'k', 'compute']), '->', t.get(['root', 'k', 'compute']), val.key)
   listener(t.val.emitters.data, null, uid(t))
   if (t.instances) {
     updateInstances(t, val)
@@ -72,6 +72,7 @@ const updateInstances = (t, val, override) => {
           }
         }
         if (!vinstance) {
+          // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
           listener(instance.val.emitters.data, null, uid(instance))
           if (instance._ks) {
             if (instance.instances) {
@@ -86,7 +87,6 @@ const updateInstances = (t, val, override) => {
             delete instance._p[instance.key]
             removeKey(instance._p, instance.key)
           }
-          // console.log('DELETING', instance.get(['root', 'k', 'compute']), instance.key)
         }
       }
     } else if (instance.instances) {
