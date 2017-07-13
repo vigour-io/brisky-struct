@@ -132,7 +132,7 @@ const resolveFromValue = (t, val, stamp) => {
     const tRoot = getRootPath(t, tPath)
     if (tRoot === vRoot) {
       let i = val.instances.length
-      while(i--) {
+      while (i--) {
         const vinstance = val.instances[i]
         // console.log('ADDING', t.key, '->', val.key, vRoot.key, '->', getRoot(vinstance).key)
         const ref = getApi(getRoot(vinstance), tPath, {})
