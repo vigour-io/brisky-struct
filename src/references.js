@@ -11,41 +11,35 @@ const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 const removeReference = (t, val) => {
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
     listener(t.val.emitters.data, null, uid(t))
-    if (t.instances) {
-      removeInstances(t, val)
-    }
+    removeInstances(t, val)
   }
 }
 
 const removeInstances = (t, val, override) => {
-  let i = t.instances.length
-  while (i--) {
-    const instance = t.instances[i]
-    if (override) {
-      switchInheritance(instance, override, void 0, t)
-    } else {
-      override = t
-    }
-    if (instance.val) {
-      if (instance.val.inherits === getVal(t)) {
+  if (t.instances) {
+    let i = t.instances.length
+    while (i--) {
+      const instance = t.instances[i]
+      if (override) {
+        switchInheritance(instance, override, void 0, t)
+      } else {
+        override = t
+      }
+      if (instance.val && instance.val.inherits === getVal(t)) {
         // console.log('DELETING', getRoot(instance).key, instance.key)
         listener(instance.val.emitters.data, null, uid(instance))
         if (instance._ks) {
-          if (instance.instances) {
-            removeInstances(instance, val)
-          }
+          removeInstances(instance, val)
           delete instance.val
         } else {
-          if (instance.instances) {
-            removeInstances(instance, val, override)
-          }
+          removeInstances(instance, val, override)
           t.instances.splice(i, 1)
           delete instance._p[instance.key]
           removeKey(instance._p, instance.key)
         }
+      } else {
+        removeInstances(instance, val)
       }
-    } else if (instance.instances) {
-      removeInstances(instance, val)
     }
   }
 }
