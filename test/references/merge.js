@@ -4,7 +4,7 @@ const { create: struct } = require('../../')
 test('references - merge', t => {
   const master = struct({
     key: 'master',
-    real:{
+    real: {
       rA: { name: 'A' },
       rB: { name: 'B' }
     },
