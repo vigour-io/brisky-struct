@@ -9,7 +9,7 @@ test('references - subscription', t => {
       realThing: 'is a thing'
     },
     otherDeep: {
-      pointer1: ['@', 'root', 'deep', 'realThing']
+      pointer: ['@', 'root', 'deep', 'realThing']
     }
   })
 
@@ -17,9 +17,9 @@ test('references - subscription', t => {
 
   const branch1 = master.create()
 
-  branch1.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
+  branch1.subscribe({ otherDeep: { pointer: true } }, (val, type) => {
     if (type === 'update') {
-      t.pass('subscription is fired for virtual reference')
+      t.pass('subscription is fired for branch')
     }
   })
 
@@ -29,29 +29,13 @@ test('references - subscription', t => {
     }
   })
 
-  t.same(
-    master.serialize(),
-    {
-      deep: {
-        realThing: 'is a thing'
-      },
-      otherDeep: {
-        pointer1: ['@', 'root', 'deep', 'realThing']
-      }
-    },
-    'master has pointer1'
+  t.equals(
+    master.get(['otherDeep', 'pointer', 'compute']), 'is a thing',
+    'master pointer is a thing'
   )
 
-  t.same(
-    branch1.serialize(),
-    {
-      deep: {
-        realThing: 'override'
-      },
-      otherDeep: {
-        pointer1: ['@', 'root', 'deep', 'realThing']
-      }
-    },
-    'branch1 has pointer1 & pointer2'
+  t.equals(
+    branch1.get(['otherDeep', 'pointer', 'compute']), 'override',
+    'branch1 pointer is override'
   )
 })

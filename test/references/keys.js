@@ -193,7 +193,7 @@ test('references - with array keys in context', t => {
 })
 
 test('references - listeners', t => {
-  t.plan(9)
+  t.plan(12)
 
   let master = void 0
   let branch1 = void 0
@@ -268,41 +268,33 @@ test('references - listeners', t => {
     realThing: 'double override'
   })
 
-  t.same(
-    master.serialize(),
-    {
-      realThing: 'is a thing',
-      pointer1: ['@', 'root', 'realThing'],
-      pointer2: ['@', 'root', 'pointer1']
-    },
-    'master has pointer1 & pointer2'
+  t.equals(
+    master.get(['pointer2', 'compute']), 'is a thing',
+    'master pointer2 is a thing'
   )
 
-  t.same(
-    branch1.serialize(),
-    {
-      realThing: 'override',
-      pointer1: ['@', 'root', 'realThing'],
-      pointer2: ['@', 'root', 'pointer1'],
-      pointer3: ['@', 'root', 'realThing'],
-      deep: {
-        pointer4: ['@', 'root', 'pointer2']
-      }
-    },
-    'branch1 has pointer1, pointer2, pointer3 & pointer4'
+  t.equals(
+    branch1.get(['pointer3', 'compute']), 'override',
+    'branch1 pointer3 is override'
   )
 
-  t.same(
-    branch2.serialize(),
-    {
-      realThing: 'double override',
-      pointer1: ['@', 'root', 'realThing'],
-      pointer2: ['@', 'root', 'pointer1'],
-      pointer3: ['@', 'root', 'realThing'],
-      deep: {
-        pointer4: ['@', 'root', 'pointer2']
-      }
-    },
-    'branch2 has pointer1, pointer2, pointer3 & pointer4'
+  t.equals(
+    branch1.get(['deep', 'pointer4', 'compute']), 'override',
+    'branch1 pointer4 is override'
+  )
+
+  t.equals(
+    branch2.get(['pointer2', 'compute']), 'double override',
+    'branch2 pointer2 is double override'
+  )
+
+  t.equals(
+    branch2.get(['pointer3', 'compute']), 'double override',
+    'branch2 pointer3 is double override'
+  )
+
+  t.equals(
+    branch2.get(['deep', 'pointer4', 'compute']), 'double override',
+    'branch2 pointer4 is override'
   )
 })
