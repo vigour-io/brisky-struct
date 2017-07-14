@@ -1,6 +1,25 @@
 const test = require('tape')
 const { create: struct } = require('../../')
 
+/*
+test('inheritance', t => {
+  const master = struct({
+    a: { b: 'value' }
+  })
+
+  const branch1 = master.create()
+
+  const branch2 = branch1.create({
+    a: { b: 'value2' }
+  })
+
+  branch1.set({ a: { b: 'value1' } })
+
+  console.log(branch2.a.inherits.b)
+  t.end()
+})
+*/
+
 test('references - merge', t => {
   const master = struct({
     key: 'master',
@@ -28,17 +47,14 @@ test('references - merge', t => {
 
   const branch3 = branch1.create({
     key: 'branch3',
-    real: { rB: { deepField: 3 } },
-    pointer: { p2: { deepPField: 33 } }
+    real: { rB: { field: 3 } },
+    pointer: { p2: { pField: 33 } }
   })
 
   const branch4 = branch2.create({
     key: 'branch4',
-    real: {
-      rA: { deepField: 4 },
-      rB: { deepField: 4 }
-    },
-    pointer: { p1: { deepPField: 44 } }
+    real: { rA: { field: 4 } },
+    pointer: { p1: { pField: 44 } }
   })
 
   master.set({
@@ -49,19 +65,19 @@ test('references - merge', t => {
   })
 
   t.equals(
-    branch3.get(['pointer', 'p2', 'deepPField', 'compute']), 33
-  )
-  /*
-  t.equals(
-    branch3.get(['pointer', 'p2', 'val', 'field', 'compute']), 1
-  )
-  */
-  t.equals(
-    branch4.get(['pointer', 'p1', 'deepPField', 'compute']), 44
+    branch3.get(['pointer', 'p2', 'pField', 'compute']), 33
   )
   t.equals(
-    branch4.get(['pointer', 'p1', 'val', 'deepField', 'compute']), 4
+    branch3.get(['pointer', 'p2', 'name', 'compute']), 'A'
   )
+  t.equals(
+    branch4.get(['pointer', 'p1', 'pField', 'compute']), 44
+  )
+  t.equals(
+    branch4.get(['pointer', 'p1', 'name', 'compute']), 'B'
+  )
+
+  console.log(branch2.pointer.p1.inherits.root(true).key)
 
   t.end()
 })

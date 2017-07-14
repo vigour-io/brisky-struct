@@ -3,6 +3,7 @@ import { listener } from './struct/listener'
 import { uid } from './uid'
 import { getVal } from './get'
 import { removeKey } from './keys'
+import { switchInheritance } from './inheritance'
 import getApi from './get/api'
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
@@ -21,7 +22,7 @@ const removeInstances = (t, val, override) => {
   while (i--) {
     const instance = t.instances[i]
     if (override) {
-      instance.inherits = override
+      switchInheritance(instance, override, void 0, t)
     } else {
       override = t
     }
