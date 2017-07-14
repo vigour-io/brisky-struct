@@ -3,71 +3,64 @@ const { create: struct } = require('../../')
 
 test('references - merge', t => {
   const master = struct({
-    deep: {
-      realThing: 'is a thing'
+    key: 'master',
+    real:{
+      rA: { name: 'A' },
+      rB: { name: 'B' }
     },
-    otherDeep: {
-      pointer1: ['@', 'root', 'deep'],
-      pointer2: ['@', 'root', 'deep']
+    pointer: {
+      p1: ['@', 'root', 'real', 'rA'],
+      p2: ['@', 'root', 'real', 'rB']
     }
   })
 
-  master.key = 'master'
+  const branch1 = master.create({
+    key: 'branch1',
+    real: { rA: { field: 1 } },
+    pointer: { p1: { pField: 11 } }
+  })
 
-  const branch1 = master.create()
+  const branch2 = master.create({
+    key: 'branch2',
+    real: { rB: { field: 2 } },
+    pointer: { p2: { pField: 22 } }
+  })
 
-  branch1.set({
-    deep: {
-      realThing: 'override'
-    },
-    otherDeep: {
-      pointer1: {
-        deeper: 'merge extra'
-      }
+  const branch3 = branch1.create({
+    key: 'branch3',
+    real: { rB: { deepField: 3 } },
+    pointer: { p2: { deepPField: 33 } }
+  })
+
+  const branch4 = branch2.create({
+    key: 'branch4',
+    real: { rA: { deepField: 4 } },
+    pointer: { p1: { deepPField: 44 } }
+  })
+
+  master.set({
+    pointer: {
+      p1: ['@', 'root', 'real', 'rB'],
+      p2: ['@', 'root', 'real', 'rA']
     }
   })
 
-  const branch2 = branch1.create()
+  t.equals(
+    branch3.get(['pointer', 'p2', 'deepPField', 'compute']), 33
+  )
+  /*
+  t.equals(
+    branch3.get(['pointer', 'p2', 'val', 'field', 'compute']), 1
+  )
+  */
+  t.equals(
+    branch4.get(['pointer', 'p1', 'deepPField', 'compute']), 44
+  )
+  /*
+  t.equals(
+    branch4.get(['pointer', 'p1', 'val', 'field', 'compute']), 2
+  )
+  */
 
-  branch2.set({
-    deep: {
-      realThing: 'double override'
-    },
-    otherDeep: {
-      pointer2: {
-        deeper: 'merge extra'
-      }
-    }
-  })
-
-  t.same(
-    master.get(['otherDeep', 'pointer1', 'realThing', 'compute']),
-    'is a thing',
-    'master pointer1 references to master realThing'
-  )
-  t.same(
-    branch1.get(['otherDeep', 'pointer1', 'realThing', 'compute']),
-    'override',
-    'branch1 pointer1 references to override'
-  )
-  t.same(
-    branch2.get(['otherDeep', 'pointer2', 'realThing', 'compute']),
-    'double override',
-    'branch2 pointer2 references to double override'
-  )
-  t.same(
-    branch2.get('otherDeep').serialize(),
-    {
-      pointer1: {
-        val: ['@', 'root', 'deep'],
-        deeper: 'merge extra'
-      },
-      pointer2: {
-        val: ['@', 'root', 'deep'],
-        deeper: 'merge extra'
-      }
-    },
-    'branch2 has all merged'
-  )
   t.end()
 })
