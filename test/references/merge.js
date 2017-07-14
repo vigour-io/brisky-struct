@@ -34,7 +34,10 @@ test('references - merge', t => {
 
   const branch4 = branch2.create({
     key: 'branch4',
-    real: { rA: { deepField: 4 } },
+    real: {
+      rA: { deepField: 4 },
+      rB: { deepField: 4 }
+    },
     pointer: { p1: { deepPField: 44 } }
   })
 
@@ -56,11 +59,9 @@ test('references - merge', t => {
   t.equals(
     branch4.get(['pointer', 'p1', 'deepPField', 'compute']), 44
   )
-  /*
   t.equals(
-    branch4.get(['pointer', 'p1', 'val', 'field', 'compute']), 2
+    branch4.get(['pointer', 'p1', 'val', 'deepField', 'compute']), 4
   )
-  */
 
   t.end()
 })

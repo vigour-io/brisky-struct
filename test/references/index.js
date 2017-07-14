@@ -1,4 +1,4 @@
 require('./basic')
-require('./merge')
 require('./keys')
+require('./merge')
 require('./subscription')

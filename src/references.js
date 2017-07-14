@@ -2,50 +2,21 @@ import { set } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
 import { getVal } from './get'
-import getApi from './get/api'
 import { removeKey } from './keys'
+import getApi from './get/api'
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
-const removeReference = t => {
+const removeReference = (t, val) => {
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
     listener(t.val.emitters.data, null, uid(t))
-  }
-}
-
-const getOnProp = t => t.props && t.props.on || getOnProp(t.inherits)
-
-const onContext = (t, context) => {
-  if (t.emitters) {
-    if (context) {
-      t.emitters._c = context
-      t.emitters._cLevel = 1
+    if (t.instances) {
+      removeInstances(t, val)
     }
-  } else if (t.inherits) {
-    onContext(t.inherits, context || t)
   }
 }
 
-const updateInstance = (t, val) => {
-  // console.log('UPDATING', t.key, '->', val.key, getRoot(t).key, '->', getRoot(val).key, '->')
-  listener(t.val.emitters.data, null, uid(t))
-  if (t.instances) {
-    updateInstances(t, val)
-  }
-  t.val = val
-  if (val.emitters) {
-    if (!val.emitters.data) {
-      getOnProp(val)(val, { data: void 0 }, 'on')
-    }
-    listener(val.emitters.data, t, uid(t))
-  } else {
-    onContext(val)
-    getOnProp(val)(val, { data: void 0 }, 'on')
-    listener(val.emitters.data, t, uid(t))
-  }
-}
-
-const updateInstances = (t, val, override) => {
+const removeInstances = (t, val, override) => {
   let i = t.instances.length
   while (i--) {
     const instance = t.instances[i]
@@ -56,38 +27,24 @@ const updateInstances = (t, val, override) => {
     }
     if (instance.val) {
       if (instance.val.inherits === getVal(t)) {
-        let vinstance
-        if (val.instances) {
-          const iRoot = getRoot(instance)
-          let j = val.instances.length
-          while (j--) {
-            if (getRoot(val.instances[j]) === iRoot) {
-              vinstance = val.instances[j]
-              updateInstance(instance, vinstance)
-              break
-            }
+        // console.log('DELETING', getRoot(instance).key, instance.key)
+        listener(instance.val.emitters.data, null, uid(instance))
+        if (instance._ks) {
+          if (instance.instances) {
+            removeInstances(instance, val)
           }
-        }
-        if (!vinstance) {
-          // console.log('DELETING', getRoot(instance).key, instance.key)
-          listener(instance.val.emitters.data, null, uid(instance))
-          if (instance._ks) {
-            if (instance.instances) {
-              updateInstances(instance, val)
-            }
-            delete instance.val
-          } else {
-            if (instance.instances) {
-              updateInstances(instance, val, override)
-            }
-            t.instances.splice(i, 1)
-            delete instance._p[instance.key]
-            removeKey(instance._p, instance.key)
+          delete instance.val
+        } else {
+          if (instance.instances) {
+            removeInstances(instance, val, override)
           }
+          t.instances.splice(i, 1)
+          delete instance._p[instance.key]
+          removeKey(instance._p, instance.key)
         }
       }
     } else if (instance.instances) {
-      updateInstances(instance, val)
+      removeInstances(instance, val)
     }
   }
 }
@@ -119,7 +76,7 @@ const resolveReferences = (t, instance, stamp) => {
     const rPath = []
     const rRoot = getRootPath(refs[i], rPath)
     if (doesInherit(iRoot.inherits, rRoot)) {
-      // console.log('ADDING', refs[i].key, '->', instance.key, rRoot.key, '->', iRoot.key)
+      // console.log('*ADDING', refs[i].key, '->', instance.key, rRoot.key, '->', iRoot.key)
       set(getApi(iRoot, rPath, {}), instance, stamp)
     }
   }
@@ -146,4 +103,4 @@ const resolveFromValue = (t, val, stamp) => {
   }
 }
 
-export { reference, removeReference, resolveReferences, resolveFromValue, updateInstances }
+export { reference, removeReference, resolveReferences, resolveFromValue }
