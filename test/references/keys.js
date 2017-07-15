@@ -33,6 +33,12 @@ test('references - with array keys in context', t => {
     ]
   })
 
+  branch1.set({
+    movieC: {
+      progress: 0.2
+    }
+  })
+
   t.same(
     master.get('movies').serialize(),
     [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
@@ -43,12 +49,6 @@ test('references - with array keys in context', t => {
     [['@', 'root', 'movieB'], ['@', 'root', 'movieC']],
     'list of movies is corect on branch1'
   )
-
-  branch1.set({
-    movieC: {
-      progress: 0.2
-    }
-  })
 
   const branch2 = branch1.create({
     key: 'branch2',
