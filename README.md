@@ -207,7 +207,7 @@ Third parameter of set is a reset flag.
 ⚠ Second parameter is a stamp, will come to our plate on further chapters.
 
 ```js
-const second =  root.get('second')
+const second = root.get('second')
 second.set({ newSubKey: 'newSubValue' })
 second.serialize() // → { "subKey": "subValue", "newSubKey": "newSubValue" }
 second.set({ onlySubKey: 'onlySubValue' }, void 0, true)
