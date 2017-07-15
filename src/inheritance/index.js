@@ -1,7 +1,7 @@
 import { getKeys } from '../keys'
 import { get, getProps, getFn, getVal } from '../get'
 import { getProp } from '../property'
-import { resolveFromValue } from '../references' // rdy for this
+import { resolveFromValue } from '../references'
 import { data } from '../emit'
 
 const getKeyProp = (t, key) => t.props

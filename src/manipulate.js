@@ -7,7 +7,7 @@ import { resolveContext } from './context'
 import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
-import { reference, resolveReferences, removeReference, resolveFromValue } from './references'
+import { reference, removeReference, resolveReferences, resolveFromValue } from './references'
 import { getKeys } from './keys'
 
 const create = (t, val, stamp, parent, key, reset) => {
@@ -53,15 +53,15 @@ const create = (t, val, stamp, parent, key, reset) => {
     set(instance, val, stamp, true, reset)
   }
 
-  if (parent) {
-    if (
-      t.emitters &&
-      t.emitters.data &&
-      t.emitters.data.struct
-    ) {
-      resolveReferences(t, instance, stamp)
-    }
+  if (
+    parent &&
+    t.emitters &&
+    t.emitters.data &&
+    t.emitters.data.struct
+  ) {
+    resolveReferences(t, instance, stamp)
   }
+
   return instance
 }
 
@@ -330,7 +330,7 @@ const setVal = (t, val, stamp, ref) => {
           return true
         }
       }
-      removeReference(t)
+      removeReference(t, val)
       t.val = val
       if (val.emitters) {
         if (!val.emitters.data) {
@@ -351,4 +351,4 @@ const setVal = (t, val, stamp, ref) => {
   }
 }
 
-export { set, create, resolveReferences }
+export { set, create }
