@@ -90,9 +90,9 @@ const resolveFromValue = (t, val, stamp) => {
         const ref = getApi(getRoot(vinstance), tPath, {})
         if (ref._c || !ref.val) {
           set(ref, vinstance, stamp)
-          ref._c = null
-          ref._cLevel = null
         }
+        ref._c = null
+        ref._cLevel = null
       }
     }
   }
