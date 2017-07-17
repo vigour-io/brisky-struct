@@ -15,8 +15,7 @@ const handleStruct = (p, stamp) => {
 const subscription = (t, stamp) => {
   t.tStamp = stamp
   if (t._p || t._c) {
-    let p = t._p
-    if (t._c && t._cLevel === 1) p = t._c
+    let p = t._c && t._cLevel === 1 ? t._c : t._p
 
     while (p && (!p.tStamp || p.tStamp !== stamp)) {
       p.tStamp = stamp
