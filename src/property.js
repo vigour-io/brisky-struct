@@ -3,39 +3,39 @@ import { addKey } from './keys'
 import { create, set } from './manipulate'
 import { contextProperty } from './context'
 
-const property = (t, val, key, stamp, struct, isNew, reset) => {
+const property = (t, val, key, stamp, struct, isNew, reset, noConflict) => {
   var changed
   const result = get(t, key)
   if (result && result.inherits) {
     if (result._c) {
       // also need to do some stuff here
-      contextProperty(t, val, stamp, key, result, reset)
+      contextProperty(t, val, stamp, key, result, reset, noConflict)
     } else {
-      set(result, val, stamp, void 0, reset)
+      set(result, val, stamp, void 0, reset, noConflict)
       changed = val === null
     }
   } else {
     changed = true
     addKey(t, key)
-    create(struct, val, stamp, t, key, reset)
+    create(struct, val, stamp, t, key, reset, noConflict)
   }
   return changed
 }
 
-const propertyNE = (t, val, key, stamp, struct, isNew, reset) => {
+const propertyNE = (t, val, key, stamp, struct, isNew, reset, noConflict) => {
   var changed
   const result = get(t, key)
   if (result && result.inherits) {
     if (result._c) {
       // also need to do some stuff here
-      contextProperty(t, val, stamp, key, result, reset)
+      contextProperty(t, val, stamp, key, result, reset, noConflict)
     } else {
-      set(result, val, stamp, void 0, reset)
+      set(result, val, stamp, void 0, reset, noConflict)
       changed = val === null
     }
   } else {
     changed = true
-    create(struct, val, stamp, t, key, reset)
+    create(struct, val, stamp, t, key, reset, noConflict)
   }
   return changed
 }
