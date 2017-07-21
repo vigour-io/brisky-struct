@@ -10,7 +10,7 @@ import { promise, generator, isGeneratorFunction, iterator } from './async'
 import { reference, removeReference, resolveReferences, resolveFromValue } from './references'
 import { getKeys } from './keys'
 
-const create = (t, val, stamp, parent, key, reset) => {
+const create = (t, val, stamp, parent, key, reset, noConflict) => {
   var instance
   const hasType = val &&
     typeof val === 'object' &&
@@ -50,7 +50,7 @@ const create = (t, val, stamp, parent, key, reset) => {
     }
   }
   if (val !== void 0) {
-    set(instance, val, stamp, true, reset)
+    set(instance, val, stamp, true, reset, noConflict)
   }
 
   if (
@@ -113,11 +113,11 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
 }
 // --------------
 
-const overrideObjects = (t, val, stamp, isNew, reset) => {
+const overrideObjects = (t, val, stamp, isNew, reset, noConflict) => {
   var override = val.stamp
 
   // conflict resolution
-  if (override && t.stamp && !reset && Math.abs(t.stamp) > Math.abs(override)) {
+  if (override && t.stamp && !noConflict && Math.abs(t.stamp) > Math.abs(override)) {
     return false
   }
 
@@ -131,7 +131,7 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
       for (let key in val) {
         if (key !== 'stamp') {
           let result = key !== 'val'
-              ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, val)
+              ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
               : setVal(t, val.val, stamp, 1)
           if (result) {
             if (!changed) {
@@ -162,7 +162,7 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
         if (key !== 'stamp') {
           if (
             key !== 'val'
-              ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, val)
+              ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
               : setVal(t, val.val, stamp, 1)
           ) {
             changed = true
@@ -182,15 +182,15 @@ const overrideObjects = (t, val, stamp, isNew, reset) => {
   }
 }
 
-const objects = (t, val, stamp, isNew, reset) => {
+const objects = (t, val, stamp, isNew, reset, noConflict) => {
   if (val.stamp) {
-    return overrideObjects(t, val, stamp, isNew, reset)
+    return overrideObjects(t, val, stamp, isNew, reset, noConflict)
   } else if (t.instances) {
     let changed
     for (let key in val) {
       if (key !== 'stamp') {
         let result = key !== 'val'
-            ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, val)
+            ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
             : setVal(t, val.val, stamp, 1)
         if (result) {
           if (!changed) {
@@ -215,7 +215,7 @@ const objects = (t, val, stamp, isNew, reset) => {
     for (let key in val) {
       if (
         key !== 'val'
-          ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, val)
+          ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
           : setVal(t, val.val, stamp, 1)
       ) {
         changed = true
@@ -231,9 +231,9 @@ const objects = (t, val, stamp, isNew, reset) => {
   }
 }
 
-const set = (t, val, stamp, isNew, reset) => {
+const set = (t, val, stamp, isNew, reset, noConflict) => {
   if (t._c) {
-    return resolveContext(t, val, stamp, reset)
+    return resolveContext(t, val, stamp, reset, noConflict)
   } else {
     const type = typeof val
     if (type === 'function') {
@@ -270,7 +270,7 @@ const set = (t, val, stamp, isNew, reset) => {
             return isChanged(t, val, stamp, isNew)
           }
         } else {
-          return objects(t, val, stamp, isNew, reset)
+          return objects(t, val, stamp, isNew, reset, noConflict)
         }
       }
     } else if (setVal(t, val, stamp)) {

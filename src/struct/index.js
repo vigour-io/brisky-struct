@@ -66,8 +66,8 @@ const parse = (t, val, key, stamp, props) => {
       }
     }
 
-    const definition = (t, val, key, stamp, isNew, reset) =>
-      p(t, val, key, stamp, struct, isNew, reset)
+    const definition = (t, val, key, stamp, isNew, reset, noConflict) =>
+      p(t, val, key, stamp, struct, isNew, reset, noConflict)
 
     definition.struct = struct
     props[key] = definition
