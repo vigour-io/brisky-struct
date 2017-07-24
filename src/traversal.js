@@ -1,3 +1,4 @@
+
 const parent = t => {
   if (t._c) {
     if (t._cLevel === 1) {
@@ -51,4 +52,19 @@ const path = (t, real) => {
   return result
 }
 
-export { path, parent, root }
+const realRoot = t => {
+  while (t._p) {
+    t = t._p
+  }
+  return t
+}
+
+const realRootPath = (t, path) => {
+  while (t._p) {
+    path.push(t.key)
+    t = t._p
+  }
+  return t
+}
+
+export { path, parent, root, realRoot, realRootPath }
