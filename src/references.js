@@ -8,14 +8,14 @@ import getApi from './get/api'
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
 
-const removeReference = (t, val) => {
+const removeReference = t => {
   if (t.val && typeof t.val === 'object' && t.val.inherits) {
     listener(t.val.emitters.data, null, uid(t))
-    removeInstances(t, val)
+    removeInstances(t)
   }
 }
 
-const removeInstances = (t, val, override) => {
+const removeInstances = (t, override) => {
   if (t.instances) {
     let i = t.instances.length
     while (i--) {
@@ -29,16 +29,16 @@ const removeInstances = (t, val, override) => {
         // console.log('DELETING', getRoot(instance).key, instance.key)
         listener(instance.val.emitters.data, null, uid(instance))
         if (instance._ks) {
-          removeInstances(instance, val)
+          removeInstances(instance)
           delete instance.val
         } else {
-          removeInstances(instance, val, override)
+          removeInstances(instance, override)
           t.instances.splice(i, 1)
           delete instance._p[instance.key]
           removeKey(instance._p, instance.key)
         }
       } else {
-        removeInstances(instance, val)
+        removeInstances(instance)
       }
     }
   }

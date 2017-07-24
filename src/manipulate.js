@@ -328,7 +328,7 @@ const setVal = (t, val, stamp, ref) => {
           return true
         }
       }
-      removeReference(t, val)
+      removeReference(t)
       t.val = val
       if (val.emitters) {
         if (!val.emitters.data) {
