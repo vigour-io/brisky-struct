@@ -9,7 +9,8 @@ test('references - subscription', t => {
       realThing: 'is a thing'
     },
     otherDeep: {
-      pointer: ['@', 'root', 'deep', 'realThing']
+      pointer1: ['@', 'root', 'deep', 'realThing'],
+      pointer2: ['@', 'parent', 'pointer1']
     }
   })
 
@@ -17,7 +18,7 @@ test('references - subscription', t => {
 
   const branch1 = master.create()
 
-  branch1.subscribe({ otherDeep: { pointer: true } }, (val, type) => {
+  branch1.subscribe({ otherDeep: { pointer2: { val: true } } }, (val, type) => {
     if (type === 'new') {
       t.equals(val.compute(), 'is a thing', 'fired for original')
     } else if (type === 'update') {
@@ -32,12 +33,12 @@ test('references - subscription', t => {
   })
 
   t.equals(
-    master.get(['otherDeep', 'pointer', 'compute']), 'is a thing',
-    'master pointer is a thing'
+    master.get(['otherDeep', 'pointer2', 'compute']), 'is a thing',
+    'master pointer2 is a thing'
   )
 
   t.equals(
-    branch1.get(['otherDeep', 'pointer', 'compute']), 'override',
-    'branch1 pointer is override'
+    branch1.get(['otherDeep', 'pointer1', 'compute']), 'override',
+    'branch1 pointer1 is override'
   )
 })
