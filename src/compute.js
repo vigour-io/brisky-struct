@@ -1,5 +1,4 @@
-const get = t => t.val !== void 0
-  ? t.val : t.inherits && get(t.inherits)
+import { getRefVal } from './references'
 
 const origin = t => t.val && typeof t.val === 'object' && t.val.inherits
   ? origin(t.val) : t
@@ -8,17 +7,16 @@ const transform = t => t.$transform !== void 0
   ? t.$transform
   : t.inherits && transform(t.inherits)
 
-const compute = (t, val, passon, arg) => {
+const compute = (t, val, passon, arg, context) => {
   if (val === void 0) {
-    val = t.val
-    if (val === void 0) { val = get(t.inherits) }
+    val = getRefVal(t, context || t._c)
   }
   if (val) {
     const type = typeof val
     if (type === 'object') {
       if (val.inherits) {
         const v = val
-        val = compute(val, void 0, passon, arg)
+        val = compute(val, void 0, passon, arg, context || t._c)
         if (val === void 0) {
           val = v
         }

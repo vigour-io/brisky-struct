@@ -1,3 +1,4 @@
+import { getRefVal } from '../references'
 
 const get = (t, key, noContext) => {
   if (key in t) {
@@ -22,13 +23,13 @@ const get = (t, key, noContext) => {
   }
 }
 
-const getOrigin = (t, key, noContext) => {
+const getOrigin = (t, key, noContext, context) => {
   if (t) {
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
       return result
-    } else if ((t = getVal(t)) && typeof t === 'object') {
-      return t.inherits && getOrigin(t, key, noContext)
+    } else if ((t = getRefVal(t, context)) && typeof t === 'object') {
+      return t.inherits && getOrigin(t, key, noContext, context)
     }
   }
 }

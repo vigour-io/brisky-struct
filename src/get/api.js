@@ -20,14 +20,14 @@ export default (t, key, val, stamp, noContext) => {
     } else {
       for (let i = 0, len = key.length; t && i < len; i++) {
         bind = t
-        t = get(t, key[i], noContext) || getOrigin(t, key[i], noContext)
+        t = getOrigin(t, key[i], noContext, t._c)
         if (typeof t === 'function' && whitelist(key[i])) { t = bind[key[i]]() }
       }
     }
     return t
   } else {
     bind = t
-    t = getOrigin(t, key, noContext)
+    t = getOrigin(t, key, noContext, t._c)
     if (!t && val !== void 0) {
       set(bind, { [key]: val }, stamp)
       t = get(bind, key, noContext)

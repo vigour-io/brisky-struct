@@ -2,7 +2,7 @@ const test = require('tape')
 const { create: struct } = require('../../')
 
 test('references - subscription', t => {
-  t.plan(3)
+  t.plan(4)
 
   const master = struct({
     deep: {
@@ -18,8 +18,10 @@ test('references - subscription', t => {
   const branch1 = master.create()
 
   branch1.subscribe({ otherDeep: { pointer: true } }, (val, type) => {
-    if (type === 'update') {
-      t.pass('subscription is fired for branch')
+    if (type === 'new') {
+      t.equals(val.compute(), 'is a thing', 'fired for original')
+    } else if (type === 'update') {
+      t.equals(val.compute(), 'override', 'fired for override')
     }
   })
 

@@ -200,20 +200,18 @@ test('references - listeners', t => {
   let branch2 = void 0
 
   master = struct({
+    key: 'master',
     types: {
       pointer: {
         on: {
           data (val, stamp, struct) {
-            if (val.compute) {
-              val = val.compute()
-            }
-            if (val === 'override' && struct.root(true) === branch1) {
+            if (val === 'override' && struct.root().key === 'branch1') {
               if (struct.key === 'pointer1') {
                 t.pass('pointer1 fired for override')
               } else if (struct.key === 'pointer2') {
                 t.pass('pointer2 fired for override')
               }
-            } else if (val === 'double override' && struct.root(true) === branch2) {
+            } else if (val === 'double override' && struct.root().key === 'branch2') {
               if (struct.key === 'pointer1') {
                 t.pass('pointer1 fired for double override')
               } else if (struct.key === 'pointer2') {
@@ -225,7 +223,7 @@ test('references - listeners', t => {
               }
             } else if (
               ~['override', 'double override'].indexOf(val) &&
-              struct.root(true) === master
+              struct.root() === 'master'
             ) {
               t.fail('master emitters should not fire')
             }
@@ -244,11 +242,8 @@ test('references - listeners', t => {
     }
   })
 
-  master.key = 'master'
-
-  branch1 = master.create()
-
-  branch1.set({
+  branch1 = master.create({
+    key: 'branch1',
     realThing: 'override',
     pointer3: {
       type: 'pointer',
@@ -262,9 +257,8 @@ test('references - listeners', t => {
     }
   })
 
-  branch2 = branch1.create()
-
-  branch2.set({
+  branch2 = branch1.create({
+    key: 'branch2',
     realThing: 'double override'
   })
 
@@ -279,7 +273,7 @@ test('references - listeners', t => {
   )
 
   t.equals(
-    branch1.get(['deep', 'pointer4', 'compute']), 'override',
+    branch1.get(['pointer2', 'compute']), 'override',
     'branch1 pointer4 is override'
   )
 

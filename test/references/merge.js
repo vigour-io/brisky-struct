@@ -65,19 +65,21 @@ test('references - merge', t => {
   })
 
   t.equals(
-    branch3.get(['pointer', 'p2', 'pField', 'compute']), 33
+    branch3.get(['pointer', 'p2', 'pField', 'compute']), 33,
+    'branch3 p2 field is correct'
   )
   t.equals(
-    branch3.get(['pointer', 'p2', 'name', 'compute']), 'A'
+    branch3.get(['pointer', 'p2', 'name', 'compute']), 'A',
+    'branch3 p2 name is correct'
   )
   t.equals(
-    branch4.get(['pointer', 'p1', 'pField', 'compute']), 44
+    branch4.get(['pointer', 'p1', 'pField', 'compute']), 44,
+    'branch4 p1 field is correct'
   )
   t.equals(
-    branch4.get(['pointer', 'p1', 'name', 'compute']), 'B'
+    branch4.get(['pointer', 'p1', 'name', 'compute']), 'B',
+    'branch4 p2 name is correct'
   )
-
-  console.log(branch2.pointer.p1.inherits.root(true).key)
 
   t.end()
 })

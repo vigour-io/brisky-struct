@@ -129,38 +129,6 @@ test('switch inheritance - instances - fields', t => {
   t.end()
 })
 
-test('references - resolve from listeners', t => {
-  const hub = struct.create({ x: true, y: true })
-  const hubInstance = hub.create({ x: 'hello' })
-  hub.set({ y: [ '@', 'root', 'x' ] })
-  t.equal(hubInstance.y.val, hubInstance.x, 'resolve refs')
-  t.end()
-})
-
-test('references - resolve from instance', t => {
-  const hub = struct.create()
-  const hubInstance = hub.create({ b: { glurf: true }, x: 'x!' })
-  hub.set({ b: [ '@', 'root', 'x' ] })
-  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
-  t.end()
-})
-
-test('references - resolve from instance (one field)', t => {
-  const hub = struct.create()
-  const hubInstance = hub.create({ x: true })
-  hub.set({ b: [ '@', 'root', 'x' ] })
-  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
-  t.end()
-})
-
-test('references - references resolve from switch', t => {
-  const hub = struct.create()
-  const hubInstance = hub.create({ b: {}, x: true })
-  hub.set({ b: [ '@', 'root', 'x' ] })
-  t.equal(hubInstance.b.val, hubInstance.x, 'resolve refs')
-  t.end()
-})
-
 test('switch inheritance - references - reverse', t => {
   const hub = struct.create()
   const hubInstance = hub.create({
@@ -195,7 +163,6 @@ test('switch inheritance - references', t => {
     b: [ '@', 'root', 'x' ],
     c: [ '@', 'root', 'y' ]
   })
-  t.equal(hubInstance.b.val, hubInstance.x)
   t.equal(getVal(hubInstance.c), hub.y)
   t.end()
 })
@@ -217,7 +184,6 @@ test('switch inheritance - gaurds', t => {
     b: [ '@', 'root', 'x' ],
     c: [ '@', 'root', 'y' ]
   })
-  t.equal(hubInstance.b.val, hubInstance.x)
   t.equal(getVal(hubInstance.c), hub.y)
   t.end()
 })

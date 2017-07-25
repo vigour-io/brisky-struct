@@ -7,7 +7,7 @@ import { resolveContext } from './context'
 import { getProp } from './property'
 import createType from './struct/types/create'
 import { promise, generator, isGeneratorFunction, iterator } from './async'
-import { reference, removeReference, resolveReferences, resolveFromValue } from './references'
+import { reference, removeReference } from './references'
 import { getKeys } from './keys'
 
 const create = (t, val, stamp, parent, key, reset, noConflict) => {
@@ -51,15 +51,6 @@ const create = (t, val, stamp, parent, key, reset, noConflict) => {
   }
   if (val !== void 0) {
     set(instance, val, stamp, true, reset, noConflict)
-  }
-
-  if (
-    parent &&
-    t.emitters &&
-    t.emitters.data &&
-    t.emitters.data.struct
-  ) {
-    resolveReferences(t, instance, stamp)
   }
 
   return instance
@@ -340,7 +331,6 @@ const setVal = (t, val, stamp, ref) => {
         getOnProp(val)(val, { data: void 0 }, 'on')
         listener(val.emitters.data, t, uid(t))
       }
-      resolveFromValue(t, val, stamp)
     } else {
       removeReference(t)
       t.val = val
