@@ -28,8 +28,8 @@ const getOrigin = (t, key, noContext, context) => {
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
       return result
-    } else if ((t = getRefVal(t, context)) && typeof t === 'object') {
-      return t.inherits && getOrigin(t, key, noContext, context)
+    } else if ((t = getRefVal(t, context || t._c)) && typeof t === 'object') {
+      return t.inherits && getOrigin(t, key, noContext, context || t._c)
     }
   }
 }
