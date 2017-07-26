@@ -18,7 +18,7 @@ const vinstances = (instances, cRoot) => {
   while (i--) {
     const vinstance = instances[i].instances &&
       vinstances(instances[i].instances, cRoot)
-    if (vinstance) {
+    if (vinstance !== void 0) {
       return vinstance
     } else {
       const vRoot = realRoot(instances[i])
@@ -36,7 +36,7 @@ const getRefVal = t => {
   if (t.val !== void 0 && t.val !== null) {
     const vinstance = t._rc && t.val.instances &&
       vinstances(t.val.instances, realRoot(t._rc))
-    if (vinstance !== void 0 && vinstance !== null) {
+    if (vinstance !== null && vinstance !== void 0) {
       t._rc = null
       return vinstance
     } else {
