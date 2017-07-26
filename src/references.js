@@ -32,23 +32,23 @@ const vinstances = (instances, cRoot) => {
   return fallback
 }
 
-const getRefVal = (t, context) => {
-  if (t.val !== void 0) {
-    const vinstance = context.c && t.val.instances &&
-      vinstances(t.val.instances, realRoot(context.c))
+const getRefVal = t => {
+  if (t.val !== void 0 && t.val !== null) {
+    const vinstance = t._rc && t.val.instances &&
+      vinstances(t.val.instances, realRoot(t._rc))
     if (vinstance !== void 0 && vinstance !== null) {
+      t._rc = null
       return vinstance
     } else {
-      if (!context.c) {
-        context.c = t
-      }
+      t._rc = t._rc || t
       return t.val
     }
-  } else {
-    if (!context.c) {
-      context.c = t
-    }
-    return t.inherits && getRefVal(t.inherits, context)
+  } else if (t.inherits) {
+    t.inherits._rc = t._rc || t
+    t._rc = null
+    return getRefVal(t.inherits)
+  } else if (t._rc) {
+    t._rc = null
   }
 }
 

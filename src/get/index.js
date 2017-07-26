@@ -10,6 +10,7 @@ const get = (t, key, noContext) => {
       } else if (result._c) {
         result._c = null
         result._cLevel = null
+        result._rc = null
       }
     }
     return result
@@ -23,16 +24,23 @@ const get = (t, key, noContext) => {
   }
 }
 
-const getOrigin = (t, key, noContext, context) => {
+const getOrigin = (t, key, noContext) => {
   if (t) {
-    if (!context) {
-      context = { c: t._c }
-    }
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
+      if (t._rc) {
+        t._rc = null
+      }
       return result
-    } else if ((t = getRefVal(t, context || { c: t._c })) && typeof t === 'object') {
-      return t.inherits && getOrigin(t, key, noContext, context)
+    } else {
+      const clean = t
+      t._rc = t._c || t._rc
+      if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
+        t._rc = clean._rc || t._rc
+        clean._rc = null
+        return getOrigin(t, key, noContext)
+      }
+      clean._rc = null
     }
   }
 }

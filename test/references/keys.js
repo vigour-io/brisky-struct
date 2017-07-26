@@ -158,7 +158,7 @@ test('references - with array keys in context', t => {
   )
   t.equals(
     branch3.get(['movies', '0', 'favourite', 'compute']), true,
-    'branch1 movieA favourite true'
+    'branch3 movieA favourite true'
   )
   t.equals(
     branch3.get(['movies', '1', 'progress', 'compute']), 0.1,
