@@ -25,11 +25,14 @@ const get = (t, key, noContext) => {
 
 const getOrigin = (t, key, noContext, context) => {
   if (t) {
+    if (!context) {
+      context = { c: t._c }
+    }
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
       return result
-    } else if ((t = getRefVal(t, context || t._c)) && typeof t === 'object') {
-      return t.inherits && getOrigin(t, key, noContext, context || t._c)
+    } else if ((t = getRefVal(t, context || { c: t._c })) && typeof t === 'object') {
+      return t.inherits && getOrigin(t, key, noContext, context)
     }
   }
 }

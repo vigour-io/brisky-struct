@@ -9,14 +9,17 @@ const transform = t => t.$transform !== void 0
 
 const compute = (t, val, passon, arg, context) => {
   if (val === void 0) {
-    val = getRefVal(t, context || t._c)
+    if (!context) {
+      context = { c: t._c }
+    }
+    val = getRefVal(t, context)
   }
   if (val) {
     const type = typeof val
     if (type === 'object') {
       if (val.inherits) {
         const v = val
-        val = compute(val, void 0, passon, arg, context || t._c)
+        val = compute(val, void 0, passon, arg, context)
         if (val === void 0) {
           val = v
         }

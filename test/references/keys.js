@@ -195,11 +195,7 @@ test('references - with array keys in context', t => {
 test('references - listeners', t => {
   t.plan(12)
 
-  let master = void 0
-  let branch1 = void 0
-  let branch2 = void 0
-
-  master = struct({
+  const master = struct({
     key: 'master',
     types: {
       pointer: {
@@ -242,7 +238,7 @@ test('references - listeners', t => {
     }
   })
 
-  branch1 = master.create({
+  const branch1 = master.create({
     key: 'branch1',
     realThing: 'override',
     pointer3: {
@@ -257,7 +253,7 @@ test('references - listeners', t => {
     }
   })
 
-  branch2 = branch1.create({
+  const branch2 = branch1.create({
     key: 'branch2',
     realThing: 'double override'
   })
@@ -273,7 +269,7 @@ test('references - listeners', t => {
   )
 
   t.equals(
-    branch1.get(['pointer2', 'compute']), 'override',
+    branch1.get(['deep', 'pointer4', 'compute']), 'override',
     'branch1 pointer4 is override'
   )
 
