@@ -51,7 +51,7 @@ test('references - merge', t => {
   )
   t.equals(
     branch3.get(['pointer', 'p2', 'field', 'compute']), 1,
-    'branch3 p2 name is correct'
+    'branch3 p2 field is correct'
   )
   t.equals(
     branch4.get(['pointer', 'p1', 'pField', 'compute']), true,
@@ -59,7 +59,7 @@ test('references - merge', t => {
   )
   t.equals(
     branch4.get(['pointer', 'p1', 'field', 'compute']), 2,
-    'branch4 p2 name is correct'
+    'branch4 p2 field is correct'
   )
 
   t.end()
