@@ -10,7 +10,6 @@ const get = (t, key, noContext) => {
       } else if (result._c) {
         result._c = null
         result._cLevel = null
-        result._rc = null
       }
     }
     return result
