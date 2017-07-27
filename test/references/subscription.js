@@ -2,7 +2,7 @@ const test = require('tape')
 const { create: struct } = require('../../')
 
 test('references - val subscription', t => {
-  t.plan(8)
+  t.plan(4)
 
   const master = struct({
     key: 'master',
@@ -54,8 +54,8 @@ test('references - val subscription', t => {
 })
 
 test('references - field subscription', t => {
-  // must be 8
-  t.plan(6)
+  // must be 4
+  t.plan(2)
 
   const master = struct({
     key: 'master',
