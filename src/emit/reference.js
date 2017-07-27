@@ -93,7 +93,7 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
 // When there's no local references
 // there can be still inherited references
 const virtualReferences = (t, val, stamp, oRoot) => {
-  if (t.inherits) {
+  while (t.inherits) {
     if (!oRoot) {
       oRoot = realRoot(t)
     }
@@ -106,7 +106,7 @@ const virtualReferences = (t, val, stamp, oRoot) => {
     } else {
       virtualSubscriptions(t, stamp, oRoot)
     }
-    virtualReferences(t.inherits, val, stamp, oRoot)
+    t = t.inherits
   }
 }
 
