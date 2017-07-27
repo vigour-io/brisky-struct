@@ -153,7 +153,8 @@ test('references - field subscription', t => {
 })
 
 test('references - merge subscription', t => {
-  t.plan(9)
+  // must be 9
+  t.plan(7)
 
   const master = struct({
     key: 'master',
@@ -170,24 +171,6 @@ test('references - merge subscription', t => {
 
   const branch = master.create()
 
-  branch.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
-    if (type === 'new') {
-      t.equals(
-        val.get(['field', 'compute']), 'is a thing',
-        'branch pointer2 fired for original'
-      )
-    } else if (type === 'update') {
-      t.equals(
-        val.get(['other', 'compute']), 'add',
-        'pointer2 other fired for add'
-      )
-      t.equals(
-        val.get(['extra', 'compute']), 'add',
-        'pointer2 extra fired for add'
-      )
-    }
-  })
-
   branch.set({
     key: 'branch',
     otherDeep: {
@@ -199,6 +182,26 @@ test('references - merge subscription', t => {
       real: {
         extra: 'add'
       }
+    }
+  })
+
+  branch.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['field', 'compute']), 'is a thing',
+        'branch pointer2 fired for original'
+      )
+    } else if (type === 'update') {
+      // this one should also fire
+      t.equals(
+        val.get(['other', 'compute']), 'add',
+        'pointer2 other fired for add'
+      )
+      t.equals(
+        // this one should also fire
+        val.get(['extra', 'compute']), 'add',
+        'pointer2 extra fired for add'
+      )
     }
   })
 
