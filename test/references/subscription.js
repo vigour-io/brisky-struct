@@ -185,7 +185,6 @@ test('references - merge subscription', t => {
   })
 
   branch.subscribe({ otherDeep: { pointer2: true } }, val => {
-    console.log(val.serialize())
     t.equals(
       val.get(['field', 'compute']), 'is a thing',
       'branch pointer2 fired for original'
