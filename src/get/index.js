@@ -27,6 +27,7 @@ const getOrigin = (t, key, noContext) => {
   if (t) {
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
+      result._rc = result._rc || t._rc
       if (t._rc) {
         t._rc = null
       }
