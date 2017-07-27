@@ -54,8 +54,7 @@ test('references - val subscription', t => {
 })
 
 test('references - field subscription', t => {
-  // must be 4
-  t.plan(2)
+  t.plan(4)
 
   const master = struct({
     key: 'master',
@@ -79,7 +78,6 @@ test('references - field subscription', t => {
         'pointer1 fired for original'
       )
     } else if (type === 'update') {
-      // this one should also fire
       t.equals(
         val.get(['field', 'compute']), 'override',
         'pointer1 fired for override'
@@ -94,7 +92,6 @@ test('references - field subscription', t => {
         'pointer2 fired for original'
       )
     } else if (type === 'update') {
-      // this one should also fire
       t.equals(
         val.get(['field', 'compute']), 'override',
         'pointer2 fired for override'
