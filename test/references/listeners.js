@@ -100,7 +100,7 @@ test('references - virtual listeners', t => {
 
   t.equals(
     branch2.get(['deep', 'pointer4', 'compute']), 'double override',
-    'branch2 pointer4 is override'
+    'branch2 pointer4 is double override'
   )
 })
 
