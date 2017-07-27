@@ -11,7 +11,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
 ))
 
 // Iterate over given references list
-// and fire emitters if conditions are met
+// and fire functions if conditions are met
 const iterate = (refs, val, stamp, oRoot, cb, fn) => {
   var i = refs.length
   while (i--) {
@@ -40,6 +40,8 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
   }
 }
 
+// Fire subscriptions in context
+// then clean the context
 const fnSubscriptions = (t, val, stamp, c, cLevel) => {
   t._c = c
   t._cLevel = cLevel
@@ -48,6 +50,8 @@ const fnSubscriptions = (t, val, stamp, c, cLevel) => {
   t._cLevel = null
 }
 
+// When there's no inherited references
+// there can still be a reference to parents
 const virtualSubscriptions = (t, stamp, oRoot) => {
   while (t._p) {
     t = t._p
@@ -67,7 +71,7 @@ const virtualSubscriptions = (t, stamp, oRoot) => {
   }
 }
 
-// Fire emitters in context
+// Fire emitters && subscriptions in context
 // then clean the context
 const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
   t._c = c
