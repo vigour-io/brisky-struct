@@ -55,12 +55,6 @@ const fnSubscriptions = (t, val, stamp, c, cLevel) => {
 const virtualSubscriptions = (t, stamp, oRoot) => {
   while (t._p) {
     t = t._p
-    let localRefs = t.emitters &&
-      t.emitters.data &&
-      t.emitters.data.struct
-    if (localRefs) {
-      iterate(localRefs, void 0, stamp, oRoot, void 0, fnSubscriptions)
-    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
