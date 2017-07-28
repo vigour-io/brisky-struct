@@ -1,7 +1,8 @@
 import struct from './struct'
 import { create as c, set } from './manipulate'
 import methods from './methods'
-import { get, getVal } from './get'
+import { get, getOrigin, getVal } from './get'
+import { getRefVal } from './references'
 import { getProp as getProperty, property } from './property'
 import { contextProperty } from './context'
 import { subscribe, parse } from './subscribe'
@@ -31,6 +32,8 @@ export {
   emitterProperty,
   switchInheritance,
   get,
+  getOrigin,
+  getRefVal,
   getProperty,
   getKeys,
   removeContextKey,
