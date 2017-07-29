@@ -109,6 +109,50 @@ test('references - field subscription', t => {
   })
 })
 
+test('references - field subscription local', t => {
+  t.plan(1)
+
+  const master = struct({
+    key: 'master',
+    deep: {
+      real: {
+        field: 'is a thing'
+      },
+      otherReal: {
+        field: 'is other thing'
+      }
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'real'],
+      pointer2: ['@', 'parent', 'pointer1']
+    }
+  })
+
+  const branch = master.create()
+
+  branch.subscribe({ otherDeep: { pointer3: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['field', 'compute']), 'is other override',
+        'pointer2 fired for other override'
+      )
+    }
+  })
+
+  branch.set({
+    key: 'branch',
+    deep: {
+      otherReal: {
+        field: 'is other override'
+      }
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'otherReal'],
+      pointer3: ['@', 'parent', 'pointer2']
+    }
+  })
+})
+
 test('references - deep field subscription', t => {
   t.plan(3)
 
