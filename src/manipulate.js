@@ -274,9 +274,7 @@ const set = (t, val, stamp, isNew, reset, noConflict) => {
 }
 
 const isChanged = (t, val, stamp, isNew) => {
-  if (stamp) {
-    data(t, val, stamp, false, isNew)
-  }
+  if (stamp) { data(t, val, stamp, false, isNew) }
   if (t.instances) { instances(t, val, stamp, true) }
   return true
 }
