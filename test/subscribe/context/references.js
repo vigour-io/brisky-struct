@@ -26,7 +26,6 @@ test('subscription - context - references', t => {
 
   orig2.set({ bla: 'bla on instance!' })
 
-  t.ok(!!orig2.page.current)
   t.same(results, [ 'hello', 'bla on original', 'w00t', 'bla on instance!' ])
 
   results = []

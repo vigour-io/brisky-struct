@@ -1,4 +1,6 @@
 require('./basic')
 require('./keys')
+require('./listeners')
 require('./merge')
 require('./subscription')
+require('./perf')

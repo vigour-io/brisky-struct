@@ -158,7 +158,7 @@ test('references - with array keys in context', t => {
   )
   t.equals(
     branch3.get(['movies', '0', 'favourite', 'compute']), true,
-    'branch1 movieA favourite true'
+    'branch3 movieA favourite true'
   )
   t.equals(
     branch3.get(['movies', '1', 'progress', 'compute']), 0.1,
@@ -190,111 +190,4 @@ test('references - with array keys in context', t => {
   )
 
   t.end()
-})
-
-test('references - listeners', t => {
-  t.plan(12)
-
-  let master = void 0
-  let branch1 = void 0
-  let branch2 = void 0
-
-  master = struct({
-    types: {
-      pointer: {
-        on: {
-          data (val, stamp, struct) {
-            if (val.compute) {
-              val = val.compute()
-            }
-            if (val === 'override' && struct.root(true) === branch1) {
-              if (struct.key === 'pointer1') {
-                t.pass('pointer1 fired for override')
-              } else if (struct.key === 'pointer2') {
-                t.pass('pointer2 fired for override')
-              }
-            } else if (val === 'double override' && struct.root(true) === branch2) {
-              if (struct.key === 'pointer1') {
-                t.pass('pointer1 fired for double override')
-              } else if (struct.key === 'pointer2') {
-                t.pass('pointer2 fired for double override')
-              } else if (struct.key === 'pointer3') {
-                t.pass('pointer3 fired for double override')
-              } else if (struct.key === 'pointer4') {
-                t.pass('pointer4 fired for double override')
-              }
-            } else if (
-              ~['override', 'double override'].indexOf(val) &&
-              struct.root(true) === master
-            ) {
-              t.fail('master emitters should not fire')
-            }
-          }
-        }
-      }
-    },
-    realThing: 'is a thing',
-    pointer1: {
-      type: 'pointer',
-      val: ['@', 'root', 'realThing']
-    },
-    pointer2: {
-      type: 'pointer',
-      val: ['@', 'root', 'pointer1']
-    }
-  })
-
-  master.key = 'master'
-
-  branch1 = master.create()
-
-  branch1.set({
-    realThing: 'override',
-    pointer3: {
-      type: 'pointer',
-      val: ['@', 'root', 'realThing']
-    },
-    deep: {
-      pointer4: {
-        type: 'pointer',
-        val: ['@', 'root', 'pointer2']
-      }
-    }
-  })
-
-  branch2 = branch1.create()
-
-  branch2.set({
-    realThing: 'double override'
-  })
-
-  t.equals(
-    master.get(['pointer2', 'compute']), 'is a thing',
-    'master pointer2 is a thing'
-  )
-
-  t.equals(
-    branch1.get(['pointer3', 'compute']), 'override',
-    'branch1 pointer3 is override'
-  )
-
-  t.equals(
-    branch1.get(['deep', 'pointer4', 'compute']), 'override',
-    'branch1 pointer4 is override'
-  )
-
-  t.equals(
-    branch2.get(['pointer2', 'compute']), 'double override',
-    'branch2 pointer2 is double override'
-  )
-
-  t.equals(
-    branch2.get(['pointer3', 'compute']), 'double override',
-    'branch2 pointer3 is double override'
-  )
-
-  t.equals(
-    branch2.get(['deep', 'pointer4', 'compute']), 'double override',
-    'branch2 pointer4 is override'
-  )
 })

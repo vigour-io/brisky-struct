@@ -1,41 +1,212 @@
 const test = require('tape')
 const { create: struct } = require('../../')
 
-test('references - subscription', t => {
+test('references - val subscription', t => {
+  t.plan(4)
+
+  const master = struct({
+    key: 'master',
+    deep: {
+      real: 'is a thing'
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'real'],
+      pointer2: ['@', 'parent', 'pointer1']
+    }
+  })
+
+  const branch = master.create()
+
+  branch.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.compute(), 'is a thing',
+        'pointer1 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.compute(), 'override',
+        'pointer1 fired for override'
+      )
+    }
+  })
+
+  branch.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.compute(), 'is a thing',
+        'pointer2 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.compute(), 'override',
+        'pointer2 fired for override'
+      )
+    }
+  })
+
+  branch.set({
+    key: 'branch',
+    deep: {
+      real: 'override'
+    }
+  })
+})
+
+test('references - field subscription', t => {
+  t.plan(4)
+
+  const master = struct({
+    key: 'master',
+    deep: {
+      real: {
+        field: 'is a thing'
+      }
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'real'],
+      pointer2: ['@', 'parent', 'pointer1']
+    }
+  })
+
+  const branch = master.create()
+
+  branch.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['field', 'compute']), 'is a thing',
+        'pointer1 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.get(['field', 'compute']), 'override',
+        'pointer1 fired for override'
+      )
+    }
+  })
+
+  branch.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['field', 'compute']), 'is a thing',
+        'pointer2 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.get(['field', 'compute']), 'override',
+        'pointer2 fired for override'
+      )
+    }
+  })
+
+  branch.set({
+    key: 'branch',
+    deep: {
+      real: {
+        field: 'override'
+      }
+    }
+  })
+})
+
+test('references - field subscription local', t => {
+  t.plan(1)
+
+  const master = struct({
+    key: 'master',
+    deep: {
+      real: {
+        field: 'is a thing'
+      },
+      otherReal: {
+        field: 'is other thing'
+      }
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'real'],
+      pointer2: ['@', 'parent', 'pointer1']
+    }
+  })
+
+  const branch = master.create()
+
+  branch.subscribe({ otherDeep: { pointer3: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['field', 'compute']), 'is other override',
+        'pointer2 fired for other override'
+      )
+    }
+  })
+
+  branch.set({
+    key: 'branch',
+    deep: {
+      otherReal: {
+        field: 'is other override'
+      }
+    },
+    otherDeep: {
+      pointer1: ['@', 'root', 'deep', 'otherReal'],
+      pointer3: ['@', 'parent', 'pointer2']
+    }
+  })
+})
+
+test('references - deep field subscription', t => {
   t.plan(3)
 
   const master = struct({
+    key: 'master',
     deep: {
-      realThing: 'is a thing'
+      real: {
+        deeper: {
+          pointer1: ['@', 'root', 'otherDeep']
+        }
+      }
+    },
+    pointers: {
+      pointer2: ['@', 'root', 'deep', 'real'],
+      pointer3: ['@', 'parent', 'pointer2']
     },
     otherDeep: {
-      pointer: ['@', 'root', 'deep', 'realThing']
+      deeper: {
+        field: 'is a thing'
+      }
     }
   })
 
-  master.key = 'master'
+  const branch = master.create()
 
-  const branch1 = master.create()
-
-  branch1.subscribe({ otherDeep: { pointer: true } }, (val, type) => {
-    if (type === 'update') {
-      t.pass('subscription is fired for branch')
+  branch.subscribe({ pointers: { pointer2: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'is a thing',
+        'pointer2 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
+        'pointer2 fired for override'
+      )
     }
   })
 
-  branch1.set({
-    deep: {
-      realThing: 'override'
+  branch.subscribe({ pointers: { pointer3: true } }, (val, type) => {
+    if (type === 'new') {
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'is a thing',
+        'pointer3 fired for original'
+      )
     }
   })
 
-  t.equals(
-    master.get(['otherDeep', 'pointer', 'compute']), 'is a thing',
-    'master pointer is a thing'
-  )
-
-  t.equals(
-    branch1.get(['otherDeep', 'pointer', 'compute']), 'override',
-    'branch1 pointer is override'
-  )
+  branch.set({
+    key: 'branch',
+    otherDeep: {
+      deeper: {
+        field: 'override'
+      }
+    }
+  })
 })

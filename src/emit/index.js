@@ -1,6 +1,7 @@
 import { getFn, getData } from '../get'
 import { exec as context } from './context'
 import subscription from './subscription'
+import virtualReferences from './reference'
 
 const onGeneric = (t, key) => t.emitters && t.emitters[key] ||
   t.inherits && onGeneric(t.inherits, key)
@@ -61,6 +62,7 @@ const data = (t, val, stamp, override, isNew) => {
         }
       }
     }
+    virtualReferences(t, val, stamp)
   }
 }
 

@@ -1,6 +1,12 @@
 import { get, getOrigin } from './'
 import { set } from '../manipulate'
 
+const whitelist = key =>
+  key === 'root' ||
+  key === 'parent' ||
+  key === 'compute' ||
+  key === 'origin'
+
 export default (t, key, val, stamp, noContext) => {
   var bind
   // if typeof key === 'fn' // do somethign as well -- super nice extra
@@ -20,7 +26,7 @@ export default (t, key, val, stamp, noContext) => {
     } else {
       for (let i = 0, len = key.length; t && i < len; i++) {
         bind = t
-        t = get(t, key[i], noContext) || getOrigin(t, key[i], noContext)
+        t = getOrigin(t, key[i], noContext)
         if (typeof t === 'function' && whitelist(key[i])) { t = bind[key[i]]() }
       }
     }
@@ -37,9 +43,3 @@ export default (t, key, val, stamp, noContext) => {
     return t
   }
 }
-
-const whitelist = key =>
-  key === 'root' ||
-  key === 'parent' ||
-  key === 'compute' ||
-  key === 'origin'
