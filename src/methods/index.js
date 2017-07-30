@@ -25,6 +25,9 @@ const define = {
   applyContext (context) { return applyContext(this, context) },
   storeContext () { return storeContext(this) },
   serialize (fn) { return serialize(this, fn) },
+  toJSON (fn) {
+    return JSON.stringify(serialize(this, fn), false, 2)
+  },
   root (real) { return root(this, real) },
   path (real) { return path(this, real) },
   parent (fn) {
