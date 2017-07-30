@@ -15,7 +15,6 @@ import getType from './struct/types/get'
 import { switchInheritance } from './inheritance'
 
 const emitterProperty = struct.props.on.struct.props.default
-console.log('????B-STRUCT')
 set(struct, { inject: methods })
 
 const create = (val, stamp, t = struct, parent, key) =>
