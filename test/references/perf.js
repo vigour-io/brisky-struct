@@ -155,7 +155,6 @@ test('references - get performance', t => {
   t.end()
 })
 
-
 test('references - emitter and subscription performance', t => {
   const master = struct({
     types: {
