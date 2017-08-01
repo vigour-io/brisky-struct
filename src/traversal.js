@@ -1,3 +1,4 @@
+import { uid } from './uid'
 
 const parent = t => {
   if (t._c) {
@@ -59,6 +60,17 @@ const realRoot = t => {
   return t
 }
 
+const realRootUid = t => {
+  if (!t._ruid) {
+    var r = t
+    while (r._p) {
+      r = r._p
+    }
+    t._ruid = uid(r)
+  }
+  return t._ruid
+}
+
 const realRootPath = (t, path) => {
   while (t._p) {
     path.push(t.key)
@@ -67,4 +79,4 @@ const realRootPath = (t, path) => {
   return t
 }
 
-export { path, parent, root, realRoot, realRootPath }
+export { path, parent, root, realRootUid, realRoot, realRootPath }
