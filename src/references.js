@@ -1,7 +1,7 @@
 import { set } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
-import { realRootUid } from './traversal'
+import { realRoot } from './traversal'
 import getApi from './get/api'
 
 const reference = (t, val, stamp) => set(t, getApi(t, val.slice(1), {}, stamp))
@@ -21,7 +21,7 @@ const vinstances = (instances, cRoot) => {
     if (vinstance !== void 0) {
       return vinstance
     } else {
-      const vRoot = realRootUid(instances[i])
+      const vRoot = realRoot(instances[i])
       if (cRoot === vRoot) {
         return instances[i]
       } else if (cRoot.inherits === vRoot) {
@@ -36,7 +36,7 @@ const getRefVal = t => {
   if (t.val !== void 0 && t.val !== null) {
     if (t._rc) {
       const vinstance = t.val.instances &&
-        vinstances(t.val.instances, realRootUid(t._rc))
+        vinstances(t.val.instances, realRoot(t._rc))
       if (vinstance !== void 0) {
         t._rc = null
         return vinstance

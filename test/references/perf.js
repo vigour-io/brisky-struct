@@ -243,7 +243,7 @@ test('references - emitter and subscription performance', t => {
 
   d = Date.now() - d
   console.log('virtual reference emitters and subscriptions:', d, 'ms')
-  t.ok(d < 300, 'virtual reference emitters and subscriptions take less than 300ms')
+  t.ok(d < 200, 'virtual reference emitters and subscriptions take less than 200ms')
 
   t.end()
 })
