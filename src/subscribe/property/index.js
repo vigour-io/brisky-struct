@@ -1,6 +1,6 @@
 import { diff } from '../diff'
 import remove from './remove'
-import { getOrigin, get } from '../../get'
+import { getOrigin } from '../../get'
 import { storeContext } from '../../context'
 import { puid } from '../../uid'
 
