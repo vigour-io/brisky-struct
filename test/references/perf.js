@@ -16,6 +16,7 @@ test('references - get performance', t => {
     },
     deep: {
       real: {
+        val: 42,
         deeper: {
           pointer1: {
             val: ['@', 'root', 'otherDeep'],
@@ -31,6 +32,16 @@ test('references - get performance', t => {
     }
   })
 
+  t.equals(
+    master.get(['pointers', 'pointer3', 'compute']),
+    42,
+    'pointer3 is 42'
+  )
+  t.equals(
+    master.get(['pointers', 'pointer2', 'compute']),
+    42,
+    'pointer2 is a 42'
+  )
   t.equals(
     master.get(['pointers', 'pointer3', 'field', 'compute']),
     'merge override',
@@ -66,6 +77,8 @@ test('references - get performance', t => {
 
   var i = 1e3
   while (i--) {
+    master.get(['pointers', 'pointer3', 'compute'])
+    master.get(['pointers', 'pointer2', 'compute'])
     master.get(['pointers', 'pointer3', 'field', 'compute'])
     master.get(['pointers', 'pointer2', 'field', 'compute'])
     master.get(['pointers', 'pointer3', 'deeper', 'pointer1', 'extra', 'compute'])
@@ -90,6 +103,7 @@ test('references - get performance', t => {
     },
     deep: {
       real: {
+        val: 24,
         deeper: {
           pointer1: {
             extra: 'value override'
@@ -104,6 +118,16 @@ test('references - get performance', t => {
     }
   })
 
+  t.equals(
+    branch.get(['pointers', 'pointer3', 'compute']),
+    24,
+    'pointer3 is 24'
+  )
+  t.equals(
+    branch.get(['pointers', 'pointer2', 'compute']),
+    24,
+    'pointer2 is a 24'
+  )
   t.equals(
     branch.get(['pointers', 'pointer3', 'field', 'compute']),
     'merge double override',
@@ -139,6 +163,8 @@ test('references - get performance', t => {
 
   i = 1e3
   while (i--) {
+    branch.get(['pointers', 'pointer3', 'compute'])
+    branch.get(['pointers', 'pointer2', 'compute'])
     branch.get(['pointers', 'pointer3', 'field', 'compute'])
     branch.get(['pointers', 'pointer2', 'field', 'compute'])
     branch.get(['pointers', 'pointer3', 'deeper', 'pointer1', 'extra', 'compute'])
@@ -217,7 +243,7 @@ test('references - emitter and subscription performance', t => {
 
   d = Date.now() - d
   console.log('virtual reference emitters and subscriptions:', d, 'ms')
-  t.ok(d < 200, 'virtual reference emitters and subscriptions take less than 200ms')
+  t.ok(d < 300, 'virtual reference emitters and subscriptions take less than 300ms')
 
   t.end()
 })
