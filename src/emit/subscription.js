@@ -31,7 +31,7 @@ const subscription = (t, stamp) => {
         p = t._c
       } else {
         p = t._p
-        p._cLeve!@l = t._cLevel - 1
+        p._cLevel = t._cLevel - 1
         p._c = t._c
       }
     } else {
