@@ -9,6 +9,7 @@ const property = (t, val, key, stamp, struct, isNew, reset, noConflict) => {
   if (result && result.inherits) {
     if (result._c) {
       // also need to do some stuff here
+      if (global.DEBUG) console.log('context set', result.path())
       contextProperty(t, val, stamp, key, result, reset, noConflict)
     } else {
       set(result, val, stamp, void 0, reset, noConflict)

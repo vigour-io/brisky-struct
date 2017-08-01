@@ -25,6 +25,7 @@ const vinstances = (instances, cRoot) => {
       if (cRoot === vRoot) {
         return instances[i]
       } else if (cRoot.inherits === vRoot) {
+        if (global.DEBUG) console.log('fallback need context')
         fallback = instances[i]
       }
     }
