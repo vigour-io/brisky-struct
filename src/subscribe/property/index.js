@@ -37,6 +37,9 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       branch.$ = stamp
       if (t._c) { store(t, branch) }
       if (subs.val) {
+        if (subs.val === 'shallow') {
+          branch.$s = t.stamp
+        }
         cb(t, 'new', subs, branch)
         changed = true
       }
@@ -44,10 +47,16 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       // ! && ! || !== (thats why != may need to replace)
     } else if (branch.$ !== stamp || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
       if (subs.val) {
-        if (
+        if (subs.val === 'shallow') {
+          const $s = t.stamp
+          if (branch.s$ !== $s || branch.$t !== t) {
+            branch.s$ = $s
+            changed = true
+            cb(t, 'update', subs, branch)
+          }
+        } else if (
           // will become parsed -- with intergers -- also switcgh returns will be parsed
           subs.val === true ||
-          subs.val === 'shallow' ||
           (subs.val === 'switch' && (
             branch.$t !== t ||
             // (delete / void 0 field later)

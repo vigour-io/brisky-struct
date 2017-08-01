@@ -128,7 +128,7 @@ test('subscription - root', t => {
   t.end()
 })
 
-test('subscription - basic - shallow - 1', t => {
+test('subscription - basic - shallow - 2', t => {
   const s = subsTest(
     t,
     {
@@ -145,7 +145,7 @@ test('subscription - basic - shallow - 1', t => {
   )
   s(
     'update root',
-    [{ path: 'blurf', type: 'update' }],
+    [],
     { blurf: { blars: 2 } }
   )
   t.end()
