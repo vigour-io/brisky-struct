@@ -34,13 +34,17 @@ const vinstances = (instances, cRoot) => {
 
 const getRefVal = t => {
   if (t.val !== void 0 && t.val !== null) {
-    const vinstance = t._rc && t.val.instances &&
-      vinstances(t.val.instances, realRoot(t._rc))
-    if (vinstance !== null && vinstance !== void 0) {
-      t._rc = null
-      return vinstance
+    if (t._rc) {
+      const vinstance = t.val.instances &&
+        vinstances(t.val.instances, realRoot(t._rc))
+      if (vinstance !== void 0) {
+        t._rc = null
+        return vinstance
+      } else {
+        return t.val
+      }
     } else {
-      t._rc = t._rc || t
+      t._rc = t
       return t.val
     }
   } else if (t.inherits) {
