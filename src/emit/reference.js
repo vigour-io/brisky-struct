@@ -42,26 +42,35 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
 
 // Fire subscriptions in context
 // then clean the context
-const fnSubscriptions = (t, val, stamp, c, cLevel) => {
+const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
   t._c = c
   t._cLevel = cLevel
   subscription(t, stamp)
   t._c = null
   t._cLevel = null
+  cb(t, stamp, oRoot)
 }
 
 // When there's no inherited references
 // there can still be a reference to parents
 const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t._p) {
+  while (t._p && t.__tStamp !== stamp) {
+    t.__tStamp = stamp
     t = t._p
+    let localRefs = t.emitters &&
+      t.emitters.data &&
+      t.emitters.data.struct
+    if (localRefs) {
+      iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, void 0, fnSubscriptions)
+      iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
     }
+    t.__tStamp = null
   }
 }
 
