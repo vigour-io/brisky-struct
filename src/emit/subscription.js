@@ -35,13 +35,13 @@ const subscription = (t, stamp) => {
         handleStruct(p, stamp)
       }
       if (p.subscriptions) {
-        if (global.DEBUG && !p._inProgressS) console.log('EXEC SUBS>>>', p.contextKey)
         exec(p, t)
       }
       if (p._c) {
         if (p._cLevel === 1) {
           p = p._c
         } else {
+          // have to keep for the edge case you dont have a subscription on top....
           const prev = p
           p = p._p
           p._cLevel = prev._cLevel - 1
@@ -53,7 +53,6 @@ const subscription = (t, stamp) => {
     }
   }
   if (t.subscriptions) {
-    console.log(':X update on?')
     exec(t, t)
   }
 }
@@ -61,15 +60,8 @@ const subscription = (t, stamp) => {
 const exec = (t, spawner) => {
   if (!t._inProgressS) {
     t._inProgressS = true
-    const x = t.contextKey
-    const spawnerHasC = spawner._c
-    // const spawnerKey = spawner.root().contextKey
     bs.on(() => {
-      if (global.DEBUG) {
-        // t has to be ancestor
-        console.log('\n\n\n💩 got an subscription update on ', x, t.contextKey, spawner.path(), spawnerHasC)
-      }
-      let i = t.subscriptions.length
+      var i = t.subscriptions.length
       while (i--) { t.subscriptions[i]() }
       t._inProgressS = false
     })
