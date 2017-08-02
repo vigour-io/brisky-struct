@@ -5,9 +5,9 @@ import subscription from './subscription'
 // Lookup until root of master
 // to find a given ancestor
 const isAncestor = (t, r, pc) => ((t === r && pc) || (
-  t._p && isAncestor(t._p, r, pc + 1)
-) || (
   t.inherits && isAncestor(t.inherits, r, pc)
+) || (
+  t._p && isAncestor(t._p, r, pc + 1)
 ))
 
 // Iterate over given references list
@@ -27,12 +27,6 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
         c = c[rPath[j]]
         if (c === void 0) {
           fn(refs[i], val, stamp, prev, j + 1, oRoot, cb)
-          let localRefs = refs[i].emitters &&
-            refs[i].emitters.data &&
-            refs[i].emitters.data.struct
-          if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, cb, fn)
-          }
           break
         }
       }
@@ -42,26 +36,41 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
 
 // Fire subscriptions in context
 // then clean the context
-const fnSubscriptions = (t, val, stamp, c, cLevel) => {
+const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
   t._c = c
   t._cLevel = cLevel
   subscription(t, stamp)
   t._c = null
   t._cLevel = null
+  cb(t, stamp, oRoot)
 }
 
 // When there's no inherited references
 // there can still be a reference to parents
-const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t._p) {
-    t = t._p
-    const contextRefs =
-      t.inherits.emitters &&
-      t.inherits.emitters.data &&
-      t.inherits.emitters.data.struct
-    if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, void 0, fnSubscriptions)
+const virtualSubscriptions = (t, stamp, oRoot, first) => {
+  while (t && t.__tStamp !== stamp) {
+    if (first) {
+      first = false
+    } else {
+      t.__tStamp = stamp
+      const contextRefs =
+        t.inherits.emitters &&
+        t.inherits.emitters.data &&
+        t.inherits.emitters.data.struct
+      if (contextRefs) {
+        iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      }
+      if (first === void 0) {
+        let localRefs = t.emitters &&
+          t.emitters.data &&
+          t.emitters.data.struct
+        if (localRefs) {
+          iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+        }
+      }
+      t.__tStamp = null
     }
+    t = t._p
   }
 }
 
@@ -85,11 +94,18 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
   }
   t._c = null
   t._cLevel = null
+  let localRefs = t.emitters &&
+    t.emitters.data &&
+    t.emitters.data.struct
+  if (localRefs) {
+    iterate(localRefs, val, stamp, oRoot, cb, fn)
+  }
   cb(t, val, stamp, oRoot)
 }
 
 // When there's no local references
 // there can be still inherited references
+// need to perf test this
 const virtualReferences = (t, val, stamp, oRoot) => {
   while (t.inherits) {
     if (!oRoot) {
@@ -102,7 +118,7 @@ const virtualReferences = (t, val, stamp, oRoot) => {
     if (contextRefs) {
       iterate(contextRefs, val, stamp, oRoot, virtualReferences, fn)
     } else {
-      virtualSubscriptions(t, stamp, oRoot)
+      virtualSubscriptions(t, stamp, oRoot, true)
     }
     t = t.inherits
   }

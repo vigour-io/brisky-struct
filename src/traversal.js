@@ -1,4 +1,3 @@
-
 const parent = t => {
   if (t._c) {
     if (t._cLevel === 1) {

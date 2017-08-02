@@ -15,24 +15,51 @@ const handleStruct = (p, stamp) => {
 const subscription = (t, stamp) => {
   t.tStamp = stamp
   if (t._p || t._c) {
-    let p = t._c && t._cLevel === 1 ? t._c : t._p
-
+    let p
+    if (t._c) {
+      if (t._cLevel === 1) {
+        p = t._c
+      } else {
+        p = t._p
+        p._cLevel = t._cLevel - 1
+        p._c = t._c
+      }
+    } else {
+      p = t._p
+    }
     while (p && (!p.tStamp || p.tStamp !== stamp)) {
       p.tStamp = stamp
-      handleStruct(p, stamp)
-
-      if (p.subscriptions) exec(p)
-      p = p._p
+      if (!p._c) {
+        handleStruct(p, stamp)
+      }
+      if (p.subscriptions) {
+        exec(p, t)
+      }
+      if (p._c) {
+        if (p._cLevel === 1) {
+          p = p._c
+        } else {
+          // have to keep for the edge case you dont have a subscription on top....
+          const prev = p
+          p = p._p
+          p._cLevel = prev._cLevel - 1
+          p._c = prev._c
+        }
+      } else {
+        p = p._p
+      }
     }
   }
-  if (t.subscriptions) exec(t)
+  if (t.subscriptions) {
+    exec(t, t)
+  }
 }
 
-const exec = t => {
+const exec = (t, spawner) => {
   if (!t._inProgressS) {
     t._inProgressS = true
     bs.on(() => {
-      let i = t.subscriptions.length
+      var i = t.subscriptions.length
       while (i--) { t.subscriptions[i]() }
       t._inProgressS = false
     })

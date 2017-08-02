@@ -154,7 +154,7 @@ test('references - field subscription local', t => {
 })
 
 test('references - deep field subscription', t => {
-  t.plan(3)
+  t.plan(4)
 
   const master = struct({
     key: 'master',
@@ -197,6 +197,11 @@ test('references - deep field subscription', t => {
       t.equals(
         val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'is a thing',
         'pointer3 fired for original'
+      )
+    } else if (type === 'update') {
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
+        'pointer3 fired for override'
       )
     }
   })
