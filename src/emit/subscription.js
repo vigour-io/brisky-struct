@@ -16,17 +16,9 @@ const handleStruct = (p, stamp) => {
 // also a tmp solution need to now why parents are not set to context - prop since youre in a ref or something
 const subscription = (t, stamp) => {
   t.tStamp = stamp
-  if (global.DEBUG) {
-    if (!t.root().contextKey) {
-      console.log('ok updating for original --->', t.path())
-    }
-  }
   if (t._p || t._c) {
-    // just looping _p and _c should enough - this is secure though can becmre lot faster
-    // by skipping the level
     let p
     if (t._c) {
-      if (global.DEBUG) console.log('has c!', t.path(), t._cLevel, t._c.path())
       if (t._cLevel === 1) {
         p = t._c
       } else {
