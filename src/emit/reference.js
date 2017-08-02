@@ -54,9 +54,9 @@ const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
 // When there's no inherited references
 // there can still be a reference to parents
 const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t._p && t.__tStamp !== stamp) {
-    t.__tStamp = stamp
+  while (t._p && t._p.__tStamp !== stamp) {
     t = t._p
+    t.__tStamp = stamp
     let localRefs = t.emitters &&
       t.emitters.data &&
       t.emitters.data.struct
