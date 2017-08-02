@@ -51,12 +51,12 @@ const subscription = (t, stamp) => {
           p = p._c
         } else {
           const prev = p
+          p = p._p
           p._cLevel = prev._cLevel - 1
           p._c = prev._c
-          p._p = prev._p
         }
       } else {
-        p = t._p
+        p = p._p
       }
     }
   }
