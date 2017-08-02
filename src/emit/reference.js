@@ -5,9 +5,9 @@ import subscription from './subscription'
 // Lookup until root of master
 // to find a given ancestor
 const isAncestor = (t, r, pc) => ((t === r && pc) || (
-  t._p && isAncestor(t._p, r, pc + 1)
-) || (
   t.inherits && isAncestor(t.inherits, r, pc)
+) || (
+  t._p && isAncestor(t._p, r, pc + 1)
 ))
 
 // Iterate over given references list
