@@ -60,11 +60,13 @@ const virtualSubscriptions = (t, stamp, oRoot, first) => {
       if (contextRefs) {
         iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
       }
-      let localRefs = t.emitters &&
-        t.emitters.data &&
-        t.emitters.data.struct
-      if (localRefs) {
-        iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      if (first === void 0) {
+        let localRefs = t.emitters &&
+          t.emitters.data &&
+          t.emitters.data.struct
+        if (localRefs) {
+          iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+        }
       }
       t.__tStamp = null
     }
