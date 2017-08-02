@@ -48,24 +48,26 @@ const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
 // When there's no inherited references
 // there can still be a reference to parents
 const virtualSubscriptions = (t, stamp, oRoot, first) => {
-  while (t._p && t.__tStamp !== stamp) {
-    t.__tStamp = stamp
-    const contextRefs =
-      t.inherits.emitters &&
-      t.inherits.emitters.data &&
-      t.inherits.emitters.data.struct
-    if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
-    }
-    if (!first) {
+  while (t && t.__tStamp !== stamp) {
+    if (first) {
+      first = false
+    } else {
+      t.__tStamp = stamp
+      const contextRefs =
+        t.inherits.emitters &&
+        t.inherits.emitters.data &&
+        t.inherits.emitters.data.struct
+      if (contextRefs) {
+        iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      }
       let localRefs = t.emitters &&
         t.emitters.data &&
         t.emitters.data.struct
       if (localRefs) {
         iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
       }
+      t.__tStamp = null
     }
-    t.__tStamp = null
     t = t._p
   }
 }
