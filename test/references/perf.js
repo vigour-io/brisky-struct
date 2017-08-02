@@ -63,7 +63,7 @@ test('references - performance of virtual', t => {
 
   d = Date.now() - d
   console.log('virtual references:', d, 'ms')
-  t.ok(d < 200, 'virtual references take less than 200ms')
+  t.ok(d < 400, 'virtual references take less than 400ms')
 
   t.end()
 })

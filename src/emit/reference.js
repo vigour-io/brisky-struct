@@ -27,12 +27,6 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
         c = c[rPath[j]]
         if (c === void 0) {
           fn(refs[i], val, stamp, prev, j + 1, oRoot, cb)
-          let localRefs = refs[i].emitters &&
-            refs[i].emitters.data &&
-            refs[i].emitters.data.struct
-          if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, cb, fn)
-          }
           break
         }
       }
@@ -53,16 +47,9 @@ const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
 
 // When there's no inherited references
 // there can still be a reference to parents
-const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t._p && t._p.__tStamp !== stamp) {
-    t = t._p
+const virtualSubscriptions = (t, stamp, oRoot, first) => {
+  while (t._p && t.__tStamp !== stamp) {
     t.__tStamp = stamp
-    let localRefs = t.emitters &&
-      t.emitters.data &&
-      t.emitters.data.struct
-    if (localRefs) {
-      iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
-    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
@@ -70,7 +57,16 @@ const virtualSubscriptions = (t, stamp, oRoot) => {
     if (contextRefs) {
       iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
     }
+    if (!first) {
+      let localRefs = t.emitters &&
+        t.emitters.data &&
+        t.emitters.data.struct
+      if (localRefs) {
+        iterate(localRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      }
+    }
     t.__tStamp = null
+    t = t._p
   }
 }
 
@@ -94,6 +90,12 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
   }
   t._c = null
   t._cLevel = null
+  let localRefs = t.emitters &&
+    t.emitters.data &&
+    t.emitters.data.struct
+  if (localRefs) {
+    iterate(localRefs, val, stamp, oRoot, cb, fn)
+  }
   cb(t, val, stamp, oRoot)
 }
 
@@ -111,7 +113,7 @@ const virtualReferences = (t, val, stamp, oRoot) => {
     if (contextRefs) {
       iterate(contextRefs, val, stamp, oRoot, virtualReferences, fn)
     } else {
-      virtualSubscriptions(t, stamp, oRoot)
+      virtualSubscriptions(t, stamp, oRoot, true)
     }
     t = t.inherits
   }
