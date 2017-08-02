@@ -12,8 +12,6 @@ const handleStruct = (p, stamp) => {
   }
 }
 
-// can be greatly optmized parent walker is shit now
-// also a tmp solution need to now why parents are not set to context - prop since youre in a ref or something
 const subscription = (t, stamp) => {
   t.tStamp = stamp
   if (t._p || t._c) {

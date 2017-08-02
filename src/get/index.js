@@ -38,9 +38,6 @@ const getOrigin = (t, key, noContext) => {
       if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
         t._rc = t._rc || clean._rc
         clean._rc = null
-        // if (global.DEBUG) {
-        //   console.log('hello', t.root() === (clean._c ? clean._c.root(true) : clean.root(true)) ? '👹' : '🤡', t.path(), t._c, clean._c, clean._cLevel)
-        // }
         return getOrigin(t, key, noContext)
       }
       clean._rc = null
