@@ -49,13 +49,6 @@ const create = (t, val, stamp, parent, key, reset, noConflict) => {
       }
     }
   }
-
-  if (global.DEBUG) {
-    if (typeof t.val === 'object' && t.val.inherits) {
-      console.log('ok creating ref', parent && parent.root().contextKey)
-    }
-  }
-
   if (val !== void 0) {
     set(instance, val, stamp, true, reset, noConflict)
   }
@@ -230,10 +223,6 @@ const objects = (t, val, stamp, isNew, reset, noConflict) => {
 }
 
 const set = (t, val, stamp, isNew, reset, noConflict) => {
-  if (global.DEBUG) {
-    // use non poluting root...
-    console.log('set--->', t.root().contextKey, t.path(), !!t._c)
-  }
   if (t._c) {
     return resolveContext(t, val, stamp, reset, noConflict)
   } else {
