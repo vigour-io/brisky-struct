@@ -66,6 +66,12 @@ test('references - origin', t => {
   )
 
   t.same(
+    master.get('deep').serialize(),
+    { real: { field: 'is a thing' } },
+    'master deep is correct'
+  )
+
+  t.same(
     branch.get('deep').serialize(),
     { real: { field: 'override', other: 5 } },
     'branch deep is correct'
