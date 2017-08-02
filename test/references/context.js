@@ -28,3 +28,28 @@ test('references - serialized', t => {
   })
   b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] })
 })
+
+test('references - origin', t => {
+  const master = struct({
+    deep: {
+      real: {
+        field: 'is a thing'
+      }
+    },
+    pointers: {
+      pointer1: ['@', 'root', 'deep']
+    }
+  })
+
+  const branch = master.create({
+    deep: {
+      real: {
+        field: 'override'
+      }
+    }
+  })
+
+  console.log(branch.get('pointers', 'pointer1').origin())
+
+  t.end()
+})
