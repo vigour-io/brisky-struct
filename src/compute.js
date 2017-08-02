@@ -1,7 +1,17 @@
 import { getRefVal } from './references'
 
-const origin = t => t.val && typeof t.val === 'object' && t.val.inherits
-  ? origin(t.val) : t
+const origin = t => {
+  const clean = t
+  t._rc = t._rc || t._c
+  if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
+    t._rc = t._rc || clean._rc
+    clean._rc = null
+    return origin(t)
+  } else {
+    clean._rc = null
+    return clean
+  }
+}
 
 const transform = t => t.$transform !== void 0
   ? t.$transform

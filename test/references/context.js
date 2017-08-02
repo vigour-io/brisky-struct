@@ -41,7 +41,9 @@ test('references - origin', t => {
     }
   })
 
-  const branch = master.create({
+  const branch = master.create()
+
+  branch.set({
     deep: {
       real: {
         field: 'override'
@@ -49,7 +51,25 @@ test('references - origin', t => {
     }
   })
 
-  console.log(branch.get('pointers', 'pointer1').origin())
+  branch.get(['pointers', 'pointer1']).origin().set({ real: { other: 5 } })
+
+  t.equals(
+    branch.get(['pointers', 'pointer1']).origin().get(['real', 'field', 'compute']),
+    'override',
+    '.origin() returns correct result'
+  )
+
+  t.equals(
+    branch.get(['pointers', 'pointer1', 'origin', 'real', 'field']).compute(),
+    'override',
+    'origin in get api returns correct result'
+  )
+
+  t.same(
+    branch.get('deep').serialize(),
+    { real: { field: 'override', other: 5 } },
+    'branch deep is correct'
+  )
 
   t.end()
 })
