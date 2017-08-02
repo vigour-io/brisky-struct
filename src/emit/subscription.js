@@ -2,13 +2,9 @@ import bs from 'stamp'
 
 const handleStruct = (p, stamp) => {
   if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
-    // this no longer holds needs to update context-instances as well...
     p.__tStamp = stamp
     let i = p.emitters.data.struct.length
     while (i--) {
-      // this no longer holds needs to update context-instances as well...
-      // now you lose it in subscription for sure
-      if (global.DEBUG) console.log('struct update on subscription!', p.emitters.data.struct[i].path())
       subscription(p.emitters.data.struct[i], stamp)
       handleStruct(p.emitters.data.struct[i])
     }
@@ -16,6 +12,8 @@ const handleStruct = (p, stamp) => {
   }
 }
 
+// can be greatly optmized parent walker is shit now
+// also a tmp solution need to now why parents are not set to context - prop since youre in a ref or something
 const subscription = (t, stamp) => {
   t.tStamp = stamp
   if (global.DEBUG) {
@@ -24,6 +22,8 @@ const subscription = (t, stamp) => {
     }
   }
   if (t._p || t._c) {
+    // just looping _p and _c should enough - this is secure though can becmre lot faster
+    // by skipping the level
     let p
     if (t._c) {
       if (global.DEBUG) console.log('has c!', t.path(), t._cLevel, t._c.path())

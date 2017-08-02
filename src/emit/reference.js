@@ -90,6 +90,7 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
 
 // When there's no local references
 // there can be still inherited references
+// need to perf test this
 const virtualReferences = (t, val, stamp, oRoot) => {
   while (t.inherits) {
     if (!oRoot) {
