@@ -10,9 +10,26 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
   t._p && isAncestor(t._p, r, pc + 1)
 ))
 
+const setContext = (t, c, level) => {
+  while (t && level) {
+    t._c = c
+    t._cLevel = level
+    level--
+    t = t._p
+  }
+}
+
+const removeContext = t => {
+  while (t && t._c) {
+    t._c = null
+    t._cLevel = null
+    t = t._p
+  }
+}
+
 // Iterate over given references list
 // and fire functions if conditions are met
-const iterate = (refs, val, stamp, oRoot, cb, fn) => {
+const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   var i = refs.length
   while (i--) {
     const rPath = []
@@ -31,7 +48,7 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
             refs[i].emitters.data &&
             refs[i].emitters.data.struct
           if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, cb, fn)
+            iterate(localRefs, val, stamp, oRoot, fn, cb)
           }
           break
         }
@@ -42,17 +59,10 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
 
 // Fire subscriptions in context
 // then clean the context
-const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
-  t._c = c
-  t._cLevel = cLevel
+const fnSubscriptions = (t, val, stamp, c, level) => {
+  setContext(t, c, level)
   subscription(t, stamp)
-  t._c = null
-  t._cLevel = null
-  if (t.__tStamp !== stamp) {
-    t.__tStamp = stamp
-    cb(t, stamp, oRoot)
-    t.__tStamp = null
-  }
+  removeContext(t)
 }
 
 // When there's no inherited references
@@ -64,7 +74,7 @@ const virtualSubscriptions = (t, stamp, oRoot) => {
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions)
     }
     t = t._p
   }
@@ -72,9 +82,8 @@ const virtualSubscriptions = (t, stamp, oRoot) => {
 
 // Fire emitters && subscriptions in context
 // then clean the context
-const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
-  t._c = c
-  t._cLevel = cLevel
+const fn = (t, val, stamp, c, level, oRoot, cb) => {
+  setContext(t, c, level)
   subscription(t, stamp)
   const emitter = getData(t)
   if (emitter) {
@@ -88,8 +97,7 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
       emitter.listeners = []
     }
   }
-  t._c = null
-  t._cLevel = null
+  removeContext(t)
   cb(t, val, stamp, oRoot)
 }
 
@@ -106,7 +114,7 @@ const virtualReferences = (t, val, stamp, oRoot) => {
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot, virtualReferences, fn)
+      iterate(contextRefs, val, stamp, oRoot, fn, virtualReferences)
     } else {
       virtualSubscriptions(t._p, stamp, oRoot)
     }
