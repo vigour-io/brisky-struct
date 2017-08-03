@@ -108,7 +108,7 @@ const virtualReferences = (t, val, stamp, oRoot) => {
     if (contextRefs) {
       iterate(contextRefs, val, stamp, oRoot, virtualReferences, fn)
     } else {
-      virtualSubscriptions(t._p, stamp, oRoot, true)
+      virtualSubscriptions(t._p, stamp, oRoot)
     }
     t = t.inherits
   }
