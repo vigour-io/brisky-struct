@@ -2,7 +2,7 @@ const test = require('tape')
 const { create: struct } = require('../../')
 
 const a = []
-a[13e5] = void 0
+a[5e6] = void 0
 var base = Date.now()
 a.forEach(() => true)
 base = Date.now() - base
@@ -182,7 +182,7 @@ test('references - get performance', t => {
   d = Date.now() - d
 
   console.log('get through virtual references:', d, 'ms')
-  t.ok(d < base * 1.25, `get through virtual references take less than ${Math.round(base * 1.25)}ms`)
+  t.ok(d < base * 1.3, `get through virtual references take less than ${Math.round(base * 1.3)}ms`)
 
   t.end()
 })
