@@ -3,6 +3,7 @@ import { getKeys } from './keys'
 
 const define = {
   inspect () {
+    // add try catch
     var keys = getKeys(this)
     var val = this.val
     const p = path(this)
