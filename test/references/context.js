@@ -28,3 +28,54 @@ test('references - serialized', t => {
   })
   b.set({ x: [ '@', 'parent', 'bla', 'newthing' ] })
 })
+
+test('references - origin', t => {
+  const master = struct({
+    deep: {
+      real: {
+        field: 'is a thing'
+      }
+    },
+    pointers: {
+      pointer1: ['@', 'root', 'deep']
+    }
+  })
+
+  const branch = master.create()
+
+  branch.set({
+    deep: {
+      real: {
+        field: 'override'
+      }
+    }
+  })
+
+  branch.get(['pointers', 'pointer1']).origin().set({ real: { other: 5 } })
+
+  t.equals(
+    branch.get(['pointers', 'pointer1']).origin().get(['real', 'field', 'compute']),
+    'override',
+    '.origin() returns correct result'
+  )
+
+  t.equals(
+    branch.get(['pointers', 'pointer1', 'origin', 'real', 'field']).compute(),
+    'override',
+    'origin in get api returns correct result'
+  )
+
+  t.same(
+    master.get('deep').serialize(),
+    { real: { field: 'is a thing' } },
+    'master deep is correct'
+  )
+
+  t.same(
+    branch.get('deep').serialize(),
+    { real: { field: 'override', other: 5 } },
+    'branch deep is correct'
+  )
+
+  t.end()
+})

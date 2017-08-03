@@ -41,7 +41,8 @@ test('references - listeners', t => {
     }
   })
 
-  t.equal(d.origin(), c2, 'correct origin for "d"')
+  // follows until val
+  t.equal(d.origin(), a, 'correct origin for "d"')
 
   const d2 = d.create({ //eslint-disable-line
     key: 'd2',

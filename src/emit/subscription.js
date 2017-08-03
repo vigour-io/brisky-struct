@@ -6,7 +6,7 @@ const handleStruct = (p, stamp) => {
     let i = p.emitters.data.struct.length
     while (i--) {
       subscription(p.emitters.data.struct[i], stamp)
-      handleStruct(p.emitters.data.struct[i])
+      handleStruct(p.emitters.data.struct[i], stamp)
     }
     p.__tStamp = null
   }
@@ -33,7 +33,7 @@ const subscription = (t, stamp) => {
         handleStruct(p, stamp)
       }
       if (p.subscriptions) {
-        exec(p, t)
+        exec(p)
       }
       if (p._c) {
         if (p._cLevel === 1) {
@@ -51,11 +51,11 @@ const subscription = (t, stamp) => {
     }
   }
   if (t.subscriptions) {
-    exec(t, t)
+    exec(t)
   }
 }
 
-const exec = (t, spawner) => {
+const exec = t => {
   if (!t._inProgressS) {
     t._inProgressS = true
     bs.on(() => {
