@@ -60,6 +60,12 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   }
 }
 
+const handleContextStruct = (t, val, stamp, c, level) => {
+  setContext(t, c, level)
+  subscription(t, stamp)
+  removeContext(t)
+}
+
 // Fire subscriptions in context
 // then clean the context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
@@ -69,17 +75,10 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   cb(t, stamp, oRoot)
 }
 
-const handleContextStruct = (t, stamp) => {
-  // this is getting harder
-}
-
 // When there's no inherited references
 // there can still be a reference to parents
 const handleInheritedStruct = (t, stamp, oRoot) => {
   while (t.inherits) {
-    if (!oRoot) {
-      oRoot = realRoot(t)
-    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
@@ -131,4 +130,4 @@ const updateInheritedStruct = (t, val, stamp, oRoot) => {
   }
 }
 
-export default { updateInheritedStruct, handleInheritedStruct, handleContextStruct }
+export default { updateInheritedStruct, handleInheritedStruct, handleContextStruct, iterate }
