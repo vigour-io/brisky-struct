@@ -53,6 +53,9 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
           break
         }
       }
+      if (c !== void 0) {
+        fn(c, val, stamp, void 0, void 0, oRoot, cb)
+      }
     }
   }
 }
