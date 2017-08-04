@@ -6,7 +6,7 @@ const handleStruct = (p, stamp) => {
   if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
     p.__tStamp = stamp
     if (p._c) {
-      iterate(p.emitters.data.struct, void 0, stamp, realRoot(p._c), handleContextStruct)
+      iterate(p.emitters.data.struct, void 0, stamp, realRoot(p._c), handleContextStruct, handleStruct)
     } else {
       let i = p.emitters.data.struct.length
       while (i--) {

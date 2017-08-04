@@ -44,11 +44,15 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
         c = c[rPath[j]]
         if (c === void 0) {
           fn(refs[i], val, stamp, prev, j + 1, oRoot, cb)
-          let localRefs = refs[i].emitters &&
-            refs[i].emitters.data &&
-            refs[i].emitters.data.struct
-          if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, fn, cb)
+          if (refs[i].__tStamp !== stamp) {
+            refs[i].__tStamp = stamp
+            let localRefs = refs[i].emitters &&
+              refs[i].emitters.data &&
+              refs[i].emitters.data.struct
+            if (localRefs) {
+              iterate(localRefs, val, stamp, oRoot, fn, cb)
+            }
+            refs[i].__tStamp = null
           }
           break
         }
@@ -60,9 +64,10 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   }
 }
 
-const handleContextStruct = (t, val, stamp, c, level) => {
+const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   subscription(t, stamp)
+  cb(t, stamp)
   removeContext(t)
 }
 
