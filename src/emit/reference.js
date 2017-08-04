@@ -66,6 +66,10 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   cb(t, stamp, oRoot)
 }
 
+const handleContextStruct = (t, stamp) => {
+  // this is getting harder
+}
+
 // When there's no inherited references
 // there can still be a reference to parents
 const handleInheritedStruct = (t, stamp, oRoot) => {
@@ -124,4 +128,4 @@ const updateInheritedStruct = (t, val, stamp, oRoot) => {
   }
 }
 
-export default { updateInheritedStruct, handleInheritedStruct, iterate }
+export default { updateInheritedStruct, handleInheritedStruct, handleContextStruct }

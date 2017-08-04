@@ -1,11 +1,11 @@
 import bs from 'stamp'
-import { handleInheritedStruct } from './reference'
+import { handleInheritedStruct, handleContextStruct } from './reference'
 
 const handleStruct = (p, stamp) => {
   if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
     p.__tStamp = stamp
     if (p._c) {
-      // this is special!
+      handleContextStruct(p, stamp)
     } else {
       let i = p.emitters.data.struct.length
       while (i--) {
