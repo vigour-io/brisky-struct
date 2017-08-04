@@ -182,7 +182,7 @@ test('references - get performance', t => {
   d = Date.now() - d
 
   console.log('get through virtual references:', d, 'ms')
-  t.ok(d < base * 1.3, `get through virtual references take less than ${Math.round(base * 1.3)}ms`)
+  t.ok(d < base * 1.5, `get through virtual references take less than ${Math.round(base * 1.5)}ms`)
 
   t.end()
 })
