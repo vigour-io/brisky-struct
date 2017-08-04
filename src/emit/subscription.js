@@ -1,12 +1,17 @@
 import bs from 'stamp'
+import { handleInheritedStruct } from './reference'
 
 const handleStruct = (p, stamp) => {
   if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
     p.__tStamp = stamp
-    let i = p.emitters.data.struct.length
-    while (i--) {
-      subscription(p.emitters.data.struct[i], stamp)
-      handleStruct(p.emitters.data.struct[i], stamp)
+    if (p._c) {
+      // this is special!
+    } else {
+      let i = p.emitters.data.struct.length
+      while (i--) {
+        subscription(p.emitters.data.struct[i], stamp)
+        handleStruct(p.emitters.data.struct[i], stamp)
+      }
     }
     p.__tStamp = null
   }
@@ -20,6 +25,7 @@ const subscription = (t, stamp) => {
     while (p && (!p.tStamp || p.tStamp !== stamp)) {
       p.tStamp = stamp
       handleStruct(p, stamp)
+      handleInheritedStruct(p, stamp)
 
       if (p.subscriptions) exec(p)
       p = p._p

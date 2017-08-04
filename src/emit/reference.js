@@ -59,24 +59,28 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 
 // Fire subscriptions in context
 // then clean the context
-const fnSubscriptions = (t, val, stamp, c, level) => {
+const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   subscription(t, stamp)
   removeContext(t)
+  cb(t, stamp, oRoot)
 }
 
 // When there's no inherited references
 // there can still be a reference to parents
-const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t) {
+const handleInheritedStruct = (t, stamp, oRoot) => {
+  while (t.inherits) {
+    if (!oRoot) {
+      oRoot = realRoot(t)
+    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions)
+      iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
     }
-    t = t._p
+    t = t.inherits
   }
 }
 
@@ -104,7 +108,7 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
 // When there's no local references
 // there can be still inherited references
 // need to perf test this
-const virtualReferences = (t, val, stamp, oRoot) => {
+const updateInheritedStruct = (t, val, stamp, oRoot) => {
   while (t.inherits) {
     if (!oRoot) {
       oRoot = realRoot(t)
@@ -114,12 +118,10 @@ const virtualReferences = (t, val, stamp, oRoot) => {
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot, fn, virtualReferences)
-    } else {
-      virtualSubscriptions(t._p, stamp, oRoot)
+      iterate(contextRefs, val, stamp, oRoot, fn, updateInheritedStruct)
     }
     t = t.inherits
   }
 }
 
-export default virtualReferences
+export default { updateInheritedStruct, handleInheritedStruct, iterate }
