@@ -98,18 +98,20 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
     if (contextRefs) {
       iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
     }
-    handleInheritedStruct(t.inherits, stamp, oRoot)
+    handleInheritedStruct(t.inherits, stamp, oRoot, false)
   }
   if (!first) {
     if (t._p) {
-      handleInheritedStruct(t._p, stamp, oRoot)
+      handleInheritedStruct(t._p, stamp, oRoot, false)
     }
-    // const localRefs = t.emitters &&
-    //   t.emitters.data &&
-    //   t.emitters.data.struct
-    // if (localRefs) {
-    //   iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
-    // }
+    if (first === false) {
+      const localRefs = t.emitters &&
+        t.emitters.data &&
+        t.emitters.data.struct
+      if (localRefs) {
+        iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
+      }
+    }
   }
 }
 
