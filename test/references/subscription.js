@@ -189,7 +189,7 @@ test('references - field subscription local', t => {
 })
 
 test('references - deep field subscription', t => {
-  t.plan(4)
+  t.plan(2)
 
   const master = struct({
     key: 'master',
