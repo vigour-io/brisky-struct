@@ -57,8 +57,10 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
           break
         }
       }
-      if (c !== void 0) {
+      if (c !== void 0 && c.__tStamp !== stamp) {
+        c.__tStamp = stamp
         fn(c, val, stamp, void 0, void 0, oRoot, cb)
+        c.__tStamp = null
       }
     }
   }
@@ -67,7 +69,7 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   if (c === void 0) {
-    console.log('firing real subs for', t.key)
+    // console.log('firing real subs for', t.key)
     subscription(t, stamp)
   } else {
     while (t && level) {
@@ -75,10 +77,14 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
       level--
       t = t._p
     }
-    console.log('firing context subs for', c.key)
+    // console.log('firing context subs for', c.key)
     subscription(c, stamp)
   }
-  cb(t, stamp, oRoot)
+  if (t.__tStamp !== stamp) {
+    t.__tStamp = stamp
+    cb(t, stamp, oRoot)
+    t.__tStamp = null
+  }
 }
 
 // When there's no inherited references
