@@ -10,9 +10,26 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
   t._p && isAncestor(t._p, r, pc + 1)
 ))
 
+const setContext = (t, c, level) => {
+  while (t && level) {
+    t._c = c
+    t._cLevel = level
+    level--
+    t = t._p
+  }
+}
+
+const removeContext = t => {
+  while (t && t._c) {
+    t._c = null
+    t._cLevel = null
+    t = t._p
+  }
+}
+
 // Iterate over given references list
 // and fire functions if conditions are met
-const iterate = (refs, val, stamp, oRoot, cb, fn) => {
+const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   var i = refs.length
   while (i--) {
     const rPath = []
@@ -27,54 +44,61 @@ const iterate = (refs, val, stamp, oRoot, cb, fn) => {
         c = c[rPath[j]]
         if (c === void 0) {
           fn(refs[i], val, stamp, prev, j + 1, oRoot, cb)
-          let localRefs = refs[i].emitters &&
-            refs[i].emitters.data &&
-            refs[i].emitters.data.struct
-          if (localRefs) {
-            iterate(localRefs, val, stamp, oRoot, cb, fn)
+          if (refs[i].__tStamp !== stamp) {
+            refs[i].__tStamp = stamp
+            let localRefs = refs[i].emitters &&
+              refs[i].emitters.data &&
+              refs[i].emitters.data.struct
+            if (localRefs) {
+              iterate(localRefs, val, stamp, oRoot, fn, cb)
+            }
+            refs[i].__tStamp = null
           }
           break
         }
+      }
+      if (c !== void 0) {
+        fn(c, val, stamp, void 0, void 0, oRoot, cb)
       }
     }
   }
 }
 
+const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
+  setContext(t, c, level)
+  subscription(t, stamp)
+  cb(t, stamp)
+  removeContext(t)
+}
+
 // Fire subscriptions in context
 // then clean the context
-const fnSubscriptions = (t, val, stamp, c, cLevel, oRoot, cb) => {
-  t._c = c
-  t._cLevel = cLevel
+const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
+  setContext(t, c, level)
   subscription(t, stamp)
-  t._c = null
-  t._cLevel = null
-  if (t.__tStamp !== stamp) {
-    t.__tStamp = stamp
-    cb(t, stamp, oRoot)
-    t.__tStamp = null
-  }
+  removeContext(t)
+  cb(t, stamp, oRoot)
 }
 
 // When there's no inherited references
 // there can still be a reference to parents
-const virtualSubscriptions = (t, stamp, oRoot) => {
-  while (t) {
+const handleInheritedStruct = (t, stamp, oRoot) => {
+  while (t.inherits) {
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, virtualSubscriptions, fnSubscriptions)
+      iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
     }
-    t = t._p
+    t = t.inherits
   }
 }
 
 // Fire emitters && subscriptions in context
 // then clean the context
-const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
-  t._c = c
-  t._cLevel = cLevel
+const fn = (t, val, stamp, c, level, oRoot, cb) => {
+  setContext(t, c, level)
   subscription(t, stamp)
   const emitter = getData(t)
   if (emitter) {
@@ -88,15 +112,14 @@ const fn = (t, val, stamp, c, cLevel, oRoot, cb) => {
       emitter.listeners = []
     }
   }
-  t._c = null
-  t._cLevel = null
+  removeContext(t)
   cb(t, val, stamp, oRoot)
 }
 
 // When there's no local references
 // there can be still inherited references
 // need to perf test this
-const virtualReferences = (t, val, stamp, oRoot) => {
+const updateInheritedStruct = (t, val, stamp, oRoot) => {
   while (t.inherits) {
     if (!oRoot) {
       oRoot = realRoot(t)
@@ -106,12 +129,10 @@ const virtualReferences = (t, val, stamp, oRoot) => {
       t.inherits.emitters.data &&
       t.inherits.emitters.data.struct
     if (contextRefs) {
-      iterate(contextRefs, val, stamp, oRoot, virtualReferences, fn)
-    } else {
-      virtualSubscriptions(t._p, stamp, oRoot)
+      iterate(contextRefs, val, stamp, oRoot, fn, updateInheritedStruct)
     }
     t = t.inherits
   }
 }
 
-export default virtualReferences
+export default { updateInheritedStruct, handleInheritedStruct, handleContextStruct, iterate }

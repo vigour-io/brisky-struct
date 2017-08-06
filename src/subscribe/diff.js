@@ -9,8 +9,8 @@ const diff = (t, subs, cb, tree, removed, composite) => {
   if (composite) {
     for (let key in composite) {
       if (key in tree) {
-        let branch = tree[key]
-        let c = branch.$c
+        const branch = tree[key]
+        const c = branch.$c
         if (c) {
           if (key.indexOf('$any') === 0) {
             changed = anyComposite(key, t, subs[key], cb, branch, removed, c)

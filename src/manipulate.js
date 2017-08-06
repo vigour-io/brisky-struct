@@ -105,7 +105,7 @@ const removeSomeFields = (t, stamp, val, changed, isBool) => {
 // --------------
 
 const overrideObjects = (t, val, stamp, isNew, reset, noConflict) => {
-  var override = val.stamp
+  const override = val.stamp
 
   // conflict resolution
   if (override && t.stamp && !noConflict && Math.abs(t.stamp) > Math.abs(override)) {
@@ -121,7 +121,7 @@ const overrideObjects = (t, val, stamp, isNew, reset, noConflict) => {
       let changed
       for (let key in val) {
         if (key !== 'stamp') {
-          let result = key !== 'val'
+          const result = key !== 'val'
               ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
               : setVal(t, val.val, stamp, 1)
           if (result) {
@@ -180,7 +180,7 @@ const objects = (t, val, stamp, isNew, reset, noConflict) => {
     let changed
     for (let key in val) {
       if (key !== 'stamp') {
-        let result = key !== 'val'
+        const result = key !== 'val'
             ? getProp(t, key)(t, val[key], key, stamp, isNew, reset, noConflict)
             : setVal(t, val.val, stamp, 1)
         if (result) {

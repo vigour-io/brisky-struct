@@ -1,6 +1,12 @@
 const test = require('tape')
 const { create: struct } = require('../../')
 
+const a = []
+a[5e6] = void 0
+var base = Date.now()
+a.forEach(() => true)
+base = Date.now() - base
+
 test('references - get performance', t => {
   const master = struct({
     key: 'master',
@@ -90,7 +96,7 @@ test('references - get performance', t => {
   d = Date.now() - d
 
   console.log('get through references:', d, 'ms')
-  t.ok(d < 500, 'get through references take less than 200ms')
+  t.ok(d < base, `get through references take less than ${base}ms`)
 
   const branch = master.create({
     pointers: {
@@ -176,7 +182,7 @@ test('references - get performance', t => {
   d = Date.now() - d
 
   console.log('get through virtual references:', d, 'ms')
-  t.ok(d < 500, 'get through virtual references take less than 200ms')
+  t.ok(d < base * 2, `get through virtual references take less than ${Math.round(base * 2)}ms`)
 
   t.end()
 })
@@ -190,60 +196,68 @@ test('references - emitter and subscription performance', t => {
         }
       }
     },
-    realThing: 'is a thing',
-    pointer1: {
-      type: 'pointer',
-      val: ['@', 'root', 'realThing']
+    deep: {
+      real: {
+        field: 'is a thing',
+        list: ['@', 'root', 'otherDeep']
+      }
     },
-    pointer2: {
-      type: 'pointer',
-      val: ['@', 'root', 'pointer1']
+    otherDeep: {
+      pointer1: {
+        type: 'pointer',
+        val: ['@', 'root', 'deep', 'real']
+      },
+      pointer2: {
+        type: 'pointer',
+        val: ['@', 'parent', 'pointer1']
+      }
     }
   })
 
   const branch1 = master.create()
 
   branch1.set({
-    realThing: 'override',
-    pointer3: {
-      type: 'pointer',
-      val: ['@', 'root', 'realThing']
-    },
-    deep: {
-      pointer4: {
+    otherDeep: {
+      pointer3: {
         type: 'pointer',
-        val: ['@', 'root', 'pointer2']
+        val: ['@', 'parent', 'pointer2']
       }
     }
   })
 
-  branch1.subscribe({ deep: { pointer4: true } }, () => true)
+  branch1.subscribe({ otherDeep: { pointer2: true } }, () => true)
 
   let d = Date.now()
 
   let i = 1e3
   while (i--) {
     branch1.set({
-      realThing: i % 2 ? 'override' : 'not override'
+      deep: {
+        real: {
+          field: i % 2 ? 'override' : 'not override'
+        }
+      }
     })
-    branch1.get(['deep', 'pointer4', 'compute'])
   }
 
   const branch2 = branch1.create()
 
-  branch2.subscribe({ pointer3: true }, () => true)
+  branch2.subscribe({ otherDeep: { pointer3: true } }, () => true)
 
   i = 1e3
   while (i--) {
     branch2.set({
-      realThing: i % 2 ? 'double override' : 'not double override'
+      deep: {
+        real: {
+          val: i % 2 ? 'override' : 'not override'
+        }
+      }
     })
-    branch2.get(['deep', 'pointer3', 'compute'])
   }
 
   d = Date.now() - d
   console.log('virtual reference emitters and subscriptions:', d, 'ms')
-  t.ok(d < 500, 'virtual reference emitters and subscriptions take less than 200ms')
+  t.ok(d < base * 3, `virtual reference emitters and subscriptions take less than ${Math.round(base * 3)}ms`)
 
   t.end()
 })

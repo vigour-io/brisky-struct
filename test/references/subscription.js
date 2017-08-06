@@ -110,7 +110,7 @@ test('references - field subscription', t => {
 })
 
 test('references - field subscription local', t => {
-  t.plan(1)
+  t.plan(2)
 
   const master = struct({
     key: 'master',
@@ -124,7 +124,8 @@ test('references - field subscription local', t => {
     },
     otherDeep: {
       pointer1: ['@', 'root', 'deep', 'real'],
-      pointer2: ['@', 'parent', 'pointer1']
+      pointer2: ['@', 'parent', 'pointer1'],
+      pointer3: ['@', 'parent', 'pointer2']
     }
   })
 
@@ -133,8 +134,13 @@ test('references - field subscription local', t => {
   branch.subscribe({ otherDeep: { pointer3: true } }, (val, type) => {
     if (type === 'new') {
       t.equals(
+        val.get(['field', 'compute']), 'is a thing',
+        'pointer3 fired for the original'
+      )
+    } else if (type === 'update') {
+      t.equals(
         val.get(['field', 'compute']), 'is other override',
-        'pointer2 fired for other override'
+        'pointer3 fired for other override'
       )
     }
   })
@@ -147,14 +153,13 @@ test('references - field subscription local', t => {
       }
     },
     otherDeep: {
-      pointer1: ['@', 'root', 'deep', 'otherReal'],
-      pointer3: ['@', 'parent', 'pointer2']
+      pointer1: ['@', 'root', 'deep', 'otherReal']
     }
   })
 })
 
 test('references - deep field subscription', t => {
-  t.plan(2)
+  t.plan(4)
 
   const master = struct({
     key: 'master',
@@ -185,11 +190,10 @@ test('references - deep field subscription', t => {
         'pointer2 fired for original'
       )
     } else if (type === 'update') {
-      // firing this is killing perf for now
-      // t.equals(
-      //   val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
-      //   'pointer2 fired for override'
-      // )
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
+        'pointer2 fired for override'
+      )
     }
   })
 
@@ -200,11 +204,10 @@ test('references - deep field subscription', t => {
         'pointer3 fired for original'
       )
     } else if (type === 'update') {
-      // firing this is killing perf for now
-      // t.equals(
-      //   val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
-      //   'pointer3 fired for override'
-      // )
+      t.equals(
+        val.get(['deeper', 'pointer1', 'deeper', 'field', 'compute']), 'override',
+        'pointer3 fired for override'
+      )
     }
   })
 
