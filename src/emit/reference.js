@@ -68,7 +68,7 @@ const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   subscription(t, stamp)
   cb(t, stamp)
-  removeContext(t)
+  // removeContext(t)
 }
 
 // Fire subscriptions in context
@@ -76,7 +76,7 @@ const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   subscription(t, stamp)
-  removeContext(t)
+  // removeContext(t)
   cb(t, stamp, oRoot)
 }
 
@@ -84,6 +84,9 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
 // there can still be a reference to parents
 const handleInheritedStruct = (t, stamp, oRoot) => {
   while (t.inherits) {
+    if (!oRoot) {
+      oRoot = realRoot(t)
+    }
     const contextRefs =
       t.inherits.emitters &&
       t.inherits.emitters.data &&
