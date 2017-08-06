@@ -15,6 +15,18 @@ test('references - val subscription', t => {
     }
   })
 
+  master.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
+    }
+  })
+
+  master.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
+    }
+  })
+
   const branch = master.create()
 
   branch.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
@@ -66,6 +78,18 @@ test('references - field subscription', t => {
     otherDeep: {
       pointer1: ['@', 'root', 'deep', 'real'],
       pointer2: ['@', 'parent', 'pointer1']
+    }
+  })
+
+  master.subscribe({ otherDeep: { pointer1: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
+    }
+  })
+
+  master.subscribe({ otherDeep: { pointer2: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
     }
   })
 
@@ -129,6 +153,12 @@ test('references - field subscription local', t => {
     }
   })
 
+  master.subscribe({ otherDeep: { pointer3: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
+    }
+  })
+
   const branch = master.create()
 
   branch.subscribe({ otherDeep: { pointer3: true } }, (val, type) => {
@@ -178,6 +208,18 @@ test('references - deep field subscription', t => {
       deeper: {
         field: 'is a thing'
       }
+    }
+  })
+
+  master.subscribe({ pointers: { pointer2: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
+    }
+  })
+
+  master.subscribe({ pointers: { pointer3: true } }, (val, type) => {
+    if (type === 'update') {
+      t.fail('should not fire for master')
     }
   })
 

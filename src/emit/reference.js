@@ -10,7 +10,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
   t._p && isAncestor(t._p, r, pc + 1)
 ))
 
-const setContext = (t, c, level) => {
+const setC = (t, c, level) => {
   while (t && level) {
     t._c = c
     t._cLevel = level
@@ -19,11 +19,35 @@ const setContext = (t, c, level) => {
   }
 }
 
-const removeContext = t => {
+const removeC = t => {
   while (t && t._c) {
     t._c = null
     t._cLevel = null
     t = t._p
+  }
+}
+
+const setContext = (t, c, level, prev) => {
+  if (t._c) {
+    if (t._c !== c) {
+      prev.c = t._c
+      prev.level = t._cLevel
+      removeC(t)
+      setC(t, c, level)
+    }
+  } else {
+    setC(t, c, level)
+  }
+}
+
+const removeContext = (t, c, prev) => {
+  if (prev.c) {
+    if (prev.c !== c) {
+      removeC(t)
+      setC(t, prev.c, prev.level)
+    }
+  } else {
+    removeC(t)
   }
 }
 
@@ -65,18 +89,20 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 }
 
 const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
+  const prev = {}
+  setContext(t, c, level, prev)
   subscription(t, stamp)
   cb(t, stamp)
-  // removeContext(t)
+  removeContext(t, c, prev)
 }
 
 // Fire subscriptions in context
 // then clean the context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
+  const prev = {}
+  setContext(t, c, level, prev)
   subscription(t, stamp)
-  // removeContext(t)
+  removeContext(t, c, prev)
   cb(t, stamp, oRoot)
 }
 
@@ -101,7 +127,8 @@ const handleInheritedStruct = (t, stamp, oRoot) => {
 // Fire emitters && subscriptions in context
 // then clean the context
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
+  const prev = {}
+  setContext(t, c, level, prev)
   subscription(t, stamp)
   const emitter = getData(t)
   if (emitter) {
@@ -115,7 +142,7 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
       emitter.listeners = []
     }
   }
-  removeContext(t)
+  removeContext(t, c, prev)
   cb(t, val, stamp, oRoot)
 }
 
