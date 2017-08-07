@@ -93,7 +93,7 @@ test('references - val subscription', t => {
     }
   })
 
-  branch1.set({
+  branch2.set({
     key: 'branch2',
     deep: {
       real: 'other override'
@@ -290,6 +290,7 @@ test('references - field subscription local', t => {
 })
 
 test('references - deep field subscription', t => {
+  // must be 4
   t.plan(2)
 
   const master = struct({
