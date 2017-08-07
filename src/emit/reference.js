@@ -99,11 +99,9 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   if (c === void 0) {
-    // console.log('firing real subs for', t.path())
     subscription(t, stamp)
   } else {
     setTStamps(t, level, stamp)
-    // console.log('firing context subs for', c.key, t.path())
     subscription(c, stamp)
   }
   if (cb) {
@@ -122,15 +120,12 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
         t.inherits.emitters.data &&
         t.inherits.emitters.data.struct
       if (contextRefs) {
-        // console.log('inherits iterate', t.path())
         iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
       }
-      // console.log('inherits', t.path())
       handleInheritedStruct(t.inherits, stamp, oRoot, false)
     }
     if (!first) {
       if (t._p) {
-        // console.log('parent', t.path())
         handleInheritedStruct(t._p, stamp, oRoot, false)
       }
       if (first === false) {
@@ -138,7 +133,6 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
           t.emitters.data &&
           t.emitters.data.struct
         if (localRefs) {
-          // console.log('local iterate', t.path())
           iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
         }
       }
