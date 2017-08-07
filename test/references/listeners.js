@@ -2,9 +2,9 @@ const test = require('tape')
 const { create: struct } = require('../../')
 
 test('references - virtual listeners', t => {
-  t.plan(12)
+  t.plan(18)
 
-  let branch1, branch2, master
+  let branch1, branch2, branch3, master
 
   master = struct({
     key: 'master',
@@ -27,6 +27,16 @@ test('references - virtual listeners', t => {
                 t.pass('pointer3 fired for double override')
               } else if (struct.key === 'pointer4') {
                 t.pass('pointer4 fired for double override')
+              }
+            } else if (val === 'triple override' && struct.root() === branch3) {
+              if (struct.key === 'pointer1') {
+                t.pass('pointer1 fired for triple override')
+              } else if (struct.key === 'pointer2') {
+                t.pass('pointer2 fired for triple override')
+              } else if (struct.key === 'pointer3') {
+                t.pass('pointer3 fired for triple override')
+              } else if (struct.key === 'pointer4') {
+                t.pass('pointer4 fired for triple override')
               }
             } else if (
               ~['override', 'double override'].indexOf(val) &&
@@ -67,10 +77,16 @@ test('references - virtual listeners', t => {
   })
 
   branch2 = branch1.create()
+  branch3 = branch1.create()
 
   branch2.set({
     key: 'branch2',
     realThing: 'double override'
+  })
+
+  branch3.set({
+    key: 'branch3',
+    realThing: 'triple override'
   })
 
   t.equals(
@@ -101,6 +117,16 @@ test('references - virtual listeners', t => {
   t.equals(
     branch2.get(['deep', 'pointer4', 'compute']), 'double override',
     'branch2 pointer4 is double override'
+  )
+
+  t.equals(
+    branch3.get(['pointer1', 'compute']), 'triple override',
+    'branch3 pointer1 is double override'
+  )
+
+  t.equals(
+    branch3.get(['deep', 'pointer4', 'compute']), 'triple override',
+    'branch3 pointer4 is double override'
   )
 })
 
