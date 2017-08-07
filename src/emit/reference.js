@@ -148,9 +148,6 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
 // When there's no local references
 // there can be still inherited references
 const updateInheritedStruct = (t, val, stamp, oRoot) => {
-  if (t._c) {
-    return
-  }
   while (t.inherits) {
     if (!oRoot) {
       oRoot = realRoot(t)
