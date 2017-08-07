@@ -290,7 +290,7 @@ test('references - field subscription local', t => {
 })
 
 test('references - deep field subscription', t => {
-  // must be 4
+  // eventually must be 4
   t.plan(2)
 
   const master = struct({
