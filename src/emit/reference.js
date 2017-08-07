@@ -88,7 +88,7 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
 // When there's no inherited references
 // there can still be a reference to parents
 const handleInheritedStruct = (t, stamp, oRoot, first) => {
-  if (t.__tStamp !== stamp) {
+  if (t.__tStamp !== stamp && !t._c) {
     t.__tStamp = stamp
     if (t.inherits) {
       const contextRefs =
