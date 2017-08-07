@@ -3,7 +3,7 @@ import { handleInheritedStruct } from './reference'
 import { realRoot } from '../traversal'
 
 const handleStruct = (p, stamp) => {
-  if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp) {
+  if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp && !p._c) {
     p.__tStamp = stamp
     let i = p.emitters.data.struct.length
     while (i--) {
