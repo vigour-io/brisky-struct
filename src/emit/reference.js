@@ -10,7 +10,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
   t._p && isAncestor(t._p, r, pc + 1)
 ))
 
-const setC = (t, c, level) => {
+const setContext = (t, c, level) => {
   while (t && level) {
     t._c = c
     t._cLevel = level
@@ -19,35 +19,11 @@ const setC = (t, c, level) => {
   }
 }
 
-const removeC = t => {
+const removeContext = t => {
   while (t && t._c) {
     t._c = null
     t._cLevel = null
     t = t._p
-  }
-}
-
-const setContext = (t, c, level, prev) => {
-  if (t._c) {
-    if (t._c !== c) {
-      prev.c = t._c
-      prev.level = t._cLevel
-      removeC(t)
-      setC(t, c, level)
-    }
-  } else {
-    setC(t, c, level)
-  }
-}
-
-const removeContext = (t, c, prev) => {
-  if (prev.c) {
-    if (prev.c !== c) {
-      removeC(t)
-      setC(t, prev.c, prev.level)
-    }
-  } else {
-    removeC(t)
   }
 }
 
@@ -144,8 +120,7 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
 // Fire emitters && subscriptions in context
 // then clean the context
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
-  const prev = {}
-  setContext(t, c, level, prev)
+  setContext(t, c, level)
   if (c === void 0 || level === 1) {
     subscription(t, stamp)
   } else {
@@ -164,7 +139,7 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
       emitter.listeners = []
     }
   }
-  removeContext(t, c, prev)
+  removeContext(t, c)
   if (cb) {
     cb(t, val, stamp, oRoot)
   }
