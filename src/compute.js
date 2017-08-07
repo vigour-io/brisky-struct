@@ -20,6 +20,7 @@ const transform = t => t.$transform !== void 0
 const compute = (t, val, passon, arg) => {
   if (val === void 0) {
     t._rc = t._rc || t._c
+    // console.log('COMPUTE', t.key, t._rc && t._rc.root(true).key)
     val = getRefVal(t)
   }
   if (val) {

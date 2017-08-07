@@ -334,7 +334,6 @@ test('references - circular subscription', t => {
   const branch2 = master.create()
 
   branch1.subscribe({ ref: { $switch: () => ({ items: { val: true } }) } }, (val, type) => {
-    console.log('branch1', val.parent().key, val, type)
     if (val.parent().key === 'i1' && type === 'new') {
       t.equals(
         val.get(['sub1', 'bf1', 'compute']), false,
@@ -361,7 +360,6 @@ test('references - circular subscription', t => {
   })
 
   branch2.subscribe({ ref: { $switch: () => ({ items: { val: true } }) } }, (val, type) => {
-    console.log('branch2', val.parent().key, val, type)
     if (val.parent().key === 'i2' && type === 'new') {
       t.equals(
         val.get(['sub3', 'bf3', 'compute']), false,
