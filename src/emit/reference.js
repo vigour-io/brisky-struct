@@ -10,7 +10,7 @@ const isAncestor = (t, r, pc) => ((t === r && pc) || (
   t._p && isAncestor(t._p, r, pc + 1)
 ))
 
-const setContext = (t, c, level) => {
+const setC = (t, c, level) => {
   while (t && level) {
     t._c = c
     t._cLevel = level
@@ -19,10 +19,42 @@ const setContext = (t, c, level) => {
   }
 }
 
-const removeContext = t => {
+const removeC = t => {
   while (t && t._c) {
     t._c = null
     t._cLevel = null
+    t = t._p
+  }
+}
+
+const setContext = (t, c, level, prev) => {
+  if (t._c) {
+    if (t._c !== c) {
+      prev.c = t._c
+      prev.level = t._cLevel
+      removeC(t)
+      setC(t, c, level)
+    }
+  } else {
+    setC(t, c, level)
+  }
+}
+
+const removeContext = (t, c, prev) => {
+  if (prev.c) {
+    if (prev.c !== c) {
+      removeC(t)
+      setC(t, prev.c, prev.level)
+    }
+  } else {
+    removeC(t)
+  }
+}
+
+const setTStamps = (t, level, stamp) => {
+  while (t && level) {
+    t.tStamp = stamp
+    level--
     t = t._p
   }
 }
@@ -50,7 +82,7 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
               refs[i].emitters.data &&
               refs[i].emitters.data.struct
             if (localRefs) {
-              iterate(localRefs, val, stamp, oRoot, fn, cb)
+              iterate(localRefs, val, stamp, oRoot, fn)
             }
             refs[i].__tStamp = null
           }
@@ -58,51 +90,68 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
         }
       }
       if (c !== void 0) {
-        fn(c, val, stamp, void 0, void 0, oRoot, cb)
+        fn(c, val, stamp, void 0, void 0, oRoot)
       }
     }
   }
 }
 
-const handleContextStruct = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
-  subscription(t, stamp)
-  cb(t, stamp)
-  // removeContext(t)
-}
-
 // Fire subscriptions in context
-// then clean the context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
-  subscription(t, stamp)
-  // removeContext(t)
-  cb(t, stamp, oRoot)
+  if (c === void 0) {
+    subscription(t, stamp)
+  } else {
+    setTStamps(t, level, stamp)
+    subscription(c, stamp)
+  }
+  if (cb) {
+    cb(t, stamp, oRoot)
+  }
 }
 
 // When there's no inherited references
 // there can still be a reference to parents
-const handleInheritedStruct = (t, stamp, oRoot) => {
-  while (t.inherits) {
-    if (!oRoot) {
-      oRoot = realRoot(t)
+const handleInheritedStruct = (t, stamp, oRoot, first) => {
+  if (t.__tStamp !== stamp) {
+    t.__tStamp = stamp
+    if (t.inherits) {
+      const contextRefs =
+        t.inherits.emitters &&
+        t.inherits.emitters.data &&
+        t.inherits.emitters.data.struct
+      if (contextRefs) {
+        iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
+      }
+      handleInheritedStruct(t.inherits, stamp, oRoot, false)
     }
-    const contextRefs =
-      t.inherits.emitters &&
-      t.inherits.emitters.data &&
-      t.inherits.emitters.data.struct
-    if (contextRefs) {
-      iterate(contextRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
+    if (!first) {
+      if (t._p) {
+        handleInheritedStruct(t._p, stamp, oRoot, false)
+      }
+      // if (first === false) {
+      //   const localRefs = t.emitters &&
+      //     t.emitters.data &&
+      //     t.emitters.data.struct
+      //   if (localRefs) {
+      //     iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
+      //   }
+      // }
     }
-    t = t.inherits
+    t.__tStamp = null
   }
 }
 
 // Fire emitters && subscriptions in context
 // then clean the context
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
-  setContext(t, c, level)
-  subscription(t, stamp)
+  const prev = {}
+  setContext(t, c, level, prev)
+  if (c === void 0 || level === 1) {
+    subscription(t, stamp)
+  } else {
+    setTStamps(t, level, stamp)
+    subscription(c, stamp)
+  }
   const emitter = getData(t)
   if (emitter) {
     const listeners = getFn(emitter)
@@ -115,13 +164,14 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
       emitter.listeners = []
     }
   }
-  removeContext(t)
-  cb(t, val, stamp, oRoot)
+  removeContext(t, c, prev)
+  if (cb) {
+    cb(t, val, stamp, oRoot)
+  }
 }
 
 // When there's no local references
 // there can be still inherited references
-// need to perf test this
 const updateInheritedStruct = (t, val, stamp, oRoot) => {
   while (t.inherits) {
     if (!oRoot) {
@@ -138,4 +188,4 @@ const updateInheritedStruct = (t, val, stamp, oRoot) => {
   }
 }
 
-export default { updateInheritedStruct, handleInheritedStruct, handleContextStruct, iterate }
+export default { updateInheritedStruct, handleInheritedStruct }
