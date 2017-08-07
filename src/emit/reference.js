@@ -72,10 +72,11 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
     // console.log('firing real subs for', t.key)
     subscription(t, stamp)
   } else {
-    while (t && level) {
-      t.tStamp = stamp
+    let p = t
+    while (p && level) {
+      p.tStamp = stamp
       level--
-      t = t._p
+      p = p._p
     }
     // console.log('firing context subs for', c.key)
     subscription(c, stamp)
@@ -119,6 +120,17 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
 // then clean the context
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
+  if (c === void 0 || level === 1) {
+    subscription(t, stamp)
+  } else {
+    let p = t
+    while (p && level) {
+      p.tStamp = stamp
+      level--
+      p = p._p
+    }
+    subscription(c, stamp)
+  }
   const emitter = getData(t)
   if (emitter) {
     const listeners = getFn(emitter)
@@ -130,16 +142,6 @@ const fn = (t, val, stamp, c, level, oRoot, cb) => {
     } else {
       emitter.listeners = []
     }
-  }
-  if (c === void 0 || level === 1) {
-    subscription(t, stamp)
-  } else {
-    while (t && level) {
-      t.tStamp = stamp
-      level--
-      t = t._p
-    }
-    subscription(c, stamp)
   }
   removeContext(t)
   cb(t, val, stamp, oRoot)
