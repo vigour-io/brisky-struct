@@ -390,7 +390,7 @@ test('references - circular subscription', t => {
       i2: { bf2: false },
       i4: { sub: { bf4: true } }
     },
-    ref: ['@', 'root', 'list', 'i1'],
+    ref: ['@', 'root', 'list', 'i1']
   })
 
   branch2.set({
