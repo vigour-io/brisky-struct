@@ -25,11 +25,10 @@ const get = (t, key, noContext) => {
 
 const getOrigin = (t, key, noContext) => {
   if (t) {
-    // console.log('GET ORIGIN', t.key, '->', key, t._c && t._c.root(true).key)
     let result = get(t, key, noContext)
-    // console.log('GET ORIGIN RESULT', result, result && result._rc && result._rc.root(true).key)
     if (result !== void 0 && result !== null) {
-      result._rc = result._rc || t._rc
+      result._rc = t._rc || result._rc
+      // not sure about this cleanup
       // if (t._rc) {
       //   t._rc = null
       // }

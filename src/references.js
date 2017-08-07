@@ -35,7 +35,6 @@ const vinstances = (instances, cRoot) => {
 
 const getRefVal = t => {
   if (t.val !== void 0 && t.val !== null) {
-    // console.log('GET REF VAL', t.key, '->', t.val && t.val.key, t._rc && t._rc.root(true).key)
     if (t._rc) {
       const vinstance = t.val.instances &&
         vinstances(t.val.instances, realRoot(t._rc))
