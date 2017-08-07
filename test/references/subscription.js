@@ -67,7 +67,7 @@ test('references - val subscription', t => {
     } else if (type === 'update') {
       t.equals(
         val.compute(), 'other override',
-        'branch2 pointer1 fired for override'
+        'branch2 pointer1 fired for other override'
       )
     }
   })
@@ -81,7 +81,7 @@ test('references - val subscription', t => {
     } else if (type === 'update') {
       t.equals(
         val.compute(), 'other override',
-        'branch2 pointer2 fired for override'
+        'branch2 pointer2 fired for other override'
       )
     }
   })
