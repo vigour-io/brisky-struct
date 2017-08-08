@@ -2,7 +2,7 @@ const test = require('tape')
 const { create: struct } = require('../../')
 
 const a = []
-a[5e6] = void 0
+a[1e7] = void 0
 var base = Date.now()
 a.forEach(() => true)
 base = Date.now() - base
