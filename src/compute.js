@@ -3,7 +3,7 @@ import { getRefVal } from './references'
 const origin = t => {
   const clean = t
   t._rc = t._rc || t._c
-  if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
+  if ((t = getRefVal(t, true)) && t !== void 0 && t !== clean) {
     t._rc = t._rc || clean._rc || t
     clean._rc = null
     return origin(t)

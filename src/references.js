@@ -33,7 +33,7 @@ const vinstances = (instances, cRoot) => {
   return fallback
 }
 
-const getRefVal = t => {
+const getRefVal = (t, struct, noContext) => {
   if (t.val !== void 0 && t.val !== null) {
     if (t._rc) {
       const vinstance = t.val.instances &&
@@ -41,9 +41,14 @@ const getRefVal = t => {
       if (vinstance !== void 0) {
         t._rc = null
         return vinstance
+      } else if (struct && !(t && t.val.inherits)) {
+        return t
       } else {
         return t.val
       }
+    } else if (struct && !(t && t.val.inherits)) {
+      t._rc = t
+      return t
     } else {
       t._rc = t
       return t.val
@@ -51,7 +56,12 @@ const getRefVal = t => {
   } else if (t.inherits) {
     t.inherits._rc = t._rc || t
     t._rc = null
-    return getRefVal(t.inherits)
+    const result = getRefVal(t.inherits, struct, noContext)
+    if (!noContext && result && result.inherits) {
+      result._c = t
+      result._cLevel = 1
+    }
+    return result
   } else if (t._rc) {
     t._rc = null
   }
