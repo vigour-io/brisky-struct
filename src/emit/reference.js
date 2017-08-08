@@ -1,6 +1,6 @@
+import bs from 'stamp'
 import { getFn, getData } from '../get'
 import { realRoot, realRootPath } from '../traversal'
-import subscription from './subscription'
 
 // Lookup until root of master
 // to find a given ancestor
@@ -72,13 +72,29 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   }
 }
 
+const subscription = (t, stamp) => {
+  t.tStamp = stamp
+  if (t.subscriptions) {
+    if (!t._inProgressS) {
+      t._inProgressS = true
+      bs.on(() => {
+        var i = t.subscriptions.length
+        while (i--) { t.subscriptions[i]() }
+        t._inProgressS = false
+      })
+    }
+  }
+}
+
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   if (c === void 0) {
-    subscription(t, stamp)
+    if (!t._c) subscription(t, stamp)
   } else {
-    setTStamps(t, level, stamp)
-    subscription(c, stamp)
+    if (!c._c) {
+      setTStamps(t, level, stamp)
+      subscription(c, stamp)
+    }
   }
   if (cb) {
     cb(t, stamp, oRoot)
@@ -122,10 +138,12 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   if (c === void 0 || level === 1) {
-    subscription(t, stamp)
+    if (!t._c) subscription(t, stamp)
   } else {
-    setTStamps(t, level, stamp)
-    subscription(c, stamp)
+    if (!c._c) {
+      setTStamps(t, level, stamp)
+      subscription(c, stamp)
+    }
   }
   const emitter = getData(t)
   if (emitter) {
