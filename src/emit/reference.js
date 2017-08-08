@@ -35,6 +35,18 @@ const setTStamps = (t, level, stamp) => {
   }
 }
 
+const subscription = (t, stamp) => {
+  t.tStamp = stamp
+  if (t.subscriptions && !t._inProgressS) {
+    t._inProgressS = true
+    bs.on(() => {
+      var i = t.subscriptions.length
+      while (i--) { t.subscriptions[i]() }
+      t._inProgressS = false
+    })
+  }
+}
+
 // Iterate over given references list
 // and fire functions if conditions are met
 const iterate = (refs, val, stamp, oRoot, fn, cb) => {
@@ -72,24 +84,12 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
   }
 }
 
-const subscription = (t, stamp) => {
-  t.tStamp = stamp
-  if (t.subscriptions) {
-    if (!t._inProgressS) {
-      t._inProgressS = true
-      bs.on(() => {
-        var i = t.subscriptions.length
-        while (i--) { t.subscriptions[i]() }
-        t._inProgressS = false
-      })
-    }
-  }
-}
-
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   if (c === void 0) {
-    if (!t._c) subscription(t, stamp)
+    if (!t._c) {
+      subscription(t, stamp)
+    }
   } else {
     if (!c._c) {
       setTStamps(t, level, stamp)
@@ -138,7 +138,9 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   if (c === void 0 || level === 1) {
-    if (!t._c) subscription(t, stamp)
+    if (!t._c) {
+      subscription(t, stamp)
+    }
   } else {
     if (!c._c) {
       setTStamps(t, level, stamp)

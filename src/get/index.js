@@ -27,17 +27,16 @@ const getOrigin = (t, key, noContext) => {
   if (t) {
     let result = get(t, key, noContext)
     if (result !== void 0 && result !== null) {
-      result._rc = t._rc || result._rc
-      // not sure about this cleanup
-      // if (t._rc) {
-      //   t._rc = null
-      // }
+      result._rc = t._rc || result._c
+      if (t._rc) {
+        t._rc = null
+      }
       return result
     } else {
       const clean = t
       t._rc = t._rc || t._c
       if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
-        t._rc = t._rc || clean._rc
+        t._rc = t._rc || clean._rc || t
         clean._rc = null
         return getOrigin(t, key, noContext)
       }
