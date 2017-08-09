@@ -31,6 +31,9 @@ const vinstances = (instances, cRoot) => {
       }
     }
   }
+  if (fallback) {
+    setPathContext(fallback, cRoot)
+  }
   return fallback
 }
 
