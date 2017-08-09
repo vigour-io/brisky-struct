@@ -29,17 +29,17 @@ const getOrigin = (t, key, noContext) => {
     if (result !== void 0 && result !== null) {
       result._rc = t._rc || result._c
       if (t._rc) {
-        t._rc = null
+        t._rc = void 0
       }
       return result
     } else {
       const clean = t
       t._rc = t._rc || t._c
-      if ((t = getRefVal(t, true, noContext)) && t !== void 0) {
-        clean._rc = null
+      t = getRefVal(t, true, noContext)
+      clean._rc = void 0
+      if (t) {
         return getOrigin(t, key, noContext)
       }
-      clean._rc = null
     }
   }
 }

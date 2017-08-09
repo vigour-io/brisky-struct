@@ -3,13 +3,9 @@ import { getRefVal } from './references'
 const origin = t => {
   const clean = t
   t._rc = t._rc || t._c
-  if ((t = getRefVal(t, true)) && t !== void 0) {
-    clean._rc = null
-    return origin(t)
-  } else {
-    clean._rc = null
-    return clean
-  }
+  t = getRefVal(t, true)
+  clean._rc = void 0
+  return t ? origin(t) : clean
 }
 
 const transform = t => t.$transform !== void 0
@@ -36,7 +32,7 @@ const compute = (t, val, passon, arg) => {
     }
   }
   if (t._rc) {
-    t._rc = null
+    t._rc = void 0
   }
   const trans = transform(t)
   return trans ? trans(val, passon || t, arg) : val

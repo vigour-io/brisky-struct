@@ -40,8 +40,8 @@ const getRefVal = (t, struct, noContext) => {
   if (t.val !== void 0 && t.val !== null) {
     const vinstance = t._rc && t.val.instances &&
       vinstances(t.val.instances, realRoot(t._rc))
-    if (t._rc && vinstance !== void 0) {
-      t._rc = null
+    if (vinstance) {
+      t._rc = void 0
       return vinstance
     } else if (t.val && t.val.inherits) {
       if (t._c && !noContext) {
@@ -54,7 +54,7 @@ const getRefVal = (t, struct, noContext) => {
     }
   } else if (t.inherits) {
     t.inherits._rc = t._rc || t._c || t
-    t._rc = null
+    t._rc = void 0
     const result = getRefVal(t.inherits, struct, noContext)
     if (!noContext && result && result.inherits) {
       result._c = t
@@ -62,7 +62,7 @@ const getRefVal = (t, struct, noContext) => {
     }
     return result
   } else if (t._rc) {
-    t._rc = null
+    t._rc = void 0
   }
 }
 
