@@ -1,5 +1,4 @@
 import { diff } from './diff'
-import { root } from '../traversal'
 
 export default (t, subs, cb, tree, removed, oRoot) => {
   var branch = tree.root
@@ -8,7 +7,7 @@ export default (t, subs, cb, tree, removed, oRoot) => {
       branch = tree.root = { _key: 'root', _p: tree }
       composite(tree)
     }
-    return diff(root(t), subs, cb, branch, void 0, void 0, oRoot)
+    return diff(oRoot, subs, cb, branch, void 0, void 0, oRoot)
   } else if (branch) {
     diff(branch.$t, subs, cb, branch, true, void 0, oRoot)
     return true

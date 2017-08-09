@@ -24,8 +24,7 @@ const get = (t, path, oRoot) => {
     if (path[i] === 'root') {
       t = root(t)
     } else {
-      // this is dangerous in context!
-      t = getOrigin(t, path[i]) // special get origin that handles context and corrects
+      t = getOrigin(t, path[i])
     }
   }
   return t

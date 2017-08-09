@@ -3,7 +3,6 @@ import remove from './property/remove'
 import { getKeys } from '../keys'
 import { getOrigin } from '../get'
 import { diff } from './diff'
-import { getRefVal } from '../references'
 
 const inherits = (key, t, index) => {
   var i = 0
@@ -20,7 +19,8 @@ const inherits = (key, t, index) => {
 const parseKeys = t => {
   var keys = getKeys(t)
   var orig = t
-  t = getRefVal(t) // edge case
+  // TODO: This needs a fix for context refs
+  t = t.val
   if (t && typeof t === 'object' && t.inherits) {
     let combined
     let index = 1

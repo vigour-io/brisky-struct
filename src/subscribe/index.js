@@ -1,3 +1,4 @@
+import { realRoot } from '../traversal'
 import { diff } from './diff'
 
 const listen = (t, fn) => t.subscriptions.push(fn)
@@ -16,13 +17,13 @@ const subscribe = (t, subs, cb, tree) => {
         diff(t, subs, cb, tree, void 0, void 0, t)
       })
     } else {
-      listen(t, () => diff(t, subs, cb, tree, void 0, void 0, t))
+      listen(t, () => diff(t, subs, cb, tree, void 0, void 0, realRoot(t)))
     }
     cb(t, 'new', subs, tree)
   } else {
-    listen(t, () => diff(t, subs, cb, tree, void 0, void 0, t))
+    listen(t, () => diff(t, subs, cb, tree, void 0, void 0, realRoot(t)))
   }
-  diff(t, subs, cb, tree, void 0, void 0, t)
+  diff(t, subs, cb, tree, void 0, void 0, realRoot(t))
   return tree
 }
 

@@ -30,6 +30,10 @@ const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
   var changed
   if (t) {
     const stamp = t.tStamp || dummy
+
+    // TODO: This needs a performance refactor!
+    t = oRoot.get(t.path(true)) || t
+
     if (!branch) {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
       branch.$ = stamp
