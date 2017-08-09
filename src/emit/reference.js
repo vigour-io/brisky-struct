@@ -1,14 +1,6 @@
 import bs from 'stamp'
 import { getFn, getData } from '../get'
-import { realRoot, realRootPath } from '../traversal'
-
-// Lookup until root of master
-// to find a given ancestor
-const isAncestor = (t, r, pc) => ((t === r && pc) || (
-  t.inherits && isAncestor(t.inherits, r, pc)
-) || (
-  t._p && isAncestor(t._p, r, pc + 1)
-))
+import { realRoot, realRootPath, isAncestor } from '../traversal'
 
 const setContext = (t, c, level) => {
   while (t && level) {

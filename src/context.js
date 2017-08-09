@@ -2,6 +2,7 @@ import { get } from './get'
 import { removeContextKey } from './keys'
 import { create } from './manipulate'
 import { removeContext as emit } from './emit/context'
+import { realRoot, realRootPath, isAncestor } from './traversal'
 
 const resolveContext = (t, val, stamp, reset, noConflict) => {
   let level = t._cLevel
@@ -165,6 +166,32 @@ const removeContext = (target, level) => {
   }
 }
 
+const setPathContext = (t, c) => {
+  const oRoot = realRoot(c)
+  const rPath = []
+  const rRoot = realRootPath(t, rPath)
+  const pc = isAncestor(oRoot.inherits, rRoot, 1)
+  if (pc) {
+    let c = oRoot
+    let level = rPath.length - pc + 1
+    let test = c
+    while (level--) {
+      c = test
+      test = test[rPath[level]]
+      if (test === void 0) {
+        level++
+        while (t && level) {
+          t._c = c
+          t._cLevel = level
+          level--
+          t = t._p
+        }
+        break
+      }
+    }
+  }
+}
+
 // make some tests but obvisouly usefull
 // const clearContext = (t, level) => {
 //   var parent = t
@@ -179,4 +206,4 @@ const removeContext = (target, level) => {
 //   return this
 // }
 
-export { contextProperty, resolveContext, applyContext, storeContext }
+export { contextProperty, resolveContext, applyContext, storeContext, setPathContext }

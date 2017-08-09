@@ -66,4 +66,10 @@ const realRootPath = (t, path) => {
   return t
 }
 
-export { path, parent, root, realRoot, realRootPath }
+const isAncestor = (t, r, pc) => ((t === r && pc) || (
+  t.inherits && isAncestor(t.inherits, r, pc)
+) || (
+  t._p && isAncestor(t._p, r, pc + 1)
+))
+
+export { path, parent, root, realRoot, realRootPath, isAncestor }

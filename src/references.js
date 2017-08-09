@@ -1,6 +1,7 @@
 import { set } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
+import { setPathContext } from './context'
 import { realRoot } from './traversal'
 import getApi from './get/api'
 
@@ -35,26 +36,24 @@ const vinstances = (instances, cRoot) => {
 
 const getRefVal = (t, struct, noContext) => {
   if (t.val !== void 0 && t.val !== null) {
-    if (t._rc) {
-      const vinstance = t.val.instances &&
-        vinstances(t.val.instances, realRoot(t._rc))
-      if (vinstance !== void 0) {
-        t._rc = null
-        return vinstance
-      } else if (struct && !(t && t.val.inherits)) {
-        return t
-      } else {
-        return t.val
+    const vinstance = t._rc && t.val.instances &&
+      vinstances(t.val.instances, realRoot(t._rc))
+    if (vinstance !== null && vinstance !== void 0) {
+      t._rc = null
+      return vinstance
+    } else if (t.val && t.val.inherits) {
+      if (t._c && !noContext) {
+        setPathContext(t.val, t._c)
       }
-    } else if (struct && !(t && t.val.inherits)) {
-      t._rc = t
+      t.val._rc = t._rc || t._c || t
+      return t.val
+    } else if (struct) {
       return t
     } else {
-      t._rc = t
       return t.val
     }
   } else if (t.inherits) {
-    t.inherits._rc = t._rc || t
+    t.inherits._rc = t._rc || t._c || t
     t._rc = null
     const result = getRefVal(t.inherits, struct, noContext)
     if (!noContext && result && result.inherits) {
