@@ -21,9 +21,8 @@ const compute = (t, val, passon, arg) => {
     const type = typeof val
     if (type === 'object') {
       if (val.inherits) {
-        const v = val
-        val = compute(val, void 0, passon, arg)
-        if (val === void 0) {
+        const v = compute(val, void 0, passon, arg)
+        if (v !== void 0) {
           val = v
         }
       }
