@@ -118,7 +118,18 @@ const property = (key, t, subs, cb, tree, removed, composite) => {
       changed = remove(subs, cb, branch) || (subs.val && true)
     }
   } else {
+    let debug
+    if (global.DEBUG) {
+      if (t && t._c) {
+        debug = t._c
+      }
+    }
     t = getOrigin(t, key)
+    if (debug) {
+      if (t && t._c !== debug && t.root() !== debug.root()) {
+        console.log('HAAAAA!!!!', t.path())
+      }
+    }
     changed = update(
       key,
       t,
