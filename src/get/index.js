@@ -35,7 +35,7 @@ const getOrigin = (t, key, noContext) => {
     } else {
       const clean = t
       t._rc = t._rc || t._c
-      if ((t = getRefVal(t, true, noContext)) && t !== void 0 && t !== clean) {
+      if ((t = getRefVal(t, true, noContext)) && t !== void 0) {
         clean._rc = null
         return getOrigin(t, key, noContext)
       }

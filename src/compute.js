@@ -3,7 +3,7 @@ import { getRefVal } from './references'
 const origin = t => {
   const clean = t
   t._rc = t._rc || t._c
-  if ((t = getRefVal(t, true)) && t !== void 0 && t !== clean) {
+  if ((t = getRefVal(t, true)) && t !== void 0) {
     clean._rc = null
     return origin(t)
   } else {

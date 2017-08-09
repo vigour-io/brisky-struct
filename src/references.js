@@ -47,9 +47,7 @@ const getRefVal = (t, struct, noContext) => {
       }
       t.val._rc = t._rc || t._c || t
       return t.val
-    } else if (struct) {
-      return t
-    } else {
+    } else if (!struct) {
       return t.val
     }
   } else if (t.inherits) {
