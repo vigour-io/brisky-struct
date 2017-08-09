@@ -170,10 +170,10 @@ const setPathContext = (t, c) => {
   const oRoot = realRoot(c)
   const rPath = []
   const rRoot = realRootPath(t, rPath)
-  const pc = isAncestor(oRoot.inherits, rRoot, 1)
-  if (pc) {
+  var level = isAncestor(oRoot.inherits, rRoot, 1)
+  if (level) {
+    level = rPath.length - level + 1
     let c = oRoot
-    let level = rPath.length - pc + 1
     let test = c
     while (level--) {
       c = test
@@ -183,8 +183,8 @@ const setPathContext = (t, c) => {
         while (t && level) {
           t._c = c
           t._cLevel = level
-          level--
           t = t._p
+          level--
         }
         break
       }
