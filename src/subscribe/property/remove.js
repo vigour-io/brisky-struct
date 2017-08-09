@@ -2,7 +2,7 @@ import { diff } from '../diff'
 
 import { applyContext } from '../../context'
 
-const remove = (subs, cb, tree) => {
+const remove = (subs, cb, tree, oRoot) => {
   const t = tree.$t
 
   if (tree.$tc) {
@@ -16,7 +16,7 @@ const remove = (subs, cb, tree) => {
 
   if (subs.val) { cb(t, 'remove', subs, tree) }
   if (!subs.$blockRemove) {
-    diff(t, subs, cb, tree, true)
+    diff(t, subs, cb, tree, true, void 0, oRoot)
   }
   const key = tree._key
   const parent = tree._p
@@ -88,7 +88,7 @@ const composite = (tree, key) => {
   }
 }
 
-const clearRootComposite = (tree) => {
+const clearRootComposite = tree => {
   tree = tree._p
   var key = 'parent'
   var cnt = 0

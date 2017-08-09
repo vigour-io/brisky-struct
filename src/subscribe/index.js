@@ -6,21 +6,23 @@ const listen = (t, fn) => t.subscriptions.push(fn)
 const subscribe = (t, subs, cb, tree) => {
   if (!t.subscriptions) t.subscriptions = []
   if (!tree) tree = {}
+  t._c = null
+  t._cLevel = null
   tree.$t = t
   if (subs.val) {
     if (subs.val === true || subs.val === 'shallow') {
       listen(t, () => {
         cb(t, 'update', subs, tree)
-        diff(t, subs, cb, tree)
+        diff(t, subs, cb, tree, void 0, void 0, t)
       })
     } else {
-      listen(t, () => diff(t, subs, cb, tree))
+      listen(t, () => diff(t, subs, cb, tree, void 0, void 0, t))
     }
     cb(t, 'new', subs, tree)
   } else {
-    listen(t, () => diff(t, subs, cb, tree))
+    listen(t, () => diff(t, subs, cb, tree, void 0, void 0, t))
   }
-  diff(t, subs, cb, tree)
+  diff(t, subs, cb, tree, void 0, void 0, t)
   return tree
 }
 
