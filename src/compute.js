@@ -3,8 +3,7 @@ import { getRefVal } from './references'
 const origin = t => {
   const clean = t
   t._rc = t._rc || t._c
-  if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
-    t._rc = t._rc || clean._rc || t
+  if ((t = getRefVal(t, true)) && t !== void 0) {
     clean._rc = null
     return origin(t)
   } else {
@@ -27,7 +26,6 @@ const compute = (t, val, passon, arg) => {
     if (type === 'object') {
       if (val.inherits) {
         const v = val
-        val._rc = t._rc
         val = compute(val, void 0, passon, arg)
         if (val === void 0) {
           val = v

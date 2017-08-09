@@ -2,36 +2,35 @@ import { diff } from './diff'
 import { root } from '../traversal'
 import { getOrigin } from '../get'
 
-export default (t, subs, cb, tree, removed) => {
+export default (t, subs, cb, tree, removed, oRoot) => {
   var branch = tree.parent
   if (!removed && t) {
     if (!branch) {
       branch = tree.parent = { _p: tree, _key: 'parent' }
       composite(tree)
     }
-    const parente = getParent(t, tree)
-    const c = diff(parente, subs, cb, branch)
+    const parent = getParent(t, tree, oRoot)
+    const c = diff(parent, subs, cb, branch, void 0, void 0, oRoot)
     return c
   } else if (branch) {
-    diff(branch.$t, subs, cb, branch, true)
+    diff(branch.$t, subs, cb, branch, true, void 0, oRoot)
     return true
   }
 }
 
-const get = (t, path) => {
+const get = (t, path, oRoot) => {
   let i = path.length
   while (i--) {
     if (path[i] === 'root') {
       t = root(t)
     } else {
-      // this is dangerous in context!
       t = getOrigin(t, path[i])
     }
   }
   return t
 }
 
-const getParent = (t, tree) => {
+const getParent = (t, tree, oRoot) => {
   var path = []
   var cnt = 1
   var i = 0
@@ -54,28 +53,8 @@ const getParent = (t, tree) => {
     }
     tree = tree._p
   }
-  return get(root(t), path)
+  return get(root(t), path, oRoot)
 }
-
-// const composite = tree => {
-//   console.log('-----------------')
-//   var key = 'parent'
-//   while (
-//     tree._p &&
-//     (!(tree.$c) ||
-//     !(key in tree.$c) ||
-//     tree.$c[key] !== 'root')
-//   ) {
-//     console.log(key)
-//     let tkey = tree._key
-//     if (tkey !== 'parent' && tkey !== 'root') {
-//       if (!('$c' in tree)) { tree.$c = {} }
-//       tree.$c[key] = 'parent'
-//     }
-//     key = tkey
-//     tree = tree._p
-//   }
-// }
 
 const composite = tree => {
   var key = 'parent'

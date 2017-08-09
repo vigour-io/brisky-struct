@@ -25,13 +25,15 @@ const switchuid = t => {
   return uid >>> 0
 }
 
-const update = (key, t, subs, cb, tree, c, parent) => {
+const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
   var branch = tree[key]
   var changed
   if (t) {
-    // console.log('PROPERTY:', t, !!(branch && branch.$c))
+    const stamp = t.tStamp || dummy
 
-    const stamp = t.tStamp || dummy  // needs to use stamp as well (if dstamp is gone)
+    // TODO: This needs a performance refactor!
+    t = oRoot.get(t.path(true)) || t
+
     if (!branch) {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
       branch.$ = stamp
@@ -43,8 +45,7 @@ const update = (key, t, subs, cb, tree, c, parent) => {
         cb(t, 'new', subs, branch)
         changed = true
       }
-      changed = diff(t, subs, cb, branch, void 0, c) || changed
-      // ! && ! || !== (thats why != may need to replace)
+      changed = diff(t, subs, cb, branch, void 0, void 0, oRoot) || changed
     } else if (branch.$ !== stamp || branch.$t !== t || branch.$tc != t._c) { //eslint-disable-line
       if (subs.val) {
         if (subs.val === 'shallow') {
@@ -91,11 +92,10 @@ const update = (key, t, subs, cb, tree, c, parent) => {
           delete branch.$val
         }
       }
-      changed = diff(t, subs, cb, branch, void 0, c) || changed
+      changed = diff(t, subs, cb, branch, void 0, c, oRoot) || changed
     } else if (branch.$c) {
       // console.log('go $c!', branch.$)
-      if (diff(t, subs, cb, branch, void 0, branch.$c)) {
-        // console.log('CHANGED', t)
+      if (diff(t, subs, cb, branch, void 0, branch.$c, oRoot)) {
         changed = true // cover this
         // shallow hack
         // maybe add switch as well?
@@ -105,19 +105,21 @@ const update = (key, t, subs, cb, tree, c, parent) => {
       }
     }
   } else if (branch) {
-    changed = remove(subs, cb, branch) || (subs.val && true)
+    changed = remove(subs, cb, branch, oRoot) || (subs.val && true)
   }
   return changed
 }
 
-const property = (key, t, subs, cb, tree, removed, composite) => {
+const property = (key, t, subs, cb, tree, removed, composite, oRoot) => {
   var changed
   if (removed) {
     const branch = tree[key]
     if (branch) {
-      changed = remove(subs, cb, branch) || (subs.val && true)
+      changed = remove(subs, cb, branch, oRoot) || (subs.val && true)
     }
   } else {
+    // right here lets go clean
+    // t._c
     t = getOrigin(t, key)
     changed = update(
       key,
@@ -125,7 +127,9 @@ const property = (key, t, subs, cb, tree, removed, composite) => {
       subs,
       cb,
       tree,
-      composite
+      composite,
+      void 0,
+      oRoot
     )
   }
   return changed

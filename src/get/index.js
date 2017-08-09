@@ -35,8 +35,7 @@ const getOrigin = (t, key, noContext) => {
     } else {
       const clean = t
       t._rc = t._rc || t._c
-      if ((t = getRefVal(t)) && typeof t === 'object' && t.inherits) {
-        t._rc = t._rc || clean._rc || t
+      if ((t = getRefVal(t, true, noContext)) && t !== void 0) {
         clean._rc = null
         return getOrigin(t, key, noContext)
       }

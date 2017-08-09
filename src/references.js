@@ -1,6 +1,7 @@
 import { set } from './manipulate'
 import { listener } from './struct/listener'
 import { uid } from './uid'
+import { setPathContext } from './context'
 import { realRoot } from './traversal'
 import getApi from './get/api'
 
@@ -25,33 +26,41 @@ const vinstances = (instances, cRoot) => {
       if (cRoot === vRoot) {
         return instances[i]
       } else if (cRoot.inherits === vRoot) {
-        if (global.DEBUG) console.log('fallback need context')
         fallback = instances[i]
       }
     }
   }
+  if (fallback) {
+    setPathContext(fallback, cRoot)
+  }
   return fallback
 }
 
-const getRefVal = t => {
+const getRefVal = (t, struct, noContext) => {
   if (t.val !== void 0 && t.val !== null) {
-    if (t._rc) {
-      const vinstance = t.val.instances &&
-        vinstances(t.val.instances, realRoot(t._rc))
-      if (vinstance !== void 0) {
-        t._rc = null
-        return vinstance
-      } else {
-        return t.val
+    const vinstance = t._rc && t.val.instances &&
+      vinstances(t.val.instances, realRoot(t._rc))
+    if (t._rc && vinstance !== void 0) {
+      t._rc = null
+      return vinstance
+    } else if (t.val && t.val.inherits) {
+      if (t._c && !noContext) {
+        setPathContext(t.val, t._c)
       }
-    } else {
-      t._rc = t
+      t.val._rc = t._rc || t._c || t
+      return t.val
+    } else if (!struct) {
       return t.val
     }
   } else if (t.inherits) {
-    t.inherits._rc = t._rc || t
+    t.inherits._rc = t._rc || t._c || t
     t._rc = null
-    return getRefVal(t.inherits)
+    const result = getRefVal(t.inherits, struct, noContext)
+    if (!noContext && result && result.inherits) {
+      result._c = t
+      result._cLevel = 1
+    }
+    return result
   } else if (t._rc) {
     t._rc = null
   }

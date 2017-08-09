@@ -16,9 +16,10 @@ const inherits = (key, t, index) => {
   return true
 }
 
-const parseKeys = (t) => {
+const parseKeys = t => {
   var keys = getKeys(t)
   var orig = t
+  // TODO: This needs a fix for context refs
   t = t.val
   if (t && typeof t === 'object' && t.inherits) {
     let combined
@@ -57,19 +58,21 @@ const parseKeys = (t) => {
   return keys
 }
 
-const composite = (key, t, subs, cb, branch, removed, c) => {
+// const diff = (t, subs, cb, tree, removed, composite, oRoot) => {
+
+const composite = (key, t, subs, cb, branch, removed, c, oRoot) => {
   var changed
   const keys = branch.$keys
   if (subs.$keys && subs.$keys.val) {
     const dKey = '$keys' + key
-    if (c[dKey] && diff(t, subs.$keys, cb, branch[dKey])) {
-      any(key, t, subs, cb, branch._p, removed)
+    if (c[dKey] && diff(t, subs.$keys, cb, branch[dKey], void 0, void 0, oRoot)) {
+      any(key, t, subs, cb, branch._p, removed, oRoot)
     } else {
       for (let k in c) {
         const target = keys[k]
         if (
           k !== dKey &&
-          updateProperty(k, target.$t, subs, cb, keys, target.$c, branch)
+          updateProperty(k, target.$t, subs, cb, keys, target.$c, branch, oRoot)
         ) {
           changed = true
         }
@@ -79,7 +82,7 @@ const composite = (key, t, subs, cb, branch, removed, c) => {
     for (let k in c) {
       const target = keys[k]
       if (target) {
-        if (updateProperty(k, target.$t, subs, cb, keys, target.$c, branch)) {
+        if (updateProperty(k, target.$t, subs, cb, keys, target.$c, branch, oRoot)) {
           changed = true
         }
       }
@@ -88,12 +91,12 @@ const composite = (key, t, subs, cb, branch, removed, c) => {
   return changed
 }
 
-const any = (key, t, subs, cb, tree, removed) => {
+const any = (key, t, subs, cb, tree, removed, oRoot) => {
   const branch = tree[key]
   var $object
   if (removed || !t) {
     if (branch) {
-      removeFields(key, subs, branch, cb, tree)
+      removeFields(key, subs, branch, cb, oRoot)
       return true
     }
   } else {
@@ -109,22 +112,22 @@ const any = (key, t, subs, cb, tree, removed) => {
     if (keys) {
       if (!branch) {
         if ($object) {
-          createObject(key, keys, t, subs, cb, tree)
+          createObject(key, keys, t, subs, cb, tree, oRoot)
         } else {
-          create(key, keys, t, subs, cb, tree)
+          create(key, keys, t, subs, cb, tree, oRoot)
         }
         return true
       } else {
         // $object
         return $object
-          ? updateObject(key, keys, t, subs, cb, branch)
-          : update(key, keys, t, subs, cb, branch)
+          ? updateObject(key, keys, t, subs, cb, branch, oRoot)
+          : update(key, keys, t, subs, cb, branch, oRoot)
       }
     } else if (branch) {
       if ($object) {
-        removeFieldsObject(key, subs, branch, cb, tree)
+        removeFieldsObject(key, subs, branch, cb, oRoot)
       } else {
-        removeFields(key, subs, branch, cb, tree)
+        removeFields(key, subs, branch, cb, oRoot)
       }
       return true
     }
@@ -132,31 +135,31 @@ const any = (key, t, subs, cb, tree, removed) => {
 }
 
 // AS ARRAY
-const create = (key, keys, t, subs, cb, tree) => {
+const create = (key, keys, t, subs, cb, tree, oRoot) => {
   const len = keys.length
   const $keys = new Array(len)
   const branch = tree[key] = { _p: tree, _key: key, $keys }
   for (let i = 0; i < len; i++) {
     let key = keys[i]
     let tt = getOrigin(t, key)
-    updateProperty(i, tt, subs, cb, $keys, void 0, branch)
+    updateProperty(i, tt, subs, cb, $keys, void 0, branch, oRoot)
   }
   if (subs.$keys && subs.$keys.val) {
     const dKey = '$keys' + key
     const dBranch = branch[dKey] = { _p: branch, _key: dKey }
-    diff(t, subs.$keys, cb, dBranch)
+    diff(t, subs.$keys, cb, dBranch, void 0, void 0, oRoot)
   }
 }
 
-const removeFields = (key, subs, branch, cb, tre) => {
+const removeFields = (key, subs, branch, cb, oRoot) => {
   const $keys = branch.$keys
   let i = $keys.length
   while (i--) {
-    remove(subs, cb, $keys[0])
+    remove(subs, cb, $keys[0], oRoot)
   }
 }
 
-const update = (key, keys, t, subs, cb, branch) => {
+const update = (key, keys, t, subs, cb, branch, oRoot) => {
   var changed
   const $keys = branch.$keys
   const len1 = keys.length
@@ -164,7 +167,7 @@ const update = (key, keys, t, subs, cb, branch) => {
   if (len1 > len2) {
     for (let i = 0; i < len1; i++) {
       const key = keys[i]
-      if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch)) {
+      if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch, oRoot)) {
         changed = true
       }
     }
@@ -172,12 +175,12 @@ const update = (key, keys, t, subs, cb, branch) => {
     for (let i = 0; i < len2; i++) {
       const key = keys[i]
       if (!key) {
-        remove(subs, cb, $keys[i])
+        remove(subs, cb, $keys[i], oRoot)
         len2--
         i--
         changed = true
       } else {
-        if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch)) {
+        if (updateProperty(i, getOrigin(t, key), subs, cb, $keys, void 0, branch, oRoot)) {
           changed = true
         }
       }
@@ -186,31 +189,31 @@ const update = (key, keys, t, subs, cb, branch) => {
   return changed
 }
 // ------AS OBJECT
-const createObject = (key, keys, t, subs, cb, tree) => {
+const createObject = (key, keys, t, subs, cb, tree, oRoot) => {
   const len = keys.length
   const $keys = {}
   const branch = tree[key] = { _p: tree, _key: key, $keys }
   for (let i = 0; i < len; i++) {
     let key = keys[i]
     let tt = getOrigin(t, key)
-    updateProperty(key, tt, subs, cb, $keys, void 0, branch)
+    updateProperty(key, tt, subs, cb, $keys, void 0, branch, oRoot)
   }
 
   if (subs.$keys && subs.$keys.val) {
     const dKey = '$keys' + key
     const dBranch = branch[dKey] = { _p: branch, _key: dKey }
-    diff(t, subs.$keys, cb, dBranch)
+    diff(t, subs.$keys, cb, dBranch, void 0, void 0, oRoot)
   }
 }
 
-const removeFieldsObject = (key, subs, branch, cb, tre) => {
+const removeFieldsObject = (key, subs, branch, cb, oRoot) => {
   const $keys = branch.$keys
   for (let key$ in $keys) {
-    remove(subs, cb, $keys[key$])
+    remove(subs, cb, $keys[key$], oRoot)
   }
 }
 
-const updateObject = (key$, keys, t, subs, cb, branch) => {
+const updateObject = (key$, keys, t, subs, cb, branch, oRoot) => {
   var changed
   const $keys = branch.$keys
   const len1 = keys.length
@@ -219,13 +222,13 @@ const updateObject = (key$, keys, t, subs, cb, branch) => {
     let key = keys[i]
     marked[key] = true
     let tt = getOrigin(t, key)
-    if (updateProperty(key, tt, subs, cb, $keys, void 0, branch)) {
+    if (updateProperty(key, tt, subs, cb, $keys, void 0, branch, oRoot)) {
       changed = true
     }
   }
   for (let key in $keys) {
     if (!(key in marked)) {
-      remove(subs, cb, $keys[key])
+      remove(subs, cb, $keys[key], oRoot)
     }
   }
   return changed
