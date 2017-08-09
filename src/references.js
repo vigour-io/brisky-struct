@@ -38,7 +38,7 @@ const getRefVal = (t, struct, noContext) => {
   if (t.val !== void 0 && t.val !== null) {
     const vinstance = t._rc && t.val.instances &&
       vinstances(t.val.instances, realRoot(t._rc))
-    if (vinstance !== null && vinstance !== void 0) {
+    if (t._rc && vinstance !== void 0) {
       t._rc = null
       return vinstance
     } else if (t.val && t.val.inherits) {
