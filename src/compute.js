@@ -1,11 +1,14 @@
 import { getRefVal } from './references'
 
 const origin = t => {
-  const clean = t
-  t._rc = t._rc || t._c
-  t = getRefVal(t, true)
-  clean._rc = void 0
-  return t ? origin(t) : clean
+  var result
+  while (t) {
+    result = t
+    t._rc = t._rc || t._c
+    t = getRefVal(t, true)
+    result._rc = void 0
+  }
+  return result
 }
 
 const transform = t => t.$transform !== void 0
