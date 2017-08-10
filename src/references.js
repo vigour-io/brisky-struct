@@ -44,10 +44,10 @@ const getRefVal = (t, struct, noContext) => {
       t._rc = void 0
       return vinstance
     } else if (t.val.inherits) {
-      if (t._c && !noContext) {
+      if (t._rc && t._c && !noContext) {
         setPathContext(t.val, t._c)
       }
-      t.val._rc = t._rc || t._c || t
+      t.val._rc = t._rc || t
       t._rc = void 0
       return t.val
     } else if (!struct) {
@@ -55,7 +55,7 @@ const getRefVal = (t, struct, noContext) => {
       return t.val
     }
   } else if (t.inherits) {
-    t.inherits._rc = t._rc || t._c || t
+    t.inherits._rc = t._rc || t
     t._rc = void 0
     const result = getRefVal(t.inherits, struct, noContext)
     if (!noContext && result && result.inherits) {
