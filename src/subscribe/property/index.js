@@ -25,8 +25,6 @@ const switchuid = t => {
   return uid >>> 0
 }
 
-console.log('-------- ok --------')
-
 const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
   var branch = tree[key]
   var changed
