@@ -25,6 +25,8 @@ const switchuid = t => {
   return uid >>> 0
 }
 
+console.log('-------- ok --------')
+
 const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
   var branch = tree[key]
   var changed
@@ -32,7 +34,7 @@ const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
     const stamp = t.tStamp || dummy
 
     // TODO: This needs a performance refactor!
-    t = oRoot.get(t.path(true)) || t
+    // t = oRoot.get(t.path(true)) || t
 
     if (!branch) {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
