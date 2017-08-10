@@ -1,10 +1,10 @@
 import { getRefVal } from './references'
 
-const origin = t => {
+const origin = (t, rc) => {
   var result
   while (t) {
     result = t
-    t._rc = t._rc || t._c
+    t._rc = rc || t._rc || t._c
     t = getRefVal(t, true)
     result._rc = void 0
   }
