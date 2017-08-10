@@ -1,7 +1,7 @@
 import { diff } from '../diff'
 import remove from './remove'
-import { getOrigin } from '../../get'
-import { storeContext } from '../../context'
+import { getContextOrigin } from '../../get'
+import { storeContext, correctContext } from '../../context'
 import { puid } from '../../uid'
 
 const store = (t, branch) => {
@@ -31,8 +31,7 @@ const update = (key, t, subs, cb, tree, c, parent, oRoot) => {
   if (t) {
     const stamp = t.tStamp || dummy
 
-    // TODO: This needs a performance refactor!
-    // t = oRoot.get(t.path(true)) || t
+    t = correctContext(t, oRoot)
 
     if (!branch) {
       branch = tree[key] = { _p: parent || tree, _key: key, $t: t }
@@ -120,7 +119,7 @@ const property = (key, t, subs, cb, tree, removed, composite, oRoot) => {
   } else {
     // right here lets go clean
     // t._c
-    t = getOrigin(t, key)
+    t = getContextOrigin(t, key, oRoot)
     changed = update(
       key,
       t,

@@ -45,7 +45,7 @@ const getRefVal = (t, struct, noContext) => {
       return vinstance
     } else if (t.val.inherits) {
       if (t._rc && t._c && !noContext) {
-        setPathContext(t.val, t._c)
+        setPathContext(t.val, realRoot(t._c))
       }
       t.val._rc = t._rc || t
       t._rc = void 0

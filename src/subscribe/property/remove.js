@@ -1,20 +1,22 @@
 import { diff } from '../diff'
-
-import { applyContext } from '../../context'
+import { correctContext } from '../../context'
 
 const remove = (subs, cb, tree, oRoot) => {
-  const t = tree.$t
+  var t = tree.$t
 
-  if (tree.$tc) {
-    if (tree.$stored) {
-      tree.$stored.unshift(tree.$tc, tree.$tcl || 1)
-      applyContext(t, tree.$stored)
-    } else {
-      applyContext(t, [ tree.$tc, tree.$tcl ])
-    }
+  // if (tree.$tc) {
+  //   if (tree.$stored) {
+  //     tree.$stored.unshift(tree.$tc, tree.$tcl || 1)
+  //     applyContext(t, tree.$stored)
+  //   } else {
+  //     applyContext(t, [ tree.$tc, tree.$tcl ])
+  //   }
+  // }
+
+  if (subs.val) {
+    t = correctContext(t, oRoot)
+    cb(t, 'remove', subs, tree)
   }
-
-  if (subs.val) { cb(t, 'remove', subs, tree) }
   if (!subs.$blockRemove) {
     diff(t, subs, cb, tree, true, void 0, oRoot)
   }

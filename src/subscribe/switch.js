@@ -1,7 +1,7 @@
 import { diff } from './diff'
 import remove from './property/remove'
 import { update } from './property'
-import { origin } from '../compute'
+import { contextOrigin } from '../compute'
 
 const compositeDriverChange = (key, tkey, t, subs, cb, tree, removed, composite, oRoot) => {
   const branch = tree[key]
@@ -60,14 +60,14 @@ const body = (key, t, subs, cb, tree, removed, localSwitch, diffIt, composite, o
       update(key, t, result, cb, tree, void 0, void 0, oRoot)
       branch = tree[key]
       branch.$subs = result
-      branch.$origin = origin(t, oRoot)
+      branch.$origin = contextOrigin(t, oRoot)
       return true
     } else if (isSwitched(branch.$subs, result, branch, t, oRoot)) {
       remove(branch.$subs, cb, branch, oRoot)
       update(key, t, result, cb, tree, void 0, void 0, oRoot)
       branch = tree[key]
       branch.$subs = result
-      branch.$origin = origin(t, oRoot)
+      branch.$origin = contextOrigin(t, oRoot)
       return true
     } else if (diffIt) {
       return update(key, t, result, cb, tree, composite, void 0, oRoot)
@@ -77,8 +77,7 @@ const body = (key, t, subs, cb, tree, removed, localSwitch, diffIt, composite, o
 
 const isSwitched = (a, b, branch, t, oRoot) => {
   if (t) {
-    // here we need to special origin
-    const o = origin(t, oRoot)
+    const o = contextOrigin(t, oRoot)
     const b = branch.$origin
     if (b !== o) {
       branch.$origin = o

@@ -1,14 +1,22 @@
+import { correctContext } from './context'
 import { getRefVal } from './references'
 
-const origin = (t, rc) => {
+const origin = (t) => {
   var result
   while (t) {
     result = t
-    t._rc = t._rc || rc || t._c
+    t._rc = t._rc || t._c
     t = getRefVal(t, true)
     result._rc = void 0
   }
   return result
+}
+
+const contextOrigin = (t, oRoot) => {
+  if (t) {
+    t = correctContext(t, oRoot)
+    return origin(t)
+  }
 }
 
 const transform = t => t.$transform !== void 0
@@ -40,4 +48,4 @@ const compute = (t, val, passon, arg) => {
   return trans ? trans(val, passon || t, arg) : val
 }
 
-export { origin, compute }
+export { origin, compute, contextOrigin }

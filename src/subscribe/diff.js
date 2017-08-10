@@ -53,4 +53,3 @@ const parse = (key, t, subs, cb, tree, removed, composite, oRoot) => {
 }
 
 export { diff, parse }
-
