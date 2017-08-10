@@ -129,9 +129,13 @@ test('references - multi branch origin', t => {
     }
   })
 
-  branch1.get(['pointers', 'pointer2']).origin().set({ real: { other: 1 } })
-  branch2.get(['pointers', 'pointer2']).origin().set({ other: 2 })
-  branch3.get(['pointers', 'pointer2']).origin().set({ real: { other: 3 } })
+  const b2p2 = branch2.get(['pointers', 'pointer2'])
+  const b3p2 = branch3.get(['pointers', 'pointer2'])
+  const b1p2 = branch1.get(['pointers', 'pointer2'])
+
+  b3p2.origin().set({ real: { other: 3 } })
+  b2p2.origin().set({ other: 2 })
+  b1p2.origin().set({ real: { other: 1 } })
 
   t.equals(
     branch1.get(['pointers', 'pointer2']).get(['real', 'field', 'compute']),
