@@ -1,14 +1,21 @@
+import { correctContext } from './context'
 import { getRefVal } from './references'
 
-const origin = t => {
-  const clean = t
-  t._rc = t._rc || t._c
-  if ((t = getRefVal(t, true)) && t !== void 0) {
-    clean._rc = null
+const origin = (t) => {
+  var result
+  while (t) {
+    result = t
+    t._rc = t._rc || t._c
+    t = getRefVal(t, true)
+    result._rc = void 0
+  }
+  return result
+}
+
+const contextOrigin = (t, oRoot) => {
+  if (t) {
+    t = correctContext(t, oRoot)
     return origin(t)
-  } else {
-    clean._rc = null
-    return clean
   }
 }
 
@@ -25,9 +32,8 @@ const compute = (t, val, passon, arg) => {
     const type = typeof val
     if (type === 'object') {
       if (val.inherits) {
-        const v = val
-        val = compute(val, void 0, passon, arg)
-        if (val === void 0) {
+        const v = compute(val, void 0, passon, arg)
+        if (v !== void 0) {
           val = v
         }
       }
@@ -36,10 +42,10 @@ const compute = (t, val, passon, arg) => {
     }
   }
   if (t._rc) {
-    t._rc = null
+    t._rc = void 0
   }
   const trans = transform(t)
   return trans ? trans(val, passon || t, arg) : val
 }
 
-export { origin, compute }
+export { origin, compute, contextOrigin }

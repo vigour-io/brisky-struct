@@ -13,6 +13,8 @@ const subscribe = (t, subs, cb, tree) => {
   if (subs.val) {
     if (subs.val === true || subs.val === 'shallow') {
       listen(t, () => {
+        t._c = null
+        t._cLevel = null
         cb(t, 'update', subs, tree)
         diff(t, subs, cb, tree, void 0, void 0, t)
       })

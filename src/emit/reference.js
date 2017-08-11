@@ -79,14 +79,10 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
   if (c === void 0) {
-    if (!t._c) {
-      subscription(t, stamp)
-    }
+    subscription(t, stamp)
   } else {
-    if (!c._c) {
-      setTStamps(t, level, stamp)
-      subscription(c, stamp)
-    }
+    setTStamps(t, level, stamp)
+    subscription(c, stamp)
   }
   if (cb) {
     cb(t, stamp, oRoot)
@@ -130,14 +126,10 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
 const fn = (t, val, stamp, c, level, oRoot, cb) => {
   setContext(t, c, level)
   if (c === void 0 || level === 1) {
-    if (!t._c) {
-      subscription(t, stamp)
-    }
+    subscription(t, stamp)
   } else {
-    if (!c._c) {
-      setTStamps(t, level, stamp)
-      subscription(c, stamp)
-    }
+    setTStamps(t, level, stamp)
+    subscription(c, stamp)
   }
   const emitter = getData(t)
   if (emitter) {

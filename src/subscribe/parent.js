@@ -1,6 +1,6 @@
 import { diff } from './diff'
 import { root } from '../traversal'
-import { getOrigin } from '../get'
+import { getContextOrigin } from '../get'
 
 export default (t, subs, cb, tree, removed, oRoot) => {
   var branch = tree.parent
@@ -24,7 +24,7 @@ const get = (t, path, oRoot) => {
     if (path[i] === 'root') {
       t = root(t)
     } else {
-      t = getOrigin(t, path[i])
+      t = getContextOrigin(t, path[i], oRoot)
     }
   }
   return t

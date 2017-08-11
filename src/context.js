@@ -166,14 +166,13 @@ const removeContext = (target, level) => {
   }
 }
 
-const setPathContext = (t, c) => {
-  const oRoot = realRoot(c)
+const setPathContext = (t, oRoot) => {
   const rPath = []
   const rRoot = realRootPath(t, rPath)
-  const pc = isAncestor(oRoot.inherits, rRoot, 1)
-  if (pc) {
+  var level = isAncestor(oRoot.inherits, rRoot, 1)
+  if (level) {
+    level = rPath.length - level + 1
     let c = oRoot
-    let level = rPath.length - pc + 1
     let test = c
     while (level--) {
       c = test
@@ -183,13 +182,32 @@ const setPathContext = (t, c) => {
         while (t && level) {
           t._c = c
           t._cLevel = level
-          level--
           t = t._p
+          level--
         }
         break
       }
     }
+    if (test !== void 0) {
+      return test
+    }
   }
+}
+
+const correctContext = (t, oRoot) => {
+  var p = t
+  while (p) {
+    if (p._c) {
+      p._c = null
+      p._cLevel = null
+    }
+    p = p._p
+  }
+  if (realRoot(t) !== oRoot) {
+    t = setPathContext(t, oRoot) || t
+  }
+  t._rc = oRoot
+  return t
 }
 
 // make some tests but obvisouly usefull
@@ -206,4 +224,4 @@ const setPathContext = (t, c) => {
 //   return this
 // }
 
-export { contextProperty, resolveContext, applyContext, storeContext, setPathContext }
+export { contextProperty, resolveContext, applyContext, storeContext, setPathContext, correctContext }

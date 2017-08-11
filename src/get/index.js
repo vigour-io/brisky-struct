@@ -1,3 +1,4 @@
+import { correctContext } from '../context'
 import { getRefVal } from '../references'
 
 const get = (t, key, noContext) => {
@@ -29,18 +30,24 @@ const getOrigin = (t, key, noContext) => {
     if (result !== void 0 && result !== null) {
       result._rc = t._rc || result._c
       if (t._rc) {
-        t._rc = null
+        t._rc = void 0
       }
       return result
     } else {
       const clean = t
-      t._rc = t._rc || t._c
-      if ((t = getRefVal(t, true, noContext)) && t !== void 0) {
-        clean._rc = null
+      t = getRefVal(t, true, noContext)
+      clean._rc = void 0
+      if (t) {
         return getOrigin(t, key, noContext)
       }
-      clean._rc = null
     }
+  }
+}
+
+const getContextOrigin = (t, key, oRoot) => {
+  if (t) {
+    t = correctContext(t, oRoot)
+    return getOrigin(t, key, void 0)
   }
 }
 
@@ -56,4 +63,4 @@ const getDefault = t => t.props && t.props.default.struct || getDefault(t.inheri
 
 const getVal = t => t.val !== void 0 ? t.val : t.inherits && getVal(t.inherits)
 
-export { get, getDefault, getOrigin, getData, getFn, getVal, getProps }
+export { get, getDefault, getOrigin, getContextOrigin, getData, getFn, getVal, getProps }
