@@ -1,6 +1,6 @@
 import bs from 'stamp'
-import { handleInheritedStruct } from './reference'
 import { realRoot } from '../traversal'
+import { handleInheritedStruct } from './reference'
 
 const handleStruct = (p, stamp) => {
   if (p.emitters && p.emitters.data && p.emitters.data.struct && p.__tStamp !== stamp && !p._c) {

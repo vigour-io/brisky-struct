@@ -28,14 +28,16 @@ const setTStamps = (t, level, stamp) => {
 }
 
 const subscription = (t, stamp) => {
-  t.tStamp = stamp
-  if (t.subscriptions && !t._inProgressS) {
-    t._inProgressS = true
-    bs.on(() => {
-      var i = t.subscriptions.length
-      while (i--) { t.subscriptions[i]() }
-      t._inProgressS = false
-    })
+  if (t.tStamp !== stamp) {
+    t.tStamp = stamp
+    if (t.subscriptions && !t._inProgressS) {
+      t._inProgressS = true
+      bs.on(() => {
+        var i = t.subscriptions.length
+        while (i--) { t.subscriptions[i]() }
+        t._inProgressS = false
+      })
+    }
   }
 }
 
@@ -78,6 +80,9 @@ const iterate = (refs, val, stamp, oRoot, fn, cb) => {
 
 // Fire subscriptions in context
 const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
+  if (t.tStamp === stamp) {
+    cb = void 0
+  }
   if (c === void 0) {
     subscription(t, stamp)
   } else {
@@ -92,7 +97,7 @@ const fnSubscriptions = (t, val, stamp, c, level, oRoot, cb) => {
 // When there's no inherited references
 // there can still be a reference to parents
 const handleInheritedStruct = (t, stamp, oRoot, first) => {
-  if (t.__tStamp !== stamp && !t._c) {
+  if (t.__tStamp !== stamp && (!first || !t._c)) {
     t.__tStamp = stamp
     if (t.inherits) {
       const contextRefs =
@@ -108,14 +113,14 @@ const handleInheritedStruct = (t, stamp, oRoot, first) => {
       if (t._p) {
         handleInheritedStruct(t._p, stamp, oRoot, false)
       }
-      // if (first === false) {
-      //   const localRefs = t.emitters &&
-      //     t.emitters.data &&
-      //     t.emitters.data.struct
-      //   if (localRefs) {
-      //     iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
-      //   }
-      // }
+      if (first === false) {
+        const localRefs = t.emitters &&
+          t.emitters.data &&
+          t.emitters.data.struct
+        if (localRefs) {
+          iterate(localRefs, void 0, stamp, oRoot, fnSubscriptions, handleInheritedStruct)
+        }
+      }
     }
     t.__tStamp = null
   }
