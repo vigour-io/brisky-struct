@@ -43,8 +43,7 @@
     "instrument": true
   },
   "dependencies": {
-    "stamp": "^4.0.2",
-    "string-hash": "^1.1.0"
+    "stamp": "^4.0.2"
   },
   "devDependencies": {
     "builder-boy": "latest",
