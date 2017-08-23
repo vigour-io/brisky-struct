@@ -31,7 +31,7 @@ const remove = (subs, cb, tree, oRoot) => {
         while (i-- > key) {
           parent.$keys[i]._key = i
         }
-        if (parent.$c[len]) {
+        if (parent.$c && parent.$c[len]) {
           composite(parent, len)
         }
       } else {
