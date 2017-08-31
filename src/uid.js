@@ -13,11 +13,16 @@ const cuid = t => {
   }
 }
 const hash = (id, str) => {
-  var i = str.length
-  while (i) {
-    id = (id * 33) ^ str.charCodeAt(--i)
+  if (isFinite(str)) {
+    str = parseFloat(str)
+    return id * 33 ^ str
+  } else {
+    var i = str.length
+    while (i) {
+      id = (id * 33) ^ str.charCodeAt(--i)
+    }
+    return id
   }
-  return id
 }
 const puid = t => {
   var id = 5381
